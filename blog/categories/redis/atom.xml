@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Redis | The Disco Blog]]></title>
+  <link href="http://aglover.github.com/blog/categories/redis/atom.xml" rel="self"/>
+  <link href="http://aglover.github.com/"/>
+  <updated>2012-08-29T16:21:39-04:00</updated>
+  <id>http://aglover.github.com/</id>
+  <author>
+    <name><![CDATA[Andrew Glover]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Redis replication: couldn't be any easier]]></title>
+    <link href="http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/"/>
+    <updated>2012-08-29T13:23:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier</id>
+    <content type="html"><![CDATA[<p><a href="http://redis.io">Redis</a> supports <a href="http://redis.io/topics/replication">master-slave replication</a> and it's extremely easy to setup.  And the beauty of setting up replication is that all you have to do is fire up a slave instance and have it point to some other Redis instance (which then becomes the master node).</p>
+
+<p>Accordingly, open up the <code>redis.conf</code> file for an intended secondary (or slave node) and find the section containing a <code>slaveof</code> phrase. Uncomment it and add the IP address &amp; port of the master node:</p>
+
+<p><code>
+slaveof ec2-23-21-a8-21.compute-1.amazonaws.com 6379
+</code></p>
+
+<p>Then cycle the secondary node (so the <code>redis.conf</code> file is re-read). That's it.</p>
+
+<p>When you fire up the slave node and run the <code>INFO</code> command, you'll see a few new items, namely:</p>
+
+<p><code>
+role:slave
+master_host:ec2-23-21-a8-21.compute-1.amazonaws.com
+master_port:6379
+master_link_status:down
+master_last_io_seconds_ago:-1
+master_sync_in_progress:1
+master_sync_left_bytes:-1
+master_sync_last_io_seconds_ago:0
+master_link_down_since_seconds:14
+</code>
+You'll note that it takes a few moments for a data sync to occur, thus, after a few seconds, rerun the <code>INFO</code> command to see:</p>
+
+<p><code>
+role:slave
+master_host:ec2-23-21-a8-21.compute-1.amazonaws.com
+master_port:6379
+master_link_status:up
+master_last_io_seconds_ago:6
+master_sync_in_progress:0
+</code></p>
+
+<p>Running the same <code>INFO</code> command on the master node will yield a new field as well:</p>
+
+<p><code>
+role:master
+slave0:10.255.3.143,34647,online
+</code></p>
+
+<p>A master node can have 0..N slaves (hence the naming scheme of <code>slaveN</code>); what's more, slaves can become a master by commenting out or unsetting the <code>SLAVEOF</code> command in their corresponding configuration.</p>
+
+<p>It should be noted that Redis does support configuration changes <em>at runtime</em> via the <code>CONFIG SET</code> <a href="http://redis.io/commands/config-set">command</a>, which means you don't even need to cycle a particular node to synchronize it with a master.</p>
+]]></content>
+  </entry>
+  
+</feed>
