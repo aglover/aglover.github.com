@@ -12,7 +12,7 @@ categories: [mobile]
 By applying the lessons of history we can infer that cross-platform toolkits will not be a viable solution to the multitude of mobile platforms.
 {% endblockquote %}
 
-And thus [ties this direction](http://martinfowler.com/articles/multiMobile/#uncanny) into a potential result of building apps that suffer from "[The Uncanny Valley](http://en.wikipedia.org/wiki/Uncanny_valley)" (i.e. "slight imperfections of an almost-native user interface cause a disproportionate negative response for the user").
+And he thus [ties this direction](http://martinfowler.com/articles/multiMobile/#uncanny) into a potential result of building apps that suffer from "[The Uncanny Valley](http://en.wikipedia.org/wiki/Uncanny_valley)" (i.e. "slight imperfections of an almost-native user interface cause a disproportionate negative response for the user").
 
 This analogy, however, isn't necessarily correct. If you invoke memories of, say, Java and think back to AWT or Swing and the resulting, almost always, underwhelming UI/UX, then you've got a point. But the UIs of say, Xamarin are 100% native (which is the polar opposite of Swing!)-- there is no [Frankenstein-ness](http://martinfowler.com/articles/multiMobile/#frankenstein) here. There is no mimicking going on -- a single code base is compiled _natively_ into the underlying platform's UI. All you have to do is take a look at a sample application built using [Corona](http://www.coronalabs.com/products/corona-sdk/) and you'll realize that at this point, the Uncanny Valley argument for cross-platform frameworks is [FUD](http://en.wikipedia.org/wiki/Fear,_uncertainty_and_doubt). 
 
