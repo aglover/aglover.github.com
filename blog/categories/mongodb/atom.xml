@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Node | The Disco Blog]]></title>
-  <link href="http://aglover.github.com/blog/categories/node/atom.xml" rel="self"/>
+  <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
+  <link href="http://aglover.github.com/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
   <updated>2012-08-31T21:36:22-04:00</updated>
   <id>http://aglover.github.com/</id>
@@ -96,29 +96,6 @@ done(err)
 <p>In this case, the above code is a <a href="http://visionmedia.github.com/mocha/">Mocha</a> test case (which uses <a href="https://github.com/visionmedia/should.js">should</a> for assertions) that demonstrates Mongoose's <code>findOne</code>.</p>
 
 <p>You can find the code for these examples and more at my Github repo dubbed <a href="https://github.com/aglover/exegesis">Exegesis</a> and while you're at it, check out the <a href="http://www.ibm.com/developerworks/training/kp/j-kp-node/index.html">developerWorks videos I did for Node</a>!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Scala &amp; Typesafe: exciting. Not disruptive]]></title>
-    <link href="http://aglover.github.com/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive/"/>
-    <updated>2012-08-27T08:35:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive</id>
-    <content type="html"><![CDATA[<p>I recently read an article on <a href="http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework">TheServerSide.com</a> where the author muses about the possible disruptive nature of Typesafe's <a href="http://typesafe.com/company/news/24499">recent Series B cash infusion of $14M</a>:</p>
-
-<p><blockquote><p>It's time for a disruptive event that will change how programs are designed, and how applications target the Java Virtual Machine.</p><footer><strong>Cameron McKenzie</strong> <cite><a href='http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework'>Disruptive Forces in Java: Is Scala the New Spring Framework?</a></cite></footer></blockquote></p>
-
-<p>Indeed, he likens the event to <a href="http://www.springsource.com/">SpringSource</a> and its meteoric rise to prominence in a time when web development was a real pain-in-the-neck. Think <a href="http://struts.apache.org/">Struts</a> (which, impressively, is still putting out releases) along with <a href="http://www.oracle.com/technetwork/java/javaee/ejb/index.html">EJB</a> and you have a perfect storm for a lightweight revolution.</p>
-
-<p>Unfortunately for the author's comparison, the world of web development these days is innovating at a breakneck pace. And this innovation isn't necessarily found in Typesafe's <a href="http://typesafe.com/stack">Typesafe Stack</a>. I don't discount its relevance or applicability -- Typesafe Stack is exciting: witness <a href="http://www.theregister.co.uk/2009/04/01/twitter_on_scala/">Twitter's move to Scala</a> a few years ago.  It is not, however, disruptive.</p>
-
-<p>Disruptive is something that completely changes the game. When Spring was unleashed, building Java apps became easier and consequently, you could produce them quicker. That same disruptiveness is happening now in a different community: <a href="http://nodejs.org/">Node</a>. Specifically, frameworks like <a href="http://www.meteor.com/">Meteor</a> and <a href="http://derbyjs.com/">Derby</a>, which are built using Node along with <a href="http://socket.io/">Socket.io</a>, are on the cusp of <em>revolutionizing</em> the web. These nascent frameworks are blazing new trails with respect to the realtime web -- you can build an extremely interactive application in a fraction of the code compared to something like <a href="http://www.playframework.org/">Play</a>. And you can do it before the download and installation of Play completes.</p>
-
-<p>Indeed, the excitement around these frameworks is attracting serious attention. Meteor's recent announcement that it took <a href="http://gigaom.com/cloud/scoop-meteor-gets-9m-in-funding/">$9M in funding</a> is most likely a harbinger of things to come with smart people making calculated bets in realtime, rapidly built, and rapidly deployed apps.</p>
-
-<p>Combine the ideas of these innovative frameworks with <a href="http://vertx.io/">vert.x</a>, which is an "event driven application framework that runs on the JVM" (Node has made <em>event driven</em> a key phrase) that allows you to write web apps in "Ruby, Java, Groovy, JavaScript and Python" and you have a legitimate shot a disruption that'll "change how programs are designed, and how applications target the Java Virtual Machine."</p>
-
-<p>Typesafe Stack is exciting. It's a safe choice for traditional style web development. But the forces changing web development these days are rapidly converging on the Node community. It's there that you'll find disruption.</p>
 ]]></content>
   </entry>
   

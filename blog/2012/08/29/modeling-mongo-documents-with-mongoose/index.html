@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Modeling Mongo documents with Mongoose - The Disco Blog</title>
+  <meta name="author" content="Andrew Glover">
+
+  
+  <meta name="description" content="Without a doubt, one of the quickest ways to build an application that leverages MongoDB is with Node. It&#8217;s as if the two platforms were made &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://aglover.github.com/blog/2012/08/29/modeling-mongo-documents-with-mongoose/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="The Disco Blog" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Disco Blog</a></h1>
+  
+    <h2>Can you dig it?</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:aglover.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Modeling Mongo Documents With Mongoose</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-29T21:45:00-04:00" pubdate data-updated="true">Aug 29<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Without a doubt, one of the quickest ways to build an application that leverages <a href="http://www.mongodb.org/">MongoDB</a> is with Node. It&#8217;s as if the two platforms were made for each other; the sheer number of Node libraries available for dealing with Mongo is testimony to a vibrant, innovative community. Indeed, one of my favorite Mongo focused libraries these days is <a href="http://mongoosejs.com/">Mongoose</a>.</p>
+
+<p>Briefly, Mongoose is an object modeling framework that makes it incredibly easy to model collections and ultimately work with intuitive objects that support a rich feature set. Like most things in Node, it couldn&#8217;t be any easier to get set up. Essentially, to use Mongoose, you&#8217;ll need to define <code>Schema</code> objects &#8211; these are your documents &#8211; either top level or even embedded.</p>
+
+<p>For example, I&#8217;ve defined a <code>words</code> collection that contains documents (representing&#8230;words) that each contain an embedded collection of <code>definition</code> documents. A sample document looks like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{  
+</span><span class='line'>  _id: "4fd7c7ac8b5b27f21b000001",    
+</span><span class='line'>  spelling: "drivel", 
+</span><span class='line'>  synonyms: ["garbage", "dribble", "drool"], 
+</span><span class='line'>  definitions: [ 
+</span><span class='line'>  { part_of_speech: "noun",
+</span><span class='line'>    definition:"saliva flowing from the mouth, or mucus from the nose; slaver."
+</span><span class='line'>  }, 
+</span><span class='line'>  { part_of_speech: "noun", 
+</span><span class='line'>    definition:"childish, silly, or meaningless talk or thinking; nonsense; twaddle." 
+</span><span class='line'>  }]
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>From an document modeling standpoint, I&#8217;d like to work with a <code>Word</code> object that contains a list of <code>Definition</code> objects and a number of related attributes (i.e. synonyms, parts of speech, etc). To model this relationship with Mongoose, I&#8217;ll need to define two <code>Schema</code> types and I&#8217;ll start with the simplest:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Definition = mongoose.model 'definition', new mongoose.Schema({
+</span><span class='line'>  part_of_speech : { type: String, required: true, trim: true, enum: ['adjective', 'noun', 'verb', 'adverb'] },
+</span><span class='line'>  definition : {type: String, required: true, trim: true}
+</span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, a <code>Definition</code> is simple &#8211; the <code>part_of_speech</code> attribute is an enumerated <code>String</code> that&#8217;s required; what&#8217;s more, the <code>definition</code> attribute is also a required <code>String</code>.</p>
+
+<p>Next, I&#8217;ll define a <code>Word</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Word = mongoose.model 'word', new mongoose.Schema({
+</span><span class='line'>  spelling : {type: String, required: true, trim: true, lowercase: true, unique: true},
+</span><span class='line'>  definitions : [Definition.schema],
+</span><span class='line'>  synonyms : [{ type: String, trim: true, lowercase: true }]
+</span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>As you can see, a <code>Word</code> instance embeds a collection of <code>Definition</code>s. Here I&#8217;m also demonstrating the usage of <code>lowercase</code> and the index <code>unique</code> placed on the <code>spelling</code> attribute.</p>
+
+<p>To create a <code>Word</code> instance and save the corresponding document couldn&#8217;t be easier. Mongo array&#8217;s leverage the <code>push</code> command and Mongoose follows this pattern to the tee.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>word = new models.Word({spelling : 'loquacious'})
+</span><span class='line'>word.synonyms.push 'verbose'
+</span><span class='line'>word.definitions.push {definition: 'talking or tending to talk much or freely; talkative; \
+</span><span class='line'>  chattering; babbling; garrulous.', part_of_speech: 'adjective' }
+</span><span class='line'>word.save (err, data) -&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finding a word is easy too:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>it 'findOne should return one', (done) -&gt;
+</span><span class='line'>  models.Word.findOne spelling:'nefarious', (err, document) -&gt;
+</span><span class='line'>    document.spelling.should.eql 'nefarious'
+</span><span class='line'>    document.definitions.length.should.eql 1
+</span><span class='line'>    document.synonyms.length.should.eql 2
+</span><span class='line'>    document.definitions[0]['part_of_speech'].should.eql 'adjective'
+</span><span class='line'>    done(err)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, the above code is a <a href="http://visionmedia.github.com/mocha/">Mocha</a> test case (which uses <a href="https://github.com/visionmedia/should.js">should</a> for assertions) that demonstrates Mongoose&#8217;s <code>findOne</code>.</p>
+
+<p>You can find the code for these examples and more at my Github repo dubbed <a href="https://github.com/aglover/exegesis">Exegesis</a> and while you&#8217;re at it, check out the <a href="http://www.ibm.com/developerworks/training/kp/j-kp-node/index.html">developerWorks videos I did for Node</a>!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-29T21:45:00-04:00" pubdate data-updated="true">Aug 29<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/mongodb/'>MongoDB</a>, <a class='category' href='/blog/categories/node/'>Node</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aglover.github.com/blog/2012/08/29/modeling-mongo-documents-with-mongoose/" data-via="aglover" data-counturl="http://aglover.github.com/blog/2012/08/29/modeling-mongo-documents-with-mongoose/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2012/08/29/redis-replication-couldnt-be-any-easier/" title="Previous Post: Redis replication: couldn't be any easier">&laquo; Redis replication: couldn't be any easier</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/08/29/modeling-mongo-documents-with-mongoose/">Modeling Mongo documents with Mongoose</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/08/29/redis-replication-couldnt-be-any-easier/">Redis replication: couldn't be any easier</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/08/28/leaner-jquery-with-zepto/">Leaner JQuery with Zepto</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive/">Scala &amp; Typesafe: exciting. Not disruptive</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/aglover">@aglover</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'aglover',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("aglover", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/aglover" class="twitter-follow-button" data-show-count="false">Follow @aglover</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Andrew Glover -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

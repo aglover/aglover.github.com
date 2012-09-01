@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-08-29T16:21:39-04:00</updated>
+  <updated>2012-08-31T21:36:22-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,113 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Modeling Mongo documents with Mongoose]]></title>
+    <link href="http://aglover.github.com/blog/2012/08/29/modeling-mongo-documents-with-mongoose/"/>
+    <updated>2012-08-29T21:45:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2012/08/29/modeling-mongo-documents-with-mongoose</id>
+    <content type="html"><![CDATA[<p>Without a doubt, one of the quickest ways to build an application that leverages <a href="http://www.mongodb.org/">MongoDB</a> is with Node. It&#8217;s as if the two platforms were made for each other; the sheer number of Node libraries available for dealing with Mongo is testimony to a vibrant, innovative community. Indeed, one of my favorite Mongo focused libraries these days is <a href="http://mongoosejs.com/">Mongoose</a>.</p>
+
+<p>Briefly, Mongoose is an object modeling framework that makes it incredibly easy to model collections and ultimately work with intuitive objects that support a rich feature set. Like most things in Node, it couldn&#8217;t be any easier to get set up. Essentially, to use Mongoose, you&#8217;ll need to define <code>Schema</code> objects &#8211; these are your documents &#8211; either top level or even embedded.</p>
+
+<p>For example, I&#8217;ve defined a <code>words</code> collection that contains documents (representing&#8230;words) that each contain an embedded collection of <code>definition</code> documents. A sample document looks like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{  
+</span><span class='line'>  _id: "4fd7c7ac8b5b27f21b000001",    
+</span><span class='line'>  spelling: "drivel", 
+</span><span class='line'>  synonyms: ["garbage", "dribble", "drool"], 
+</span><span class='line'>  definitions: [ 
+</span><span class='line'>  { part_of_speech: "noun",
+</span><span class='line'>    definition:"saliva flowing from the mouth, or mucus from the nose; slaver."
+</span><span class='line'>  }, 
+</span><span class='line'>  { part_of_speech: "noun", 
+</span><span class='line'>    definition:"childish, silly, or meaningless talk or thinking; nonsense; twaddle." 
+</span><span class='line'>  }]
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>From an document modeling standpoint, I&#8217;d like to work with a <code>Word</code> object that contains a list of <code>Definition</code> objects and a number of related attributes (i.e. synonyms, parts of speech, etc). To model this relationship with Mongoose, I&#8217;ll need to define two <code>Schema</code> types and I&#8217;ll start with the simplest:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Definition = mongoose.model 'definition', new mongoose.Schema({
+</span><span class='line'>  part_of_speech : { type: String, required: true, trim: true, enum: ['adjective', 'noun', 'verb', 'adverb'] },
+</span><span class='line'>  definition : {type: String, required: true, trim: true}
+</span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, a <code>Definition</code> is simple &#8211; the <code>part_of_speech</code> attribute is an enumerated <code>String</code> that&#8217;s required; what&#8217;s more, the <code>definition</code> attribute is also a required <code>String</code>.</p>
+
+<p>Next, I&#8217;ll define a <code>Word</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Word = mongoose.model 'word', new mongoose.Schema({
+</span><span class='line'>  spelling : {type: String, required: true, trim: true, lowercase: true, unique: true},
+</span><span class='line'>  definitions : [Definition.schema],
+</span><span class='line'>  synonyms : [{ type: String, trim: true, lowercase: true }]
+</span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>As you can see, a <code>Word</code> instance embeds a collection of <code>Definition</code>s. Here I&#8217;m also demonstrating the usage of <code>lowercase</code> and the index <code>unique</code> placed on the <code>spelling</code> attribute.</p>
+
+<p>To create a <code>Word</code> instance and save the corresponding document couldn&#8217;t be easier. Mongo array&#8217;s leverage the <code>push</code> command and Mongoose follows this pattern to the tee.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>word = new models.Word({spelling : 'loquacious'})
+</span><span class='line'>word.synonyms.push 'verbose'
+</span><span class='line'>word.definitions.push {definition: 'talking or tending to talk much or freely; talkative; \
+</span><span class='line'>  chattering; babbling; garrulous.', part_of_speech: 'adjective' }
+</span><span class='line'>word.save (err, data) -&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finding a word is easy too:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>it 'findOne should return one', (done) -&gt;
+</span><span class='line'>  models.Word.findOne spelling:'nefarious', (err, document) -&gt;
+</span><span class='line'>    document.spelling.should.eql 'nefarious'
+</span><span class='line'>    document.definitions.length.should.eql 1
+</span><span class='line'>    document.synonyms.length.should.eql 2
+</span><span class='line'>    document.definitions[0]['part_of_speech'].should.eql 'adjective'
+</span><span class='line'>    done(err)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, the above code is a <a href="http://visionmedia.github.com/mocha/">Mocha</a> test case (which uses <a href="https://github.com/visionmedia/should.js">should</a> for assertions) that demonstrates Mongoose&#8217;s <code>findOne</code>.</p>
+
+<p>You can find the code for these examples and more at my Github repo dubbed <a href="https://github.com/aglover/exegesis">Exegesis</a> and while you&#8217;re at it, check out the <a href="http://www.ibm.com/developerworks/training/kp/j-kp-node/index.html">developerWorks videos I did for Node</a>!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Redis replication: couldn't be any easier]]></title>
