@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-09-01T09:04:41-04:00</updated>
+  <updated>2012-09-01T09:11:52-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -24,7 +24,7 @@
 
 <p>For example, I've defined a <code>words</code> collection that contains documents (representing...words) that each contain an embedded collection of <code>definition</code> documents. A sample document looks like this:</p>
 
-<p>```
+<p>``` JSON Word Document
 {<br/>
   _id: "4fd7c7ac8b5b27f21b000001",<br/>
   spelling: "drivel",
