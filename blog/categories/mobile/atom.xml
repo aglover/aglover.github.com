@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mobile | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-09-01T09:11:52-04:00</updated>
+  <updated>2012-09-01T11:09:15-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Cost and the Great Mobile App Debate]]></title>
+    <link href="http://aglover.github.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/"/>
+    <updated>2012-09-01T11:07:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate</id>
+    <content type="html"><![CDATA[<p>{% img right http://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/HTML5-logo.svg/200px-HTML5-logo.svg.png %} The Great Mobile App Debate rages on; in fact, it seems of late, the debate has been heating up <em>dramatically</em>. And interestingly enough, some interesting people are joining this lively discussion including <a href="http://martinfowler.com/">Martin Fowler</a>. In his presentation dubbed '<a href="http://martinfowler.com/articles/multiMobile/">Developing Software for Multiple Devices</a>', Martin makes the case for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> citing the reduced cost of building a single platform app as opposed to building an app for each platform. What's more, he notes that the option to build an app via some cross-platform framework (presumably he's talking about <a href="http://thinkmobile.appcelerator.com/blog/bid/211263/The-Great-Mobile-App-Debate-Native-vs-HTML5">Appcelerator</a> or the <a href="http://xamarin.com/">Xamarin</a>'s of the world) isn't viable. He invokes memories from the early days of desktop apps:</p>
+
+<p>{% blockquote Martin Fowler http://martinfowler.com/articles/multiMobile/#desktop-history  Developing Software for Multiple Devices %}
+By applying the lessons of history we can infer that cross-platform toolkits will not be a viable solution to the multitude of mobile platforms.
+{% endblockquote %}</p>
+
+<p>And thus <a href="http://martinfowler.com/articles/multiMobile/#uncanny">ties this direction</a> into a potential result of building apps that suffer from "<a href="http://en.wikipedia.org/wiki/Uncanny_valley">The Uncanny Valley</a>" (i.e. "slight imperfections of an almost-native user interface cause a disproportionate negative response for the user").</p>
+
+<p>This analogy, however, isn't necessarily correct. If you invoke memories of, say, Java and think back to AWT or Swing and the resulting, almost always, underwhelming UI/UX, then you've got a point. But the UIs of say, Xamarin are 100% native (which is the polar opposite of Swing!)-- there is no <a href="http://martinfowler.com/articles/multiMobile/#frankenstein">Frankenstein-ness</a> here. There is no mimicking going on -- a single code base is compiled <em>natively</em> into the underlying platform's UI. All you have to do is take a look at a sample application built using <a href="http://www.coronalabs.com/products/corona-sdk/">Corona</a> and you'll realize that at this point, the Uncanny Valley argument for cross-platform frameworks is <a href="http://en.wikipedia.org/wiki/Fear,_uncertainty_and_doubt">FUD</a>.</p>
+
+<p>Which leads full circle back to the underlying argument for HTML5: cost. A cross-platform framework that produces a stellar app with exceptional UX <em>is cost effective</em>! You potentially build one app for multiple devices and it meets the terrifically high standards that consumers demand of a mobile app. And this is one thing that is often not met with pure play mobile web apps: they are not yet at parity with native-ness.</p>
+
+<p>This isn't to say HTML5 isn't worth consideration. There are certainly apps that have been built as pure play web apps and they are terrific. The point of the discussion shouldn't focus on HTML5 versus Native versus Hybrid. It should instead focus on what you're trying to build. If you want to build a fantastic interactive application that wows users (think something like <a href="http://flipboard.com/">Flipboard</a>) then you have a different line of thinking to pursue. If your goal is to build an information app that conveys data then UI/UX could be secondary and thus, an HTML5 option might just meet your needs.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Leaner JQuery with Zepto]]></title>

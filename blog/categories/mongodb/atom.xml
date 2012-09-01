@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-09-01T09:11:52-04:00</updated>
+  <updated>2012-09-01T11:09:15-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -47,7 +47,7 @@
 
 <p>From an document modeling standpoint, I'd like to work with a <code>Word</code> object that contains a list of <code>Definition</code> objects and a number of related attributes (i.e. synonyms, parts of speech, etc). To model this relationship with Mongoose, I'll need to define two <code>Schema</code> types and I'll start with the simplest:</p>
 
-<p><code>
+<p><code>JavaScript Definition Schema
 Definition = mongoose.model 'definition', new mongoose.Schema({
   part_of_speech : { type: String, required: true, trim: true, enum: ['adjective', 'noun', 'verb', 'adverb'] },
   definition : {type: String, required: true, trim: true}
@@ -58,7 +58,7 @@ Definition = mongoose.model 'definition', new mongoose.Schema({
 
 <p>Next, I'll define a <code>Word</code>:</p>
 
-<p><code>
+<p><code>JavaScript Word Schema
 Word = mongoose.model 'word', new mongoose.Schema({
   spelling : {type: String, required: true, trim: true, lowercase: true, unique: true},
   definitions : [Definition.schema],
@@ -70,7 +70,7 @@ Word = mongoose.model 'word', new mongoose.Schema({
 
 <p>To create a <code>Word</code> instance and save the corresponding document couldn't be easier. Mongo array's leverage the <code>push</code> command and Mongoose follows this pattern to the tee.</p>
 
-<p><code>
+<p><code>JavaScript saving with Mongoose
 word = new models.Word({spelling : 'loquacious'})
 word.synonyms.push 'verbose'
 word.definitions.push {definition: 'talking or tending to talk much or freely; talkative; \
@@ -80,7 +80,7 @@ word.save (err, data) -&gt;
 
 <p>Finding a word is easy too:</p>
 
-<p>```
+<p>``` JavaScript findOne in action
 it 'findOne should return one', (done) ->
   models.Word.findOne spelling:'nefarious', (err, document) -></p>
 
