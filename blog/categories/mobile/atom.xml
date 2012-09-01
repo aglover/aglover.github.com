@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mobile | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-09-01T11:27:36-04:00</updated>
+  <updated>2012-09-01T11:30:04-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -22,7 +22,7 @@
 
 <p><blockquote><p>By applying the lessons of history we can infer that cross-platform toolkits will not be a viable solution to the multitude of mobile platforms.</p><footer><strong>Martin Fowler</strong> <cite><a href='http://martinfowler.com/articles/multiMobile/#desktop-history'>Developing Software for Multiple Devices</a></cite></footer></blockquote></p>
 
-<p>And thus <a href="http://martinfowler.com/articles/multiMobile/#uncanny">ties this direction</a> into a potential result of building apps that suffer from "<a href="http://en.wikipedia.org/wiki/Uncanny_valley">The Uncanny Valley</a>" (i.e. "slight imperfections of an almost-native user interface cause a disproportionate negative response for the user").</p>
+<p>And he thus <a href="http://martinfowler.com/articles/multiMobile/#uncanny">ties this direction</a> into a potential result of building apps that suffer from "<a href="http://en.wikipedia.org/wiki/Uncanny_valley">The Uncanny Valley</a>" (i.e. "slight imperfections of an almost-native user interface cause a disproportionate negative response for the user").</p>
 
 <p>This analogy, however, isn't necessarily correct. If you invoke memories of, say, Java and think back to AWT or Swing and the resulting, almost always, underwhelming UI/UX, then you've got a point. But the UIs of say, Xamarin are 100% native (which is the polar opposite of Swing!)-- there is no <a href="http://martinfowler.com/articles/multiMobile/#frankenstein">Frankenstein-ness</a> here. There is no mimicking going on -- a single code base is compiled <em>natively</em> into the underlying platform's UI. All you have to do is take a look at a sample application built using <a href="http://www.coronalabs.com/products/corona-sdk/">Corona</a> and you'll realize that at this point, the Uncanny Valley argument for cross-platform frameworks is <a href="http://en.wikipedia.org/wiki/Fear,_uncertainty_and_doubt">FUD</a>.</p>
 
