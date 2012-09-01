@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Redis replication: couldn't be any easier - The Disco Blog</title>
+  <title>Cost and the Great Mobile App Debate - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="Redis supports master-slave replication and it&#8217;s extremely easy to setup. And the beauty of setting up replication is that all you have to do &hellip;">
+  <meta name="description" content="The Great Mobile App Debate rages on; in fact, it seems of late, the debate has been heating up dramatically. And interestingly enough, some &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/">
+  <link rel="canonical" href="http://aglover.github.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -70,7 +70,7 @@
   <header>
     
       
-        <h1 class="entry-title">Redis Replication: Couldn't Be Any Easier</h1>
+        <h1 class="entry-title">Cost and the Great Mobile App Debate</h1>
       
     
     
@@ -87,72 +87,27 @@
   
 
 
-<time datetime="2012-08-29T13:23:00-04:00" pubdate data-updated="true">Aug 29<span>th</span>, 2012</time>
+<time datetime="2012-09-01T11:07:00-04:00" pubdate data-updated="true">Sep 1<span>st</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><a href="http://redis.io">Redis</a> supports <a href="http://redis.io/topics/replication">master-slave replication</a> and it&#8217;s extremely easy to setup.  And the beauty of setting up replication is that all you have to do is fire up a slave instance and have it point to some other Redis instance (which then becomes the master node).</p>
+<div class="entry-content"><p>The Great Mobile App Debate rages on; in fact, it seems of late, the debate has been heating up <em>dramatically</em>. And interestingly enough, some interesting people are joining this lively discussion including <a href="http://martinfowler.com/">Martin Fowler</a>. In his presentation dubbed &#8217;<a href="http://martinfowler.com/articles/multiMobile/">Developing Software for Multiple Devices</a>&#8217;, Martin makes the case for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> citing the reduced cost of building a single platform app as opposed to building an app for each platform. What&#8217;s more, he notes that the option to build an app via some cross-platform framework (presumably he&#8217;s talking about <a href="http://thinkmobile.appcelerator.com/blog/bid/211263/The-Great-Mobile-App-Debate-Native-vs-HTML5">Appcelerator</a> or the <a href="http://xamarin.com/">Xamarin</a>&#8217;s of the world) isn&#8217;t viable. He invokes memories from the early days of desktop apps:</p>
 
-<p>Accordingly, open up the <code>redis.conf</code> file for an intended secondary (or slave node) and find the section containing a <code>slaveof</code> phrase. Uncomment it and add the IP address &amp; port of the master node:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>slaveof ec2-23-21-a8-21.compute-1.amazonaws.com 6379</span></code></pre></td></tr></table></div></figure>
+<blockquote><p>By applying the lessons of history we can infer that cross-platform toolkits will not be a viable solution to the multitude of mobile platforms.</p><footer><strong>Martin Fowler</strong> <cite><a href='http://martinfowler.com/articles/multiMobile/#desktop-history'>Developing Software for Multiple Devices</a></cite></footer></blockquote>
 
 
-<p>Then cycle the secondary node (so the <code>redis.conf</code> file is re-read). That&#8217;s it.</p>
+<p>And thus <a href="http://martinfowler.com/articles/multiMobile/#uncanny">ties this direction</a> into a potential result of building apps that suffer from &#8221;<a href="http://en.wikipedia.org/wiki/Uncanny_valley">The Uncanny Valley</a>&#8221; (i.e. &#8220;slight imperfections of an almost-native user interface cause a disproportionate negative response for the user&#8221;).</p>
 
-<p>When you fire up the slave node and run the <code>INFO</code> command, you&#8217;ll see a few new items, namely:</p>
+<p>This analogy, however, isn&#8217;t necessarily correct. If you invoke memories of, say, Java and think back to AWT or Swing and the resulting, almost always, underwhelming UI/UX, then you&#8217;ve got a point. But the UIs of say, Xamarin are 100% native (which is the polar opposite of Swing!)&#8211; there is no <a href="http://martinfowler.com/articles/multiMobile/#frankenstein">Frankenstein-ness</a> here. There is no mimicking going on &#8211; a single code base is compiled <em>natively</em> into the underlying platform&#8217;s UI. All you have to do is take a look at a sample application built using <a href="http://www.coronalabs.com/products/corona-sdk/">Corona</a> and you&#8217;ll realize that at this point, the Uncanny Valley argument for cross-platform frameworks is <a href="http://en.wikipedia.org/wiki/Fear,_uncertainty_and_doubt">FUD</a>.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>role:slave
-</span><span class='line'>master_host:ec2-23-21-a8-21.compute-1.amazonaws.com
-</span><span class='line'>master_port:6379
-</span><span class='line'>master_link_status:down
-</span><span class='line'>master_last_io_seconds_ago:-1
-</span><span class='line'>master_sync_in_progress:1
-</span><span class='line'>master_sync_left_bytes:-1
-</span><span class='line'>master_sync_last_io_seconds_ago:0
-</span><span class='line'>master_link_down_since_seconds:14</span></code></pre></td></tr></table></div></figure>
+<p>Which leads full circle back to the underlying argument for HTML5: cost. A cross-platform framework that produces a stellar app with exceptional UX <em>is cost effective</em>! You potentially build one app for multiple devices and it meets the terrifically high standards that consumers demand of a mobile app. And this is one thing that is often not met with pure play mobile web apps: they are not yet at parity with native-ness. More often than not, I find myself looking at <a href="http://wtfmobileweb.com/">Frankenstein mobile web apps</a>.</p>
 
+<p>This isn&#8217;t to say HTML5 isn&#8217;t worth consideration. There are certainly apps that have been built as pure play web apps and they are terrific. The point of the discussion shouldn&#8217;t focus on HTML5 versus Native versus Hybrid. It should instead focus on what you&#8217;re trying to build. If you want to build a fantastic interactive app that wows users (think something like <a href="http://flipboard.com/">Flipboard</a>) then you have a different line of thinking to pursue. If your goal is to build an information app that conveys data then UI/UX could be secondary and thus, an HTML5 option might just meet your needs.</p>
 
-<p>You&#8217;ll note that it takes a few moments for a data sync to occur, thus, after a few seconds, rerun the <code>INFO</code> command to see:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>role:slave
-</span><span class='line'>master_host:ec2-23-21-a8-21.compute-1.amazonaws.com
-</span><span class='line'>master_port:6379
-</span><span class='line'>master_link_status:up
-</span><span class='line'>master_last_io_seconds_ago:6
-</span><span class='line'>master_sync_in_progress:0</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Running the same <code>INFO</code> command on the master node will yield a new field as well:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>role:master
-</span><span class='line'>slave0:10.255.3.143,34647,online</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A master node can have 0..N slaves (hence the naming scheme of <code>slaveN</code>); what&#8217;s more, slaves can become a master by commenting out or unsetting the <code>SLAVEOF</code> command in their corresponding configuration.</p>
-
-<p>It should be noted that Redis does support configuration changes <em>at runtime</em> via the <code>CONFIG SET</code> <a href="http://redis.io/commands/config-set">command</a>, which means you don&#8217;t even need to cycle a particular node to synchronize it with a master.</p>
+<p>The Great Mobile App Debate shows no sign of abating anytime soon. HTML5 offers a plethora of promises for awesomeness. Someday this might be the case; however, HTML5 isn&#8217;t an app development silver bullet.</p>
 </div>
 
 
@@ -175,12 +130,12 @@
   
 
 
-<time datetime="2012-08-29T13:23:00-04:00" pubdate data-updated="true">Aug 29<span>th</span>, 2012</time>
+<time datetime="2012-09-01T11:07:00-04:00" pubdate data-updated="true">Sep 1<span>st</span>, 2012</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/redis/'>Redis</a>
+    <a class='category' href='/blog/categories/mobile/'>mobile</a>
   
 </span>
 
@@ -189,7 +144,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/" data-via="aglover" data-counturl="http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aglover.github.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/" data-via="aglover" data-counturl="http://aglover.github.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/" >Tweet</a>
   
   
   
@@ -198,10 +153,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left articlenav" href="/blog/2012/08/28/leaner-jquery-with-zepto/" title="Previous Post: Leaner JQuery with Zepto">&laquo; Leaner JQuery with Zepto</a>
+        <a class="basic-alignment left articlenav" href="/blog/2012/08/29/modeling-mongo-documents-with-mongoose/" title="Previous Post: Modeling Mongo documents with Mongoose">&laquo; Modeling Mongo documents with Mongoose</a>
       
-      
-        <a class="basic-alignment right articlenav" href="/blog/2012/08/29/modeling-mongo-documents-with-mongoose/" title="Next Post: Modeling Mongo documents with Mongoose">Modeling Mongo documents with Mongoose &raquo;</a>
       
     </p>
   </footer>
@@ -310,8 +263,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/';
-        var disqus_url = 'http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/';
+        var disqus_identifier = 'http://aglover.github.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/';
+        var disqus_url = 'http://aglover.github.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/';
         var disqus_script = 'embed.js';
       
     (function () {

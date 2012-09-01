@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-09-01T09:10:11-04:00</updated>
+  <updated>2012-09-01T11:24:22-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,28 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Cost and the Great Mobile App Debate]]></title>
+    <link href="http://aglover.github.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/"/>
+    <updated>2012-09-01T11:07:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate</id>
+    <content type="html"><![CDATA[<p>The Great Mobile App Debate rages on; in fact, it seems of late, the debate has been heating up <em>dramatically</em>. And interestingly enough, some interesting people are joining this lively discussion including <a href="http://martinfowler.com/">Martin Fowler</a>. In his presentation dubbed &#8217;<a href="http://martinfowler.com/articles/multiMobile/">Developing Software for Multiple Devices</a>&#8217;, Martin makes the case for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> citing the reduced cost of building a single platform app as opposed to building an app for each platform. What&#8217;s more, he notes that the option to build an app via some cross-platform framework (presumably he&#8217;s talking about <a href="http://thinkmobile.appcelerator.com/blog/bid/211263/The-Great-Mobile-App-Debate-Native-vs-HTML5">Appcelerator</a> or the <a href="http://xamarin.com/">Xamarin</a>&#8217;s of the world) isn&#8217;t viable. He invokes memories from the early days of desktop apps:</p>
+
+<blockquote><p>By applying the lessons of history we can infer that cross-platform toolkits will not be a viable solution to the multitude of mobile platforms.</p><footer><strong>Martin Fowler</strong> <cite><a href='http://martinfowler.com/articles/multiMobile/#desktop-history'>Developing Software for Multiple Devices</a></cite></footer></blockquote>
+
+
+<p>And thus <a href="http://martinfowler.com/articles/multiMobile/#uncanny">ties this direction</a> into a potential result of building apps that suffer from &#8221;<a href="http://en.wikipedia.org/wiki/Uncanny_valley">The Uncanny Valley</a>&#8221; (i.e. &#8220;slight imperfections of an almost-native user interface cause a disproportionate negative response for the user&#8221;).</p>
+
+<p>This analogy, however, isn&#8217;t necessarily correct. If you invoke memories of, say, Java and think back to AWT or Swing and the resulting, almost always, underwhelming UI/UX, then you&#8217;ve got a point. But the UIs of say, Xamarin are 100% native (which is the polar opposite of Swing!)&#8211; there is no <a href="http://martinfowler.com/articles/multiMobile/#frankenstein">Frankenstein-ness</a> here. There is no mimicking going on &#8211; a single code base is compiled <em>natively</em> into the underlying platform&#8217;s UI. All you have to do is take a look at a sample application built using <a href="http://www.coronalabs.com/products/corona-sdk/">Corona</a> and you&#8217;ll realize that at this point, the Uncanny Valley argument for cross-platform frameworks is <a href="http://en.wikipedia.org/wiki/Fear,_uncertainty_and_doubt">FUD</a>.</p>
+
+<p>Which leads full circle back to the underlying argument for HTML5: cost. A cross-platform framework that produces a stellar app with exceptional UX <em>is cost effective</em>! You potentially build one app for multiple devices and it meets the terrifically high standards that consumers demand of a mobile app. And this is one thing that is often not met with pure play mobile web apps: they are not yet at parity with native-ness. More often than not, I find myself looking at <a href="http://wtfmobileweb.com/">Frankenstein mobile web apps</a>.</p>
+
+<p>This isn&#8217;t to say HTML5 isn&#8217;t worth consideration. There are certainly apps that have been built as pure play web apps and they are terrific. The point of the discussion shouldn&#8217;t focus on HTML5 versus Native versus Hybrid. It should instead focus on what you&#8217;re trying to build. If you want to build a fantastic interactive app that wows users (think something like <a href="http://flipboard.com/">Flipboard</a>) then you have a different line of thinking to pursue. If your goal is to build an information app that conveys data then UI/UX could be secondary and thus, an HTML5 option might just meet your needs.</p>
+
+<p>The Great Mobile App Debate shows no sign of abating anytime soon. HTML5 offers a plethora of promises for awesomeness. Someday this might be the case; however, HTML5 isn&#8217;t an app development silver bullet.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Modeling Mongo documents with Mongoose]]></title>
@@ -24,7 +46,7 @@
 
 <p>For example, I&#8217;ve defined a <code>words</code> collection that contains documents (representing&#8230;words) that each contain an embedded collection of <code>definition</code> documents. A sample document looks like this:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>Word Document</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -36,46 +58,49 @@
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{  
-</span><span class='line'>  _id: "4fd7c7ac8b5b27f21b000001",    
-</span><span class='line'>  spelling: "drivel", 
-</span><span class='line'>  synonyms: ["garbage", "dribble", "drool"], 
-</span><span class='line'>  definitions: [ 
-</span><span class='line'>  { part_of_speech: "noun",
-</span><span class='line'>    definition:"saliva flowing from the mouth, or mucus from the nose; slaver."
-</span><span class='line'>  }, 
-</span><span class='line'>  { part_of_speech: "noun", 
-</span><span class='line'>    definition:"childish, silly, or meaningless talk or thinking; nonsense; twaddle." 
-</span><span class='line'>  }]
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nx">_id</span><span class="o">:</span> <span class="s2">&quot;4fd7c7ac8b5b27f21b000001&quot;</span><span class="p">,</span>    
+</span><span class='line'>  <span class="nx">spelling</span><span class="o">:</span> <span class="s2">&quot;drivel&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">synonyms</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;garbage&quot;</span><span class="p">,</span> <span class="s2">&quot;dribble&quot;</span><span class="p">,</span> <span class="s2">&quot;drool&quot;</span><span class="p">],</span>
+</span><span class='line'>  <span class="nx">definitions</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>  <span class="p">{</span> <span class="nx">part_of_speech</span><span class="o">:</span> <span class="s2">&quot;noun&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">definition</span><span class="o">:</span><span class="s2">&quot;saliva flowing from the mouth, or mucus from the nose; slaver.&quot;</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="p">{</span> <span class="nx">part_of_speech</span><span class="o">:</span> <span class="s2">&quot;noun&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">definition</span><span class="o">:</span><span class="s2">&quot;childish, silly, or meaningless talk or thinking; nonsense; twaddle.&quot;</span>
+</span><span class='line'>  <span class="p">}]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>From an document modeling standpoint, I&#8217;d like to work with a <code>Word</code> object that contains a list of <code>Definition</code> objects and a number of related attributes (i.e. synonyms, parts of speech, etc). To model this relationship with Mongoose, I&#8217;ll need to define two <code>Schema</code> types and I&#8217;ll start with the simplest:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>Definition Schema</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Definition = mongoose.model 'definition', new mongoose.Schema({
-</span><span class='line'>  part_of_speech : { type: String, required: true, trim: true, enum: ['adjective', 'noun', 'verb', 'adverb'] },
-</span><span class='line'>  definition : {type: String, required: true, trim: true}
-</span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Definition</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span> <span class="s1">&#39;definition&#39;</span><span class="p">,</span> <span class="k">new</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Schema</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">part_of_speech</span> <span class="o">:</span> <span class="p">{</span> <span class="nx">type</span><span class="o">:</span> <span class="nb">String</span><span class="p">,</span> <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">trim</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="kr">enum</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;adjective&#39;</span><span class="p">,</span> <span class="s1">&#39;noun&#39;</span><span class="p">,</span> <span class="s1">&#39;verb&#39;</span><span class="p">,</span> <span class="s1">&#39;adverb&#39;</span><span class="p">]</span> <span class="p">},</span>
+</span><span class='line'>  <span class="nx">definition</span> <span class="o">:</span> <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="nb">String</span><span class="p">,</span> <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">trim</span><span class="o">:</span> <span class="kc">true</span><span class="p">}</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>As you can see, a <code>Definition</code> is simple &#8211; the <code>part_of_speech</code> attribute is an enumerated <code>String</code> that&#8217;s required; what&#8217;s more, the <code>definition</code> attribute is also a required <code>String</code>.</p>
 
 <p>Next, I&#8217;ll define a <code>Word</code>:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>Word Schema</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Word = mongoose.model 'word', new mongoose.Schema({
-</span><span class='line'>  spelling : {type: String, required: true, trim: true, lowercase: true, unique: true},
-</span><span class='line'>  definitions : [Definition.schema],
-</span><span class='line'>  synonyms : [{ type: String, trim: true, lowercase: true }]
-</span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Word</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span> <span class="s1">&#39;word&#39;</span><span class="p">,</span> <span class="k">new</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Schema</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">spelling</span> <span class="o">:</span> <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="nb">String</span><span class="p">,</span> <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">trim</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">lowercase</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">unique</span><span class="o">:</span> <span class="kc">true</span><span class="p">},</span>
+</span><span class='line'>  <span class="nx">definitions</span> <span class="o">:</span> <span class="p">[</span><span class="nx">Definition</span><span class="p">.</span><span class="nx">schema</span><span class="p">],</span>
+</span><span class='line'>  <span class="nx">synonyms</span> <span class="o">:</span> <span class="p">[{</span> <span class="nx">type</span><span class="o">:</span> <span class="nb">String</span><span class="p">,</span> <span class="nx">trim</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">lowercase</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}]</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p></p>
@@ -84,34 +109,36 @@
 
 <p>To create a <code>Word</code> instance and save the corresponding document couldn&#8217;t be easier. Mongo array&#8217;s leverage the <code>push</code> command and Mongoose follows this pattern to the tee.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>saving with Mongoose</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>word = new models.Word({spelling : 'loquacious'})
-</span><span class='line'>word.synonyms.push 'verbose'
-</span><span class='line'>word.definitions.push {definition: 'talking or tending to talk much or freely; talkative; \
-</span><span class='line'>  chattering; babbling; garrulous.', part_of_speech: 'adjective' }
-</span><span class='line'>word.save (err, data) -&gt;</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">word</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">models</span><span class="p">.</span><span class="nx">Word</span><span class="p">({</span><span class="nx">spelling</span> <span class="o">:</span> <span class="s1">&#39;loquacious&#39;</span><span class="p">})</span>
+</span><span class='line'><span class="nx">word</span><span class="p">.</span><span class="nx">synonyms</span><span class="p">.</span><span class="nx">push</span> <span class="s1">&#39;verbose&#39;</span>
+</span><span class='line'><span class="nx">word</span><span class="p">.</span><span class="nx">definitions</span><span class="p">.</span><span class="nx">push</span> <span class="p">{</span><span class="nx">definition</span><span class="o">:</span> <span class="s1">&#39;talking or tending to talk much or freely; talkative; \</span>
+</span><span class='line'><span class="s1">  chattering; babbling; garrulous.&#39;</span><span class="p">,</span> <span class="nx">part_of_speech</span><span class="o">:</span> <span class="s1">&#39;adjective&#39;</span> <span class="p">}</span>
+</span><span class='line'><span class="nx">word</span><span class="p">.</span><span class="nx">save</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Finding a word is easy too:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>findOne in action</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>it 'findOne should return one', (done) -&gt;
-</span><span class='line'>  models.Word.findOne spelling:'nefarious', (err, document) -&gt;
-</span><span class='line'>    document.spelling.should.eql 'nefarious'
-</span><span class='line'>    document.definitions.length.should.eql 1
-</span><span class='line'>    document.synonyms.length.should.eql 2
-</span><span class='line'>    document.definitions[0]['part_of_speech'].should.eql 'adjective'
-</span><span class='line'>    done(err)</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">it</span> <span class="s1">&#39;findOne should return one&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="nx">models</span><span class="p">.</span><span class="nx">Word</span><span class="p">.</span><span class="nx">findOne</span> <span class="nx">spelling</span><span class="o">:</span><span class="s1">&#39;nefarious&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nb">document</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>    <span class="nb">document</span><span class="p">.</span><span class="nx">spelling</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">eql</span> <span class="s1">&#39;nefarious&#39;</span>
+</span><span class='line'>    <span class="nb">document</span><span class="p">.</span><span class="nx">definitions</span><span class="p">.</span><span class="nx">length</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">eql</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="nb">document</span><span class="p">.</span><span class="nx">synonyms</span><span class="p">.</span><span class="nx">length</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">eql</span> <span class="mi">2</span>
+</span><span class='line'>    <span class="nb">document</span><span class="p">.</span><span class="nx">definitions</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;part_of_speech&#39;</span><span class="p">].</span><span class="nx">should</span><span class="p">.</span><span class="nx">eql</span> <span class="s1">&#39;adjective&#39;</span>
+</span><span class='line'>    <span class="nx">done</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>In this case, the above code is a <a href="http://visionmedia.github.com/mocha/">Mocha</a> test case (which uses <a href="https://github.com/visionmedia/should.js">should</a> for assertions) that demonstrates Mongoose&#8217;s <code>findOne</code>.</p>
