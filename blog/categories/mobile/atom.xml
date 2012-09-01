@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mobile | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-09-01T11:25:45-04:00</updated>
+  <updated>2012-09-01T11:27:36-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://aglover.github.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/"/>
     <updated>2012-09-01T11:07:00-04:00</updated>
     <id>http://aglover.github.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/HTML5-logo.svg/200px-HTML5-logo.svg.png"> The Great Mobile App Debate rages on; in fact, it seems of late, the debate has been heating up <em>dramatically</em>. And interestingly enough, some interesting people are joining this lively discussion including <a href="http://martinfowler.com/">Martin Fowler</a>. In his presentation dubbed '<a href="http://martinfowler.com/articles/multiMobile/">Developing Software for Multiple Devices</a>', Martin makes the case for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> citing the reduced cost of building a single platform app as opposed to building an app for each platform. What's more, he notes that the option to build an app via some cross-platform framework (presumably he's talking about <a href="http://thinkmobile.appcelerator.com/blog/bid/211263/The-Great-Mobile-App-Debate-Native-vs-HTML5">Appcelerator</a> or the <a href="http://xamarin.com/">Xamarin</a>'s of the world) isn't viable. He invokes memories from the early days of desktop apps:</p>
+    <content type="html"><![CDATA[<p><img class="right" src="http://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/HTML5-logo.svg/200px-HTML5-logo.svg.png"> The Great Mobile App Debate rages on; in fact, it seems of late, the debate has been heating up <em>dramatically</em>. And interestingly enough, some intriguing people are joining this lively discussion including <a href="http://martinfowler.com/">Martin Fowler</a>. In his presentation dubbed '<a href="http://martinfowler.com/articles/multiMobile/">Developing Software for Multiple Devices</a>', Martin makes the case for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> citing the reduced cost of building a single platform app as opposed to building an app for each platform. What's more, he notes that the option to build an app via some cross-platform framework (presumably he's talking about <a href="http://thinkmobile.appcelerator.com/blog/bid/211263/The-Great-Mobile-App-Debate-Native-vs-HTML5">Appcelerator</a> or the <a href="http://xamarin.com/">Xamarin</a>'s of the world) isn't viable. He invokes memories from the early days of desktop apps:</p>
 
 <p><blockquote><p>By applying the lessons of history we can infer that cross-platform toolkits will not be a viable solution to the multitude of mobile platforms.</p><footer><strong>Martin Fowler</strong> <cite><a href='http://martinfowler.com/articles/multiMobile/#desktop-history'>Developing Software for Multiple Devices</a></cite></footer></blockquote></p>
 
