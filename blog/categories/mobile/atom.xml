@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mobile | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-08-31T21:36:22-04:00</updated>
+  <updated>2012-09-01T09:04:41-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -22,7 +22,9 @@
 
 <p>One of the entries you can find on wtfmobileweb.com is an interesting Tweet, which I happened to see on <a href="https://twitter.com/jonathanstark">Jonthan</a>'s timeline. <a href="https://twitter.com/@philhawksworth">@philhawksworth</a> notes that <a href="http://grolsch.com/">grolsch.com</a> isn't particularly mobile-savvy:</p>
 
-<p><blockquote><p>Dear web developers of the world. Can we stop this silliness before somebody gets hurt?!</p><footer><strong>@philhawksworth</strong> <cite><a href='https://twitter.com/philhawksworth/status/223805766161797121'>twitter.com/philhawksworth/&hellip;</a></cite></footer></blockquote></p>
+<p>{% blockquote @philhawksworth https://twitter.com/philhawksworth/status/223805766161797121 %}
+Dear web developers of the world. Can we stop this silliness before somebody gets hurt?!
+{% endblockquote %}</p>
 
 <p>If you look closely in the image referenced by the tweet (or on wtfmobileweb.com), you'll see that slightly over 24MB of content is downloaded over the course of 388 requests. And that, presumably, a lot of that content is coming from everyone's friend <a href="http://jquery.com/">JQuery</a>.</p>
 
@@ -30,7 +32,9 @@
 
 <p>As Zepto's website puts it:</p>
 
-<p><blockquote><p>Zepto is a minimalist JavaScript library for modern browsers with a largely jQuery-compatible API. If you use jQuery, you already know how to use Zepto.</p></blockquote></p>
+<p>{% blockquote http://zeptojs.com/ Zepto.com %}
+Zepto is a minimalist JavaScript library for modern browsers with a largely jQuery-compatible API. If you use jQuery, you already know how to use Zepto.
+{% endblockquote %}</p>
 
 <p>Indeed, JQuery's <code>$</code> is there in all its glory -- only just <em>slimmer</em>. I was able to substitute in Zepto for JQuery in a <a href="https://github.com/aglover/caprice">PhoneGap</a> project without any issues. Give it a shot -- unless you like having your website end up on wtfmobileweb.com!</p>
 ]]></content>

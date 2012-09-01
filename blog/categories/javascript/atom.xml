@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-08-31T21:36:22-04:00</updated>
+  <updated>2012-09-01T09:04:41-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -108,7 +108,9 @@ done(err)
 
 <p>One of the entries you can find on wtfmobileweb.com is an interesting Tweet, which I happened to see on <a href="https://twitter.com/jonathanstark">Jonthan</a>'s timeline. <a href="https://twitter.com/@philhawksworth">@philhawksworth</a> notes that <a href="http://grolsch.com/">grolsch.com</a> isn't particularly mobile-savvy:</p>
 
-<p><blockquote><p>Dear web developers of the world. Can we stop this silliness before somebody gets hurt?!</p><footer><strong>@philhawksworth</strong> <cite><a href='https://twitter.com/philhawksworth/status/223805766161797121'>twitter.com/philhawksworth/&hellip;</a></cite></footer></blockquote></p>
+<p>{% blockquote @philhawksworth https://twitter.com/philhawksworth/status/223805766161797121 %}
+Dear web developers of the world. Can we stop this silliness before somebody gets hurt?!
+{% endblockquote %}</p>
 
 <p>If you look closely in the image referenced by the tweet (or on wtfmobileweb.com), you'll see that slightly over 24MB of content is downloaded over the course of 388 requests. And that, presumably, a lot of that content is coming from everyone's friend <a href="http://jquery.com/">JQuery</a>.</p>
 
@@ -116,7 +118,9 @@ done(err)
 
 <p>As Zepto's website puts it:</p>
 
-<p><blockquote><p>Zepto is a minimalist JavaScript library for modern browsers with a largely jQuery-compatible API. If you use jQuery, you already know how to use Zepto.</p></blockquote></p>
+<p>{% blockquote http://zeptojs.com/ Zepto.com %}
+Zepto is a minimalist JavaScript library for modern browsers with a largely jQuery-compatible API. If you use jQuery, you already know how to use Zepto.
+{% endblockquote %}</p>
 
 <p>Indeed, JQuery's <code>$</code> is there in all its glory -- only just <em>slimmer</em>. I was able to substitute in Zepto for JQuery in a <a href="https://github.com/aglover/caprice">PhoneGap</a> project without any issues. Give it a shot -- unless you like having your website end up on wtfmobileweb.com!</p>
 ]]></content>
@@ -129,7 +133,9 @@ done(err)
     <id>http://aglover.github.com/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive</id>
     <content type="html"><![CDATA[<p>I recently read an article on <a href="http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework">TheServerSide.com</a> where the author muses about the possible disruptive nature of Typesafe's <a href="http://typesafe.com/company/news/24499">recent Series B cash infusion of $14M</a>:</p>
 
-<p><blockquote><p>It's time for a disruptive event that will change how programs are designed, and how applications target the Java Virtual Machine.</p><footer><strong>Cameron McKenzie</strong> <cite><a href='http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework'>Disruptive Forces in Java: Is Scala the New Spring Framework?</a></cite></footer></blockquote></p>
+<p>{% blockquote Cameron McKenzie http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework Disruptive forces in Java: Is Scala the new Spring framework? %}
+It's time for a disruptive event that will change how programs are designed, and how applications target the Java Virtual Machine.
+{% endblockquote %}</p>
 
 <p>Indeed, he likens the event to <a href="http://www.springsource.com/">SpringSource</a> and its meteoric rise to prominence in a time when web development was a real pain-in-the-neck. Think <a href="http://struts.apache.org/">Struts</a> (which, impressively, is still putting out releases) along with <a href="http://www.oracle.com/technetwork/java/javaee/ejb/index.html">EJB</a> and you have a perfect storm for a lightweight revolution.</p>
 
