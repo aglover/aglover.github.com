@@ -12,7 +12,7 @@ Briefly, Mongoose is an object modeling framework that makes it incredibly easy 
 
 For example, I've defined a `words` collection that contains documents (representing...words) that each contain an embedded collection of `definition` documents. A sample document looks like this:
 
-``` JSON Word Document
+``` javascript Word Document
 {  
   _id: "4fd7c7ac8b5b27f21b000001", 	
   spelling: "drivel", 
@@ -29,7 +29,7 @@ For example, I've defined a `words` collection that contains documents (represen
  
 From an document modeling standpoint, I'd like to work with a `Word` object that contains a list of `Definition` objects and a number of related attributes (i.e. synonyms, parts of speech, etc). To model this relationship with Mongoose, I'll need to define two `Schema` types and I'll start with the simplest: 
 
-``` JavaScript Definition Schema
+``` javascript Definition Schema
 Definition = mongoose.model 'definition', new mongoose.Schema({
   part_of_speech : { type: String, required: true, trim: true, enum: ['adjective', 'noun', 'verb', 'adverb'] },
   definition : {type: String, required: true, trim: true}
@@ -40,7 +40,7 @@ As you can see, a `Definition` is simple -- the `part_of_speech` attribute is an
 
 Next, I'll define a `Word`:
 
-``` JavaScript Word Schema
+``` javascript Word Schema
 Word = mongoose.model 'word', new mongoose.Schema({
   spelling : {type: String, required: true, trim: true, lowercase: true, unique: true},
   definitions : [Definition.schema],
@@ -52,7 +52,7 @@ As you can see, a `Word` instance embeds a collection of `Definition`s. Here I'm
 
 To create a `Word` instance and save the corresponding document couldn't be easier. Mongo array's leverage the `push` command and Mongoose follows this pattern to the tee. 
 
-``` JavaScript saving with Mongoose
+``` javascript saving with Mongoose
 word = new models.Word({spelling : 'loquacious'})
 word.synonyms.push 'verbose'
 word.definitions.push {definition: 'talking or tending to talk much or freely; talkative; \
@@ -62,7 +62,7 @@ word.save (err, data) ->
 
 Finding a word is easy too:
 
-``` JavaScript findOne in action
+``` javascript findOne in action
 it 'findOne should return one', (done) ->
   models.Word.findOne spelling:'nefarious', (err, document) ->
     document.spelling.should.eql 'nefarious'
