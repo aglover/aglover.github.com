@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-09-03T21:51:44-04:00</updated>
+  <updated>2012-09-03T21:52:55-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -28,7 +28,7 @@
 
 <p>An example will probably help: imagine the business card example from earlier -- a <code>person</code> document containing an embedded collection of <code>contacts</code>:</p>
 
-<p>```
+<p>``` javascript person document
 {</p>
 
 <pre><code>first_name: 'Andrew',
@@ -52,13 +52,13 @@ contacts: [
 
 <p>To find this document by a phone number is easy:</p>
 
-<p><code>
+<p><code>javascript finding a person by phone number
  db.persons.find({'contacts.value':'555-555-5555'})
 </code></p>
 
 <p>But what if you wanted to find the <code>contact</code> that was recently updated, say since the beginning of the month, and change its value or add some additional meta-data? The query <em>you'd like</em> would look something like:</p>
 
-<p><code>
+<p><code>javascript finding via last_updated
 db.persons.find({'contacts.last_updated': {$gte: datetime(2012, 8, 1)}})
 </code></p>
 

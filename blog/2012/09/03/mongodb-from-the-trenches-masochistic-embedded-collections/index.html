@@ -104,7 +104,7 @@
 
 <p>An example will probably help: imagine the business card example from earlier &#8211; a <code>person</code> document containing an embedded collection of <code>contacts</code>:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>person document</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -120,34 +120,37 @@
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{
-</span><span class='line'>  first_name: 'Andrew',
-</span><span class='line'>  last_name: 'Glover',
-</span><span class='line'>  contacts: [ 
-</span><span class='line'>  {
-</span><span class='line'>    type: 'cell',
-</span><span class='line'>    value: '555-555-5555',
-</span><span class='line'>    last_updated: 2012-09-01 23:41:51 UTC
-</span><span class='line'>  },
-</span><span class='line'>  {
-</span><span class='line'>    type: 'home',
-</span><span class='line'>    value: '555-555-5551',
-</span><span class='line'>    last_updated: 2012-02-11 12:21:11 UTC
-</span><span class='line'>  }
-</span><span class='line'>  ]
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nx">first_name</span><span class="o">:</span> <span class="s1">&#39;Andrew&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">last_name</span><span class="o">:</span> <span class="s1">&#39;Glover&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">contacts</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="nx">type</span><span class="o">:</span>  <span class="s1">&#39;cell&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">value</span><span class="o">:</span> <span class="s1">&#39;555-555-5555&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">last_updated</span><span class="o">:</span> <span class="mi">2012</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">01</span> <span class="mi">23</span><span class="o">:</span><span class="mi">41</span><span class="o">:</span><span class="mi">51</span> <span class="nx">UTC</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="nx">type</span><span class="o">:</span>  <span class="s1">&#39;home&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">value</span><span class="o">:</span> <span class="s1">&#39;555-555-5551&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">last_updated</span><span class="o">:</span> <span class="mi">2012</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">11</span> <span class="mi">12</span><span class="o">:</span><span class="mi">21</span><span class="o">:</span><span class="mi">11</span> <span class="nx">UTC</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>To find this document by a phone number is easy:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> db.persons.find({'contacts.value':'555-555-5555'})</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span>finding a person by phone number</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'> <span class="nx">db</span><span class="p">.</span><span class="nx">persons</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="s1">&#39;contacts.value&#39;</span><span class="o">:</span><span class="s1">&#39;555-555-5555&#39;</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>But what if you wanted to find the <code>contact</code> that was recently updated, say since the beginning of the month, and change its value or add some additional meta-data? The query <em>you&#8217;d like</em> would look something like:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>db.persons.find({'contacts.last_updated': {$gte: datetime(2012, 8, 1)}})</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span>finding via last_updated</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">db</span><span class="p">.</span><span class="nx">persons</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="s1">&#39;contacts.last_updated&#39;</span><span class="o">:</span> <span class="p">{</span><span class="nx">$gte</span><span class="o">:</span> <span class="nx">datetime</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}})</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>This query works and will match the person &#8216;Andrew Glover&#8217; &#8211; but the catch here is that what is returned is the entire document. You can add query limiters if you&#8217;d like (i.e. <code>{contacts:1}</code>), however, that will merely return a <code>person</code> document with only a collection of <code>contacts</code>. Thus, you are left to iterate over the resultant collection of <code>contacts</code> and work your magic that way. That is, you still have to find the contact document that was edited this month! In your code!</p>
