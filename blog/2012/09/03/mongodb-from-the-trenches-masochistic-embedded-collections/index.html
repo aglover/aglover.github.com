@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>MongoDB from the trenches: masochistic embedded collections - The Disco Blog</title>
+  <meta name="author" content="Andrew Glover">
+
+  
+  <meta name="description" content="MongoDB supports rich documents that can include, among other things, embedded documents. This feature embodies a has-a relationship quite nicely and &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://aglover.github.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="The Disco Blog" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Disco Blog</a></h1>
+  
+    <h2>Can you dig it?</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:aglover.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">MongoDB From the Trenches: Masochistic Embedded Collections</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-03T21:47:00-04:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://www.mongodb.org/">MongoDB</a> supports rich documents that can include, among other things, embedded documents. This feature embodies a <em>has-a</em> relationship quite nicely and can, if modeled properly, reduce the number of finds required to ascertain certain data as there are no joins in Mongo.</p>
+
+<p>As classic example of embedding a collection of documents inside a parent document is contact addresses (i.e. mailing, email, twitter, etc) associated with a person. Think business cards. You can, of course, model this in any number of ways &#8211; in the traditional relational world, this would be a one-to-many relationship between at least two tables. Nevertheless, with a document-oriented database, you can model a parent <code>person</code> document with an embedded collection of <code>contacts</code> that are each themselves documents containing, say, <em>type</em> (i.e. phone, twitter, email) and <em>value</em> (which could be 555-555-555, @jon_doe, etc).</p>
+
+<p>This relationship with Mongo works nicely <em>if the child embedded document never needs to exist outside of its parent</em>. In the case of a business card, the contact document representing a phone number, for example, doesn&#8217;t necessarily make sense outside the context of the person who it belongs to. With this relationship, you can easily find a particular person via his/her phone number (that is, via Mongo&#8217;s query language, you can reach inside arrays via its <a href="http://www.mongodb.org/display/DOCS/Dot+Notation+(Reaching+into+Objects">dot notion</a>) effortlessly). And, once you have a handle to a person, you don&#8217;t need to execute a series of finds to ascertain contact information &#8211; it&#8217;s all right there.</p>
+
+<p>Nevertheless, things start to get painful quickly if you&#8217;d like to operate solely on a singular embedded document. That is, if you execute finds that are intended to deal with the expected resultant embedded document, you&#8217;re in for some work: as of Mongo 2.2, you can&#8217;t select a singular document from within a collection residing in a parent via a query. A find in this case will pull <em>everything</em> &#8211; it&#8217;s up to you (i.e your application) to filter things.</p>
+
+<p>An example will probably help: imagine the business card example from earlier &#8211; a <code>person</code> document containing an embedded collection of <code>contacts</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  first_name: 'Andrew',
+</span><span class='line'>  last_name: 'Glover',
+</span><span class='line'>  contacts: [ 
+</span><span class='line'>  {
+</span><span class='line'>    type: 'cell',
+</span><span class='line'>    value: '555-555-5555',
+</span><span class='line'>    last_updated: 2012-09-01 23:41:51 UTC
+</span><span class='line'>  },
+</span><span class='line'>  {
+</span><span class='line'>    type: 'home',
+</span><span class='line'>    value: '555-555-5551',
+</span><span class='line'>    last_updated: 2012-02-11 12:21:11 UTC
+</span><span class='line'>  }
+</span><span class='line'>  ]
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To find this document by a phone number is easy:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> db.persons.find({'contacts.value':'555-555-5555'})</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But what if you wanted to find the <code>contact</code> that was recently updated, say since the beginning of the month, and change its value or add some additional meta-data? The query <em>you&#8217;d like</em> would look something like:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>db.persons.find({'contacts.last_updated': {$gte: datetime(2012, 8, 1)}})</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This query works and will match the person &#8216;Andrew Glover&#8217; &#8211; but the catch here is that what is returned is the entire document. You can add query limiters if you&#8217;d like (i.e. <code>{contacts:1}</code>), however, that will merely return a <code>person</code> document with only a collection of <code>contacts</code>. Thus, you are left to iterate over the resultant collection of <code>contacts</code> and work your magic that way. That is, you still have to find the contact document that was edited this month! In your code!</p>
+
+<p>No big deal, you say? This particular example is, indeed, a bit contrived; however, imagine if the overall document is quite large (maybe it&#8217;s not a <code>person</code> but an <code>organization</code>!) and that the embedded collection is also lengthly (how many employees does Google have?). Now this simple update is pulling a lot of bytes across the wire (and taxing Mongo in the process) and then your app is working with a lot of bytes in memory (now the document is taxing your app!). Did you want this operation to happen quickly, under load too?</p>
+
+<p>Thus, with embedded document collections, if you envision having to work with a particular embedded document <em>in isolation</em>, it is better, at this point, to model has-a relationships with distinct collections (i.e. in this example, life would be much easier if there is a <code>person</code> collection and a <code>contacts</code> one). Indeed, the flexibility of document-oriented, schema-less data stores is a boon to rapid evolutionary development. But you still have to do some thinking up front. Unless, of course, you&#8217;re a masochist.</p>
+
+<p>I&#8217;m a huge fan of Mongo. Check out some of the articles, videos, and podcasts that I&#8217;ve done, which focus on Mongo, including:</p>
+
+<ul>
+<li><a href="http://www.ibm.com/developerworks/java/library/j-javadev2-12/">Java development 2.0: MongoDB: A NoSQL datastore with (all the right) RDBMS moves</a></li>
+<li><a href="http://public.dhe.ibm.com/software/dw/demos/jmongodb/index.html">Video demo: An introduction to MongoDB</a></li>
+<li><a href="http://www.ibm.com/developerworks/java/library/j-gloverpodcast/#Horowitz">Eliot Horowitz on MongoDB</a></li>
+<li><a href="http://www.ibm.com/developerworks/java/library/j-gloverpodcast4/index.html#francia">10gen&#8217;s Steve Francia talks MongoDB</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-03T21:47:00-04:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/mongodb/'>MongoDB</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aglover.github.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/" data-via="aglover" data-counturl="http://aglover.github.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2012/09/01/cost-and-the-great-mobile-app-debate/" title="Previous Post: Cost and the Great Mobile App Debate">&laquo; Cost and the Great Mobile App Debate</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">MongoDB from the trenches: masochistic embedded collections</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">Cost and the Great Mobile App Debate</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/08/29/modeling-mongo-documents-with-mongoose/">Modeling Mongo documents with Mongoose</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/08/29/redis-replication-couldnt-be-any-easier/">Redis replication: couldn't be any easier</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/08/28/leaner-jquery-with-zepto/">Leaner JQuery with Zepto</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/aglover">@aglover</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'aglover',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("aglover", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/aglover" class="twitter-follow-button" data-show-count="false">Follow @aglover</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Andrew Glover -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'thediscoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://aglover.github.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/';
+        var disqus_url = 'http://aglover.github.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
