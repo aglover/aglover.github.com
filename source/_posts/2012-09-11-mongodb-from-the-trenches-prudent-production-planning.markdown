@@ -6,7 +6,7 @@ comments: true
 categories: [MongoDB]
 ---
 
-{% img left /images/mine/Mongodb_icon.png %}While starting out with [MongoDB](http://http://www.Mongodb.org/) is super easy, there are few things you should keep in mind as you move from a development environment into a production one. No one wants to get paged at 3am because a customer can’t complete an order on your awesome e-commerce site because your database isn’t responding fast enough or worse, is down.
+{% img left /images/mine/mongodb_icon.png %}While starting out with [MongoDB](http://http://www.Mongodb.org/) is super easy, there are few things you should keep in mind as you move from a development environment into a production one. No one wants to get paged at 3am because a customer can’t complete an order on your awesome e-commerce site because your database isn’t responding fast enough or worse, is down.
 
 
 Planning for a production deployment with MongoDB [isn't rocket science](http://www.mongodb.org/display/DOCS/Production+Notes), but I must warn you, it'll cost money, especially if your application actually gets used _a lot_, which is every developer's dream. Therefore, like all databases, you need to plan for high availability and you’ll want the maximum performance benefits you can get for your money in a production environment. 
@@ -25,7 +25,7 @@ Finally, for maximum availably, _you really should be using Mongo’s [replica s
 
  * data redundancy
  * high availability via automated failover
- * disaster recovery. 
+ * disaster recovery
 
 Plus, running a replica set makes maintenance so much easier as you can bring nodes off line and on line w/out an interruption of service. And you can run nodes in a replica set on commodity hardware (don’t forget about my points regarding memory and I/O though). 
 
