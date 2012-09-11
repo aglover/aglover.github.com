@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>MongoDB from the trenches: prudent production planning - The Disco Blog</title>
+  <meta name="author" content="Andrew Glover">
+
+  
+  <meta name="description" content="While starting out with MongoDB is super easy, there are few things you should keep in mind as you move from a development environment into a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://aglover.github.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="The Disco Blog" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Disco Blog</a></h1>
+  
+    <h2>Can you dig it?</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:aglover.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">MongoDB From the Trenches: Prudent Production Planning</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-11T11:34:00-04:00" pubdate data-updated="true">Sep 11<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img class="left" src="/images/mine/Mongodb_icon.png">While starting out with <a href="http://http://www.Mongodb.org/">MongoDB</a> is super easy, there are few things you should keep in mind as you move from a development environment into a production one. No one wants to get paged at 3am because a customer can’t complete an order on your awesome e-commerce site because your database isn’t responding fast enough or worse, is down.</p>
+
+<p>Planning for a production deployment with MongoDB <a href="http://www.mongodb.org/display/DOCS/Production+Notes">isn&#8217;t rocket science</a>, but I must warn you, it&#8217;ll cost money, especially if your application actually gets used <em>a lot</em>, which is every developer&#8217;s dream. Therefore, like all databases, you need to plan for high availability and you’ll want the maximum performance benefits you can get for your money in a production environment.</p>
+
+<p>First and foremost, <a href="http://www.mongodb.org/display/DOCS/Caching">Mongo likes memory</a>; that is, frequently accessed data is stored directly in memory; moreover, writes are also stored in memory until being flushed to disk. It’s imperative that you provide enough memory for Mongo to store a valid working dataset; otherwise, Mongo will have to go to the disk to retrieve, what should be, fast lookups via indexed data. This is sloooooow. Therefore, a good rule of thumb is to plan to run your Mongo instances with <em>as much memory as you can afford</em>.</p>
+
+<p>You can get an idea for your working data set by running <code>Mongostat</code> &#8211; this is a handy command line utility that’ll give you a second-by-second view into what Mongo is up to &#8211; one particular metric you’ll see is resident memory (labeled as <code>res</code>) &#8211; this will give you a good idea of how much memory Mongo’s using at any given moment. If this number exceeds what you have available on a given machine, then Mongo is having to go to disk, which is going to be a lot slower.</p>
+
+<p>Not all data can be stored in memory; every document in Mongo is eventually written to disk. And like always, I/O is always a slow operation compared to working with memory. This is why, for example, writes in Mongo can be so fast &#8211; drivers allow you to, essentially, fire and forget and the actual write to disk is done later, asynchronously. Reads can also incur an I/O penalty when something requested isn’t in working memory.</p>
+
+<p>Thus, for high performance reads and writes, <em>pay attention to the underlying disks</em>. A key metric here is IOPS or input/output operations per second. Mongo will be extremely happy, for example, <a href="http://www.mongodb.org/display/DOCS/SSD">in an SSD environment</a>, provided you can afford it. <a href="http://en.wikipedia.org/wiki/IOPS">Just take a look at various IOPS comparisons between SSDs and traditional spinning disks</a> &#8211; super fast RPM disks can achieve IOPS in the 200 range. Typical SSD drives are attaining wild numbers, orders of magnitude higher (like in the 100’s of thousands of IOPS). It’s crazy how fast SSDs are compared to traditional hard drives.</p>
+
+<p>RAM is still faster than SSDs, so you’ll still want to understand your working set of data and ensure you have plenty of memory to contain it.</p>
+
+<p>Finally, for maximum availably, <em>you really should be using Mongo’s <a href="http://www.mongodb.org/display/DOCS/Replica+Sets">replica sets</a></em>. Setting up a cluster of Mongo instances is so incredibility easy that there really isn’t a good reason not to do it. The benefits of doing so are manifold, including:</p>
+
+<ul>
+<li>data redundancy</li>
+<li>high availability via automated failover</li>
+<li>disaster recovery.</li>
+</ul>
+
+
+<p>Plus, running a replica set makes maintenance so much easier as you can bring nodes off line and on line w/out an interruption of service. And you can run nodes in a replica set on commodity hardware (don’t forget about my points regarding memory and I/O though).</p>
+
+<p>Accordingly, when looking to move Mongo into a production environment, you need to consider memory, I/O performance, and replica sets. Running a high performant, high availability replica set&#8217;ed Mongo, not surprisingly, will cost you. If you&#8217;re looking for options for running Mongo in a production environment, I can&#8217;t recommend enough the team at <a href="https://mongohq.com/">MongoHQ</a>.</p>
+
+<p>I&#8217;m a huge fan of Mongo. Check out some of the articles, videos, and podcasts that I&#8217;ve done, which focus on Mongo, including:</p>
+
+<ul>
+<li><a href="http://www.ibm.com/developerworks/java/library/j-javadev2-12/">Java development 2.0: MongoDB: A NoSQL datastore with (all the right) RDBMS moves</a></li>
+<li><a href="http://public.dhe.ibm.com/software/dw/demos/jmongodb/index.html">Video demo: An introduction to MongoDB</a></li>
+<li><a href="http://www.ibm.com/developerworks/java/library/j-gloverpodcast/#Horowitz">Eliot Horowitz on MongoDB</a></li>
+<li><a href="http://www.ibm.com/developerworks/java/library/j-gloverpodcast4/index.html#francia">10gen&#8217;s Steve Francia talks MongoDB</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-11T11:34:00-04:00" pubdate data-updated="true">Sep 11<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/mongodb/'>MongoDB</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aglover.github.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/" data-via="aglover" data-counturl="http://aglover.github.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/" title="Previous Post: Past performance is no guarantee of future results">&laquo; Past performance is no guarantee of future results</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">MongoDB from the trenches: prudent production planning</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/">Past performance is no guarantee of future results</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">MongoDB from the trenches: masochistic embedded collections</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">Cost and the Great Mobile App Debate</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/08/29/modeling-mongo-documents-with-mongoose/">Modeling Mongo documents with Mongoose</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/aglover">@aglover</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'aglover',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("aglover", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/aglover" class="twitter-follow-button" data-show-count="false">Follow @aglover</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Andrew Glover -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'thediscoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://aglover.github.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/';
+        var disqus_url = 'http://aglover.github.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
