@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mobile | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-09-24T15:57:44-04:00</updated>
+  <updated>2012-09-25T13:05:30-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,22 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[MoDevTablet 2012 video: Mobile Web Realities]]></title>
+    <link href="http://aglover.github.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/"/>
+    <updated>2012-09-25T12:51:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities</id>
+    <content type="html"><![CDATA[<p>Recently, I had the distinct pleasure of speaking at <a href="http://modevtablet.com/">MoDevTablet</a> where I gave a presentation entitled "Mobile Web Realities" and the <a href="http://www.meetup.com/modevdc/">good folks who put on the conference</a> recorded it.</p>
+
+<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/rqfJS3F_YYk "></iframe></div></p>
+
+<p></p>
+
+
+<p>In summary: a year ago, hybrid development frameworks like <a href="http://phonegap.com/">PhoneGap</a> that leverage HTML5 were poised to radically alter mobile app development, but the potential has failed to live up to the promise: Faster/Easier/Cheaper <em>doesn't always mean</em> Better.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A tale of three browsers]]></title>
