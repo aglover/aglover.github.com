@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-09-25T13:05:30-04:00</updated>
+  <updated>2012-11-02T17:40:57-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,38 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[JVM fork modes and metaclass wizardry]]></title>
+    <link href="http://aglover.github.com/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry/"/>
+    <updated>2012-11-02T16:30:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry</id>
+    <content type="html"><![CDATA[<p>Over the past decade of finding myself staring at innumerable Ant build files containing a <a href="http://ant.apache.org/manual/Tasks/junit.html">JUnit task</a>, I&#8217;ve come to realize a subtle, yet powerful flag, that when not set properly, almost always leads to random and confusing test catastrophes. The JUnit task supports a number of attributes, but the most important is the <code>fork</code> one. This flag controls whether or not the tests being run are invoked within the same JVM instance of Ant itself or within a new one. By default, this value is set to <code>off</code> (<code>false</code> seems to do the same thing); however, in doing so, I&#8217;ve, from time to time, seen class loading issues or mysterious versions of jars causing strange code to be executed.</p>
+
+<p>Thus, unless there is some reason <em>not</em> to do so, I usually set the the <code>fork</code> attribute to <code>true</code>. But alas, the story doesn&#8217;t end there! With the value of <code>true</code>, a test suite will be executed within a new JVM, shielded from Ant and 98.72% of the time, this is good enough. Nevertheless, if your code does something <em>really</em> interesting, like augment normal Java code with <a href="http://groovy.codehaus.org/Per-Instance+MetaClass">MetaClass wizardry</a> you might find yourself scratching your head, especially if you change the behavior of the same classes between tests.</p>
+
+<p>For instance, at <a href="http://www.app47.com/">App47</a> we have a number of different software components, written in various languages, that interact via queues. In one particular case, we have a <a href="https://cirrus.app47.com">Rails</a> instance dropping messages on two queues that are ultimately processed by a Java application. The underlying queue implementation changes based upon where the code is running (i.e. in the cloud or within a data center). The data center queuing implementation was added after an initial cloud implementation was written an deployed. In order for the Java application to interact with the underlying queues and their differing implementations, at runtime, one class is dynamically augmented with some extra code, unique to the particular queue it is set to interact with. This magic is actually quite simple and is achieved via Groovy.</p>
+
+<p>Essentially, a <code>Message</code> class (representing a generic message residing on a queue) is dynamically augmented with a <code>Processor</code> class that knows how to actually handle the message instance. In this case, we only have two types of messages, so at run time, when the actual Java process fires up, it is told which type of <code>Processor</code> to shove into a popped <code>Message</code> instance like so:</p>
+
+<figure class='code'><figcaption><span>Groovy MetaClass wizardry</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">def</span> <span class="n">iprocessor</span> <span class="o">=</span> <span class="n">manufactureProcessor</span><span class="o">(</span><span class="n">processor</span><span class="o">)</span>
+</span><span class='line'><span class="n">iprocessor</span><span class="o">.</span><span class="na">setProperties</span><span class="o">(</span><span class="n">properties</span><span class="o">)</span>
+</span><span class='line'><span class="n">Message</span><span class="o">.</span><span class="na">metaClass</span><span class="o">.</span><span class="na">static</span><span class="o">.</span><span class="na">getMessageProcessor</span> <span class="o">&lt;&lt;</span> <span class="o">{</span> <span class="k">return</span> <span class="n">iprocessor</span> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Thus, when a particular <code>Message</code> instance is popped off of a queue, it asks itself for an instance of a <code>Processor</code> via the <code>getMessageProcessor</code> method and it proceeded to process itself. Without delving into the particulars of underlying queues or workflow, the relevant details here are that the original message was created via a Ruby process and that ultimately the underlying message is a JSON document; what&#8217;s more, the dynamic code was added to retro fit a newer queueing technology required for data center deployments.</p>
+
+<p>Now back to JUnit and Ant: this varying and dynamic altering of a Java class caused some subtle test failures when run in a forked mode.  It turns out that in addition to the ability to fork the JVM for a test suite, you can control the granularity of how often you can fork. That is, via the <code>forkmode</code> attribute, you can fork one time for all tests or once for <em>each test</em>.</p>
+
+<p>The <code>forkmode</code> attribute can take the values of <code>perTest</code> (which is the default value), <code>once</code>, and <code>perBatch</code> &#8211; in our particular case, the value was initially set to <code>once</code>, which meant that once a <code>Message</code> class was dynamically set with a <code>Processor</code>, it seemingly always had the <em>same one</em>. That is, even in later tests where the underlying logic was setting different <code>Processor</code> instances, they were subsequently ignored in favor of which ever <code>Processor</code> was initially set.  Switching the <code>forkmode</code> attribute to <code>perTest</code> naturally fixed the test failures. This made total sense: each JVM instance for each test had the correctly modified <code>Message</code> class. This incidentally also models how the underlying Java processes work in a production environment: they each have their own JVM.</p>
+
+<p>Therefore, pay particular attention to the settings in an Ant file&#8217;s JUnit task. The same is true for Maven&#8217;s <a href="http://maven.apache.org/plugins/maven-surefire-plugin/">Surefire Plugin</a> &#8211; in both cases, the fork mode and the frequency at which tests fork can mean the difference between a successful test suite run or a cacophony of failures.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MoDevTablet 2012 video: Mobile Web Realities]]></title>
