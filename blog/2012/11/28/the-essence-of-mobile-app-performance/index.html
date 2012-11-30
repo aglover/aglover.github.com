@@ -1,0 +1,321 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>The essence of mobile app performance - The Disco Blog</title>
+  <meta name="author" content="Andrew Glover">
+
+  
+  <meta name="description" content="Are you pumped that you just published an app? Yep, me too. But guess what? Once you&#8217;ve built, tested, and deployed a mobile app, you&#8217;ll &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://aglover.github.com/blog/2012/11/28/the-essence-of-mobile-app-performance/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="The Disco Blog" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Disco Blog</a></h1>
+  
+    <h2>Can you dig it?</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:aglover.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">The Essence of Mobile App Performance</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-28T16:59:00-05:00" pubdate data-updated="true">Nov 28<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img class="right" src="/images/mine/binoculars.png">Are you pumped that you just published an app? Yep, me too. But guess what? Once you&#8217;ve built, tested, and deployed a mobile app, you&#8217;ll find yourself concerned with two factors:</p>
+
+<ul>
+<li>visibility</li>
+<li>engagement</li>
+</ul>
+
+
+<p>The view app stores like <a href="http://www.apple.com/itunes/">iTunes</a> and <a href="https://play.google.com/store?hl=en">Google Play</a> provide for you regarding app usage is fairly blurry. Downloads, the metric you get for free, doesn&#8217;t really tell you anything about how your app is being used.</p>
+
+<p>While, at this point, there are essentially two platforms (<a href="http://en.wikipedia.org/wiki/IOS">iOS</a> &amp; <a href="http://en.wikipedia.org/wiki/Android_(operating_system">Android</a>)), it&#8217;s a big big world out there with a <a href="http://www.androidpit.com/mobile-world-congress">ton of different devices</a>! What&#8217;s more, these devices, whether <a href="http://bgr.com/2012/05/16/android-fragmentation-visualized-opensignalmaps/">Android</a> <em>or <a href="http://bgr.com/2012/06/12/apple-ios-fragmentation-iphone/">iOS</a></em> are fragmented, which means your app will behave in some manner you haven&#8217;t tested. Plus, the spectrum of varied users almost guarantees they are going to do something with your app that you&#8217;ve never even considered.  In an app world, you can&#8217;t assume who will use your app!</p>
+
+<p>When&#8217;s the last time you downloaded an app that has a measly one or two star rating? Me, neither. Once your app is live, you&#8217;ll want to know what&#8217;s happening. You&#8217;ll want to know how your app is behaving and you&#8217;ll want to know as quickly as possible before a landslide of negative feedback.</p>
+
+<p>Behavior can be ascertained in two ways:</p>
+
+<ul>
+<li>logging</li>
+<li>events</li>
+</ul>
+
+
+<p>Logging is a no-brainer &#8211; but remember, crash logs are not enough sometimes! While you can get these in some form or another from app stores, oftentimes monitoring error and/or warning logs can bring to light that future crash. On that same note, don&#8217;t over log either &#8211; the loquacious logger usually ends up being a nuisance by flooding you with too much information. Think <a href="http://en.wikipedia.org/wiki/Signal-to-noise_ratio">signal-to-noise</a> ratio here.</p>
+
+<p>Events are like log messages, but they&#8217;re more typed &#8211; rather than describing geek-speak information like a JSON parsing warning at line 43, they capture succinct actions like a button click, a picture taken, a video download. The sky&#8217;s the limit when it comes to what behavior you wish to capture with an event!</p>
+
+<p>Events come in a lot of flavors &#8211; they can have a timer associated with them and, in some respects, they can also be categorized as a session. Either which way you spin it though, events tell you <em>how your app is being used</em>. Combine these tools with dimension data like device information and geo-location and you start to see what&#8217;s happening with your app in real time &#8211; your view is certainly less cloudy!</p>
+
+<p>Another question: are you giving your app away for free <em>without any monetization strategy</em>?  I didn&#8217;t think so. You wouldn&#8217;t have read this far otherwise. <a href="http://www.insidefacebook.com/2009/01/12/application-insights-how-exactly-is-mau-calculated/">Engagement</a> is about understanding the lifetime value of a user. You want some sort of return on your investment (and if it isn&#8217;t money, then it is certainly engaged eyeballs), otherwise you wasted your time building the app.</p>
+
+<p>When&#8217;s the last time you downloaded an app, launched it, decided it was terrible and uninstalled it immediately? Yeah, me too (it happened while I was writing this post). I recently spoke with a government agency that disclosed to me that they had over 500,000 downloads of their app. That&#8217;s great news! Unfortunately, they had no idea if the app was being used. I bet the app I just deleted is happy they had another download too.</p>
+
+<p>What everyone wants to know, in addition to <em>how</em> their app is being used, is <em>whether it is being used at all</em>. Are people engaged in actively using your app or do they <a href="http://www.nuance.com/ucmprod/groups/enterprise/@web-enus/documents/collateral/nc_020218.pdf">abandon</a> it? A telling metric here is <em>active users</em> &#8211; this accurately discloses how often someone uses your app. And if your monetization strategy relies on ads, for example, this metric means everything to you.</p>
+
+<p>Just like with visibility, if you add dimension data like device information, geo-location, and even duration, a fairly vivid picture of user engagement is painted for you. You can ascertain if your app is actually delivering value.</p>
+
+<p>Building, testing, and deploying your app is no easy feat. Congrats on getting that far! But don&#8217;t forget about what happens after that effort finishes. Putting an app out into the wild without some sort of monitoring is like driving your car from the back seat while sitting backwards. All you see is outdated and you have no view as to where you&#8217;re headed.  Visibility and engagement. If they don&#8217;t matter to you now, they will.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-28T16:59:00-05:00" pubdate data-updated="true">Nov 28<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/mobile/'>mobile</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aglover.github.com/blog/2012/11/28/the-essence-of-mobile-app-performance/" data-via="aglover" data-counturl="http://aglover.github.com/blog/2012/11/28/the-essence-of-mobile-app-performance/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry/" title="Previous Post: JVM fork modes and metaclass wizardry">&laquo; JVM fork modes and metaclass wizardry</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/11/28/the-essence-of-mobile-app-performance/">The essence of mobile app performance</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry/">JVM fork modes and metaclass wizardry</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/">MoDevTablet 2012 video: Mobile Web Realities</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/24/a-tale-of-three-browsers/">A tale of three browsers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">MongoDB from the trenches: prudent production planning</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/aglover">@aglover</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'aglover',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("aglover", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/aglover" class="twitter-follow-button" data-show-count="false">Follow @aglover</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Andrew Glover -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'thediscoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://aglover.github.com/blog/2012/11/28/the-essence-of-mobile-app-performance/';
+        var disqus_url = 'http://aglover.github.com/blog/2012/11/28/the-essence-of-mobile-app-performance/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
