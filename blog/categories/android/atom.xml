@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Java | The Disco Blog]]></title>
-  <link href="http://aglover.github.com/blog/categories/java/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Android | The Disco Blog]]></title>
+  <link href="http://aglover.github.com/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
   <updated>2012-12-05T09:12:04-05:00</updated>
   <id>http://aglover.github.com/</id>
@@ -72,58 +72,6 @@
 <p>As I alluded to in the beginning of this post, there are 4 <em>primary platforms</em> and myriad hybrid options, such as <a href="http://phonegap.com/">PhoneGap</a> and <a href="http://www.appcelerator.com/">Appcelerator</a>, for example. These hybrid options have various advantages and disadvantages; however, the primary concerns one needs to think through are still speed of development, distribution, and payout.</p>
 
 <p>Before you embark on a mobile development effort, it pays to have the end in mind -- that is, before you code, have tangible answers for app distribution, development effort, and potential payout as these points will help guide you through the mobile landscape.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[JVM fork modes and metaclass wizardry]]></title>
-    <link href="http://aglover.github.com/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry/"/>
-    <updated>2012-11-02T16:30:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry</id>
-    <content type="html"><![CDATA[<p>Over the past decade of finding myself staring at innumerable Ant build files containing a <a href="http://ant.apache.org/manual/Tasks/junit.html">JUnit task</a>, I've come to realize a subtle, yet powerful flag, that when not set properly, almost always leads to random and confusing test catastrophes. The JUnit task supports a number of attributes, but the most important is the <code>fork</code> one. This flag controls whether or not the tests being run are invoked within the same JVM instance of Ant itself or within a new one. By default, this value is set to <code>off</code> (<code>false</code> seems to do the same thing); however, in doing so, I've, from time to time, seen class loading issues or mysterious versions of jars causing strange code to be executed.</p>
-
-<p>Thus, unless there is some reason <em>not</em> to do so, I usually set the the <code>fork</code> attribute to <code>true</code>. But alas, the story doesn't end there! With the value of <code>true</code>, a test suite will be executed within a new JVM, shielded from Ant and 98.72% of the time, this is good enough. Nevertheless, if your code does something <em>really</em> interesting, like augment normal Java code with <a href="http://groovy.codehaus.org/Per-Instance+MetaClass">MetaClass wizardry</a> you might find yourself scratching your head, especially if you change the behavior of the same classes between tests.</p>
-
-<p>For instance, at <a href="http://www.app47.com/">App47</a> we have a number of different software components, written in various languages, that interact via queues. In one particular case, we have a <a href="https://cirrus.app47.com">Rails</a> instance dropping messages on two queues that are ultimately processed by a Java application. The underlying queue implementation changes based upon where the code is running (i.e. in the cloud or within a data center). The data center queuing implementation was added after an initial cloud implementation was written an deployed. In order for the Java application to interact with the underlying queues and their differing implementations, at runtime, one class is dynamically augmented with some extra code, unique to the particular queue it is set to interact with. This magic is actually quite simple and is achieved via Groovy.</p>
-
-<p>Essentially, a <code>Message</code> class (representing a generic message residing on a queue) is dynamically augmented with a <code>Processor</code> class that knows how to actually handle the message instance. In this case, we only have two types of messages, so at run time, when the actual Java process fires up, it is told which type of <code>Processor</code> to shove into a popped <code>Message</code> instance like so:</p>
-
-<p><code>java Groovy MetaClass wizardry
-def iprocessor = manufactureProcessor(processor)
-iprocessor.setProperties(properties)
-Message.metaClass.static.getMessageProcessor &lt;&lt; { return iprocessor }
-</code></p>
-
-<p>Thus, when a particular <code>Message</code> instance is popped off of a queue, it asks itself for an instance of a <code>Processor</code> via the <code>getMessageProcessor</code> method and it proceeded to process itself. Without delving into the particulars of underlying queues or workflow, the relevant details here are that the original message was created via a Ruby process and that ultimately the underlying message is a JSON document; what's more, the dynamic code was added to retro fit a newer queueing technology required for data center deployments.</p>
-
-<p>Now back to JUnit and Ant: this varying and dynamic altering of a Java class caused some subtle test failures when run in a forked mode.  It turns out that in addition to the ability to fork the JVM for a test suite, you can control the granularity of how often you can fork. That is, via the <code>forkmode</code> attribute, you can fork one time for all tests or once for <em>each test</em>.</p>
-
-<p>The <code>forkmode</code> attribute can take the values of <code>perTest</code> (which is the default value), <code>once</code>, and <code>perBatch</code> -- in our particular case, the value was initially set to <code>once</code>, which meant that once a <code>Message</code> class was dynamically set with a <code>Processor</code>, it seemingly always had the <em>same one</em>. That is, even in later tests where the underlying logic was setting different <code>Processor</code> instances, they were subsequently ignored in favor of which ever <code>Processor</code> was initially set.  Switching the <code>forkmode</code> attribute to <code>perTest</code> naturally fixed the test failures. This made total sense: each JVM instance for each test had the correctly modified <code>Message</code> class. This incidentally also models how the underlying Java processes work in a production environment: they each have their own JVM.</p>
-
-<p>Therefore, pay particular attention to the settings in an Ant file's JUnit task. The same is true for Maven's <a href="http://maven.apache.org/plugins/maven-surefire-plugin/">Surefire Plugin</a> -- in both cases, the fork mode and the frequency at which tests fork can mean the difference between a successful test suite run or a cacophony of failures.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Scala &amp; Typesafe: exciting. Not disruptive]]></title>
-    <link href="http://aglover.github.com/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive/"/>
-    <updated>2012-08-27T08:35:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive</id>
-    <content type="html"><![CDATA[<p>I recently read an article on <a href="http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework">TheServerSide.com</a> where the author muses about the possible disruptive nature of Typesafe's <a href="http://typesafe.com/company/news/24499">recent Series B cash infusion of $14M</a>:</p>
-
-<p><blockquote><p>It's time for a disruptive event that will change how programs are designed, and how applications target the Java Virtual Machine.</p><footer><strong>Cameron McKenzie</strong> <cite><a href='http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework'>Disruptive Forces in Java: Is Scala the New Spring Framework?</a></cite></footer></blockquote></p>
-
-<p>Indeed, he likens the event to <a href="http://www.springsource.com/">SpringSource</a> and its meteoric rise to prominence in a time when web development was a real pain-in-the-neck. Think <a href="http://struts.apache.org/">Struts</a> (which, impressively, is still putting out releases) along with <a href="http://www.oracle.com/technetwork/java/javaee/ejb/index.html">EJB</a> and you have a perfect storm for a lightweight revolution.</p>
-
-<p>Unfortunately for the author's comparison, the world of web development these days is innovating at a breakneck pace. And this innovation isn't necessarily found in Typesafe's <a href="http://typesafe.com/stack">Typesafe Stack</a>. I don't discount its relevance or applicability -- Typesafe Stack is exciting: witness <a href="http://www.theregister.co.uk/2009/04/01/twitter_on_scala/">Twitter's move to Scala</a> a few years ago.  It is not, however, disruptive.</p>
-
-<p>Disruptive is something that completely changes the game. When Spring was unleashed, building Java apps became easier and consequently, you could produce them quicker. That same disruptiveness is happening now in a different community: <a href="http://nodejs.org/">Node</a>. Specifically, frameworks like <a href="http://www.meteor.com/">Meteor</a> and <a href="http://derbyjs.com/">Derby</a>, which are built using Node along with <a href="http://socket.io/">Socket.io</a>, are on the cusp of <em>revolutionizing</em> the web. These nascent frameworks are blazing new trails with respect to the realtime web -- you can build an extremely interactive application in a fraction of the code compared to something like <a href="http://www.playframework.org/">Play</a>. And you can do it before the download and installation of Play completes.</p>
-
-<p>Indeed, the excitement around these frameworks is attracting serious attention. Meteor's recent announcement that it took <a href="http://gigaom.com/cloud/scoop-meteor-gets-9m-in-funding/">$9M in funding</a> is most likely a harbinger of things to come with smart people making calculated bets in realtime, rapidly built, and rapidly deployed apps.</p>
-
-<p>Combine the ideas of these innovative frameworks with <a href="http://vertx.io/">vert.x</a>, which is an "event driven application framework that runs on the JVM" (Node has made <em>event driven</em> a key phrase) that allows you to write web apps in "Ruby, Java, Groovy, JavaScript and Python" and you have a legitimate shot a disruption that'll "change how programs are designed, and how applications target the Java Virtual Machine."</p>
-
-<p>Typesafe Stack is exciting. It's a safe choice for traditional style web development. But the forces changing web development these days are rapidly converging on the Node community. It's there that you'll find disruption.</p>
 ]]></content>
   </entry>
   
