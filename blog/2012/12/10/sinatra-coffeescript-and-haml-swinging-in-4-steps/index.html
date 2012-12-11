@@ -1,0 +1,327 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Sinatra, CoffeeScript, and Haml: swinging in 4 steps - The Disco Blog</title>
+  <meta name="author" content="Andrew Glover">
+
+  
+  <meta name="description" content="I recently decided to ditch plain old JavaScript in a Sinatra based application in favor of CoffeeScript. The existing JavaScript wasn&#8217;t &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="The Disco Blog" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Disco Blog</a></h1>
+  
+    <h2>Can you dig it?</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:aglover.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Sinatra, CoffeeScript, and Haml: Swinging in 4 Steps</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-10T21:49:00-05:00" pubdate data-updated="true">Dec 10<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I recently decided to ditch plain old JavaScript in a <a href="http://www.sinatrarb.com/">Sinatra</a> based application in favor of <a href="http://coffeescript.org/">CoffeeScript</a>. The existing JavaScript wasn&#8217;t terribly complex; however, I was looking at having to add some AJAX based long polling and I couldn&#8217;t bring myself to do it in <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-18/index.html">JavaScript</a>. Accordingly, I decided I&#8217;d use <a href="http://www.ibm.com/developerworks/web/library/j-coffeescript/index.html">CoffeeScript</a>, but, as it turns out, there were a few steps I had to put in place before I could enjoy some significant whitespace delimitation.</p>
+
+<p>First, I installed <a href="https://github.com/Sutto/barista">Barista</a>, which is a nifty Ruby gem that adds transparent CoffeeScript support to any Rack app. There were a few other gems available, however, I decided that Barista had the most mature documentation and the project still showed signs of life.</p>
+
+<p>Once I added the Barista gem to my Gemfile and ran <a href="http://gembundler.com/">Bundler</a>, I next had to require Barista in my Sinatra app; moreover, I had to register the Barista extension via <code>Sinatra.register Barista::Integration::Sinatra</code>. Note, that these steps need to be done after <a href="http://haml.info/">Haml</a> is loaded.</p>
+
+<p>In order for Barista to work properly, you&#8217;ll need to have a JavaScript runtime handy &#8211; there are a number of options here, including <a href="https://github.com/cowboyd/therubyracer">therubyracer</a>; however, after a bit of research, I found some <a href="http://stackoverflow.com/questions/6282307/execjs-and-could-not-find-a-javascript-runtime">concerning notes regarding therubyracer&#8217;s memory consumption</a>. After a bit of surfing, I happened upon <a href="https://github.com/sstephenson/execjs">ExecJS</a>, which states that Node will work just fine. Yeah!</p>
+
+<p>Accordingly, since this application runs on Ubuntu, I got to use a nifty script that I happened to have written about a year ago: <a href="https://github.com/aglover/ubuntu-equip">Ubuntu Equip</a>. In less than a minute, I had the latest and greatest version of Node running by running the command:</p>
+
+<figure class='code'><figcaption><span>script for install Node on Ubuntu</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_node.sh <span class="o">&amp;&amp;</span> bash equip_node.sh
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Take note: this script sets a custom <a href="http://en.wikipedia.org/wiki/Advanced_Packaging_Tool">apt-get</a> repository; otherwise, if you don&#8217;t add this repository, you&#8217;ll end up with an ancient version of Node.</p>
+
+<p>Finally, to actually start coding in CoffeeScript, all you have to do is use Haml&#8217;s handy inline <code>:coffeescript</code> filter:</p>
+
+<figure class='code'><figcaption><span>CoffeeScript spinner</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">:</span><span class="nx">coffeescript</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span> <span class="o">-&gt;</span>
+</span><span class='line'>    <span class="nx">opts</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">lines</span><span class="o">:</span> <span class="mi">13</span><span class="p">,</span> <span class="p">...}</span>
+</span><span class='line'>    <span class="nx">spinner</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Spinner</span><span class="p">(</span><span class="nx">opts</span><span class="p">).</span><span class="nx">spin</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;spinner&#39;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>That&#8217;s it! The steps required to get Sinatra, CoffeeScript, and Haml playing together are:</p>
+
+<ul>
+<li>Install Barista</li>
+<li>Configure Sinatra</li>
+<li>Install a JavaScript runtime engine</li>
+<li>Write some CoffeeScript</li>
+</ul>
+
+
+<p>In short, Barista and <a href="http://www.ibm.com/developerworks/java/library/j-nodejs/">Node</a> make Sinatra swing with CoffeeScript.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-10T21:49:00-05:00" pubdate data-updated="true">Dec 10<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/coffeescript/'>CoffeeScript</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/node/'>Node</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/" data-via="aglover" data-counturl="http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2012/12/02/comprehending-the-mobile-development-landscape/" title="Previous Post: Comprehending the mobile development landscape">&laquo; Comprehending the mobile development landscape</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/">Sinatra, CoffeeScript, and Haml: swinging in 4 steps</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/02/comprehending-the-mobile-development-landscape/">Comprehending the mobile development landscape</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/28/the-essence-of-mobile-app-performance/">The essence of mobile app performance</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry/">JVM fork modes and metaclass wizardry</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/">MoDevTablet 2012 video: Mobile Web Realities</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/aglover">@aglover</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'aglover',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("aglover", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/aglover" class="twitter-follow-button" data-show-count="false">Follow @aglover</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Andrew Glover -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'thediscoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/';
+        var disqus_url = 'http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
