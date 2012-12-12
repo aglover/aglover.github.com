@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: podcast | The Disco Blog]]></title>
+  <link href="http://aglover.github.com/blog/categories/podcast/atom.xml" rel="self"/>
+  <link href="http://aglover.github.com/"/>
+  <updated>2012-12-12T17:30:39-05:00</updated>
+  <id>http://aglover.github.com/</id>
+  <author>
+    <name><![CDATA[Andrew Glover]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The cloud files are out!]]></title>
+    <link href="http://aglover.github.com/blog/2012/12/12/the-cloud-files-are-out/"/>
+    <updated>2012-12-12T17:22:00-05:00</updated>
+    <id>http://aglover.github.com/blog/2012/12/12/the-cloud-files-are-out</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://www.ibm.com/developerworks/i/t-j-f-cloudpodcast_ffffff.jpg">The good folks over at <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a> have recently published <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">season 5 of the Java technical podcast series</a>. This season
+focuses on the technologies, companies, and people influencing cloud computing. I had the pleasure to with a cadre of super interesting people, including <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#labourey">Sacha Labourey</a> of CloudBees, <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#engineyard">Bill Platt and Mark Gaydos</a> of Engine Yard, and <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#proudman">Jesse Proudman</a> of BlueBox, just to name a few!</p>
+
+<p><a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">In these podcasts</a>, you'll hear from people who not only influence, but directly impact cloud computing, regardless of the underlying language or platform. There's a lot to learn here, so put on your headphones and get ready for some interesting conversations! So what are you waiting for? <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">Go listen right this instant</a>!</p>
+]]></content>
+  </entry>
+  
+</feed>
