@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-12-12T17:31:34-05:00</updated>
+  <updated>2012-12-17T09:45:06-05:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Running individual tests in Rails]]></title>
+    <link href="http://aglover.github.com/blog/2012/12/17/running-individual-tests-in-rails/"/>
+    <updated>2012-12-17T09:38:00-05:00</updated>
+    <id>http://aglover.github.com/blog/2012/12/17/running-individual-tests-in-rails</id>
+    <content type="html"><![CDATA[<p>Every now and again, I find myself struggling to remember how to execute a single test in <a href="http://rubyonrails.org/">Rails</a>. While I have <a href="https://github.com/guard/guard">Guard</a> running the entire test suite <em>anytime</em> a change is detected, there are times when I want to focus solely on one test. Accordingly, <a href="http://flavio.castelli.name/2010/05/28/rails_execute_single_test/">Flavio Castelli has a great blog entry</a> detailing the manifold ways one can execute a single test using <a href="http://rake.rubyforge.org/">Rake</a> and/or Ruby.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The cloud files are out!]]></title>
