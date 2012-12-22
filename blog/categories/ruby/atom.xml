@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-12-17T09:45:06-05:00</updated>
+  <updated>2012-12-21T21:51:32-05:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Pushing Mongo GridFS files with Sinatra]]></title>
+    <link href="http://aglover.github.com/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra/"/>
+    <updated>2012-12-21T21:19:00-05:00</updated>
+    <id>http://aglover.github.com/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra</id>
+    <content type="html"><![CDATA[<p><a href="http://www.app47.com/">We</a> recently implemented a new feature that required two interesting aspects: storing a file in <a href="http://www.mongodb.org/">MongoDB</a> using <a href="http://docs.mongodb.org/manual/applications/gridfs/">GridFS</a> (think traditional <a href="http://en.wikipedia.org/wiki/Binary_large_object">Blob</a>) and then pushing that file down to a browser. Along the way, I discovered a lot of questions on <a href="http://stackoverflow.com/">stackoverflow</a> and the like pertaining to various aspects of GridFS and <a href="http://www.sinatrarb.com/">Sinatra</a> pushes, so I thought I'd explain what we did.</p>
+
+<p>First off, GridFS is a specification for storing and retrieving large documents. In essence, Mongo breaks a large document into smaller documents (called <em>chunks</em>) and stores them in one collection and associates the meta data related to the aggregated chunks into another collection. It's a fairly handy feature and in our case, it made sense to use <a href="http://docs.mongodb.org/manual/faq/developers/#faq-developers-when-to-use-gridfs">GridFS</a> rather than <a href="http://aws.amazon.com/s3/">S3</a> (or the underlying file system).</p>
+
+<p>All MongoDB drivers implement a similar access pattern to leverage GridFS and they hide the complexity of working with chunks. For example, <a href="https://github.com/mongodb/mongo-ruby-driver">the Ruby driver</a> simply provides a <a href="https://github.com/mongodb/mongo-ruby-driver/wiki/GridFS">single interface to manage the two GridFS collections</a>. In fact, <a href="https://github.com/mongodb/mongo-ruby-driver/blob/master/lib/mongo/gridfs/grid.rb">the interface</a> basically provides two methods: <code>get</code> &amp; <code>put</code> which might seem somewhat limiting (especially because <code>get</code> takes an <code>_id</code>!) given the fact that you can add rich meta data to a GridFS document -- data you'd conceivably want to query by. Nevertheless, because GridFS is ultimately two collections in Mongo, you can query them as you would any other collection.</p>
+
+<p>Thus, finding files by some attribute other than their <code>_id</code> is as easy as writing the corresponding query:</p>
+
+<p><code>ruby GridFS example
+file = @mongo['user_apks.files'].find({:filename =&gt; user_id.to_s}).first
+</code></p>
+
+<p>Keep in mind, however, that the result returned above is a JSON document -- i.e. the variable <code>file</code> above isn't a pointer to an actual I/O instance but simply a JSON document with its details. To get the actual file, use the <code>get</code> method provided by the driver's GridFS facade -- this'll handle the details of grabbing the file from GridFS. The <code>get</code> method takes an <code>_id</code>, which you can get from the file document. Thus, to get an instance of a readable file, you can grab it like so:</p>
+
+<p><code>ruby get via _id
+@grid.get(file['_id'])
+</code></p>
+
+<p>Thus, with the <code>get</code> call you can actually get ahold of a file instance and not some JSON document describing it.</p>
+
+<p>To push this instance down to a browser using <a href="http://thediscoblog.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/">Sinatra</a>, you need to do 3 things:</p>
+
+<ul>
+<li>set the content type</li>
+<li>set the attachment name</li>
+<li>write the file to the response</li>
+</ul>
+
+
+<p>In our case, the file is an <a href="http://developer.android.com/index.html">Android</a> app; accordingly, the content type is <code>application/vnd.android.package-archive</code> and as you'll note, the attachment is simply the name of the <code>.apk</code> file. Finally, the response to the request is written to by <em>reading</em> from the corresponding GridFS file:</p>
+
+<p><code>ruby Sinatra push
+get '/some/url/:account_id/:user_id', :agent =&gt; /Android/ do |account_id, user_id|
+  file = # get the file from GridFS
+  content_type 'application/vnd.android.package-archive'
+  attachment "#{file.filename}.apk"
+  response.write file.read
+end
+</code>
+As you can see, it's all quite easy -- GridFS is simply a facade in front of two collections; moreover, forcing a download in Sinatra is three straightforward steps.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Running individual tests in Rails]]></title>
