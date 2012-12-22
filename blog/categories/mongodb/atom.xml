@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-12-21T21:51:32-05:00</updated>
+  <updated>2012-12-21T21:59:55-05:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -22,7 +22,7 @@
 
 <p>First off, GridFS is a specification for storing and retrieving large documents. In essence, Mongo breaks a large document into smaller documents (called <em>chunks</em>) and stores them in one collection and associates the meta data related to the aggregated chunks into another collection. It's a fairly handy feature and in our case, it made sense to use <a href="http://docs.mongodb.org/manual/faq/developers/#faq-developers-when-to-use-gridfs">GridFS</a> rather than <a href="http://aws.amazon.com/s3/">S3</a> (or the underlying file system).</p>
 
-<p>All MongoDB drivers implement a similar access pattern to leverage GridFS and they hide the complexity of working with chunks. For example, <a href="https://github.com/mongodb/mongo-ruby-driver">the Ruby driver</a> simply provides a <a href="https://github.com/mongodb/mongo-ruby-driver/wiki/GridFS">single interface to manage the two GridFS collections</a>. In fact, <a href="https://github.com/mongodb/mongo-ruby-driver/blob/master/lib/mongo/gridfs/grid.rb">the interface</a> basically provides two methods: <code>get</code> &amp; <code>put</code> which might seem somewhat limiting (especially because <code>get</code> takes an <code>_id</code>!) given the fact that you can add rich meta data to a GridFS document -- data you'd conceivably want to query by. Nevertheless, because GridFS is ultimately two collections in Mongo, you can query them as you would any other collection.</p>
+<p>All MongoDB drivers implement a similar access pattern to leverage GridFS and they hide the complexity of working with chunks. For example, <a href="https://github.com/mongodb/mongo-ruby-driver">the Ruby driver</a> simply provides a <a href="https://github.com/mongodb/mongo-ruby-driver/wiki/GridFS">single interface to manage the two GridFS collections</a>. In fact, <a href="https://github.com/mongodb/mongo-ruby-driver/blob/master/lib/mongo/gridfs/grid.rb">the interface</a> basically provides two methods: <code>get</code> &amp; <code>put</code> which might seem somewhat limiting, especially because <code>get</code> takes an <code>_id</code>! What's more, you can add rich meta data to a GridFS document (via the <code>put</code> call) -- data you'd conceivably want to query by, but at first glance, you can't via the <code>get</code> method. Nevertheless, because GridFS is ultimately two collections in Mongo, you can query them as you would any other collection.</p>
 
 <p>Thus, finding files by some attribute other than their <code>_id</code> is as easy as writing the corresponding query:</p>
 
@@ -30,7 +30,7 @@
 file = @mongo['user_apks.files'].find({:filename =&gt; user_id.to_s}).first
 </code></p>
 
-<p>Keep in mind, however, that the result returned above is a JSON document -- i.e. the variable <code>file</code> above isn't a pointer to an actual I/O instance but simply a JSON document with its details. To get the actual file, use the <code>get</code> method provided by the driver's GridFS facade -- this'll handle the details of grabbing the file from GridFS. The <code>get</code> method takes an <code>_id</code>, which you can get from the file document. Thus, to get an instance of a readable file, you can grab it like so:</p>
+<p>Keep in mind, however, that the result returned above is a JSON document -- i.e. the variable <code>file</code> above isn't a pointer to an actual I/O instance but simply a JSON document with its details. To get the actual file, use the <code>get</code> method provided by the driver's GridFS facade -- this'll handle the details of grabbing the file from GridFS. The <code>get</code> method takes an <code>_id</code>, which you can get from the <code>file</code> document. Thus, to get an instance of a readable file, you can grab it like so:</p>
 
 <p><code>ruby get via _id
 @grid.get(file['_id'])
