@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-12-21T21:59:55-05:00</updated>
+  <updated>2012-12-21T22:01:41-05:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -57,7 +57,7 @@ get '/some/url/:account_id/:user_id', :agent =&gt; /Android/ do |account_id, use
   response.write file.read
 end
 </code>
-As you can see, it's all quite easy -- GridFS is simply a facade in front of two collections; moreover, forcing a download in Sinatra is three straightforward steps.</p>
+As you can see, it's all quite easy -- GridFS is simply a facade for two collections; moreover, forcing a download in Sinatra is three straightforward steps. Can you dig it, man?</p>
 ]]></content>
   </entry>
   
