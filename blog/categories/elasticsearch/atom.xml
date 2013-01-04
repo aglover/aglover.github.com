@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: elasticsearch | The Disco Blog]]></title>
+  <link href="http://aglover.github.com/blog/categories/elasticsearch/atom.xml" rel="self"/>
+  <link href="http://aglover.github.com/"/>
+  <updated>2013-01-04T12:12:18-05:00</updated>
+  <id>http://aglover.github.com/</id>
+  <author>
+    <name><![CDATA[Andrew Glover]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Scalable searching with ElasticSearch]]></title>
+    <link href="http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch/"/>
+    <updated>2013-01-02T16:02:00-05:00</updated>
+    <id>http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/search_flickr.jpg">Search is no longer an optional feature: it's expected of most any application that consumes, produces, or stores data. And not everyone wants to be a search technology specialist, especially given the range of sophisticated algorithms underlying today's complex searches (i.e. SQL queries are no longer sufficient!). Knowing about existing, open source search platforms could save you a lot of time and money and allow you to spend your time fine-tuning your software's main functionality.</p>
+
+<p>In "<a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/index.html">Java development 2.0: Scalable searching with ElasticSearch</a>", I introduce <a href="http://www.elasticsearch.org/">ElasticSearch</a>, a distributed search platform that is easy to get started with and vastly extendable. ElasticSearch's sophistication and ease-of-use are impressive, and its support for horizontal scalability offers a world of options should your data requirements need to scale. So what are you waiting for? Give <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/index.html">it a read</a>!</p>
+
+<p>Thanks to <a href="http://www.flickr.com/photos/danardvincente/2512148775/">Danard Vincente</a> for the search-engine-magnifying-glass image!</p>
+]]></content>
+  </entry>
+  
+</feed>

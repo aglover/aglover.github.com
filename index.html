@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="We recently implemented a new feature that required two interesting aspects: storing a file in MongoDB using GridFS (think traditional Blob) and then &hellip;">
+  <meta name="description" content="MongoDB supports a rich query language; in fact, its support of dynamic queries is one of its more distinguishing features compared to other &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,99 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/01/04/savvy-mongo-query-selector-exists/">Savvy Mongo Query Selector: Exists</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-04T11:57:00-05:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.mongodb.org/">MongoDB</a> supports a <a href="http://docs.mongodb.org/manual/applications/read/">rich query language</a>; in fact, its support of dynamic queries is one of its <a href="http://public.dhe.ibm.com/software/dw/demos/jmongodbdocs/index.html">more distinguishing features</a> compared to other datastores in the <a href="http://www.infoworld.com/d/data-management/flexing-nosql-mongodb-in-review-185922">NoSQL</a> world. Mongo&#8217;s query language has a variety of query selectors that enable you to <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">fashion some powerful document searches</a>. One particular <a href="http://docs.mongodb.org/manual/reference/operators/#element">query selector that comes in handy</a> from time to time is <code>$exists</code>.</p>
+
+<p>Because <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-12/">Mongo is document oriented</a> and thus lacks a rigid schema, documents (for better or for worse) can have varying structures within a collection. In practice, you probably don&#8217;t see vastly differing documents within a collection; however, from time to time, various document fields might differ (as in, <em>they might not be present</em>). Take for example, the classic example of a business card: some cards (i.e. documents) might list a fax number while others might omit it. As another example, as an application and its corresponding data evolves, new fields might be added (or removed).</p>
+
+<p>The <code>$exists</code> query selector facilitates finding documents that have (or do not have) specific fields. On more than one occasion, I&#8217;ve employed this query selector to find documents in need of a surgical update. For example, in a collection dubbed <code>words</code> with word documents that each contain an embedded <code>definitions</code> document collection, I can find those particular definitions that do not have a <code>part_of_speech</code> element like so:</p>
+
+<figure class='code'><figcaption><span>$exists query selector in action</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">db</span><span class="p">.</span><span class="nx">words</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="s2">&quot;definitions.part_of_speech&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;$exists&quot;</span><span class="o">:</span><span class="kc">false</span><span class="p">}}).</span><span class="nx">sort</span><span class="p">({</span><span class="s2">&quot;spelling&quot;</span><span class="o">:</span><span class="mi">1</span><span class="p">}).</span><span class="nx">limit</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that the <code>$exists</code> query selector takes a boolean &#8211; <code>true</code> or <code>false</code>.</p>
+
+<p>As you can probably ascertain, Mongo&#8217;s <code>$exists</code> is slightly <a href="http://www.techonthenet.com/sql/exists.php">different than SQL&#8217;s</a> <code>exists</code> &#8211; in fact, in SQL there is no way to fashion a query to find a row not containing a column! Can you dig it?</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/01/02/scalable-searching-with-elasticsearch/">Scalable Searching With ElasticSearch</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-02T16:02:00-05:00" pubdate data-updated="true">Jan 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/mine/search_flickr.jpg">Search is no longer an optional feature: it&#8217;s expected of most any application that consumes, produces, or stores data. And not everyone wants to be a search technology specialist, especially given the range of sophisticated algorithms underlying today&#8217;s complex searches (i.e. SQL queries are no longer sufficient!). Knowing about existing, open source search platforms could save you a lot of time and money and allow you to spend your time fine-tuning your software&#8217;s main functionality.</p>
+
+<p>In &#8221;<a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/index.html">Java development 2.0: Scalable searching with ElasticSearch</a>&#8221;, I introduce <a href="http://www.elasticsearch.org/">ElasticSearch</a>, a distributed search platform that is easy to get started with and vastly extendable. ElasticSearch&#8217;s sophistication and ease-of-use are impressive, and its support for horizontal scalability offers a world of options should your data requirements need to scale. So what are you waiting for? Give <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/index.html">it a read</a>!</p>
+
+<p>Thanks to <a href="http://www.flickr.com/photos/danardvincente/2512148775/">Danard Vincente</a> for the search-engine-magnifying-glass image!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -589,132 +682,6 @@ focuses on the technologies, companies, and people influencing cloud computing. 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2012/09/24/a-tale-of-three-browsers/">A Tale of Three Browsers</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-24T15:39:00-04:00" pubdate data-updated="true">Sep 24<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently spent time evaluating various mobile browsers&#8217; HTML5 compatibility in an effort to understand the state of the mobile web. Along the way, I discovered that the good folks at Facebook, <a href="http://www.zdnet.com/facebooks-mark-zuckerberg-knocks-html5-in-favor-of-native-apps-7000004082/">who happen to have quite a lot of experience with HTML5</a> and <a href="http://gantdaily.com/2012/09/12/facebook-ceo-mark-zuckerberg-promises-better-mobile-strategy/">mobility</a> put together a handy website called <a href="http://www.rng.io/">Ringmark</a>.</p>
-
-<p>As the Facebook development team puts it, Ringmark</p>
-
-<blockquote><p>helps you understand which mobile browsers support the functionality your app needs.</p><footer><strong>Facebook HTML5 Blog</strong> <cite><a href='http://developers.facebook.com/html5/blog/post/2012/02/27/announcing-ringmark--a-mobile-browser-test-suite/'>developers.facebook.com/html5/&hellip;</a></cite></footer></blockquote>
-
-
-<p>Thus, with Ringmark you can ascertain a particular browser&#8217;s compatibility with HTML5 by simply going to <a href="http://www.rng.io/">rng.io</a>.</p>
-
-<p>Needless to say, I had some fun comparing Mobile Safari on my iPad to my Android 2.3.2 device. Interestingly enough, the fun really started when I decided to see what the feature functionality gap was between three browsers <em>on my desktop</em>.</p>
-
-<p><img class="center" src="/images/mine/rng_io_3_browsers.png">For the test, I used Chrome, Safari, and Firefox &#8211; all three browsers are up to date as of the writing of this entry as well. The center browser is Chrome, left is Safari and right is Firefox.</p>
-
-<p>As you can see, all 3 browsers score <em>differently</em> &#8211; Chrome scoring best with only 29 failures in Ring 1 and Safari, the worst with over 40 failures. None even made it to Ring 2.</p>
-
-<p>If you think HTML5 poses some compatibility issues for mobile devices, you need to widen your scope: HTML5 support varies across <em>everything</em>. Indeed, the <a href="http://en.wikipedia.org/wiki/Browser_wars">Browser Wars</a> are still being fought. The big difference now is that the wars are on multiple fronts.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">MongoDB From the Trenches: Prudent Production Planning</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-11T11:34:00-04:00" pubdate data-updated="true">Sep 11<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img class="left" src="/images/mine/mongodb_icon.png">While starting out with <a href="http://http://www.Mongodb.org/">MongoDB</a> is super easy, there are few things you should keep in mind as you move from a development environment into a production one. No one wants to get paged at 3am because a customer can’t complete an order on your awesome e-commerce site because your database isn’t responding fast enough or worse, is down.</p>
-
-<p>Planning for a production deployment with MongoDB <a href="http://www.mongodb.org/display/DOCS/Production+Notes">isn&#8217;t rocket science</a>, but I must warn you, it&#8217;ll cost money, especially if your application actually gets used <em>a lot</em>, which is every developer&#8217;s dream. Therefore, like all databases, you need to plan for high availability and you’ll want the maximum performance benefits you can get for your money in a production environment.</p>
-
-<p>First and foremost, <a href="http://www.mongodb.org/display/DOCS/Caching">Mongo likes memory</a>; that is, frequently accessed data is stored directly in memory; moreover, writes are also stored in memory until being flushed to disk. It’s imperative that you provide enough memory for Mongo to store a valid working dataset; otherwise, Mongo will have to go to the disk to retrieve, what should be, fast lookups via indexed data. This is sloooooow. Therefore, a good rule of thumb is to plan to run your Mongo instances with <em>as much memory as you can afford</em>.</p>
-
-<p>You can get an idea for your working data set by running <code>Mongostat</code> &#8211; this is a handy command line utility that’ll give you a second-by-second view into what Mongo is up to &#8211; one particular metric you’ll see is resident memory (labeled as <code>res</code>) &#8211; this will give you a good idea of how much memory Mongo’s using at any given moment. If this number exceeds what you have available on a given machine, then Mongo is having to go to disk, which is going to be a lot slower.</p>
-
-<p>Not all data can be stored in memory; every document in Mongo is eventually written to disk. And like always, I/O is always a slow operation compared to working with memory. This is why, for example, writes in Mongo can be so fast &#8211; drivers allow you to, essentially, fire and forget and the actual write to disk is done later, asynchronously. Reads can also incur an I/O penalty when something requested isn’t in working memory.</p>
-
-<p>Thus, for high performance reads and writes, <em>pay attention to the underlying disks</em>. A key metric here is IOPS or input/output operations per second. Mongo will be extremely happy, for example, <a href="http://www.mongodb.org/display/DOCS/SSD">in an SSD environment</a>, provided you can afford it. <a href="http://en.wikipedia.org/wiki/IOPS">Just take a look at various IOPS comparisons between SSDs and traditional spinning disks</a> &#8211; super fast RPM disks can achieve IOPS in the 200 range. Typical SSD drives are attaining wild numbers, orders of magnitude higher (like in the 100’s of thousands of IOPS). It’s crazy how fast SSDs are compared to traditional hard drives.</p>
-
-<p>RAM is still faster than SSDs, so you’ll still want to understand your working set of data and ensure you have plenty of memory to contain it.</p>
-
-<p>Finally, for maximum availably, <em>you really should be using Mongo’s <a href="http://www.mongodb.org/display/DOCS/Replica+Sets">replica sets</a></em>. Setting up a cluster of Mongo instances is so incredibility easy that there really isn’t a good reason not to do it. The benefits of doing so are manifold, including:</p>
-
-<ul>
-<li>data redundancy</li>
-<li>high availability via automated failover</li>
-<li>disaster recovery</li>
-</ul>
-
-
-<p>Plus, running a replica set makes maintenance so much easier as you can bring nodes off line and on line w/out an interruption of service. And you can run nodes in a replica set on commodity hardware (don’t forget about my points regarding memory and I/O though).</p>
-
-<p>Accordingly, when looking to move Mongo into a production environment, you need to consider memory, I/O performance, and replica sets. Running a high performant, high availability replica set&#8217;ed Mongo, not surprisingly, will cost you. If you&#8217;re looking for options for running Mongo in a production environment, I can&#8217;t recommend enough the team at <a href="https://mongohq.com/">MongoHQ</a>.</p>
-
-<p>I&#8217;m a huge fan of Mongo. Check out some of the articles, videos, and podcasts that I&#8217;ve done, which focus on Mongo, including:</p>
-
-<ul>
-<li><a href="http://www.ibm.com/developerworks/java/library/j-javadev2-12/">Java development 2.0: MongoDB: A NoSQL datastore with (all the right) RDBMS moves</a></li>
-<li><a href="http://public.dhe.ibm.com/software/dw/demos/jmongodb/index.html">Video demo: An introduction to MongoDB</a></li>
-<li><a href="http://www.ibm.com/developerworks/java/library/j-gloverpodcast/#Horowitz">Eliot Horowitz on MongoDB</a></li>
-<li><a href="http://www.ibm.com/developerworks/java/library/j-gloverpodcast4/index.html#francia">10gen&#8217;s Steve Francia talks MongoDB</a></li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -730,6 +697,14 @@ focuses on the technologies, companies, and people influencing cloud computing. 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/04/savvy-mongo-query-selector-exists/">Savvy Mongo query selector: exists</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/02/scalable-searching-with-elasticsearch/">Scalable searching with ElasticSearch</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra/">Pushing Mongo GridFS files with Sinatra</a>
       </li>
     
@@ -739,14 +714,6 @@ focuses on the technologies, companies, and people influencing cloud computing. 
     
       <li class="post">
         <a href="/blog/2012/12/12/the-cloud-files-are-out/">The cloud files are out!</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/">Sinatra, CoffeeScript, and Haml: swinging in 4 steps</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/02/comprehending-the-mobile-development-landscape/">Comprehending the mobile development landscape</a>
       </li>
     
   </ul>
@@ -805,7 +772,7 @@ focuses on the technologies, companies, and people influencing cloud computing. 
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - Andrew Glover -
+  Copyright &copy; 2013 - Andrew Glover -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

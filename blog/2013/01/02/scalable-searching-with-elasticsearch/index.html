@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Scala - The Disco Blog</title>
+  <title>Scalable searching with ElasticSearch - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="Category: Scala">
+  <meta name="description" content="Search is no longer an optional feature: it&#8217;s expected of most any application that consumes, produces, or stores data. And not everyone wants &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://aglover.github.comblog/categories/scala/">
+  <link rel="canonical" href="http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -65,36 +65,99 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Scala</h1>
+    
+      
+        <h1 class="entry-title">Scalable Searching With ElasticSearch</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-02T16:02:00-05:00" pubdate data-updated="true">Jan 2<span>nd</span>, 2013</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p><img class="right" src="/images/mine/search_flickr.jpg">Search is no longer an optional feature: it&#8217;s expected of most any application that consumes, produces, or stores data. And not everyone wants to be a search technology specialist, especially given the range of sophisticated algorithms underlying today&#8217;s complex searches (i.e. SQL queries are no longer sufficient!). Knowing about existing, open source search platforms could save you a lot of time and money and allow you to spend your time fine-tuning your software&#8217;s main functionality.</p>
 
-  
-  <h2>2012</h2>
+<p>In &#8221;<a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/index.html">Java development 2.0: Scalable searching with ElasticSearch</a>&#8221;, I introduce <a href="http://www.elasticsearch.org/">ElasticSearch</a>, a distributed search platform that is easy to get started with and vastly extendable. ElasticSearch&#8217;s sophistication and ease-of-use are impressive, and its support for horizontal scalability offers a world of options should your data requirements need to scale. So what are you waiting for? Give <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/index.html">it a read</a>!</p>
 
-<article>
-  
-<h1><a href="/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive/">Scala &amp; Typesafe: exciting. Not disruptive</a></h1>
-<time datetime="2012-08-27T08:35:00-04:00" pubdate><span class='month'>Aug</span> <span class='day'>27</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/node/'>Node</a>, <a class='category' href='/blog/categories/scala/'>Scala</a></span>
-</footer>
-
-
-</article>
-
+<p>Thanks to <a href="http://www.flickr.com/photos/danardvincente/2512148775/">Danard Vincente</a> for the search-engine-magnifying-glass image!</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-02T16:02:00-05:00" pubdate data-updated="true">Jan 2<span>nd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/elasticsearch/'>elasticsearch</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch/" data-via="aglover" data-counturl="http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra/" title="Previous Post: Pushing Mongo GridFS files with Sinatra">&laquo; Pushing Mongo GridFS files with Sinatra</a>
+      
+      
+        <a class="basic-alignment right articlenav" href="/blog/2013/01/04/savvy-mongo-query-selector-exists/" title="Next Post: Savvy Mongo query selector: exists">Savvy Mongo query selector: exists &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -192,7 +255,10 @@
       var disqus_shortname = 'thediscoblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch/';
+        var disqus_url = 'http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

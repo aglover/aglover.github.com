@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2012-12-21T22:01:41-05:00</updated>
+  <updated>2013-01-04T12:12:18-05:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Savvy Mongo query selector: exists]]></title>
+    <link href="http://aglover.github.com/blog/2013/01/04/savvy-mongo-query-selector-exists/"/>
+    <updated>2013-01-04T11:57:00-05:00</updated>
+    <id>http://aglover.github.com/blog/2013/01/04/savvy-mongo-query-selector-exists</id>
+    <content type="html"><![CDATA[<p><a href="http://www.mongodb.org/">MongoDB</a> supports a <a href="http://docs.mongodb.org/manual/applications/read/">rich query language</a>; in fact, its support of dynamic queries is one of its <a href="http://public.dhe.ibm.com/software/dw/demos/jmongodbdocs/index.html">more distinguishing features</a> compared to other datastores in the <a href="http://www.infoworld.com/d/data-management/flexing-nosql-mongodb-in-review-185922">NoSQL</a> world. Mongo's query language has a variety of query selectors that enable you to <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">fashion some powerful document searches</a>. One particular <a href="http://docs.mongodb.org/manual/reference/operators/#element">query selector that comes in handy</a> from time to time is <code>$exists</code>.</p>
+
+<p>Because <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-12/">Mongo is document oriented</a> and thus lacks a rigid schema, documents (for better or for worse) can have varying structures within a collection. In practice, you probably don't see vastly differing documents within a collection; however, from time to time, various document fields might differ (as in, <em>they might not be present</em>). Take for example, the classic example of a business card: some cards (i.e. documents) might list a fax number while others might omit it. As another example, as an application and its corresponding data evolves, new fields might be added (or removed).</p>
+
+<p>The <code>$exists</code> query selector facilitates finding documents that have (or do not have) specific fields. On more than one occasion, I've employed this query selector to find documents in need of a surgical update. For example, in a collection dubbed <code>words</code> with word documents that each contain an embedded <code>definitions</code> document collection, I can find those particular definitions that do not have a <code>part_of_speech</code> element like so:</p>
+
+<p><code>javascript $exists query selector in action
+db.words.find({"definitions.part_of_speech":{"$exists":false}}).sort({"spelling":1}).limit(100)
+</code></p>
+
+<p>Note that the <code>$exists</code> query selector takes a boolean -- <code>true</code> or <code>false</code>.</p>
+
+<p>As you can probably ascertain, Mongo's <code>$exists</code> is slightly <a href="http://www.techonthenet.com/sql/exists.php">different than SQL's</a> <code>exists</code> -- in fact, in SQL there is no way to fashion a query to find a row not containing a column! Can you dig it?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Pushing Mongo GridFS files with Sinatra]]></title>

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Redis replication: couldn't be any easier - The Disco Blog</title>
+  <title>Savvy Mongo query selector: exists - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="Redis supports master-slave replication and it&#8217;s extremely easy to setup. And the beauty of setting up replication is that all you have to do &hellip;">
+  <meta name="description" content="MongoDB supports a rich query language; in fact, its support of dynamic queries is one of its more distinguishing features compared to other &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/">
+  <link rel="canonical" href="http://aglover.github.com/blog/2013/01/04/savvy-mongo-query-selector-exists/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -70,7 +70,7 @@
   <header>
     
       
-        <h1 class="entry-title">Redis Replication: Couldn't Be Any Easier</h1>
+        <h1 class="entry-title">Savvy Mongo Query Selector: Exists</h1>
       
     
     
@@ -87,72 +87,27 @@
   
 
 
-<time datetime="2012-08-29T13:23:00-04:00" pubdate data-updated="true">Aug 29<span>th</span>, 2012</time>
+<time datetime="2013-01-04T11:57:00-05:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><a href="http://redis.io">Redis</a> supports <a href="http://redis.io/topics/replication">master-slave replication</a> and it&#8217;s extremely easy to setup.  And the beauty of setting up replication is that all you have to do is fire up a slave instance and have it point to some other Redis instance (which then becomes the master node).</p>
+<div class="entry-content"><p><a href="http://www.mongodb.org/">MongoDB</a> supports a <a href="http://docs.mongodb.org/manual/applications/read/">rich query language</a>; in fact, its support of dynamic queries is one of its <a href="http://public.dhe.ibm.com/software/dw/demos/jmongodbdocs/index.html">more distinguishing features</a> compared to other datastores in the <a href="http://www.infoworld.com/d/data-management/flexing-nosql-mongodb-in-review-185922">NoSQL</a> world. Mongo&#8217;s query language has a variety of query selectors that enable you to <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">fashion some powerful document searches</a>. One particular <a href="http://docs.mongodb.org/manual/reference/operators/#element">query selector that comes in handy</a> from time to time is <code>$exists</code>.</p>
 
-<p>Accordingly, open up the <code>redis.conf</code> file for an intended secondary (or slave node) and find the section containing a <code>slaveof</code> phrase. Uncomment it and add the IP address &amp; port of the master node:</p>
+<p>Because <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-12/">Mongo is document oriented</a> and thus lacks a rigid schema, documents (for better or for worse) can have varying structures within a collection. In practice, you probably don&#8217;t see vastly differing documents within a collection; however, from time to time, various document fields might differ (as in, <em>they might not be present</em>). Take for example, the classic example of a business card: some cards (i.e. documents) might list a fax number while others might omit it. As another example, as an application and its corresponding data evolves, new fields might be added (or removed).</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>slaveof ec2-23-21-a8-21.compute-1.amazonaws.com 6379</span></code></pre></td></tr></table></div></figure>
+<p>The <code>$exists</code> query selector facilitates finding documents that have (or do not have) specific fields. On more than one occasion, I&#8217;ve employed this query selector to find documents in need of a surgical update. For example, in a collection dubbed <code>words</code> with word documents that each contain an embedded <code>definitions</code> document collection, I can find those particular definitions that do not have a <code>part_of_speech</code> element like so:</p>
 
-
-<p>Then cycle the secondary node (so the <code>redis.conf</code> file is re-read). That&#8217;s it.</p>
-
-<p>When you fire up the slave node and run the <code>INFO</code> command, you&#8217;ll see a few new items, namely:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>role:slave
-</span><span class='line'>master_host:ec2-23-21-a8-21.compute-1.amazonaws.com
-</span><span class='line'>master_port:6379
-</span><span class='line'>master_link_status:down
-</span><span class='line'>master_last_io_seconds_ago:-1
-</span><span class='line'>master_sync_in_progress:1
-</span><span class='line'>master_sync_left_bytes:-1
-</span><span class='line'>master_sync_last_io_seconds_ago:0
-</span><span class='line'>master_link_down_since_seconds:14</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span>$exists query selector in action</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">db</span><span class="p">.</span><span class="nx">words</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="s2">&quot;definitions.part_of_speech&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;$exists&quot;</span><span class="o">:</span><span class="kc">false</span><span class="p">}}).</span><span class="nx">sort</span><span class="p">({</span><span class="s2">&quot;spelling&quot;</span><span class="o">:</span><span class="mi">1</span><span class="p">}).</span><span class="nx">limit</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>You&#8217;ll note that it takes a few moments for a data sync to occur, thus, after a few seconds, rerun the <code>INFO</code> command to see:</p>
+<p>Note that the <code>$exists</code> query selector takes a boolean &#8211; <code>true</code> or <code>false</code>.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>role:slave
-</span><span class='line'>master_host:ec2-23-21-a8-21.compute-1.amazonaws.com
-</span><span class='line'>master_port:6379
-</span><span class='line'>master_link_status:up
-</span><span class='line'>master_last_io_seconds_ago:6
-</span><span class='line'>master_sync_in_progress:0</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Running the same <code>INFO</code> command on the master node will yield a new field as well:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>role:master
-</span><span class='line'>slave0:10.255.3.143,34647,online</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A master node can have 0..N slaves (hence the naming scheme of <code>slaveN</code>); what&#8217;s more, slaves can become a master by commenting out or unsetting the <code>SLAVEOF</code> command in their corresponding configuration.</p>
-
-<p>It should be noted that Redis does support configuration changes <em>at runtime</em> via the <code>CONFIG SET</code> <a href="http://redis.io/commands/config-set">command</a>, which means you don&#8217;t even need to cycle a particular node to synchronize it with a master.</p>
+<p>As you can probably ascertain, Mongo&#8217;s <code>$exists</code> is slightly <a href="http://www.techonthenet.com/sql/exists.php">different than SQL&#8217;s</a> <code>exists</code> &#8211; in fact, in SQL there is no way to fashion a query to find a row not containing a column! Can you dig it?</p>
 </div>
 
 
@@ -175,12 +130,12 @@
   
 
 
-<time datetime="2012-08-29T13:23:00-04:00" pubdate data-updated="true">Aug 29<span>th</span>, 2012</time>
+<time datetime="2013-01-04T11:57:00-05:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/redis/'>Redis</a>
+    <a class='category' href='/blog/categories/mongodb/'>MongoDB</a>
   
 </span>
 
@@ -189,7 +144,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/" data-via="aglover" data-counturl="http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aglover.github.com/blog/2013/01/04/savvy-mongo-query-selector-exists/" data-via="aglover" data-counturl="http://aglover.github.com/blog/2013/01/04/savvy-mongo-query-selector-exists/" >Tweet</a>
   
   
   
@@ -198,10 +153,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left articlenav" href="/blog/2012/08/28/leaner-jquery-with-zepto/" title="Previous Post: Leaner JQuery with Zepto">&laquo; Leaner JQuery with Zepto</a>
+        <a class="basic-alignment left articlenav" href="/blog/2013/01/02/scalable-searching-with-elasticsearch/" title="Previous Post: Scalable searching with ElasticSearch">&laquo; Scalable searching with ElasticSearch</a>
       
-      
-        <a class="basic-alignment right articlenav" href="/blog/2012/08/29/modeling-mongo-documents-with-mongoose/" title="Next Post: Modeling Mongo documents with Mongoose">Modeling Mongo documents with Mongoose &raquo;</a>
       
     </p>
   </footer>
@@ -310,8 +263,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/';
-        var disqus_url = 'http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/';
+        var disqus_identifier = 'http://aglover.github.com/blog/2013/01/04/savvy-mongo-query-selector-exists/';
+        var disqus_url = 'http://aglover.github.com/blog/2013/01/04/savvy-mongo-query-selector-exists/';
         var disqus_script = 'embed.js';
       
     (function () {
