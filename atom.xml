@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-01-04T12:12:18-05:00</updated>
+  <updated>2013-02-17T12:42:22-05:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Circumventing mobile UX expectations]]></title>
+    <link href="http://aglover.github.com/blog/2013/02/17/circumventing-mobile-ux-expectations/"/>
+    <updated>2013-02-17T12:10:00-05:00</updated>
+    <id>http://aglover.github.com/blog/2013/02/17/circumventing-mobile-ux-expectations</id>
+    <content type="html"><![CDATA[<p>Recently, a <a href="https://twitter.com/trianglechoke">buddy of mine</a> pointed me to an interesting tweet:</p>
+
+<blockquote><p>New tool converts your Apple #iOS apps to #HTML5 http://dld.bz/cejxz  #appdev</p><footer><strong>@effectiveui</strong> <cite><a href='https://twitter.com/effectiveui/status/299626694149537792'>twitter.com/effectiveui/status/&hellip;</a></cite></footer></blockquote>
+
+
+<p>The article about this new tool, dubbed the &#8221;<a href="http://software.intel.com/en-us/articles/technical-reference-intel-html5-app-porter-tool-beta">Intel HTML5 App Porter Tool</a>&#8221; suggests that because iOS apps are limited to one platform, HTML5:</p>
+
+<blockquote><p>represents an opportunity because it’s supported across a wide range of different devices and operating systems, so it enables the same code base to be reused across different app deployments.</p><footer><strong>Softtalkblog</strong> <cite><a href='http://www.develop-online.net/news/43193/New-tool-converts-your-Apple-apps-to-HTML5'>New Tool Converts Your Apple Apps to HTML5</a></cite></footer></blockquote>
+
+
+<p><img class="right" src="http://www.carinsurance.com/imagesvr_ce/6464/152631.jpg"> While technically this statement is true &#8211; HTML5 <em>is ubiquitous</em> and you do end up with a single code base &#8211; HTML5 is the lowest common app development denominator and thus produces an underwhelming experience when compared to its native brethren.</p>
+
+<p>Taking a native iOS (or Android) app and recasting it into an HTML5 app is like taking your beautiful Ferrari and trading it for a station wagon. The experience will never be quite the same.</p>
+
+<p>Don&#8217;t get caught up in the HTML5 hype-cycle. It&#8217;s a great platform for mobile web sites, but if you&#8217;re building a mobile app, the UX bar has been set quite high. You cannot yet meet that bar with HTML5.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Savvy Mongo query selector: exists]]></title>
