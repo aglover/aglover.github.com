@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="Recently, a buddy of mine pointed me to an interesting tweet: New tool converts your Apple #iOS apps to #HTML5 http://dld.bz/cejxz #appdev@ &hellip;">
+  <meta name="description" content="Are you new to MongoDB? Curious to see what&#8217;s interesting about it? Document-oriented databases like MongoDB are vastly different from &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,140 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/02/23/everything-you-need-to-know-about-mongodb/">Everything You Need to Know About MongoDB</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-23T09:39:00-05:00" pubdate data-updated="true">Feb 23<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/mine/mongodb_icon.png">Are you new to <a href="http://www.mongodb.org/">MongoDB</a>? Curious to see what&#8217;s interesting about it?  Document-oriented databases like MongoDB are vastly different from relational databases in that they don&#8217;t store data in tables; instead, they store it in the form of documents. From a developer&#8217;s perspective, document-oriented (or schemaless) data is simpler and <a href="http://thediscoblog.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">far more flexible</a> to manage than relational data. Rather than storing data into a rigid schema of tables, rows, and columns, joined by relationships, documents are written individually, containing whatever data they require.</p>
+
+<p>Among open source, document-oriented databases, MongoDB is often billed as a <a href="http://www.ibm.com/developerworks/library/j-javadev2-12/">NoSQL database with RDBMS features</a>. One example of this is MongoDB&#8217;s support for dynamic queries that don&#8217;t require predefined MapReduce functions. MongoDB also comes with an interactive shell that makes accessing its datastore refreshingly easy, and its out-of-the-box support for sharding and clustering (via <a href="http://thediscoblog.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">replica sets</a>) enables high scalability across multiple nodes.</p>
+
+<p>Check out this IBM developerWorks&#8217; Knowledge Path dubbed &#8221;<a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Discover MongoDB</a>&#8221; &#8211; watch four videos, read a few articles, listen to a podcast and learn everything you need to know about MongoDB!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/02/18/testing-rails-migrations/">Testing Rails Migrations</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-18T16:22:00-05:00" pubdate data-updated="true">Feb 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I recently found myself searching <a href="http://stackoverflow.com/">Stackoverflow</a> and Google for various techniques for automatically testing <a href="http://guides.rubyonrails.org/migrations.html">Rails migrations</a>. I was surprised not to have found <a href="http://stackoverflow.com/questions/6079016/how-do-i-test-rails-migrations">too much</a> information though. While testing a migration is fairly straightforward (migrations are classes and you can easily invoke corresponding methods); the challenge can be setting models up properly. That is, migrations are a tool to update an underlying database to reflect changes in models &#8211; by the time you are writing a migration, the models <em>already</em> reflect what should be.</p>
+
+<p>Accordingly, to test a migration, you need to set up your test with how things were and then run your migration and verify things have migrated.  As it turns out, this is super easy to do with a document oriented database like <a href="http://www.mongodb.org/">MongoDB</a>. For this particular project, we&#8217;re using <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a>,  which is an Object-Document-Mapper (or ODM) for MongoDB and we&#8217;re also using a nifty gem dubbed <a href="https://github.com/adacosta/mongoid_rails_migrations">mongoid_rails_migrations</a>, which facilitates writing Mongoid migrations.</p>
+
+<p>In order to reflect the state of the underlying datastore before running a migration, I needed to remove a particular collection, which due to changes in our models, is automatically populated with meta data when various events occur (think <a href="http://en.wikipedia.org/wiki/Database_trigger">relational trigger</a> here, for example). As you can probably see, as this new collection doesn&#8217;t exist in production, all the existing data in production needs some corresponding default meta data to reflect the new requirements which brought this collection to life.</p>
+
+<p>Accordingly, once I initialize my models and the corresponding collection is populated, I need to completely <a href="http://docs.mongodb.org/manual/reference/method/db.collection.drop/">drop the collection</a>. Then, I can run my migration and then verify that the previously nuked collection is present with all the required data.</p>
+
+<p>In my case, I&#8217;m using <a href="https://github.com/thoughtbot/shoulda">shoulda</a> in concert with <a href="http://ruby-doc.org/stdlib-1.9.3/libdoc/test/unit/rdoc/Test/Unit.html">Test::Unit</a>, but the details of a test framework really don&#8217;t matter &#8211; in any case, you&#8217;ll need to load your migration, which can be done via a <code>require</code> statement like so:</p>
+
+<figure class='code'><figcaption><span>Requiring a migration</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;db&#39;</span><span class="p">,</span> <span class="s1">&#39;migrate&#39;</span><span class="p">,</span> <span class="s1">&#39;20130217194234_member_app_roles_permissions&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In my <a href="http://en.wikipedia.org/wiki/Test_fixture">fixture</a> logic, I&#8217;ve initialized a few objects and related them, which automatically creates the aforementioned meta data collection; consequently, I need to do two things. First, get a connection to the underlying test datastore and then drop that collection.</p>
+
+<figure class='code'><figcaption><span>Obtaining a connection and dropping a collection</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">db</span> <span class="o">=</span> <span class="vi">@account</span><span class="o">.</span><span class="n">db</span>
+</span><span class='line'><span class="n">db</span><span class="o">[</span><span class="s1">&#39;member_app_roles&#39;</span><span class="o">].</span><span class="n">drop</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I&#8217;m ready to run my migration &#8211; it&#8217;s as simple as invoking the <a href="http://www.railstips.org/blog/archives/2009/05/11/class-and-instance-methods-in-ruby/">class method</a> <code>up</code>!</p>
+
+<figure class='code'><figcaption><span>Invoking a migration </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">MemberAppRolesPermissions</span><span class="o">.</span><span class="n">up</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once the migration has finished running, I can then verify that everything is cool and copasetic. In this case, I need to go directly to the datastore because those objects in memory won&#8217;t reflect my changes just yet.</p>
+
+<figure class='code'><figcaption><span>Asserting things worked!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">member</span> <span class="o">=</span> <span class="no">Member</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">assert_equal</span> <span class="mi">2</span><span class="p">,</span> <span class="n">member</span><span class="o">.</span><span class="n">member_app_roles</span><span class="o">.</span><span class="n">size</span>
+</span><span class='line'><span class="n">member</span><span class="o">.</span><span class="n">member_app_roles</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">app_role</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">assert_equal</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="n">app_role</span><span class="o">.</span><span class="n">role</span>
+</span><span class='line'>  <span class="n">assert_equal</span> <span class="n">member</span><span class="p">,</span> <span class="n">app_role</span><span class="o">.</span><span class="n">member</span>
+</span><span class='line'>  <span class="n">assert_not_nil</span> <span class="n">app_role</span><span class="o">.</span><span class="n">app</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As a benefit of thinking through how to test a migration, you end up unveiling how you&#8217;d construct the migration&#8217;s <code>down</code> method. That is, in my case, to roll back, all I need to do is blow away the <code>member_app_roles</code> collection!</p>
+
+<p>As you can see, testing migrations isn&#8217;t terribly difficult (probably a good reason why I haven&#8217;t found too much information about it); the key aspect is the logic that is applied to verify your migration actually worked. It should be noted that while I executed this test in the context of a document oriented database, you could certainly do the same in a relational database. For example, by dropping  columns, tables, etc before running a migration. Either way, testing a migration is a snap. Can you dig it?</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -551,141 +685,6 @@ focuses on the technologies, companies, and people influencing cloud computing. 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2012/11/28/the-essence-of-mobile-app-performance/">The Essence of Mobile App Performance</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-11-28T16:59:00-05:00" pubdate data-updated="true">Nov 28<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img class="right" src="/images/mine/binoculars.png">Are you pumped that you just published an app? Yep, me too. But guess what? Once you&#8217;ve built, tested, and deployed a mobile app, you&#8217;ll find yourself concerned with two factors:</p>
-
-<ul>
-<li>visibility</li>
-<li>engagement</li>
-</ul>
-
-
-<p>The view app stores like <a href="http://www.apple.com/itunes/">iTunes</a> and <a href="https://play.google.com/store?hl=en">Google Play</a> provide for you regarding app usage is fairly blurry. Downloads, the metric you get for free, doesn&#8217;t really tell you anything about how your app is being used.</p>
-
-<p>While, at this point, there are essentially two platforms (<a href="http://en.wikipedia.org/wiki/IOS">iOS</a> &amp; <a href="http://en.wikipedia.org/wiki/Android_(operating_system">Android</a>)), it&#8217;s a big big world out there with a <a href="http://www.androidpit.com/mobile-world-congress">ton of different devices</a>! What&#8217;s more, these devices, whether <a href="http://bgr.com/2012/05/16/android-fragmentation-visualized-opensignalmaps/">Android</a> <em>or <a href="http://bgr.com/2012/06/12/apple-ios-fragmentation-iphone/">iOS</a></em> are fragmented, which means your app will behave in some manner you haven&#8217;t tested. Plus, the spectrum of varied users almost guarantees they are going to do something with your app that you&#8217;ve never even considered.  In an app world, you can&#8217;t assume who will use your app!</p>
-
-<p>When&#8217;s the last time you downloaded an app that has a measly one or two star rating? Me, neither. Once your app is live, you&#8217;ll want to know what&#8217;s happening. You&#8217;ll want to know how your app is behaving and you&#8217;ll want to know as quickly as possible before a landslide of negative feedback.</p>
-
-<p>Behavior can be ascertained in two ways:</p>
-
-<ul>
-<li>logging</li>
-<li>events</li>
-</ul>
-
-
-<p>Logging is a no-brainer &#8211; but remember, crash logs are not enough sometimes! While you can get these in some form or another from app stores, oftentimes monitoring error and/or warning logs can bring to light that future crash. On that same note, don&#8217;t over log either &#8211; the loquacious logger usually ends up being a nuisance by flooding you with too much information. Think <a href="http://en.wikipedia.org/wiki/Signal-to-noise_ratio">signal-to-noise</a> ratio here.</p>
-
-<p>Events are like log messages, but they&#8217;re more typed &#8211; rather than describing geek-speak information like a JSON parsing warning at line 43, they capture succinct actions like a button click, a picture taken, a video download. The sky&#8217;s the limit when it comes to what behavior you wish to capture with an event!</p>
-
-<p>Events come in a lot of flavors &#8211; they can have a timer associated with them and, in some respects, they can also be categorized as a session. Either which way you spin it though, events tell you <em>how your app is being used</em>. Combine these tools with dimension data like device information and geo-location and you start to see what&#8217;s happening with your app in real time &#8211; your view is certainly less cloudy!</p>
-
-<p>Another question: are you giving your app away for free <em>without any monetization strategy</em>?  I didn&#8217;t think so. You wouldn&#8217;t have read this far otherwise. <a href="http://www.insidefacebook.com/2009/01/12/application-insights-how-exactly-is-mau-calculated/">Engagement</a> is about understanding the lifetime value of a user. You want some sort of return on your investment (and if it isn&#8217;t money, then it is certainly engaged eyeballs), otherwise you wasted your time building the app.</p>
-
-<p>When&#8217;s the last time you downloaded an app, launched it, decided it was terrible and uninstalled it immediately? Yeah, me too (it happened while I was writing this post). I recently spoke with a government agency that disclosed to me that they had over 500,000 downloads of their app. That&#8217;s great news! Unfortunately, they had no idea if the app was being used. I bet the app I just deleted is happy they had another download too.</p>
-
-<p>What everyone wants to know, in addition to <em>how</em> their app is being used, is <em>whether it is being used at all</em>. Are people engaged in actively using your app or do they <a href="http://www.nuance.com/ucmprod/groups/enterprise/@web-enus/documents/collateral/nc_020218.pdf">abandon</a> it? A telling metric here is <em>active users</em> &#8211; this accurately discloses how often someone uses your app. And if your monetization strategy relies on ads, for example, this metric means everything to you.</p>
-
-<p>Just like with visibility, if you add dimension data like device information, geo-location, and even duration, a fairly vivid picture of user engagement is painted for you. You can ascertain if your app is actually delivering value.</p>
-
-<p>Building, testing, and deploying your app is no easy feat. Congrats on getting that far! But don&#8217;t forget about what happens after that effort finishes. Putting an app out into the wild without some sort of monitoring is like driving your car from the back seat while sitting backwards. All you see is outdated and you have no view as to where you&#8217;re headed.  Visibility and engagement. If they don&#8217;t matter to you now, they will.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry/">JVM Fork Modes and Metaclass Wizardry</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-11-02T16:30:00-04:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Over the past decade of finding myself staring at innumerable Ant build files containing a <a href="http://ant.apache.org/manual/Tasks/junit.html">JUnit task</a>, I&#8217;ve come to realize a subtle, yet powerful flag, that when not set properly, almost always leads to random and confusing test catastrophes. The JUnit task supports a number of attributes, but the most important is the <code>fork</code> one. This flag controls whether or not the tests being run are invoked within the same JVM instance of Ant itself or within a new one. By default, this value is set to <code>off</code> (<code>false</code> seems to do the same thing); however, in doing so, I&#8217;ve, from time to time, seen class loading issues or mysterious versions of jars causing strange code to be executed.</p>
-
-<p>Thus, unless there is some reason <em>not</em> to do so, I usually set the the <code>fork</code> attribute to <code>true</code>. But alas, the story doesn&#8217;t end there! With the value of <code>true</code>, a test suite will be executed within a new JVM, shielded from Ant and 98.72% of the time, this is good enough. Nevertheless, if your code does something <em>really</em> interesting, like augment normal Java code with <a href="http://groovy.codehaus.org/Per-Instance+MetaClass">MetaClass wizardry</a> you might find yourself scratching your head, especially if you change the behavior of the same classes between tests.</p>
-
-<p>For instance, at <a href="http://www.app47.com/">App47</a> we have a number of different software components, written in various languages, that interact via queues. In one particular case, we have a <a href="https://cirrus.app47.com">Rails</a> instance dropping messages on two queues that are ultimately processed by a Java application. The underlying queue implementation changes based upon where the code is running (i.e. in the cloud or within a data center). The data center queuing implementation was added after an initial cloud implementation was written an deployed. In order for the Java application to interact with the underlying queues and their differing implementations, at runtime, one class is dynamically augmented with some extra code, unique to the particular queue it is set to interact with. This magic is actually quite simple and is achieved via Groovy.</p>
-
-<p>Essentially, a <code>Message</code> class (representing a generic message residing on a queue) is dynamically augmented with a <code>Processor</code> class that knows how to actually handle the message instance. In this case, we only have two types of messages, so at run time, when the actual Java process fires up, it is told which type of <code>Processor</code> to shove into a popped <code>Message</code> instance like so:</p>
-
-<figure class='code'><figcaption><span>Groovy MetaClass wizardry</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">def</span> <span class="n">iprocessor</span> <span class="o">=</span> <span class="n">manufactureProcessor</span><span class="o">(</span><span class="n">processor</span><span class="o">)</span>
-</span><span class='line'><span class="n">iprocessor</span><span class="o">.</span><span class="na">setProperties</span><span class="o">(</span><span class="n">properties</span><span class="o">)</span>
-</span><span class='line'><span class="n">Message</span><span class="o">.</span><span class="na">metaClass</span><span class="o">.</span><span class="na">static</span><span class="o">.</span><span class="na">getMessageProcessor</span> <span class="o">&lt;&lt;</span> <span class="o">{</span> <span class="k">return</span> <span class="n">iprocessor</span> <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Thus, when a particular <code>Message</code> instance is popped off of a queue, it asks itself for an instance of a <code>Processor</code> via the <code>getMessageProcessor</code> method and it proceeded to process itself. Without delving into the particulars of underlying queues or workflow, the relevant details here are that the original message was created via a Ruby process and that ultimately the underlying message is a JSON document; what&#8217;s more, the dynamic code was added to retro fit a newer queueing technology required for data center deployments.</p>
-
-<p>Now back to JUnit and Ant: this varying and dynamic altering of a Java class caused some subtle test failures when run in a forked mode.  It turns out that in addition to the ability to fork the JVM for a test suite, you can control the granularity of how often you can fork. That is, via the <code>forkmode</code> attribute, you can fork one time for all tests or once for <em>each test</em>.</p>
-
-<p>The <code>forkmode</code> attribute can take the values of <code>perTest</code> (which is the default value), <code>once</code>, and <code>perBatch</code> &#8211; in our particular case, the value was initially set to <code>once</code>, which meant that once a <code>Message</code> class was dynamically set with a <code>Processor</code>, it seemingly always had the <em>same one</em>. That is, even in later tests where the underlying logic was setting different <code>Processor</code> instances, they were subsequently ignored in favor of which ever <code>Processor</code> was initially set.  Switching the <code>forkmode</code> attribute to <code>perTest</code> naturally fixed the test failures. This made total sense: each JVM instance for each test had the correctly modified <code>Message</code> class. This incidentally also models how the underlying Java processes work in a production environment: they each have their own JVM.</p>
-
-<p>Therefore, pay particular attention to the settings in an Ant file&#8217;s JUnit task. The same is true for Maven&#8217;s <a href="http://maven.apache.org/plugins/maven-surefire-plugin/">Surefire Plugin</a> &#8211; in both cases, the fork mode and the frequency at which tests fork can mean the difference between a successful test suite run or a cacophony of failures.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -701,6 +700,14 @@ focuses on the technologies, companies, and people influencing cloud computing. 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/23/everything-you-need-to-know-about-mongodb/">Everything you need to know about MongoDB</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/testing-rails-migrations/">Testing Rails migrations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/circumventing-mobile-ux-expectations/">Circumventing mobile UX expectations</a>
       </li>
     
@@ -710,14 +717,6 @@ focuses on the technologies, companies, and people influencing cloud computing. 
     
       <li class="post">
         <a href="/blog/2013/01/02/scalable-searching-with-elasticsearch/">Scalable searching with ElasticSearch</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra/">Pushing Mongo GridFS files with Sinatra</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/17/running-individual-tests-in-rails/">Running individual tests in Rails</a>
       </li>
     
   </ul>

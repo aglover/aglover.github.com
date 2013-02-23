@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-02-17T12:42:22-05:00</updated>
+  <updated>2013-02-23T09:52:46-05:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,57 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Testing Rails migrations]]></title>
+    <link href="http://aglover.github.com/blog/2013/02/18/testing-rails-migrations/"/>
+    <updated>2013-02-18T16:22:00-05:00</updated>
+    <id>http://aglover.github.com/blog/2013/02/18/testing-rails-migrations</id>
+    <content type="html"><![CDATA[<p>I recently found myself searching <a href="http://stackoverflow.com/">Stackoverflow</a> and Google for various techniques for automatically testing <a href="http://guides.rubyonrails.org/migrations.html">Rails migrations</a>. I was surprised not to have found <a href="http://stackoverflow.com/questions/6079016/how-do-i-test-rails-migrations">too much</a> information though. While testing a migration is fairly straightforward (migrations are classes and you can easily invoke corresponding methods); the challenge can be setting models up properly. That is, migrations are a tool to update an underlying database to reflect changes in models -- by the time you are writing a migration, the models <em>already</em> reflect what should be.</p>
+
+<p>Accordingly, to test a migration, you need to set up your test with how things were and then run your migration and verify things have migrated.  As it turns out, this is super easy to do with a document oriented database like <a href="http://www.mongodb.org/">MongoDB</a>. For this particular project, we're using <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a>,  which is an Object-Document-Mapper (or ODM) for MongoDB and we're also using a nifty gem dubbed <a href="https://github.com/adacosta/mongoid_rails_migrations">mongoid_rails_migrations</a>, which facilitates writing Mongoid migrations.</p>
+
+<p>In order to reflect the state of the underlying datastore before running a migration, I needed to remove a particular collection, which due to changes in our models, is automatically populated with meta data when various events occur (think <a href="http://en.wikipedia.org/wiki/Database_trigger">relational trigger</a> here, for example). As you can probably see, as this new collection doesn't exist in production, all the existing data in production needs some corresponding default meta data to reflect the new requirements which brought this collection to life.</p>
+
+<p>Accordingly, once I initialize my models and the corresponding collection is populated, I need to completely <a href="http://docs.mongodb.org/manual/reference/method/db.collection.drop/">drop the collection</a>. Then, I can run my migration and then verify that the previously nuked collection is present with all the required data.</p>
+
+<p>In my case, I'm using <a href="https://github.com/thoughtbot/shoulda">shoulda</a> in concert with <a href="http://ruby-doc.org/stdlib-1.9.3/libdoc/test/unit/rdoc/Test/Unit.html">Test::Unit</a>, but the details of a test framework really don't matter -- in any case, you'll need to load your migration, which can be done via a <code>require</code> statement like so:</p>
+
+<p><code>ruby Requiring a migration
+require File.join(Rails.root, 'db', 'migrate', '20130217194234_member_app_roles_permissions')
+</code></p>
+
+<p>In my <a href="http://en.wikipedia.org/wiki/Test_fixture">fixture</a> logic, I've initialized a few objects and related them, which automatically creates the aforementioned meta data collection; consequently, I need to do two things. First, get a connection to the underlying test datastore and then drop that collection.</p>
+
+<p><code>ruby Obtaining a connection and dropping a collection
+db = @account.db
+db['member_app_roles'].drop
+</code></p>
+
+<p>Now I'm ready to run my migration -- it's as simple as invoking the <a href="http://www.railstips.org/blog/archives/2009/05/11/class-and-instance-methods-in-ruby/">class method</a> <code>up</code>!</p>
+
+<p><code>ruby Invoking a migration
+MemberAppRolesPermissions.up
+</code></p>
+
+<p>Once the migration has finished running, I can then verify that everything is cool and copasetic. In this case, I need to go directly to the datastore because those objects in memory won't reflect my changes just yet.</p>
+
+<p>``` ruby Asserting things worked!
+member = Member.find(member.id)</p>
+
+<p>assert_equal 2, member.member_app_roles.size
+member.member_app_roles.each do |app_role|
+  assert_equal 'admin', app_role.role
+  assert_equal member, app_role.member
+  assert_not_nil app_role.app
+end
+```</p>
+
+<p>As a benefit of thinking through how to test a migration, you end up unveiling how you'd construct the migration's <code>down</code> method. That is, in my case, to roll back, all I need to do is blow away the <code>member_app_roles</code> collection!</p>
+
+<p>As you can see, testing migrations isn't terribly difficult (probably a good reason why I haven't found too much information about it); the key aspect is the logic that is applied to verify your migration actually worked. It should be noted that while I executed this test in the context of a document oriented database, you could certainly do the same in a relational database. For example, by dropping  columns, tables, etc before running a migration. Either way, testing a migration is a snap. Can you dig it?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Pushing Mongo GridFS files with Sinatra]]></title>

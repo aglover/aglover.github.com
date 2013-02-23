@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Testing Rails migrations - The Disco Blog</title>
+  <meta name="author" content="Andrew Glover">
+
+  
+  <meta name="description" content="I recently found myself searching Stackoverflow and Google for various techniques for automatically testing Rails migrations. I was surprised not to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://aglover.github.com/blog/2013/02/18/testing-rails-migrations/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="The Disco Blog" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Disco Blog</a></h1>
+  
+    <h2>Can you dig it?</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:aglover.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Testing Rails Migrations</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-18T16:22:00-05:00" pubdate data-updated="true">Feb 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I recently found myself searching <a href="http://stackoverflow.com/">Stackoverflow</a> and Google for various techniques for automatically testing <a href="http://guides.rubyonrails.org/migrations.html">Rails migrations</a>. I was surprised not to have found <a href="http://stackoverflow.com/questions/6079016/how-do-i-test-rails-migrations">too much</a> information though. While testing a migration is fairly straightforward (migrations are classes and you can easily invoke corresponding methods); the challenge can be setting models up properly. That is, migrations are a tool to update an underlying database to reflect changes in models &#8211; by the time you are writing a migration, the models <em>already</em> reflect what should be.</p>
+
+<p>Accordingly, to test a migration, you need to set up your test with how things were and then run your migration and verify things have migrated.  As it turns out, this is super easy to do with a document oriented database like <a href="http://www.mongodb.org/">MongoDB</a>. For this particular project, we&#8217;re using <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a>,  which is an Object-Document-Mapper (or ODM) for MongoDB and we&#8217;re also using a nifty gem dubbed <a href="https://github.com/adacosta/mongoid_rails_migrations">mongoid_rails_migrations</a>, which facilitates writing Mongoid migrations.</p>
+
+<p>In order to reflect the state of the underlying datastore before running a migration, I needed to remove a particular collection, which due to changes in our models, is automatically populated with meta data when various events occur (think <a href="http://en.wikipedia.org/wiki/Database_trigger">relational trigger</a> here, for example). As you can probably see, as this new collection doesn&#8217;t exist in production, all the existing data in production needs some corresponding default meta data to reflect the new requirements which brought this collection to life.</p>
+
+<p>Accordingly, once I initialize my models and the corresponding collection is populated, I need to completely <a href="http://docs.mongodb.org/manual/reference/method/db.collection.drop/">drop the collection</a>. Then, I can run my migration and then verify that the previously nuked collection is present with all the required data.</p>
+
+<p>In my case, I&#8217;m using <a href="https://github.com/thoughtbot/shoulda">shoulda</a> in concert with <a href="http://ruby-doc.org/stdlib-1.9.3/libdoc/test/unit/rdoc/Test/Unit.html">Test::Unit</a>, but the details of a test framework really don&#8217;t matter &#8211; in any case, you&#8217;ll need to load your migration, which can be done via a <code>require</code> statement like so:</p>
+
+<figure class='code'><figcaption><span>Requiring a migration</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;db&#39;</span><span class="p">,</span> <span class="s1">&#39;migrate&#39;</span><span class="p">,</span> <span class="s1">&#39;20130217194234_member_app_roles_permissions&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In my <a href="http://en.wikipedia.org/wiki/Test_fixture">fixture</a> logic, I&#8217;ve initialized a few objects and related them, which automatically creates the aforementioned meta data collection; consequently, I need to do two things. First, get a connection to the underlying test datastore and then drop that collection.</p>
+
+<figure class='code'><figcaption><span>Obtaining a connection and dropping a collection</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">db</span> <span class="o">=</span> <span class="vi">@account</span><span class="o">.</span><span class="n">db</span>
+</span><span class='line'><span class="n">db</span><span class="o">[</span><span class="s1">&#39;member_app_roles&#39;</span><span class="o">].</span><span class="n">drop</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I&#8217;m ready to run my migration &#8211; it&#8217;s as simple as invoking the <a href="http://www.railstips.org/blog/archives/2009/05/11/class-and-instance-methods-in-ruby/">class method</a> <code>up</code>!</p>
+
+<figure class='code'><figcaption><span>Invoking a migration </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">MemberAppRolesPermissions</span><span class="o">.</span><span class="n">up</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once the migration has finished running, I can then verify that everything is cool and copasetic. In this case, I need to go directly to the datastore because those objects in memory won&#8217;t reflect my changes just yet.</p>
+
+<figure class='code'><figcaption><span>Asserting things worked!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">member</span> <span class="o">=</span> <span class="no">Member</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">assert_equal</span> <span class="mi">2</span><span class="p">,</span> <span class="n">member</span><span class="o">.</span><span class="n">member_app_roles</span><span class="o">.</span><span class="n">size</span>
+</span><span class='line'><span class="n">member</span><span class="o">.</span><span class="n">member_app_roles</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">app_role</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">assert_equal</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="n">app_role</span><span class="o">.</span><span class="n">role</span>
+</span><span class='line'>  <span class="n">assert_equal</span> <span class="n">member</span><span class="p">,</span> <span class="n">app_role</span><span class="o">.</span><span class="n">member</span>
+</span><span class='line'>  <span class="n">assert_not_nil</span> <span class="n">app_role</span><span class="o">.</span><span class="n">app</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As a benefit of thinking through how to test a migration, you end up unveiling how you&#8217;d construct the migration&#8217;s <code>down</code> method. That is, in my case, to roll back, all I need to do is blow away the <code>member_app_roles</code> collection!</p>
+
+<p>As you can see, testing migrations isn&#8217;t terribly difficult (probably a good reason why I haven&#8217;t found too much information about it); the key aspect is the logic that is applied to verify your migration actually worked. It should be noted that while I executed this test in the context of a document oriented database, you could certainly do the same in a relational database. For example, by dropping  columns, tables, etc before running a migration. Either way, testing a migration is a snap. Can you dig it?</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-18T16:22:00-05:00" pubdate data-updated="true">Feb 18<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aglover.github.com/blog/2013/02/18/testing-rails-migrations/" data-via="aglover" data-counturl="http://aglover.github.com/blog/2013/02/18/testing-rails-migrations/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2013/02/17/circumventing-mobile-ux-expectations/" title="Previous Post: Circumventing mobile UX expectations">&laquo; Circumventing mobile UX expectations</a>
+      
+      
+        <a class="basic-alignment right articlenav" href="/blog/2013/02/23/everything-you-need-to-know-about-mongodb/" title="Next Post: Everything you need to know about MongoDB">Everything you need to know about MongoDB &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/23/everything-you-need-to-know-about-mongodb/">Everything you need to know about MongoDB</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/18/testing-rails-migrations/">Testing Rails migrations</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/17/circumventing-mobile-ux-expectations/">Circumventing mobile UX expectations</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/04/savvy-mongo-query-selector-exists/">Savvy Mongo query selector: exists</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/02/scalable-searching-with-elasticsearch/">Scalable searching with ElasticSearch</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/aglover">@aglover</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'aglover',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("aglover", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/aglover" class="twitter-follow-button" data-show-count="false">Follow @aglover</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Andrew Glover -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'thediscoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://aglover.github.com/blog/2013/02/18/testing-rails-migrations/';
+        var disqus_url = 'http://aglover.github.com/blog/2013/02/18/testing-rails-migrations/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

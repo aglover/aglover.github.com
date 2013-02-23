@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-02-17T12:42:22-05:00</updated>
+  <updated>2013-02-23T09:52:46-05:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Everything you need to know about MongoDB]]></title>
+    <link href="http://aglover.github.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb/"/>
+    <updated>2013-02-23T09:39:00-05:00</updated>
+    <id>http://aglover.github.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mongodb_icon.png">Are you new to <a href="http://www.mongodb.org/">MongoDB</a>? Curious to see what's interesting about it?  Document-oriented databases like MongoDB are vastly different from relational databases in that they don't store data in tables; instead, they store it in the form of documents. From a developer's perspective, document-oriented (or schemaless) data is simpler and <a href="http://thediscoblog.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">far more flexible</a> to manage than relational data. Rather than storing data into a rigid schema of tables, rows, and columns, joined by relationships, documents are written individually, containing whatever data they require.</p>
+
+<p>Among open source, document-oriented databases, MongoDB is often billed as a <a href="http://www.ibm.com/developerworks/library/j-javadev2-12/">NoSQL database with RDBMS features</a>. One example of this is MongoDB's support for dynamic queries that don't require predefined MapReduce functions. MongoDB also comes with an interactive shell that makes accessing its datastore refreshingly easy, and its out-of-the-box support for sharding and clustering (via <a href="http://thediscoblog.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">replica sets</a>) enables high scalability across multiple nodes.</p>
+
+<p>Check out this IBM developerWorks' Knowledge Path dubbed "<a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Discover MongoDB</a>" -- watch four videos, read a few articles, listen to a podcast and learn everything you need to know about MongoDB!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Savvy Mongo query selector: exists]]></title>
@@ -190,92 +203,6 @@ db.persons.find({'contacts.last_updated': {$gte: datetime(2012, 8, 1)}})
 <li><a href="http://www.ibm.com/developerworks/java/library/j-gloverpodcast4/index.html#francia">10gen's Steve Francia talks MongoDB</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Modeling Mongo documents with Mongoose]]></title>
-    <link href="http://aglover.github.com/blog/2012/08/29/modeling-mongo-documents-with-mongoose/"/>
-    <updated>2012-08-29T21:45:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2012/08/29/modeling-mongo-documents-with-mongoose</id>
-    <content type="html"><![CDATA[<p>Without a doubt, one of the quickest ways to build an application that leverages <a href="http://www.mongodb.org/">MongoDB</a> is with Node. It's as if the two platforms were made for each other; the sheer number of Node libraries available for dealing with Mongo is testimony to a vibrant, innovative community. Indeed, one of my favorite Mongo focused libraries these days is <a href="http://mongoosejs.com/">Mongoose</a>.</p>
-
-<p>Briefly, Mongoose is an object modeling framework that makes it incredibly easy to model collections and ultimately work with intuitive objects that support a rich feature set. Like most things in Node, it couldn't be any easier to get set up. Essentially, to use Mongoose, you'll need to define <code>Schema</code> objects -- these are your documents -- either top level or even embedded.</p>
-
-<p>For example, I've defined a <code>words</code> collection that contains documents (representing...words) that each contain an embedded collection of <code>definition</code> documents. A sample document looks like this:</p>
-
-<p>``` javascript Word Document
-{<br/>
-  _id: "4fd7c7ac8b5b27f21b000001",<br/>
-  spelling: "drivel",
-  synonyms: ["garbage", "dribble", "drool"],
-  definitions: [
-  { part_of_speech: "noun",</p>
-
-<pre><code>definition:"saliva flowing from the mouth, or mucus from the nose; slaver."
-</code></pre>
-
-<p>  },
-  { part_of_speech: "noun",</p>
-
-<pre><code>definition:"childish, silly, or meaningless talk or thinking; nonsense; twaddle." 
-</code></pre>
-
-<p>  }]
-}
-```</p>
-
-<p>From an document modeling standpoint, I'd like to work with a <code>Word</code> object that contains a list of <code>Definition</code> objects and a number of related attributes (i.e. synonyms, parts of speech, etc). To model this relationship with Mongoose, I'll need to define two <code>Schema</code> types and I'll start with the simplest:</p>
-
-<p><code>javascript Definition Schema
-Definition = mongoose.model 'definition', new mongoose.Schema({
-  part_of_speech : { type: String, required: true, trim: true, enum: ['adjective', 'noun', 'verb', 'adverb'] },
-  definition : {type: String, required: true, trim: true}
-})
-</code></p>
-
-<p>As you can see, a <code>Definition</code> is simple -- the <code>part_of_speech</code> attribute is an enumerated <code>String</code> that's required; what's more, the <code>definition</code> attribute is also a required <code>String</code>.</p>
-
-<p>Next, I'll define a <code>Word</code>:</p>
-
-<p><code>javascript Word Schema
-Word = mongoose.model 'word', new mongoose.Schema({
-  spelling : {type: String, required: true, trim: true, lowercase: true, unique: true},
-  definitions : [Definition.schema],
-  synonyms : [{ type: String, trim: true, lowercase: true }]
-})
-</code></p>
-
-<p>As you can see, a <code>Word</code> instance embeds a collection of <code>Definition</code>s. Here I'm also demonstrating the usage of <code>lowercase</code> and the index <code>unique</code> placed on the <code>spelling</code> attribute.</p>
-
-<p>To create a <code>Word</code> instance and save the corresponding document couldn't be easier. Mongo array's leverage the <code>push</code> command and Mongoose follows this pattern to the tee.</p>
-
-<p><code>javascript saving with Mongoose
-word = new models.Word({spelling : 'loquacious'})
-word.synonyms.push 'verbose'
-word.definitions.push {definition: 'talking or tending to talk much or freely; talkative; \
-  chattering; babbling; garrulous.', part_of_speech: 'adjective' }
-word.save (err, data) -&gt;
-</code></p>
-
-<p>Finding a word is easy too:</p>
-
-<p>``` javascript findOne in action
-it 'findOne should return one', (done) ->
-  models.Word.findOne spelling:'nefarious', (err, document) -></p>
-
-<pre><code>document.spelling.should.eql 'nefarious'
-document.definitions.length.should.eql 1
-document.synonyms.length.should.eql 2
-document.definitions[0]['part_of_speech'].should.eql 'adjective'
-done(err)
-</code></pre>
-
-<p>```</p>
-
-<p>In this case, the above code is a <a href="http://visionmedia.github.com/mocha/">Mocha</a> test case (which uses <a href="https://github.com/visionmedia/should.js">should</a> for assertions) that demonstrates Mongoose's <code>findOne</code>.</p>
-
-<p>You can find the code for these examples and more at my Github repo dubbed <a href="https://github.com/aglover/exegesis">Exegesis</a> and while you're at it, check out the <a href="http://www.ibm.com/developerworks/training/kp/j-kp-node/index.html">developerWorks videos I did for Node</a>!</p>
 ]]></content>
   </entry>
   

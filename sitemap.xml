@@ -104,14 +104,24 @@
     </url>
     <url>
         <loc>http://aglover.github.com/blog/2013/02/17/circumventing-mobile-ux-expectations/</loc>
-        <lastmod>2013-02-17T12:41:57-05:00</lastmod>
+        <lastmod>2013-02-17T12:45:48-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://aglover.github.com/blog/2013/02/18/testing-rails-migrations/</loc>
+        <lastmod>2013-02-23T09:38:51-05:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://aglover.github.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb/
+        </loc>
+        <lastmod>2013-02-23T09:52:37-05:00</lastmod>
     </url>
     <url>
         <loc>http://aglover.github.com/blog/archives/</loc>
-        <lastmod>2013-02-17T12:41:57-05:00</lastmod>
+        <lastmod>2013-02-23T09:52:37-05:00</lastmod>
     </url>
     <url>
         <loc>http://aglover.github.com/</loc>
-        <lastmod>2013-02-17T12:41:57-05:00</lastmod>
+        <lastmod>2013-02-23T09:52:37-05:00</lastmod>
     </url>
 </urlset>
