@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mobile | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-02-23T09:52:46-05:00</updated>
+  <updated>2013-03-06T09:38:45-05:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,38 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The bull's eye on mobility: Mobile for the masses]]></title>
+    <link href="http://aglover.github.com/blog/2013/03/06/the-bulls-eye-on-mobility-mobile-for-the-masses/"/>
+    <updated>2013-03-06T09:28:00-05:00</updated>
+    <id>http://aglover.github.com/blog/2013/03/06/the-bulls-eye-on-mobility-mobile-for-the-masses</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/mftm_1.jpg">Since joining <a href="http://www.app47.com/">App47</a>, I've been lazer focused on mobility; consquently, I'm pleased to announce that a new mobile development series has debuted on <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>! The inaugural article,  "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">A gentle introduction to Android</a>", begins by exploring the mobile landscape and introduces how to get started with Android app development.</p>
+
+<p>As the article summary states:</p>
+
+<p><blockquote><p>The mobile landscape is rich with promise, and Android is a viable and exciting platform for developers who seek a way in. This new series starts with an introduction to Android that is tailored specifically for Java developers just getting started with mobile. Learn about Android's three-layer versioning system (and find out why it matters), then set up your development environment and build your first Android app.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/library/j-mobileforthemasses1/'>Mobile for the Masses: A Gentle Introduction to Android</a></cite></footer></blockquote></p>
+
+<p>So what are you waiting for? Check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>" and learn the ins and outs of Android development! Stay tuned for more articles to come and don't forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[It's a question of wow]]></title>
+    <link href="http://aglover.github.com/blog/2013/03/04/its-a-question-of-wow/"/>
+    <updated>2013-03-04T10:29:00-05:00</updated>
+    <id>http://aglover.github.com/blog/2013/03/04/its-a-question-of-wow</id>
+    <content type="html"><![CDATA[<p>Let me ask you a question: do you want to build a mobile website or a mobile app? If your answer is mobile website, then <a href="http://www.ebizmba.com/articles/best-html5-websites">HTML5 is good enough</a>. But if your answer is mobile app then you had better <a href="http://www.trademob.com/why-native-apps-remain-unrivalled-by-web-apps-in-user-experience-and-discoverability/">think about user experience</a>. You see, the user experience bar has been set extraordinarily high by a number of stellar native apps. People expect to be wowed and if they aren't, they won't use your app. It's that simple.</p>
+
+<p><img class="right" src="/images/mine/wow.png">How do you wow someone? You make your app easy to use and aesthetically pleasing to the eye. And it has to work correctly consistently. Unresponsiveness, however minor, won't do.</p>
+
+<p>Can you wow someone <a href="http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/">with an HTML5 mobile app</a>? <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">Sometimes</a>. But let me tell you: <a href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/">it's not easy</a>. Don't think for a second that just because there are a gazillion developers who have an <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">understanding of HTML and JavaScript</a>, that anyone can build an app to inspire a wow. No, it's a <a href="http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/">tricky business with HTML5</a> these days.</p>
+
+<p>Yep, there are fewer developers out there that actually can code <a href="http://en.wikipedia.org/wiki/Objective-C">Objective-C</a> or truly understand <a href="http://developer.android.com/index.html">Android</a>. They might be costly too. But the wow comes from native apps these days and it looks to be that way for some time. Native apps are close to the bone -- they don't have to rely on browser standards or <a href="https://code.google.com/p/html5shiv/">shivs</a> to <a href="http://paulirish.com/2011/the-history-of-the-html5-shiv/">work correctly</a> 83% of the time.  Coded correctly, they work <em>all the time</em>. They are responsive, fast, and can work offline without a lot of magic.</p>
+
+<p><a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> is great for mobile web sites. Not mobile apps. Until HTML5 can produce a significant wow factor, your best bet is to go native. It's that simple.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Circumventing mobile UX expectations]]></title>
@@ -138,45 +170,6 @@
 <p>Just like with visibility, if you add dimension data like device information, geo-location, and even duration, a fairly vivid picture of user engagement is painted for you. You can ascertain if your app is actually delivering value.</p>
 
 <p>Building, testing, and deploying your app is no easy feat. Congrats on getting that far! But don't forget about what happens after that effort finishes. Putting an app out into the wild without some sort of monitoring is like driving your car from the back seat while sitting backwards. All you see is outdated and you have no view as to where you're headed.  Visibility and engagement. If they don't matter to you now, they will.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MoDevTablet 2012 video: Mobile Web Realities]]></title>
-    <link href="http://aglover.github.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/"/>
-    <updated>2012-09-25T12:51:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities</id>
-    <content type="html"><![CDATA[<p>Recently, I had the distinct pleasure of speaking at <a href="http://modevtablet.com/">MoDevTablet</a> where I gave a presentation entitled "Mobile Web Realities" and the <a href="http://www.meetup.com/modevdc/">good folks who put on the conference</a> recorded it.</p>
-
-<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/rqfJS3F_YYk "></iframe></div></p>
-
-<p></p>
-
-
-<p>In summary: a year ago, hybrid development frameworks like <a href="http://phonegap.com/">PhoneGap</a> that leverage HTML5 were poised to radically alter mobile app development, but the potential has failed to live up to the promise: Faster/Easier/Cheaper <em>doesn't always mean</em> Better.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A tale of three browsers]]></title>
-    <link href="http://aglover.github.com/blog/2012/09/24/a-tale-of-three-browsers/"/>
-    <updated>2012-09-24T15:39:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2012/09/24/a-tale-of-three-browsers</id>
-    <content type="html"><![CDATA[<p>I recently spent time evaluating various mobile browsers' HTML5 compatibility in an effort to understand the state of the mobile web. Along the way, I discovered that the good folks at Facebook, <a href="http://www.zdnet.com/facebooks-mark-zuckerberg-knocks-html5-in-favor-of-native-apps-7000004082/">who happen to have quite a lot of experience with HTML5</a> and <a href="http://gantdaily.com/2012/09/12/facebook-ceo-mark-zuckerberg-promises-better-mobile-strategy/">mobility</a> put together a handy website called <a href="http://www.rng.io/">Ringmark</a>.</p>
-
-<p>As the Facebook development team puts it, Ringmark</p>
-
-<p><blockquote><p>helps you understand which mobile browsers support the functionality your app needs.</p><footer><strong>Facebook HTML5 Blog</strong> <cite><a href='http://developers.facebook.com/html5/blog/post/2012/02/27/announcing-ringmark--a-mobile-browser-test-suite/'>developers.facebook.com/html5/&hellip;</a></cite></footer></blockquote></p>
-
-<p>Thus, with Ringmark you can ascertain a particular browser's compatibility with HTML5 by simply going to <a href="http://www.rng.io/">rng.io</a>.</p>
-
-<p>Needless to say, I had some fun comparing Mobile Safari on my iPad to my Android 2.3.2 device. Interestingly enough, the fun really started when I decided to see what the feature functionality gap was between three browsers <em>on my desktop</em>.</p>
-
-<p><img class="center" src="/images/mine/rng_io_3_browsers.png">For the test, I used Chrome, Safari, and Firefox -- all three browsers are up to date as of the writing of this entry as well. The center browser is Chrome, left is Safari and right is Firefox.</p>
-
-<p>As you can see, all 3 browsers score <em>differently</em> -- Chrome scoring best with only 29 failures in Ring 1 and Safari, the worst with over 40 failures. None even made it to Ring 2.</p>
-
-<p>If you think HTML5 poses some compatibility issues for mobile devices, you need to widen your scope: HTML5 support varies across <em>everything</em>. Indeed, the <a href="http://en.wikipedia.org/wiki/Browser_wars">Browser Wars</a> are still being fought. The big difference now is that the wars are on multiple fronts.</p>
 ]]></content>
   </entry>
   
