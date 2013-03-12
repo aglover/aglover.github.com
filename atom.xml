@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-03-06T09:38:45-05:00</updated>
+  <updated>2013-03-12T12:05:56-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Node.js in 3 commands]]></title>
+    <link href="http://aglover.github.com/blog/2013/03/12/node-in-3-commands/"/>
+    <updated>2013-03-12T11:55:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/03/12/node-in-3-commands</id>
+    <content type="html"><![CDATA[<p>A few <a href="http://www.javaworld.com/community/node/8140">short years ago</a> when I started to explore <a href="http://nodejs.org/">Node.js</a>, I remember the installation on my MacBook Pro required downloading the source, compiling and installing it, and then updating paths. <em>And then</em> you had to install <a href="https://npmjs.org/">NPM</a>.</p>
+
+<p>Since then, <a href="http://www.ibm.com/developerworks/library/j-nodejs/">Node</a>&#8217;s installation has been come tremendously easy and NPM is even <em>bundled</em> with <a href="http://www.ibm.com/developerworks/offers/lp/demos/summary/j-jnodejs.html?ca=drs-">Node</a>. And yet, installing Node (and keeping up w/its rapid release schedule) is even easier with a nifty tool: <a href="https://github.com/creationix/nvm">Node Version Manager</a>.</p>
+
+<p>With Node Version Manager (or <a href="https://twitter.com/aglover/status/105824835149627392">nvm</a>) you can be up and running with Node in 3 easy commands.</p>
+
+<p>Step 1: Download and install nvm.</p>
+
+<figure class='code'><figcaption><span>downloading nvm</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl https://raw.github.com/creationix/nvm/master/install.sh | sh
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Step 2: Reload your shell.</p>
+
+<figure class='code'><figcaption><span>reloading .bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">source</span> .bash_profile
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Step 2.5: Obtain a list of available node versions to install.</p>
+
+<figure class='code'><figcaption><span>listing available node versions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>nvm ls-remote
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Step 3: Install your desired version of node.</p>
+
+<figure class='code'><figcaption><span>installing node version 0.10.0</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>nvm install v0.10.0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After that&#8217;s done, execute a <code>node -v</code> to verify. Now wasn&#8217;t that easy? You bet!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The bull's eye on mobility: Mobile for the masses]]></title>
@@ -644,28 +687,6 @@ focuses on the technologies, companies, and people influencing cloud computing. 
 <li><a href="http://www.ibm.com/developerworks/java/library/j-gloverpodcast4/index.html#francia">10gen&#8217;s Steve Francia talks MongoDB</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Cost and the Great Mobile App Debate]]></title>
-    <link href="http://aglover.github.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/"/>
-    <updated>2012-09-01T11:07:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/HTML5-logo.svg/200px-HTML5-logo.svg.png"> The Great Mobile App Debate rages on; in fact, it seems of late, the debate has been heating up <em>dramatically</em>. And interestingly enough, some intriguing people are joining this lively discussion including <a href="http://martinfowler.com/">Martin Fowler</a>. In his presentation dubbed &#8217;<a href="http://martinfowler.com/articles/multiMobile/">Developing Software for Multiple Devices</a>&#8217;, Martin makes the case for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> citing the reduced cost of building a single platform app as opposed to building an app for each platform. What&#8217;s more, he notes that the option to build an app via some cross-platform framework (presumably he&#8217;s talking about <a href="http://thinkmobile.appcelerator.com/blog/bid/211263/The-Great-Mobile-App-Debate-Native-vs-HTML5">Appcelerator</a> or the <a href="http://xamarin.com/">Xamarin</a>&#8217;s of the world) isn&#8217;t viable. He invokes memories from the early days of desktop apps:</p>
-
-<blockquote><p>By applying the lessons of history we can infer that cross-platform toolkits will not be a viable solution to the multitude of mobile platforms.</p><footer><strong>Martin Fowler</strong> <cite><a href='http://martinfowler.com/articles/multiMobile/#desktop-history'>Developing Software for Multiple Devices</a></cite></footer></blockquote>
-
-
-<p>And he thus <a href="http://martinfowler.com/articles/multiMobile/#uncanny">ties this direction</a> into a potential result of building apps that suffer from &#8221;<a href="http://en.wikipedia.org/wiki/Uncanny_valley">The Uncanny Valley</a>&#8221; (i.e. &#8220;slight imperfections of an almost-native user interface cause a disproportionate negative response for the user&#8221;).</p>
-
-<p>This analogy, however, isn&#8217;t necessarily correct. If you invoke memories of, say, Java and think back to AWT or Swing and the resulting, almost always, underwhelming UI/UX, then you&#8217;ve got a point. But the UIs of say, Xamarin are 100% native (which is the polar opposite of Swing!)&#8211; there is no <a href="http://martinfowler.com/articles/multiMobile/#frankenstein">Frankenstein-ness</a> here. There is no mimicking going on &#8211; a single code base is compiled <em>natively</em> into the underlying platform&#8217;s UI. All you have to do is take a look at a sample application built using <a href="http://www.coronalabs.com/products/corona-sdk/">Corona</a> and you&#8217;ll realize that at this point, the Uncanny Valley argument for cross-platform frameworks is <a href="http://en.wikipedia.org/wiki/Fear,_uncertainty_and_doubt">FUD</a>.</p>
-
-<p>Which leads full circle back to the underlying argument for HTML5: cost. A cross-platform framework that produces a stellar app with exceptional UX <em>is cost effective</em>! You potentially build one app for multiple devices and it meets the terrifically high standards that consumers demand of a mobile app. And this is one thing that is often not met with pure play mobile web apps: they are not yet at parity with native-ness. More often than not, I find myself looking at <a href="http://wtfmobileweb.com/">Frankenstein mobile web apps</a>.</p>
-
-<p>This isn&#8217;t to say HTML5 isn&#8217;t worth consideration. There are certainly apps that have been built as pure play web apps and they are terrific. The point of the discussion shouldn&#8217;t focus on HTML5 versus Native versus Hybrid. It should instead focus on what you&#8217;re trying to build. If you want to build a fantastic interactive app that wows users (think something like <a href="http://flipboard.com/">Flipboard</a>) then you have a different line of thinking to pursue. If your goal is to build an information app that conveys data then UI/UX could be secondary and thus, an HTML5 option might just meet your needs.</p>
-
-<p>The Great Mobile App Debate shows no sign of abating anytime soon. HTML5 offers a plethora of promises for awesomeness. Someday this might be the case; however, HTML5 isn&#8217;t an app development silver bullet.</p>
 ]]></content>
   </entry>
   

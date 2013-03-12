@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Java - The Disco Blog</title>
+  <title>Node.js in 3 commands - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="Category: Java">
+  <meta name="description" content="A few short years ago when I started to explore Node.js, I remember the installation on my MacBook Pro required downloading the source, compiling and &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://aglover.github.comblog/categories/java/">
+  <link rel="canonical" href="http://aglover.github.com/blog/2013/03/12/node-in-3-commands/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -65,81 +65,127 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Java</h1>
+    
+      
+        <h1 class="entry-title">Node.js in 3 Commands</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-12T11:55:00-04:00" pubdate data-updated="true">Mar 12<span>th</span>, 2013</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>A few <a href="http://www.javaworld.com/community/node/8140">short years ago</a> when I started to explore <a href="http://nodejs.org/">Node.js</a>, I remember the installation on my MacBook Pro required downloading the source, compiling and installing it, and then updating paths. <em>And then</em> you had to install <a href="https://npmjs.org/">NPM</a>.</p>
 
-  
-  <h2>2013</h2>
+<p>Since then, <a href="http://www.ibm.com/developerworks/library/j-nodejs/">Node</a>&#8217;s installation has been come tremendously easy and NPM is even <em>bundled</em> with <a href="http://www.ibm.com/developerworks/offers/lp/demos/summary/j-jnodejs.html?ca=drs-">Node</a>. And yet, installing Node (and keeping up w/its rapid release schedule) is even easier with a nifty tool: <a href="https://github.com/creationix/nvm">Node Version Manager</a>.</p>
 
-<article>
-  
-<h1><a href="/blog/2013/01/02/scalable-searching-with-elasticsearch/">Scalable searching with ElasticSearch</a></h1>
-<time datetime="2013-01-02T16:02:00-05:00" pubdate><span class='month'>Jan</span> <span class='day'>02</span> <span class='year'>2013</span></time>
+<p>With Node Version Manager (or <a href="https://twitter.com/aglover/status/105824835149627392">nvm</a>) you can be up and running with Node in 3 easy commands.</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/elasticsearch/'>elasticsearch</a></span>
-</footer>
+<p>Step 1: Download and install nvm.</p>
 
-
-</article>
+<figure class='code'><figcaption><span>downloading nvm</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl https://raw.github.com/creationix/nvm/master/install.sh | sh
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Step 2: Reload your shell.</p>
 
-  
-  <h2>2012</h2>
-
-<article>
-  
-<h1><a href="/blog/2012/12/02/comprehending-the-mobile-development-landscape/">Comprehending the mobile development landscape</a></h1>
-<time datetime="2012-12-02T18:11:00-05:00" pubdate><span class='month'>Dec</span> <span class='day'>02</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/android/'>Android</a>, <a class='category' href='/blog/categories/html5/'>HTML5</a>, <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/ios/'>iOS</a>, <a class='category' href='/blog/categories/mobile/'>mobile</a></span>
-</footer>
+<figure class='code'><figcaption><span>reloading .bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">source</span> .bash_profile
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<p>Step 2.5: Obtain a list of available node versions to install.</p>
+
+<figure class='code'><figcaption><span>listing available node versions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>nvm ls-remote
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Step 3: Install your desired version of node.</p>
 
-<article>
-  
-<h1><a href="/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry/">JVM fork modes and metaclass wizardry</a></h1>
-<time datetime="2012-11-02T16:30:00-04:00" pubdate><span class='month'>Nov</span> <span class='day'>02</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/java/'>Java</a></span>
-</footer>
+<figure class='code'><figcaption><span>installing node version 0.10.0</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>nvm install v0.10.0
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive/">Scala &amp; Typesafe: exciting. Not disruptive</a></h1>
-<time datetime="2012-08-27T08:35:00-04:00" pubdate><span class='month'>Aug</span> <span class='day'>27</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/node/'>Node</a>, <a class='category' href='/blog/categories/scala/'>Scala</a></span>
-</footer>
-
-
-</article>
-
+<p>After that&#8217;s done, execute a <code>node -v</code> to verify. Now wasn&#8217;t that easy? You bet!</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-12T11:55:00-04:00" pubdate data-updated="true">Mar 12<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/node/'>Node</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aglover.github.com/blog/2013/03/12/node-in-3-commands/" data-via="aglover" data-counturl="http://aglover.github.com/blog/2013/03/12/node-in-3-commands/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2013/03/06/the-bulls-eye-on-mobility-mobile-for-the-masses/" title="Previous Post: The bull's eye on mobility: Mobile for the masses">&laquo; The bull's eye on mobility: Mobile for the masses</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -237,7 +283,10 @@
       var disqus_shortname = 'thediscoblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://aglover.github.com/blog/2013/03/12/node-in-3-commands/';
+        var disqus_url = 'http://aglover.github.com/blog/2013/03/12/node-in-3-commands/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
