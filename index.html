@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="A few short years ago when I started to explore Node.js, I remember the installation on my MacBook Pro required downloading the source, compiling and &hellip;">
+  <meta name="description" content="Last fall, I had the pleasure of moderating a panel discussion at MoDevEast entitled &#8221;What Developers Love and Hate about iOS, Android, Windows &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,92 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/03/25/modeveast-2012-panel-discussion/">MoDevEast 2012 Panel Discussion</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-25T18:34:00-04:00" pubdate data-updated="true">Mar 25<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Last fall, I had the pleasure of moderating a panel discussion at <a href="http://modeveast.com/">MoDevEast</a> entitled &#8221;<a href="http://www.youtube.com/watch?v=b7P-wNuHPL0">What Developers Love and Hate about iOS, Android, Windows and HTML5</a>&#8221; with five super star mobile app developers.</p>
+
+<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/b7P-wNuHPL0 "></iframe></div>
+
+
+
+
+<p></p>
+
+
+<p>The panelists are a diverse set, which made the interaction a lot of fun as each had unique perspectives. Check out what my friends <a href="https://twitter.com/rmm5t">Ryan McGeary</a>, Steve Jernigan, Michael Shapard, <a href="https://twitter.com/andytrice">Andrew Trice</a>, and Chris Kamsler have to say!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/03/21/2013-open-analytics-summit/">2013 Open Analytics Summit</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-21T15:21:00-04:00" pubdate data-updated="true">Mar 21<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right left" src="http://www.openanalyticssummit.com/wp-content/uploads/2012/12/OAS-logo-Full-colour3-300x85.png">On March 25, 2013, <a href="http://www.openanalyticssummit.com/speakers/">I&#8217;ll be speaking</a> at the <a href="http://www.openanalyticssummit.com/">Open Analytics Summit in Washington DC</a>; specifically, I&#8217;ll be discussing how the <a href="http://www.app47.com/2013/03/20/next-monday-app47-cto-andy-glover-offers-a-database-reality-check-at-the-open-analytics-summit/">App47</a> team has used <a href="http://www.mongodb.org/">MongoDB</a> as the backend of our enterprise mobile application management platform. We&#8217;ve learned quite a few things about <a href="http://thediscoblog.com/blog/categories/mongodb/">Mongo</a> over the last two years! In the process of growing from a few gigabytes of data a month to over a terabyte/month, we&#8217;ve found out first hand what <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Mongo</a> is good at and what it&#8217;s <em>not good at</em>. I&#8217;ll be addressing a number of tips, techniques, and strategies &#8211; if you are a Mongo user or planning on being one, come on by!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -509,133 +595,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra/">Pushing Mongo GridFS Files With Sinatra</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-21T21:19:00-05:00" pubdate data-updated="true">Dec 21<span>st</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.app47.com/">We</a> recently implemented a new feature that required two interesting aspects: storing a file in <a href="http://www.mongodb.org/">MongoDB</a> using <a href="http://docs.mongodb.org/manual/applications/gridfs/">GridFS</a> (think traditional <a href="http://en.wikipedia.org/wiki/Binary_large_object">Blob</a>) and then pushing that file down to a browser. Along the way, I discovered a lot of questions on <a href="http://stackoverflow.com/">stackoverflow</a> and the like pertaining to various aspects of GridFS and <a href="http://www.sinatrarb.com/">Sinatra</a> pushes, so I thought I&#8217;d explain what we did.</p>
-
-<p>First off, GridFS is a specification for storing and retrieving large documents. In essence, Mongo breaks a large document into smaller documents (called <em>chunks</em>) and stores them in one collection and associates the meta data related to the aggregated chunks into another collection. It&#8217;s a fairly handy feature and in our case, it made sense to use <a href="http://docs.mongodb.org/manual/faq/developers/#faq-developers-when-to-use-gridfs">GridFS</a> rather than <a href="http://aws.amazon.com/s3/">S3</a> (or the underlying file system).</p>
-
-<p>All MongoDB drivers implement a similar access pattern to leverage GridFS and they hide the complexity of working with chunks. For example, <a href="https://github.com/mongodb/mongo-ruby-driver">the Ruby driver</a> simply provides a <a href="https://github.com/mongodb/mongo-ruby-driver/wiki/GridFS">single interface to manage the two GridFS collections</a>. In fact, <a href="https://github.com/mongodb/mongo-ruby-driver/blob/master/lib/mongo/gridfs/grid.rb">the interface</a> basically provides two methods: <code>get</code> &amp; <code>put</code> which might seem somewhat limiting, especially because <code>get</code> takes an <code>_id</code>! What&#8217;s more, you can add rich meta data to a GridFS document (via the <code>put</code> call) &#8211; data you&#8217;d conceivably want to query by, but at first glance, you can&#8217;t via the <code>get</code> method. Nevertheless, because GridFS is ultimately two collections in Mongo, you can query them as you would any other collection.</p>
-
-<p>Thus, finding files by some attribute other than their <code>_id</code> is as easy as writing the corresponding query:</p>
-
-<figure class='code'><figcaption><span>GridFS example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">file</span> <span class="o">=</span> <span class="vi">@mongo</span><span class="o">[</span><span class="s1">&#39;user_apks.files&#39;</span><span class="o">].</span><span class="n">find</span><span class="p">({</span><span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="n">user_id</span><span class="o">.</span><span class="n">to_s</span><span class="p">})</span><span class="o">.</span><span class="n">first</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Keep in mind, however, that the result returned above is a JSON document &#8211; i.e. the variable <code>file</code> above isn&#8217;t a pointer to an actual I/O instance but simply a JSON document with its details. To get the actual file, use the <code>get</code> method provided by the driver&#8217;s GridFS facade &#8211; this&#8217;ll handle the details of grabbing the file from GridFS. The <code>get</code> method takes an <code>_id</code>, which you can get from the <code>file</code> document. Thus, to get an instance of a readable file, you can grab it like so:</p>
-
-<figure class='code'><figcaption><span>get via _id</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vi">@grid</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">file</span><span class="o">[</span><span class="s1">&#39;_id&#39;</span><span class="o">]</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>Thus, with the <code>get</code> call you can actually get ahold of a file instance and not some JSON document describing it.</p>
-
-<p>To push this instance down to a browser using <a href="http://thediscoblog.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/">Sinatra</a>, you need to do 3 things:</p>
-
-<ul>
-<li>set the content type</li>
-<li>set the attachment name</li>
-<li>write the file to the response</li>
-</ul>
-
-
-<p>In our case, the file is an <a href="http://developer.android.com/index.html">Android</a> app; accordingly, the content type is <code>application/vnd.android.package-archive</code> and as you&#8217;ll note, the attachment is simply the name of the <code>.apk</code> file. Finally, the response to the request is written to by <em>reading</em> from the corresponding GridFS file:</p>
-
-<figure class='code'><figcaption><span>Sinatra push</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">get</span> <span class="s1">&#39;/some/url/:account_id/:user_id&#39;</span><span class="p">,</span> <span class="ss">:agent</span> <span class="o">=&gt;</span> <span class="sr">/Android/</span> <span class="k">do</span> <span class="o">|</span><span class="n">account_id</span><span class="p">,</span> <span class="n">user_id</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">file</span> <span class="o">=</span> <span class="c1"># get the file from GridFS</span>
-</span><span class='line'>  <span class="n">content_type</span> <span class="s1">&#39;application/vnd.android.package-archive&#39;</span>
-</span><span class='line'>  <span class="n">attachment</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">file</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">.apk&quot;</span>
-</span><span class='line'>  <span class="n">response</span><span class="o">.</span><span class="n">write</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>
-As you can see, it&#8217;s all quite easy &#8211; GridFS is simply a facade for two collections; moreover, forcing a download in Sinatra is three straightforward steps. Can you dig it, man?</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2012/12/17/running-individual-tests-in-rails/">Running Individual Tests in Rails</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-17T09:38:00-05:00" pubdate data-updated="true">Dec 17<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Every now and again, I find myself struggling to remember how to execute a single test in <a href="http://rubyonrails.org/">Rails</a>. While I have <a href="https://github.com/guard/guard">Guard</a> running the entire test suite <em>anytime</em> a change is detected, there are times when I want to focus solely on one test. Accordingly, <a href="http://flavio.castelli.name/2010/05/28/rails_execute_single_test/">Flavio Castelli has a great blog entry</a> detailing the manifold ways one can execute a single test using <a href="http://rake.rubyforge.org/">Rake</a> and/or Ruby.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -651,6 +610,14 @@ As you can see, it&#8217;s all quite easy &#8211; GridFS is simply a facade for 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/25/modeveast-2012-panel-discussion/">MoDevEast 2012 panel discussion</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/21/2013-open-analytics-summit/">2013 Open Analytics Summit</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/12/node-in-3-commands/">Node.js in 3 commands</a>
       </li>
     
@@ -660,14 +627,6 @@ As you can see, it&#8217;s all quite easy &#8211; GridFS is simply a facade for 
     
       <li class="post">
         <a href="/blog/2013/03/04/its-a-question-of-wow/">It&#8217;s a question of wow</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/23/everything-you-need-to-know-about-mongodb/">Everything you need to know about MongoDB</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/18/testing-rails-migrations/">Testing Rails migrations</a>
       </li>
     
   </ul>
