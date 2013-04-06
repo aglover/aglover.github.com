@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-03-25T18:39:24-04:00</updated>
+  <updated>2013-04-05T22:04:27-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,30 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mongoid batch inserts]]></title>
+    <link href="http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts/"/>
+    <updated>2013-03-27T11:34:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts</id>
+    <content type="html"><![CDATA[<p>In SQL land, all databases support batch inserts. Batch inserts are an effective and efficient mechanism to insert a lot of similar data. That is, instead of issuing x insert statements, you execute 1 insert with x records. This is much more efficient because the insert statement doesn't need to be re-parsed x times, there is only 1 network trip as opposed to x, and in the case of transactions, there is only 1 transaction instead of x. When compared to x inserts, batch inserts are always faster.</p>
+
+<p>As it turns out, <a href="http://www.mongodb.org/">MongoDB</a> supports <a href="http://docs.mongodb.org/manual/applications/create/#bulk-insert-multiple-documents">batch inserts</a>! And just like in SQL land, Mongo's batching feature is much faster at inserting a lot of data in one insert rather than x inserts.</p>
+
+<p>For example, the <a href="https://github.com/mongodb/mongo-ruby-driver">Mongo Ruby driver</a>'s <a href="https://github.com/mongodb/mongo-ruby-driver/blob/master/lib/mongo/collection.rb#L371">insert method takes a collection</a>; thus, you can insert an array of hashes quite efficiently. Even if you are using a <a href="http://mongoid.org/en/mongoid/index.html">ODM like Mongoid</a>, you can still perform batch inserts as all you need to do is get a reference to the model object's underlying collection and then issue an <code>insert</code> with an array of hashes matching the collection's intended document structure.</p>
+
+<p>For instance, to insert a collection of <code>Tag</code> models (each having 3 fields: <code>name</code>, <code>system_tag</code>, and <code>account_id</code>) in one fell swoop I can do the following:</p>
+
+<p><code>ruby Batch inserts with Mongoid model example
+tags = ['a', 'bunch', 'of', 'tags'].collect { |tag| {name: tag, system_tag: true, account_id: id} }
+Tag.collection.insert tags
+</code></p>
+
+<p>In the code above, the <code>insert</code> takes a collection of hashes; what's more, the <code>insert</code> is tied to the <code>tags</code> collection via the <code>Tag.collection</code> call.</p>
+
+<p>Batch inserts are always faster if you have a lot of similar documents -- in our case, we saw a <em>tremendous</em> performance increase when employing batching.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[2013 Open Analytics Summit]]></title>
@@ -101,50 +125,6 @@ get '/some/url/:account_id/:user_id', :agent =&gt; /Android/ do |account_id, use
 end
 </code>
 As you can see, it's all quite easy -- GridFS is simply a facade for two collections; moreover, forcing a download in Sinatra is three straightforward steps. Can you dig it, man?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MongoDB from the trenches: prudent production planning]]></title>
-    <link href="http://aglover.github.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/"/>
-    <updated>2012-09-11T11:34:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/mongodb_icon.png">While starting out with <a href="http://http://www.Mongodb.org/">MongoDB</a> is super easy, there are few things you should keep in mind as you move from a development environment into a production one. No one wants to get paged at 3am because a customer can’t complete an order on your awesome e-commerce site because your database isn’t responding fast enough or worse, is down.</p>
-
-<p>Planning for a production deployment with MongoDB <a href="http://www.mongodb.org/display/DOCS/Production+Notes">isn't rocket science</a>, but I must warn you, it'll cost money, especially if your application actually gets used <em>a lot</em>, which is every developer's dream. Therefore, like all databases, you need to plan for high availability and you’ll want the maximum performance benefits you can get for your money in a production environment.</p>
-
-<p>First and foremost, <a href="http://www.mongodb.org/display/DOCS/Caching">Mongo likes memory</a>; that is, frequently accessed data is stored directly in memory; moreover, writes are also stored in memory until being flushed to disk. It’s imperative that you provide enough memory for Mongo to store a valid working dataset; otherwise, Mongo will have to go to the disk to retrieve, what should be, fast lookups via indexed data. This is sloooooow. Therefore, a good rule of thumb is to plan to run your Mongo instances with <em>as much memory as you can afford</em>.</p>
-
-<p>You can get an idea for your working data set by running <code>Mongostat</code> -- this is a handy command line utility that’ll give you a second-by-second view into what Mongo is up to -- one particular metric you’ll see is resident memory (labeled as <code>res</code>) -- this will give you a good idea of how much memory Mongo’s using at any given moment. If this number exceeds what you have available on a given machine, then Mongo is having to go to disk, which is going to be a lot slower.</p>
-
-<p>Not all data can be stored in memory; every document in Mongo is eventually written to disk. And like always, I/O is always a slow operation compared to working with memory. This is why, for example, writes in Mongo can be so fast -- drivers allow you to, essentially, fire and forget and the actual write to disk is done later, asynchronously. Reads can also incur an I/O penalty when something requested isn’t in working memory.</p>
-
-<p>Thus, for high performance reads and writes, <em>pay attention to the underlying disks</em>. A key metric here is IOPS or input/output operations per second. Mongo will be extremely happy, for example, <a href="http://www.mongodb.org/display/DOCS/SSD">in an SSD environment</a>, provided you can afford it. <a href="http://en.wikipedia.org/wiki/IOPS">Just take a look at various IOPS comparisons between SSDs and traditional spinning disks</a> -- super fast RPM disks can achieve IOPS in the 200 range. Typical SSD drives are attaining wild numbers, orders of magnitude higher (like in the 100’s of thousands of IOPS). It’s crazy how fast SSDs are compared to traditional hard drives.</p>
-
-<p>RAM is still faster than SSDs, so you’ll still want to understand your working set of data and ensure you have plenty of memory to contain it.</p>
-
-<p>Finally, for maximum availably, <em>you really should be using Mongo’s <a href="http://www.mongodb.org/display/DOCS/Replica+Sets">replica sets</a></em>. Setting up a cluster of Mongo instances is so incredibility easy that there really isn’t a good reason not to do it. The benefits of doing so are manifold, including:</p>
-
-<ul>
-<li>data redundancy</li>
-<li>high availability via automated failover</li>
-<li>disaster recovery</li>
-</ul>
-
-
-<p>Plus, running a replica set makes maintenance so much easier as you can bring nodes off line and on line w/out an interruption of service. And you can run nodes in a replica set on commodity hardware (don’t forget about my points regarding memory and I/O though).</p>
-
-<p>Accordingly, when looking to move Mongo into a production environment, you need to consider memory, I/O performance, and replica sets. Running a high performant, high availability replica set'ed Mongo, not surprisingly, will cost you. If you're looking for options for running Mongo in a production environment, I can't recommend enough the team at <a href="https://mongohq.com/">MongoHQ</a>.</p>
-
-<p>I'm a huge fan of Mongo. Check out some of the articles, videos, and podcasts that I've done, which focus on Mongo, including:</p>
-
-<ul>
-<li><a href="http://www.ibm.com/developerworks/java/library/j-javadev2-12/">Java development 2.0: MongoDB: A NoSQL datastore with (all the right) RDBMS moves</a></li>
-<li><a href="http://public.dhe.ibm.com/software/dw/demos/jmongodb/index.html">Video demo: An introduction to MongoDB</a></li>
-<li><a href="http://www.ibm.com/developerworks/java/library/j-gloverpodcast/#Horowitz">Eliot Horowitz on MongoDB</a></li>
-<li><a href="http://www.ibm.com/developerworks/java/library/j-gloverpodcast4/index.html#francia">10gen's Steve Francia talks MongoDB</a></li>
-</ul>
-
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-03-25T18:39:24-04:00</updated>
+  <updated>2013-04-05T22:04:27-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Crowd think often lacks clarity]]></title>
+    <link href="http://aglover.github.com/blog/2013/04/05/crowd-think-often-lacks-clarity/"/>
+    <updated>2013-04-05T21:04:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/04/05/crowd-think-often-lacks-clarity</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/crowd.jpg">In case you missed it, <a href="http://www.infoq.com/">InfoQ</a> has an <a href="http://www.infoq.com/research/cross-platform-mobile-tools">interesting analysis regarding hybrid mobile app development frameworks</a>. They are profiling 12 tools and soliciting community feedback so as to make a <a href="http://www.thoughtworks.com/insights">ThoughtWorks-like technology radar</a>. If you participate in the voting you are entitled to see the voting distribution.</p>
+
+<p>What&#8217;s interesting (and not too surprising) about this analysis is that frameworks like <a href="http://phonegap.com/">PhoneGap</a> or <a href="http://jquerymobile.com/">jQuery Mobile</a> (and laughably <a href="http://jqtjs.com/">JQTouch</a>?) are leaning more towards <em>adoption ready</em> when compared to frameworks like <a href="http://www.madewithmarmalade.com/">Marmelade</a>, <a href="http://www.coronalabs.com/">Coronona</a> or <a href="http://www.mosync.com/">MoSync</a>. But this radar lacks some clarifying dimensions &#8211; for example, if you want to produce a mobile website on a lot of different mobile platforms quickly, then PhoneGap is probably the way to go. But if you&#8217;re looking to create a mobile app, then the choice to use PhoneGap must be treated with extreme caution.</p>
+
+<p>You cannot create a <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">compelling user experience</a> that works across <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">all platforms consistently</a> with this framework right now. And it isn&#8217;t even the fault of PhoneGap entirely &#8211; it&#8217;s <a href="http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/">HTML5</a>. That&#8217;s why going with something like JQTouch without viewing the big picture of what you are building is laughable.</p>
+
+<p>Frameworks like Marmelade or Corona might be a bit more difficult to get started with (after all, you code in something other than HTML or JavaScript) but they can produce a native app that offers a compelling user experience capable of generating a wow. Remember, native-ness <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">trumps the browser</a> almost always unless your app is a series of screens that don&#8217;t require the user to interact.</p>
+
+<p>Accordingly, the study lacks some needed dimensions &#8211; mainly, whether or not you are building a mobile app or mobile website. Don&#8217;t fall into the hype trap and jump into PhoneGap development unless you are sure what you are building is a simple mobile website and your audience isn&#8217;t expecting something like Flipboard or AngryBirds. Otherwise, you&#8217;ll find yourself investigating either pure play native development or frameworks that ultimately produce a native app.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Mongoid batch inserts]]></title>
+    <link href="http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts/"/>
+    <updated>2013-03-27T11:34:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts</id>
+    <content type="html"><![CDATA[<p>In SQL land, all databases support batch inserts. Batch inserts are an effective and efficient mechanism to insert a lot of similar data. That is, instead of issuing x insert statements, you execute 1 insert with x records. This is much more efficient because the insert statement doesn&#8217;t need to be re-parsed x times, there is only 1 network trip as opposed to x, and in the case of transactions, there is only 1 transaction instead of x. When compared to x inserts, batch inserts are always faster.</p>
+
+<p>As it turns out, <a href="http://www.mongodb.org/">MongoDB</a> supports <a href="http://docs.mongodb.org/manual/applications/create/#bulk-insert-multiple-documents">batch inserts</a>! And just like in SQL land, Mongo&#8217;s batching feature is much faster at inserting a lot of data in one insert rather than x inserts.</p>
+
+<p>For example, the <a href="https://github.com/mongodb/mongo-ruby-driver">Mongo Ruby driver</a>&#8217;s <a href="https://github.com/mongodb/mongo-ruby-driver/blob/master/lib/mongo/collection.rb#L371">insert method takes a collection</a>; thus, you can insert an array of hashes quite efficiently. Even if you are using a <a href="http://mongoid.org/en/mongoid/index.html">ODM like Mongoid</a>, you can still perform batch inserts as all you need to do is get a reference to the model object&#8217;s underlying collection and then issue an <code>insert</code> with an array of hashes matching the collection&#8217;s intended document structure.</p>
+
+<p>For instance, to insert a collection of <code>Tag</code> models (each having 3 fields: <code>name</code>, <code>system_tag</code>, and <code>account_id</code>) in one fell swoop I can do the following:</p>
+
+<figure class='code'><figcaption><span>Batch inserts with Mongoid model example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">tags</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;bunch&#39;</span><span class="p">,</span> <span class="s1">&#39;of&#39;</span><span class="p">,</span> <span class="s1">&#39;tags&#39;</span><span class="o">].</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">tag</span><span class="o">|</span> <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="n">tag</span><span class="p">,</span> <span class="n">system_tag</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="n">account_id</span><span class="p">:</span> <span class="nb">id</span><span class="p">}</span> <span class="p">}</span>
+</span><span class='line'><span class="no">Tag</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">insert</span> <span class="n">tags</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the code above, the <code>insert</code> takes a collection of hashes; what&#8217;s more, the <code>insert</code> is tied to the <code>tags</code> collection via the <code>Tag.collection</code> call.</p>
+
+<p>Batch inserts are always faster if you have a lot of similar documents &#8211; in our case, we saw a <em>tremendous</em> performance increase when employing batching.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MoDevEast 2012 panel discussion]]></title>
@@ -538,74 +581,6 @@ focuses on the technologies, companies, and people influencing cloud computing. 
 
 
 <p>In summary: a year ago, hybrid development frameworks like <a href="http://phonegap.com/">PhoneGap</a> that leverage HTML5 were poised to radically alter mobile app development, but the potential has failed to live up to the promise: Faster/Easier/Cheaper <em>doesn&#8217;t always mean</em> Better.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A tale of three browsers]]></title>
-    <link href="http://aglover.github.com/blog/2012/09/24/a-tale-of-three-browsers/"/>
-    <updated>2012-09-24T15:39:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2012/09/24/a-tale-of-three-browsers</id>
-    <content type="html"><![CDATA[<p>I recently spent time evaluating various mobile browsers&#8217; HTML5 compatibility in an effort to understand the state of the mobile web. Along the way, I discovered that the good folks at Facebook, <a href="http://www.zdnet.com/facebooks-mark-zuckerberg-knocks-html5-in-favor-of-native-apps-7000004082/">who happen to have quite a lot of experience with HTML5</a> and <a href="http://gantdaily.com/2012/09/12/facebook-ceo-mark-zuckerberg-promises-better-mobile-strategy/">mobility</a> put together a handy website called <a href="http://www.rng.io/">Ringmark</a>.</p>
-
-<p>As the Facebook development team puts it, Ringmark</p>
-
-<blockquote><p>helps you understand which mobile browsers support the functionality your app needs.</p><footer><strong>Facebook HTML5 Blog</strong> <cite><a href='http://developers.facebook.com/html5/blog/post/2012/02/27/announcing-ringmark--a-mobile-browser-test-suite/'>developers.facebook.com/html5/&hellip;</a></cite></footer></blockquote>
-
-
-<p>Thus, with Ringmark you can ascertain a particular browser&#8217;s compatibility with HTML5 by simply going to <a href="http://www.rng.io/">rng.io</a>.</p>
-
-<p>Needless to say, I had some fun comparing Mobile Safari on my iPad to my Android 2.3.2 device. Interestingly enough, the fun really started when I decided to see what the feature functionality gap was between three browsers <em>on my desktop</em>.</p>
-
-<p><img class="center" src="http://aglover.github.com/images/mine/rng_io_3_browsers.png">For the test, I used Chrome, Safari, and Firefox &#8211; all three browsers are up to date as of the writing of this entry as well. The center browser is Chrome, left is Safari and right is Firefox.</p>
-
-<p>As you can see, all 3 browsers score <em>differently</em> &#8211; Chrome scoring best with only 29 failures in Ring 1 and Safari, the worst with over 40 failures. None even made it to Ring 2.</p>
-
-<p>If you think HTML5 poses some compatibility issues for mobile devices, you need to widen your scope: HTML5 support varies across <em>everything</em>. Indeed, the <a href="http://en.wikipedia.org/wiki/Browser_wars">Browser Wars</a> are still being fought. The big difference now is that the wars are on multiple fronts.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MongoDB from the trenches: prudent production planning]]></title>
-    <link href="http://aglover.github.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/"/>
-    <updated>2012-09-11T11:34:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://aglover.github.com/images/mine/mongodb_icon.png">While starting out with <a href="http://http://www.Mongodb.org/">MongoDB</a> is super easy, there are few things you should keep in mind as you move from a development environment into a production one. No one wants to get paged at 3am because a customer can’t complete an order on your awesome e-commerce site because your database isn’t responding fast enough or worse, is down.</p>
-
-<p>Planning for a production deployment with MongoDB <a href="http://www.mongodb.org/display/DOCS/Production+Notes">isn&#8217;t rocket science</a>, but I must warn you, it&#8217;ll cost money, especially if your application actually gets used <em>a lot</em>, which is every developer&#8217;s dream. Therefore, like all databases, you need to plan for high availability and you’ll want the maximum performance benefits you can get for your money in a production environment.</p>
-
-<p>First and foremost, <a href="http://www.mongodb.org/display/DOCS/Caching">Mongo likes memory</a>; that is, frequently accessed data is stored directly in memory; moreover, writes are also stored in memory until being flushed to disk. It’s imperative that you provide enough memory for Mongo to store a valid working dataset; otherwise, Mongo will have to go to the disk to retrieve, what should be, fast lookups via indexed data. This is sloooooow. Therefore, a good rule of thumb is to plan to run your Mongo instances with <em>as much memory as you can afford</em>.</p>
-
-<p>You can get an idea for your working data set by running <code>Mongostat</code> &#8211; this is a handy command line utility that’ll give you a second-by-second view into what Mongo is up to &#8211; one particular metric you’ll see is resident memory (labeled as <code>res</code>) &#8211; this will give you a good idea of how much memory Mongo’s using at any given moment. If this number exceeds what you have available on a given machine, then Mongo is having to go to disk, which is going to be a lot slower.</p>
-
-<p>Not all data can be stored in memory; every document in Mongo is eventually written to disk. And like always, I/O is always a slow operation compared to working with memory. This is why, for example, writes in Mongo can be so fast &#8211; drivers allow you to, essentially, fire and forget and the actual write to disk is done later, asynchronously. Reads can also incur an I/O penalty when something requested isn’t in working memory.</p>
-
-<p>Thus, for high performance reads and writes, <em>pay attention to the underlying disks</em>. A key metric here is IOPS or input/output operations per second. Mongo will be extremely happy, for example, <a href="http://www.mongodb.org/display/DOCS/SSD">in an SSD environment</a>, provided you can afford it. <a href="http://en.wikipedia.org/wiki/IOPS">Just take a look at various IOPS comparisons between SSDs and traditional spinning disks</a> &#8211; super fast RPM disks can achieve IOPS in the 200 range. Typical SSD drives are attaining wild numbers, orders of magnitude higher (like in the 100’s of thousands of IOPS). It’s crazy how fast SSDs are compared to traditional hard drives.</p>
-
-<p>RAM is still faster than SSDs, so you’ll still want to understand your working set of data and ensure you have plenty of memory to contain it.</p>
-
-<p>Finally, for maximum availably, <em>you really should be using Mongo’s <a href="http://www.mongodb.org/display/DOCS/Replica+Sets">replica sets</a></em>. Setting up a cluster of Mongo instances is so incredibility easy that there really isn’t a good reason not to do it. The benefits of doing so are manifold, including:</p>
-
-<ul>
-<li>data redundancy</li>
-<li>high availability via automated failover</li>
-<li>disaster recovery</li>
-</ul>
-
-
-<p>Plus, running a replica set makes maintenance so much easier as you can bring nodes off line and on line w/out an interruption of service. And you can run nodes in a replica set on commodity hardware (don’t forget about my points regarding memory and I/O though).</p>
-
-<p>Accordingly, when looking to move Mongo into a production environment, you need to consider memory, I/O performance, and replica sets. Running a high performant, high availability replica set&#8217;ed Mongo, not surprisingly, will cost you. If you&#8217;re looking for options for running Mongo in a production environment, I can&#8217;t recommend enough the team at <a href="https://mongohq.com/">MongoHQ</a>.</p>
-
-<p>I&#8217;m a huge fan of Mongo. Check out some of the articles, videos, and podcasts that I&#8217;ve done, which focus on Mongo, including:</p>
-
-<ul>
-<li><a href="http://www.ibm.com/developerworks/java/library/j-javadev2-12/">Java development 2.0: MongoDB: A NoSQL datastore with (all the right) RDBMS moves</a></li>
-<li><a href="http://public.dhe.ibm.com/software/dw/demos/jmongodb/index.html">Video demo: An introduction to MongoDB</a></li>
-<li><a href="http://www.ibm.com/developerworks/java/library/j-gloverpodcast/#Horowitz">Eliot Horowitz on MongoDB</a></li>
-<li><a href="http://www.ibm.com/developerworks/java/library/j-gloverpodcast4/index.html#francia">10gen&#8217;s Steve Francia talks MongoDB</a></li>
-</ul>
-
 ]]></content>
   </entry>
   

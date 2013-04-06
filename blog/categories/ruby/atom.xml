@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-03-25T18:39:24-04:00</updated>
+  <updated>2013-04-05T22:04:27-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,30 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mongoid batch inserts]]></title>
+    <link href="http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts/"/>
+    <updated>2013-03-27T11:34:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts</id>
+    <content type="html"><![CDATA[<p>In SQL land, all databases support batch inserts. Batch inserts are an effective and efficient mechanism to insert a lot of similar data. That is, instead of issuing x insert statements, you execute 1 insert with x records. This is much more efficient because the insert statement doesn't need to be re-parsed x times, there is only 1 network trip as opposed to x, and in the case of transactions, there is only 1 transaction instead of x. When compared to x inserts, batch inserts are always faster.</p>
+
+<p>As it turns out, <a href="http://www.mongodb.org/">MongoDB</a> supports <a href="http://docs.mongodb.org/manual/applications/create/#bulk-insert-multiple-documents">batch inserts</a>! And just like in SQL land, Mongo's batching feature is much faster at inserting a lot of data in one insert rather than x inserts.</p>
+
+<p>For example, the <a href="https://github.com/mongodb/mongo-ruby-driver">Mongo Ruby driver</a>'s <a href="https://github.com/mongodb/mongo-ruby-driver/blob/master/lib/mongo/collection.rb#L371">insert method takes a collection</a>; thus, you can insert an array of hashes quite efficiently. Even if you are using a <a href="http://mongoid.org/en/mongoid/index.html">ODM like Mongoid</a>, you can still perform batch inserts as all you need to do is get a reference to the model object's underlying collection and then issue an <code>insert</code> with an array of hashes matching the collection's intended document structure.</p>
+
+<p>For instance, to insert a collection of <code>Tag</code> models (each having 3 fields: <code>name</code>, <code>system_tag</code>, and <code>account_id</code>) in one fell swoop I can do the following:</p>
+
+<p><code>ruby Batch inserts with Mongoid model example
+tags = ['a', 'bunch', 'of', 'tags'].collect { |tag| {name: tag, system_tag: true, account_id: id} }
+Tag.collection.insert tags
+</code></p>
+
+<p>In the code above, the <code>insert</code> takes a collection of hashes; what's more, the <code>insert</code> is tied to the <code>tags</code> collection via the <code>Tag.collection</code> call.</p>
+
+<p>Batch inserts are always faster if you have a lot of similar documents -- in our case, we saw a <em>tremendous</em> performance increase when employing batching.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Testing Rails migrations]]></title>
