@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-06T12:22:33-04:00</updated>
+  <updated>2013-04-07T10:46:27-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Painless Android swipe detection]]></title>
+    <link href="http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection/"/>
+    <updated>2013-04-07T10:37:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/gesticulate.png">Why bother building navigation buttons in an Android app when you can easily capture finger swipes? But, if you've ever implemented gesture section in Android there's the drudgery of implementing listeners and you also need to do some elementary Cartesian math. Save yourself the boilerplate bother mathematics and use a <a href="https://github.com/aglover/gesticulate">library</a>!</p>
+
+<p><a href="https://github.com/aglover/gesticulate">Gesticulate</a> makes it painless to detect straightforward swiping motions like up, down, left, and right. It's a simple jar file you include in your Android <code>libs</code> directory. Throw Gesticulate's <code>SwipeDetector</code> inside an instance of Android's <code>SimpleOnGestureListener</code>, for example, and you're detecting swipes with ease!</p>
+
+<p>Gesticulate is used in Savvy Words, a flash card vocabulary app found on <a href="https://play.google.com/store/apps/details?id=com.b50.savvywords">Google Play</a> and <a href="http://www.amazon.com/Beacon50-Savvy-Words/dp/B00C535D20/ref=sr_1_1?s=mobile-apps&amp;ie=UTF8&amp;qid=1365339189&amp;sr=1-1">Amazon's Appstore for Android</a>. See the <a href="https://github.com/aglover/gesticulate">Github project</a> for more details such as code examples for how to use Gesticulate, how to build it, and to see Gesticulate's tests. Swipe on, baby!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Comprehending the mobile development landscape]]></title>

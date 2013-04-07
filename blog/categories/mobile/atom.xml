@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mobile | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-06T12:22:33-04:00</updated>
+  <updated>2013-04-07T10:46:27-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Painless Android swipe detection]]></title>
+    <link href="http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection/"/>
+    <updated>2013-04-07T10:37:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/gesticulate.png">Why bother building navigation buttons in an Android app when you can easily capture finger swipes? But, if you've ever implemented gesture section in Android there's the drudgery of implementing listeners and you also need to do some elementary Cartesian math. Save yourself the boilerplate bother mathematics and use a <a href="https://github.com/aglover/gesticulate">library</a>!</p>
+
+<p><a href="https://github.com/aglover/gesticulate">Gesticulate</a> makes it painless to detect straightforward swiping motions like up, down, left, and right. It's a simple jar file you include in your Android <code>libs</code> directory. Throw Gesticulate's <code>SwipeDetector</code> inside an instance of Android's <code>SimpleOnGestureListener</code>, for example, and you're detecting swipes with ease!</p>
+
+<p>Gesticulate is used in Savvy Words, a flash card vocabulary app found on <a href="https://play.google.com/store/apps/details?id=com.b50.savvywords">Google Play</a> and <a href="http://www.amazon.com/Beacon50-Savvy-Words/dp/B00C535D20/ref=sr_1_1?s=mobile-apps&amp;ie=UTF8&amp;qid=1365339189&amp;sr=1-1">Amazon's Appstore for Android</a>. See the <a href="https://github.com/aglover/gesticulate">Github project</a> for more details such as code examples for how to use Gesticulate, how to build it, and to see Gesticulate's tests. Swipe on, baby!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Crowd think often lacks clarity]]></title>
@@ -75,27 +88,6 @@
 <p>Yep, there are fewer developers out there that actually can code <a href="http://en.wikipedia.org/wiki/Objective-C">Objective-C</a> or truly understand <a href="http://developer.android.com/index.html">Android</a>. They might be costly too. But the wow comes from native apps these days and it looks to be that way for some time. Native apps are close to the bone -- they don't have to rely on browser standards or <a href="https://code.google.com/p/html5shiv/">shivs</a> to <a href="http://paulirish.com/2011/the-history-of-the-html5-shiv/">work correctly</a> 83% of the time.  Coded correctly, they work <em>all the time</em>. They are responsive, fast, and can work offline without a lot of magic.</p>
 
 <p><a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> is great for mobile web sites. Not mobile apps. Until HTML5 can produce a significant wow factor, your best bet is to go native. It's that simple.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Circumventing mobile UX expectations]]></title>
-    <link href="http://aglover.github.com/blog/2013/02/17/circumventing-mobile-ux-expectations/"/>
-    <updated>2013-02-17T12:10:00-05:00</updated>
-    <id>http://aglover.github.com/blog/2013/02/17/circumventing-mobile-ux-expectations</id>
-    <content type="html"><![CDATA[<p>Recently, a <a href="https://twitter.com/trianglechoke">buddy of mine</a> pointed me to an interesting tweet:</p>
-
-<p><blockquote><p>New tool converts your Apple #iOS apps to #HTML5 http://dld.bz/cejxz  #appdev</p><footer><strong>@effectiveui</strong> <cite><a href='https://twitter.com/effectiveui/status/299626694149537792'>twitter.com/effectiveui/status/&hellip;</a></cite></footer></blockquote></p>
-
-<p>The article about this new tool, dubbed the "<a href="http://software.intel.com/en-us/articles/technical-reference-intel-html5-app-porter-tool-beta">Intel HTML5 App Porter Tool</a>" suggests that because iOS apps are limited to one platform, HTML5:</p>
-
-<p><blockquote><p>represents an opportunity because it’s supported across a wide range of different devices and operating systems, so it enables the same code base to be reused across different app deployments.</p><footer><strong>Softtalkblog</strong> <cite><a href='http://www.develop-online.net/news/43193/New-tool-converts-your-Apple-apps-to-HTML5'>New Tool Converts Your Apple Apps to HTML5</a></cite></footer></blockquote></p>
-
-<p><img class="right" src="http://www.carinsurance.com/imagesvr_ce/6464/152631.jpg"> While technically this statement is true -- HTML5 <em>is ubiquitous</em> and you do end up with a single code base -- HTML5 is the lowest common app development denominator and thus produces an underwhelming experience when compared to its native brethren.</p>
-
-<p>Taking a native iOS (or Android) app and recasting it into an HTML5 app is like taking your beautiful Ferrari and trading it for a station wagon. The experience will never be quite the same.</p>
-
-<p>Don't get caught up in the HTML5 hype-cycle. It's a great platform for mobile web sites, but if you're building a mobile app, the UX bar has been set quite high. You cannot yet meet that bar with HTML5.</p>
 ]]></content>
   </entry>
   
