@@ -3,7 +3,7 @@ layout: post
 title: "Painless Android swipe detection"
 date: 2013-04-07 10:37
 comments: true
-categories: [mobile, Android]
+categories: [mobile, Android, Java]
 ---
 
 {% img left /images/mine/gesticulate.png %}Why bother building navigation buttons in an Android app when you can easily capture finger swipes? But, if you've ever implemented gesture section in Android there's the drudgery of implementing listeners and you also need to do some elementary Cartesian math. Save yourself the boilerplate bother mathematics and use a [library](https://github.com/aglover/gesticulate)! 
