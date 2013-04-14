@@ -24,7 +24,7 @@ PhoneGap is a great framework for building hybrid-web apps. You code in HTML and
 
 {% img center /images/mine/marmalate_example.png %}
 
-Now look closely at the featured apps of each hybrid framework. They're distinctly different aren't they? 
+Now look closely at the [featured apps](http://phonegap.com/app/feature/) of each [hybrid framework](http://www.madewithmarmalade.com/app-showcase). They're [distinctly](http://phonegap.com/blog/2011/11/07/phonegap-application-craft-pain-free-mobile-app-development/) [different][m2] aren't they? 
 
 PhoneGap and the rest of the hybrid-web frameworks are good at producing informational apps. These apps can look beautiful and certainly can have some compelling features like tight integration with social networks and geo-tracking, for example. But they're inadequate for games and still lack a rich user experience when compared to more native apps like Flipboard or AngryBirds. 
 
