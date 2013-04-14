@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-07T10:51:03-04:00</updated>
+  <updated>2013-04-14T11:42:05+08:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,9 +16,9 @@
   <entry>
     <title type="html"><![CDATA[Painless Android swipe detection]]></title>
     <link href="http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection/"/>
-    <updated>2013-04-07T10:37:00-04:00</updated>
+    <updated>2013-04-07T10:37:00+08:00</updated>
     <id>http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/gesticulate.png">Why bother building navigation buttons in an Android app when you can easily capture finger swipes? But, if you've ever implemented gesture section in Android there's the drudgery of implementing listeners and you also need to do some elementary Cartesian math. Save yourself the boilerplate bother mathematics and use a <a href="https://github.com/aglover/gesticulate">library</a>!</p>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/gesticulate.png %}Why bother building navigation buttons in an Android app when you can easily capture finger swipes? But, if you've ever implemented gesture section in Android there's the drudgery of implementing listeners and you also need to do some elementary Cartesian math. Save yourself the boilerplate bother mathematics and use a <a href="https://github.com/aglover/gesticulate">library</a>!</p>
 
 <p><a href="https://github.com/aglover/gesticulate">Gesticulate</a> makes it painless to detect straightforward swiping motions like up, down, left, and right. It's a simple jar file you include in your Android <code>libs</code> directory. Throw Gesticulate's <code>SwipeDetector</code> inside an instance of Android's <code>SimpleOnGestureListener</code>, for example, and you're detecting swipes with ease!</p>
 
@@ -29,9 +29,9 @@
   <entry>
     <title type="html"><![CDATA[Scalable searching with ElasticSearch]]></title>
     <link href="http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch/"/>
-    <updated>2013-01-02T16:02:00-05:00</updated>
+    <updated>2013-01-02T16:02:00+08:00</updated>
     <id>http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/search_flickr.jpg">Search is no longer an optional feature: it's expected of most any application that consumes, produces, or stores data. And not everyone wants to be a search technology specialist, especially given the range of sophisticated algorithms underlying today's complex searches (i.e. SQL queries are no longer sufficient!). Knowing about existing, open source search platforms could save you a lot of time and money and allow you to spend your time fine-tuning your software's main functionality.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/search_flickr.jpg %}Search is no longer an optional feature: it's expected of most any application that consumes, produces, or stores data. And not everyone wants to be a search technology specialist, especially given the range of sophisticated algorithms underlying today's complex searches (i.e. SQL queries are no longer sufficient!). Knowing about existing, open source search platforms could save you a lot of time and money and allow you to spend your time fine-tuning your software's main functionality.</p>
 
 <p>In "<a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/index.html">Java development 2.0: Scalable searching with ElasticSearch</a>", I introduce <a href="http://www.elasticsearch.org/">ElasticSearch</a>, a distributed search platform that is easy to get started with and vastly extendable. ElasticSearch's sophistication and ease-of-use are impressive, and its support for horizontal scalability offers a world of options should your data requirements need to scale. So what are you waiting for? Give <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/index.html">it a read</a>!</p>
 
@@ -42,7 +42,7 @@
   <entry>
     <title type="html"><![CDATA[Comprehending the mobile development landscape]]></title>
     <link href="http://aglover.github.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/"/>
-    <updated>2012-12-02T18:11:00-05:00</updated>
+    <updated>2012-12-02T18:11:00+08:00</updated>
     <id>http://aglover.github.com/blog/2012/12/02/comprehending-the-mobile-development-landscape</id>
     <content type="html"><![CDATA[<p>There's <a href="http://www.forbes.com/sites/parmyolson/2012/12/04/5-eye-opening-stats-that-show-the-world-is-going-mobile/">no shortage</a> of <a href="http://www.forbes.com/sites/connieguglielmo/2012/12/04/mary-meekers-must-read-interent-trends-report-says-android-phone-uptake-bests-apple/">mobile growth</a> statistics, but here's a few specific ones paint an overall picture of mobility:</p>
 
@@ -104,7 +104,7 @@
   <entry>
     <title type="html"><![CDATA[JVM fork modes and metaclass wizardry]]></title>
     <link href="http://aglover.github.com/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry/"/>
-    <updated>2012-11-02T16:30:00-04:00</updated>
+    <updated>2012-11-02T16:30:00+08:00</updated>
     <id>http://aglover.github.com/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry</id>
     <content type="html"><![CDATA[<p>Over the past decade of finding myself staring at innumerable Ant build files containing a <a href="http://ant.apache.org/manual/Tasks/junit.html">JUnit task</a>, I've come to realize a subtle, yet powerful flag, that when not set properly, almost always leads to random and confusing test catastrophes. The JUnit task supports a number of attributes, but the most important is the <code>fork</code> one. This flag controls whether or not the tests being run are invoked within the same JVM instance of Ant itself or within a new one. By default, this value is set to <code>off</code> (<code>false</code> seems to do the same thing); however, in doing so, I've, from time to time, seen class loading issues or mysterious versions of jars causing strange code to be executed.</p>
 
@@ -133,11 +133,13 @@ Message.metaClass.static.getMessageProcessor &lt;&lt; { return iprocessor }
   <entry>
     <title type="html"><![CDATA[Scala &amp; Typesafe: exciting. Not disruptive]]></title>
     <link href="http://aglover.github.com/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive/"/>
-    <updated>2012-08-27T08:35:00-04:00</updated>
+    <updated>2012-08-27T08:35:00+08:00</updated>
     <id>http://aglover.github.com/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive</id>
     <content type="html"><![CDATA[<p>I recently read an article on <a href="http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework">TheServerSide.com</a> where the author muses about the possible disruptive nature of Typesafe's <a href="http://typesafe.com/company/news/24499">recent Series B cash infusion of $14M</a>:</p>
 
-<p><blockquote><p>It's time for a disruptive event that will change how programs are designed, and how applications target the Java Virtual Machine.</p><footer><strong>Cameron McKenzie</strong> <cite><a href='http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework'>Disruptive Forces in Java: Is Scala the New Spring Framework?</a></cite></footer></blockquote></p>
+<p>{% blockquote Cameron McKenzie http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework Disruptive forces in Java: Is Scala the new Spring framework? %}
+It's time for a disruptive event that will change how programs are designed, and how applications target the Java Virtual Machine.
+{% endblockquote %}</p>
 
 <p>Indeed, he likens the event to <a href="http://www.springsource.com/">SpringSource</a> and its meteoric rise to prominence in a time when web development was a real pain-in-the-neck. Think <a href="http://struts.apache.org/">Struts</a> (which, impressively, is still putting out releases) along with <a href="http://www.oracle.com/technetwork/java/javaee/ejb/index.html">EJB</a> and you have a perfect storm for a lightweight revolution.</p>
 

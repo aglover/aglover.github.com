@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="Why bother building navigation buttons in an Android app when you can easily capture finger swipes? But, if you&#8217;ve ever implemented gesture &hellip;">
+  <meta name="description" content="The mobile development landscape is bursting at the seams with frameworks and tools that enable you to target two primary mobile platforms: iOS and &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +85,66 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/04/14/hybrid-inappropriateness/">Hybrid Inappropriateness</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-14T11:14:00+08:00" pubdate data-updated="true">Apr 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/mine/confused.png">The mobile development landscape is <a href="http://skytechgeek.com/2011/09/10-mobile-application-frameworks-for-easy-development/">bursting at the seams</a> with frameworks and tools that enable you to target <a href="http://thediscoblog.com/blog/2013/03/25/modeveast-2012-panel-discussion/">two primary mobile platforms</a>: iOS and <a href="http://thediscoblog.com/blog/categories/android/">Android</a>. And the mobile community has <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">classified these frameworks and tools</a> into three categories: native, hybrid, and web. Unfortunately, limiting the classification to three <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">is inadequate</a> as the term hybrid is too generic.</p>
+
+<p>Web apps are truly ubiquitous because they take advantage of the browser and are thus, cross platform. You, for the most part, can get away with <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">maintaining one code base</a> that can be viewed on iOS, Android, and the other minor players. Yet, the key point of Web apps is that they are <a href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/"><em>web sites</em>, not mobile apps</a>.</p>
+
+<p>As you begin to blur that mobile app/mobile website line, you&#8217;ll <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">stumble over various issues</a> like performance or varying behaviors depending on the underlying device.  Worse, you&#8217;ll find that <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">not all browsers are created equally</a> and thus, you&#8217;ll need to <a href="http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/">compensate for various scenarios</a> or use assorted compensating tools like <a href="http://modernizr.com/">Modernizr</a>. Or, you&#8217;ll find yourself throwing the web app into a container because you want mass distribution via an app store or because you want to take advantage of some native feature.</p>
+
+<p>And at that point, in the eyes of many, you&#8217;ve built a hybrid mobile app. But that&#8217;s not the whole story.</p>
+
+<p>Hybrid frameworks aren&#8217;t all created equal.  There are, in fact, two flavors of hybrid-ness: <em>hybrid-web</em> and <em>hybrid-native</em>. Both are extremely different; in fact, to showcase the difference, I need only compare the &#8220;featured&#8221; apps of two hybrid frameworks: <a href="http://phonegap.com/">PhoneGap</a> and <a href="http://www.madewithmarmalade.com/">Marmalade</a>.</p>
+
+<p>PhoneGap is a great framework for building hybrid-web apps. You code in HTML and JavaScript and the resultant code is run inside of a web view managed by a native container.  You ostensibly write one code base and deploy to all the primary mobile platforms. Similar frameworks are: <a href="http://www-01.ibm.com/software/mobile-solutions/worklight/">IBM&#8217;s Worklight</a> and <a href="http://www.icenium.com/">Icenium</a>. <a href="http://www.sencha.com/products/touch">Sencha Touch</a> falls into this realm as well when you employ their container technology.</p>
+
+<p><img class="center" src="/images/mine/phonegap_example.png"></p>
+
+<p><a href="http://www.madewithmarmalade.com/">Marmalade</a> is a hybrid-native app platform; that is, you can code in an intermediary language like C++ that is ultimately compiled down into native code (i.e. Java for Android, Objective-C for iOS, etc). These apps are not characterized by a web view in any way. They are native, close to the bone as it gets apps. The benefit is that you only had to write <em>one code base</em>, the underlying tool took care of the dirty work in making it work similarly on iOS and Android, for example. Similar frameworks are: <a href="http://www.coronalabs.com/">Corona</a>, <a href="http://www.mosync.com/">MoSync</a>, and <a href="http://www.appcelerator.com/">Appcelerator</a> to name a few.</p>
+
+<p><img class="center" src="/images/mine/marmalate_example.png"></p>
+
+<p>Now look closely at the featured apps of each hybrid framework. They&#8217;re distinctly different aren&#8217;t they?</p>
+
+<p>PhoneGap and the rest of the hybrid-web frameworks are good at producing informational apps. These apps can look beautiful and certainly can have some compelling features like tight integration with social networks and geo-tracking, for example. But they&#8217;re inadequate for games and still lack a rich user experience when compared to more native apps like Flipboard or AngryBirds.</p>
+
+<p>Marmalade and the rest of the hybrid-native crowd shine when it comes to highly interactive apps like games; what&#8217;s more, these frameworks can build an app that generates a wow. And therein lies the crucial aspect that&#8217;s missed when the industry blindly assumes all hybrid options are similar. They couldn&#8217;t be more incorrect &#8211; thus, we need at least four categories (native, web, hybrid-native, and hybrid-web) and we need to eschew the lone term &#8220;hybrid&#8221; as it lacks clarification and therefore has no meaning.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2013/04/07/painless-android-swipe-detection/">Painless Android Swipe Detection</a></h1>
       
     
@@ -102,7 +162,7 @@
   
 
 
-<time datetime="2013-04-07T10:37:00-04:00" pubdate data-updated="true">Apr 7<span>th</span>, 2013</time>
+<time datetime="2013-04-07T10:37:00+08:00" pubdate data-updated="true">Apr 7<span>th</span>, 2013</time>
         
       </p>
     
@@ -144,7 +204,7 @@
   
 
 
-<time datetime="2013-04-05T21:04:00-04:00" pubdate data-updated="true">Apr 5<span>th</span>, 2013</time>
+<time datetime="2013-04-05T21:04:00+08:00" pubdate data-updated="true">Apr 5<span>th</span>, 2013</time>
         
       </p>
     
@@ -190,7 +250,7 @@
   
 
 
-<time datetime="2013-03-27T11:34:00-04:00" pubdate data-updated="true">Mar 27<span>th</span>, 2013</time>
+<time datetime="2013-03-27T11:34:00+08:00" pubdate data-updated="true">Mar 27<span>th</span>, 2013</time>
         
       </p>
     
@@ -245,7 +305,7 @@
   
 
 
-<time datetime="2013-03-25T18:34:00-04:00" pubdate data-updated="true">Mar 25<span>th</span>, 2013</time>
+<time datetime="2013-03-25T18:34:00+08:00" pubdate data-updated="true">Mar 25<span>th</span>, 2013</time>
         
       </p>
     
@@ -293,7 +353,7 @@
   
 
 
-<time datetime="2013-03-21T15:21:00-04:00" pubdate data-updated="true">Mar 21<span>st</span>, 2013</time>
+<time datetime="2013-03-21T15:21:00+08:00" pubdate data-updated="true">Mar 21<span>st</span>, 2013</time>
         
       </p>
     
@@ -331,7 +391,7 @@
   
 
 
-<time datetime="2013-03-12T11:55:00-04:00" pubdate data-updated="true">Mar 12<span>th</span>, 2013</time>
+<time datetime="2013-03-12T11:55:00+08:00" pubdate data-updated="true">Mar 12<span>th</span>, 2013</time>
         
       </p>
     
@@ -403,7 +463,7 @@
   
 
 
-<time datetime="2013-03-06T09:28:00-05:00" pubdate data-updated="true">Mar 6<span>th</span>, 2013</time>
+<time datetime="2013-03-06T09:28:00+08:00" pubdate data-updated="true">Mar 6<span>th</span>, 2013</time>
         
       </p>
     
@@ -448,7 +508,7 @@
   
 
 
-<time datetime="2013-03-04T10:29:00-05:00" pubdate data-updated="true">Mar 4<span>th</span>, 2013</time>
+<time datetime="2013-03-04T10:29:00+08:00" pubdate data-updated="true">Mar 4<span>th</span>, 2013</time>
         
       </p>
     
@@ -494,7 +554,7 @@
   
 
 
-<time datetime="2013-02-23T09:39:00-05:00" pubdate data-updated="true">Feb 23<span>rd</span>, 2013</time>
+<time datetime="2013-02-23T09:39:00+08:00" pubdate data-updated="true">Feb 23<span>rd</span>, 2013</time>
         
       </p>
     
@@ -506,98 +566,6 @@
 <p>Among open source, document-oriented databases, MongoDB is often billed as a <a href="http://www.ibm.com/developerworks/library/j-javadev2-12/">NoSQL database with RDBMS features</a>. One example of this is MongoDB&#8217;s support for dynamic queries that don&#8217;t require predefined MapReduce functions. MongoDB also comes with an interactive shell that makes accessing its datastore refreshingly easy, and its out-of-the-box support for sharding and clustering (via <a href="http://thediscoblog.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">replica sets</a>) enables high scalability across multiple nodes.</p>
 
 <p>Check out this IBM developerWorks&#8217; Knowledge Path dubbed &#8221;<a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Discover MongoDB</a>&#8221; &#8211; watch four videos, read a few articles, listen to a podcast and learn everything you need to know about MongoDB!</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/02/18/testing-rails-migrations/">Testing Rails Migrations</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-18T16:22:00-05:00" pubdate data-updated="true">Feb 18<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently found myself searching <a href="http://stackoverflow.com/">Stackoverflow</a> and Google for various techniques for automatically testing <a href="http://guides.rubyonrails.org/migrations.html">Rails migrations</a>. I was surprised not to have found <a href="http://stackoverflow.com/questions/6079016/how-do-i-test-rails-migrations">too much</a> information though. While testing a migration is fairly straightforward (migrations are classes and you can easily invoke corresponding methods); the challenge can be setting models up properly. That is, migrations are a tool to update an underlying database to reflect changes in models &#8211; by the time you are writing a migration, the models <em>already</em> reflect what should be.</p>
-
-<p>Accordingly, to test a migration, you need to set up your test with how things were and then run your migration and verify things have migrated.  As it turns out, this is super easy to do with a document oriented database like <a href="http://www.mongodb.org/">MongoDB</a>. For this particular project, we&#8217;re using <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a>,  which is an Object-Document-Mapper (or ODM) for MongoDB and we&#8217;re also using a nifty gem dubbed <a href="https://github.com/adacosta/mongoid_rails_migrations">mongoid_rails_migrations</a>, which facilitates writing Mongoid migrations.</p>
-
-<p>In order to reflect the state of the underlying datastore before running a migration, I needed to remove a particular collection, which due to changes in our models, is automatically populated with meta data when various events occur (think <a href="http://en.wikipedia.org/wiki/Database_trigger">relational trigger</a> here, for example). As you can probably see, as this new collection doesn&#8217;t exist in production, all the existing data in production needs some corresponding default meta data to reflect the new requirements which brought this collection to life.</p>
-
-<p>Accordingly, once I initialize my models and the corresponding collection is populated, I need to completely <a href="http://docs.mongodb.org/manual/reference/method/db.collection.drop/">drop the collection</a>. Then, I can run my migration and then verify that the previously nuked collection is present with all the required data.</p>
-
-<p>In my case, I&#8217;m using <a href="https://github.com/thoughtbot/shoulda">shoulda</a> in concert with <a href="http://ruby-doc.org/stdlib-1.9.3/libdoc/test/unit/rdoc/Test/Unit.html">Test::Unit</a>, but the details of a test framework really don&#8217;t matter &#8211; in any case, you&#8217;ll need to load your migration, which can be done via a <code>require</code> statement like so:</p>
-
-<figure class='code'><figcaption><span>Requiring a migration</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;db&#39;</span><span class="p">,</span> <span class="s1">&#39;migrate&#39;</span><span class="p">,</span> <span class="s1">&#39;20130217194234_member_app_roles_permissions&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In my <a href="http://en.wikipedia.org/wiki/Test_fixture">fixture</a> logic, I&#8217;ve initialized a few objects and related them, which automatically creates the aforementioned meta data collection; consequently, I need to do two things. First, get a connection to the underlying test datastore and then drop that collection.</p>
-
-<figure class='code'><figcaption><span>Obtaining a connection and dropping a collection</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">db</span> <span class="o">=</span> <span class="vi">@account</span><span class="o">.</span><span class="n">db</span>
-</span><span class='line'><span class="n">db</span><span class="o">[</span><span class="s1">&#39;member_app_roles&#39;</span><span class="o">].</span><span class="n">drop</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now I&#8217;m ready to run my migration &#8211; it&#8217;s as simple as invoking the <a href="http://www.railstips.org/blog/archives/2009/05/11/class-and-instance-methods-in-ruby/">class method</a> <code>up</code>!</p>
-
-<figure class='code'><figcaption><span>Invoking a migration </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">MemberAppRolesPermissions</span><span class="o">.</span><span class="n">up</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once the migration has finished running, I can then verify that everything is cool and copasetic. In this case, I need to go directly to the datastore because those objects in memory won&#8217;t reflect my changes just yet.</p>
-
-<figure class='code'><figcaption><span>Asserting things worked!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">member</span> <span class="o">=</span> <span class="no">Member</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">assert_equal</span> <span class="mi">2</span><span class="p">,</span> <span class="n">member</span><span class="o">.</span><span class="n">member_app_roles</span><span class="o">.</span><span class="n">size</span>
-</span><span class='line'><span class="n">member</span><span class="o">.</span><span class="n">member_app_roles</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">app_role</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">assert_equal</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="n">app_role</span><span class="o">.</span><span class="n">role</span>
-</span><span class='line'>  <span class="n">assert_equal</span> <span class="n">member</span><span class="p">,</span> <span class="n">app_role</span><span class="o">.</span><span class="n">member</span>
-</span><span class='line'>  <span class="n">assert_not_nil</span> <span class="n">app_role</span><span class="o">.</span><span class="n">app</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As a benefit of thinking through how to test a migration, you end up unveiling how you&#8217;d construct the migration&#8217;s <code>down</code> method. That is, in my case, to roll back, all I need to do is blow away the <code>member_app_roles</code> collection!</p>
-
-<p>As you can see, testing migrations isn&#8217;t terribly difficult (probably a good reason why I haven&#8217;t found too much information about it); the key aspect is the logic that is applied to verify your migration actually worked. It should be noted that while I executed this test in the context of a document oriented database, you could certainly do the same in a relational database. For example, by dropping  columns, tables, etc before running a migration. Either way, testing a migration is a snap. Can you dig it?</p>
 </div>
   
   
@@ -623,6 +591,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/14/hybrid-inappropriateness/">Hybrid inappropriateness</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/07/painless-android-swipe-detection/">Painless Android swipe detection</a>
       </li>
     
@@ -636,10 +608,6 @@
     
       <li class="post">
         <a href="/blog/2013/03/25/modeveast-2012-panel-discussion/">MoDevEast 2012 panel discussion</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/21/2013-open-analytics-summit/">2013 Open Analytics Summit</a>
       </li>
     
   </ul>

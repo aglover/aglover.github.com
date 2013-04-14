@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mobile | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-07T10:51:03-04:00</updated>
+  <updated>2013-04-14T11:42:05+08:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,11 +14,42 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Hybrid inappropriateness]]></title>
+    <link href="http://aglover.github.com/blog/2013/04/14/hybrid-inappropriateness/"/>
+    <updated>2013-04-14T11:14:00+08:00</updated>
+    <id>http://aglover.github.com/blog/2013/04/14/hybrid-inappropriateness</id>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/confused.png %}The mobile development landscape is <a href="http://skytechgeek.com/2011/09/10-mobile-application-frameworks-for-easy-development/">bursting at the seams</a> with frameworks and tools that enable you to target <a href="http://thediscoblog.com/blog/2013/03/25/modeveast-2012-panel-discussion/">two primary mobile platforms</a>: iOS and <a href="http://thediscoblog.com/blog/categories/android/">Android</a>. And the mobile community has <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">classified these frameworks and tools</a> into three categories: native, hybrid, and web. Unfortunately, limiting the classification to three <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">is inadequate</a> as the term hybrid is too generic.</p>
+
+<p>Web apps are truly ubiquitous because they take advantage of the browser and are thus, cross platform. You, for the most part, can get away with <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">maintaining one code base</a> that can be viewed on iOS, Android, and the other minor players. Yet, the key point of Web apps is that they are <a href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/"><em>web sites</em>, not mobile apps</a>.</p>
+
+<p>As you begin to blur that mobile app/mobile website line, you'll <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">stumble over various issues</a> like performance or varying behaviors depending on the underlying device.  Worse, you'll find that <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">not all browsers are created equally</a> and thus, you'll need to <a href="http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/">compensate for various scenarios</a> or use assorted compensating tools like <a href="http://modernizr.com/">Modernizr</a>. Or, you'll find yourself throwing the web app into a container because you want mass distribution via an app store or because you want to take advantage of some native feature.</p>
+
+<p>And at that point, in the eyes of many, you've built a hybrid mobile app. But that's not the whole story.</p>
+
+<p>Hybrid frameworks aren't all created equal.  There are, in fact, two flavors of hybrid-ness: <em>hybrid-web</em> and <em>hybrid-native</em>. Both are extremely different; in fact, to showcase the difference, I need only compare the "featured" apps of two hybrid frameworks: <a href="http://phonegap.com/">PhoneGap</a> and <a href="http://www.madewithmarmalade.com/">Marmalade</a>.</p>
+
+<p>PhoneGap is a great framework for building hybrid-web apps. You code in HTML and JavaScript and the resultant code is run inside of a web view managed by a native container.  You ostensibly write one code base and deploy to all the primary mobile platforms. Similar frameworks are: <a href="http://www-01.ibm.com/software/mobile-solutions/worklight/">IBM's Worklight</a> and <a href="http://www.icenium.com/">Icenium</a>. <a href="http://www.sencha.com/products/touch">Sencha Touch</a> falls into this realm as well when you employ their container technology.</p>
+
+<p>{% img center /images/mine/phonegap_example.png %}</p>
+
+<p><a href="http://www.madewithmarmalade.com/">Marmalade</a> is a hybrid-native app platform; that is, you can code in an intermediary language like C++ that is ultimately compiled down into native code (i.e. Java for Android, Objective-C for iOS, etc). These apps are not characterized by a web view in any way. They are native, close to the bone as it gets apps. The benefit is that you only had to write <em>one code base</em>, the underlying tool took care of the dirty work in making it work similarly on iOS and Android, for example. Similar frameworks are: <a href="http://www.coronalabs.com/">Corona</a>, <a href="http://www.mosync.com/">MoSync</a>, and <a href="http://www.appcelerator.com/">Appcelerator</a> to name a few.</p>
+
+<p>{% img center /images/mine/marmalate_example.png %}</p>
+
+<p>Now look closely at the featured apps of each hybrid framework. They're distinctly different aren't they?</p>
+
+<p>PhoneGap and the rest of the hybrid-web frameworks are good at producing informational apps. These apps can look beautiful and certainly can have some compelling features like tight integration with social networks and geo-tracking, for example. But they're inadequate for games and still lack a rich user experience when compared to more native apps like Flipboard or AngryBirds.</p>
+
+<p>Marmalade and the rest of the hybrid-native crowd shine when it comes to highly interactive apps like games; what's more, these frameworks can build an app that generates a wow. And therein lies the crucial aspect that's missed when the industry blindly assumes all hybrid options are similar. They couldn't be more incorrect -- thus, we need at least four categories (native, web, hybrid-native, and hybrid-web) and we need to eschew the lone term "hybrid" as it lacks clarification and therefore has no meaning.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Painless Android swipe detection]]></title>
     <link href="http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection/"/>
-    <updated>2013-04-07T10:37:00-04:00</updated>
+    <updated>2013-04-07T10:37:00+08:00</updated>
     <id>http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/gesticulate.png">Why bother building navigation buttons in an Android app when you can easily capture finger swipes? But, if you've ever implemented gesture section in Android there's the drudgery of implementing listeners and you also need to do some elementary Cartesian math. Save yourself the boilerplate bother mathematics and use a <a href="https://github.com/aglover/gesticulate">library</a>!</p>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/gesticulate.png %}Why bother building navigation buttons in an Android app when you can easily capture finger swipes? But, if you've ever implemented gesture section in Android there's the drudgery of implementing listeners and you also need to do some elementary Cartesian math. Save yourself the boilerplate bother mathematics and use a <a href="https://github.com/aglover/gesticulate">library</a>!</p>
 
 <p><a href="https://github.com/aglover/gesticulate">Gesticulate</a> makes it painless to detect straightforward swiping motions like up, down, left, and right. It's a simple jar file you include in your Android <code>libs</code> directory. Throw Gesticulate's <code>SwipeDetector</code> inside an instance of Android's <code>SimpleOnGestureListener</code>, for example, and you're detecting swipes with ease!</p>
 
@@ -29,9 +60,9 @@
   <entry>
     <title type="html"><![CDATA[Crowd think often lacks clarity]]></title>
     <link href="http://aglover.github.com/blog/2013/04/05/crowd-think-often-lacks-clarity/"/>
-    <updated>2013-04-05T21:04:00-04:00</updated>
+    <updated>2013-04-05T21:04:00+08:00</updated>
     <id>http://aglover.github.com/blog/2013/04/05/crowd-think-often-lacks-clarity</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/crowd.jpg">In case you missed it, <a href="http://www.infoq.com/">InfoQ</a> has an <a href="http://www.infoq.com/research/cross-platform-mobile-tools">interesting analysis regarding hybrid mobile app development frameworks</a>. They are profiling 12 tools and soliciting community feedback so as to make a <a href="http://www.thoughtworks.com/insights">ThoughtWorks-like technology radar</a>. If you participate in the voting you are entitled to see the voting distribution.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/crowd.jpg %}In case you missed it, <a href="http://www.infoq.com/">InfoQ</a> has an <a href="http://www.infoq.com/research/cross-platform-mobile-tools">interesting analysis regarding hybrid mobile app development frameworks</a>. They are profiling 12 tools and soliciting community feedback so as to make a <a href="http://www.thoughtworks.com/insights">ThoughtWorks-like technology radar</a>. If you participate in the voting you are entitled to see the voting distribution.</p>
 
 <p>What's interesting (and not too surprising) about this analysis is that frameworks like <a href="http://phonegap.com/">PhoneGap</a> or <a href="http://jquerymobile.com/">jQuery Mobile</a> (and laughably <a href="http://jqtjs.com/">JQTouch</a>?) are leaning more towards <em>adoption ready</em> when compared to frameworks like <a href="http://www.madewithmarmalade.com/">Marmelade</a>, <a href="http://www.coronalabs.com/">Coronona</a> or <a href="http://www.mosync.com/">MoSync</a>. But this radar lacks some clarifying dimensions -- for example, if you want to produce a mobile website on a lot of different mobile platforms quickly, then PhoneGap is probably the way to go. But if you're looking to create a mobile app, then the choice to use PhoneGap must be treated with extreme caution.</p>
 
@@ -46,11 +77,11 @@
   <entry>
     <title type="html"><![CDATA[MoDevEast 2012 panel discussion]]></title>
     <link href="http://aglover.github.com/blog/2013/03/25/modeveast-2012-panel-discussion/"/>
-    <updated>2013-03-25T18:34:00-04:00</updated>
+    <updated>2013-03-25T18:34:00+08:00</updated>
     <id>http://aglover.github.com/blog/2013/03/25/modeveast-2012-panel-discussion</id>
     <content type="html"><![CDATA[<p>Last fall, I had the pleasure of moderating a panel discussion at <a href="http://modeveast.com/">MoDevEast</a> entitled "<a href="http://www.youtube.com/watch?v=b7P-wNuHPL0">What Developers Love and Hate about iOS, Android, Windows and HTML5</a>" with five super star mobile app developers.</p>
 
-<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/b7P-wNuHPL0 "></iframe></div></p>
+<p>{% youtube b7P-wNuHPL0 %}</p>
 
 <p></p>
 
@@ -62,32 +93,17 @@
   <entry>
     <title type="html"><![CDATA[The bull's eye on mobility: Mobile for the masses]]></title>
     <link href="http://aglover.github.com/blog/2013/03/06/the-bulls-eye-on-mobility-mobile-for-the-masses/"/>
-    <updated>2013-03-06T09:28:00-05:00</updated>
+    <updated>2013-03-06T09:28:00+08:00</updated>
     <id>http://aglover.github.com/blog/2013/03/06/the-bulls-eye-on-mobility-mobile-for-the-masses</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/mftm_1.jpg">Since joining <a href="http://www.app47.com/">App47</a>, I've been lazer focused on mobility; consquently, I'm pleased to announce that a new mobile development series has debuted on <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>! The inaugural article,  "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">A gentle introduction to Android</a>", begins by exploring the mobile landscape and introduces how to get started with Android app development.</p>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/mftm_1.jpg %}Since joining <a href="http://www.app47.com/">App47</a>, I've been lazer focused on mobility; consquently, I'm pleased to announce that a new mobile development series has debuted on <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>! The inaugural article,  "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">A gentle introduction to Android</a>", begins by exploring the mobile landscape and introduces how to get started with Android app development.</p>
 
 <p>As the article summary states:</p>
 
-<p><blockquote><p>The mobile landscape is rich with promise, and Android is a viable and exciting platform for developers who seek a way in. This new series starts with an introduction to Android that is tailored specifically for Java developers just getting started with mobile. Learn about Android's three-layer versioning system (and find out why it matters), then set up your development environment and build your first Android app.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/library/j-mobileforthemasses1/'>Mobile for the Masses: A Gentle Introduction to Android</a></cite></footer></blockquote></p>
+<p>{% blockquote IBM DeveloperWorks http://www.ibm.com/developerworks/library/j-mobileforthemasses1/ Mobile for the masses: A gentle introduction to Android %}
+The mobile landscape is rich with promise, and Android is a viable and exciting platform for developers who seek a way in. This new series starts with an introduction to Android that is tailored specifically for Java developers just getting started with mobile. Learn about Android's three-layer versioning system (and find out why it matters), then set up your development environment and build your first Android app.
+{% endblockquote %}</p>
 
 <p>So what are you waiting for? Check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>" and learn the ins and outs of Android development! Stay tuned for more articles to come and don't forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[It's a question of wow]]></title>
-    <link href="http://aglover.github.com/blog/2013/03/04/its-a-question-of-wow/"/>
-    <updated>2013-03-04T10:29:00-05:00</updated>
-    <id>http://aglover.github.com/blog/2013/03/04/its-a-question-of-wow</id>
-    <content type="html"><![CDATA[<p>Let me ask you a question: do you want to build a mobile website or a mobile app? If your answer is mobile website, then <a href="http://www.ebizmba.com/articles/best-html5-websites">HTML5 is good enough</a>. But if your answer is mobile app then you had better <a href="http://www.trademob.com/why-native-apps-remain-unrivalled-by-web-apps-in-user-experience-and-discoverability/">think about user experience</a>. You see, the user experience bar has been set extraordinarily high by a number of stellar native apps. People expect to be wowed and if they aren't, they won't use your app. It's that simple.</p>
-
-<p><img class="right" src="/images/mine/wow.png">How do you wow someone? You make your app easy to use and aesthetically pleasing to the eye. And it has to work correctly consistently. Unresponsiveness, however minor, won't do.</p>
-
-<p>Can you wow someone <a href="http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/">with an HTML5 mobile app</a>? <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">Sometimes</a>. But let me tell you: <a href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/">it's not easy</a>. Don't think for a second that just because there are a gazillion developers who have an <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">understanding of HTML and JavaScript</a>, that anyone can build an app to inspire a wow. No, it's a <a href="http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/">tricky business with HTML5</a> these days.</p>
-
-<p>Yep, there are fewer developers out there that actually can code <a href="http://en.wikipedia.org/wiki/Objective-C">Objective-C</a> or truly understand <a href="http://developer.android.com/index.html">Android</a>. They might be costly too. But the wow comes from native apps these days and it looks to be that way for some time. Native apps are close to the bone -- they don't have to rely on browser standards or <a href="https://code.google.com/p/html5shiv/">shivs</a> to <a href="http://paulirish.com/2011/the-history-of-the-html5-shiv/">work correctly</a> 83% of the time.  Coded correctly, they work <em>all the time</em>. They are responsive, fast, and can work offline without a lot of magic.</p>
-
-<p><a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> is great for mobile web sites. Not mobile apps. Until HTML5 can produce a significant wow factor, your best bet is to go native. It's that simple.</p>
 ]]></content>
   </entry>
   
