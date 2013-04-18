@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="As if the JavaScript console in Chrome couldn&#8217;t be any more awesome. Check it out: Command Line API Reference. Yep, it&#8217;s legit. I&#8217; &hellip;">
+  <meta name="description" content="Wget is an extremely handy utility I use all the time when I find myself on a Linux box. It&#8217;s quite helpful, for example, for downloading files &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +85,68 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/04/18/curling-for-wget/">cURLing for Wget</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-18T09:33:00-04:00" pubdate data-updated="true">Apr 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://en.wikipedia.org/wiki/Wget">Wget</a> is an extremely handy utility I use all the time when I find myself on a Linux box. It&#8217;s quite helpful, for example, for downloading files. Need to <a href="https://github.com/aglover/ubuntu-equip/blob/master/equip_ruby.sh">install Ruby</a>? No problem, just download the binary like so:</p>
+
+<figure class='code'><figcaption><span>wget example of downloading Ruby binary</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>and you&#8217;re one step closer. There&#8217;s no flags to remember either.</p>
+
+<p>Wget, however, isn&#8217;t natively available on OSX. From time to time, I&#8217;m stung to see the nefarious &#8216;command not found&#8217; message after expectantly waiting to see some file I need downloaded.</p>
+
+<p>Luckily, you can force <a href="http://curl.haxx.se/docs/manpage.html">cURL</a> to act like Wget with a few flags. Simply use the <code>-OL</code> flags like so:</p>
+
+<figure class='code'><figcaption><span>cURL acting like Wget</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -OL http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>and you&#8217;ll be on your way to downloading some file.</p>
+
+<p>Of course, it&#8217;s possible to get <code>wget</code> on your Mac via <a href="http://osxdaily.com/2012/05/22/install-wget-mac-os-x/">MacPorts or Homebrew</a>; nevertheless, knowing you can achieve the same goals with cURL is always handy.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2013/04/15/chromes-console-commands/">Chrome&#8217;s Console Commands</a></h1>
       
     
@@ -102,7 +164,7 @@
   
 
 
-<time datetime="2013-04-15T10:05:00+08:00" pubdate data-updated="true">Apr 15<span>th</span>, 2013</time>
+<time datetime="2013-04-15T10:05:00-04:00" pubdate data-updated="true">Apr 15<span>th</span>, 2013</time>
         
       </p>
     
@@ -146,7 +208,7 @@
   
 
 
-<time datetime="2013-04-14T11:14:00+08:00" pubdate data-updated="true">Apr 14<span>th</span>, 2013</time>
+<time datetime="2013-04-14T11:14:00-04:00" pubdate data-updated="true">Apr 14<span>th</span>, 2013</time>
         
       </p>
     
@@ -206,7 +268,7 @@
   
 
 
-<time datetime="2013-04-07T10:37:00+08:00" pubdate data-updated="true">Apr 7<span>th</span>, 2013</time>
+<time datetime="2013-04-07T10:37:00-04:00" pubdate data-updated="true">Apr 7<span>th</span>, 2013</time>
         
       </p>
     
@@ -248,7 +310,7 @@
   
 
 
-<time datetime="2013-04-05T21:04:00+08:00" pubdate data-updated="true">Apr 5<span>th</span>, 2013</time>
+<time datetime="2013-04-05T21:04:00-04:00" pubdate data-updated="true">Apr 5<span>th</span>, 2013</time>
         
       </p>
     
@@ -294,7 +356,7 @@
   
 
 
-<time datetime="2013-03-27T11:34:00+08:00" pubdate data-updated="true">Mar 27<span>th</span>, 2013</time>
+<time datetime="2013-03-27T11:34:00-04:00" pubdate data-updated="true">Mar 27<span>th</span>, 2013</time>
         
       </p>
     
@@ -349,7 +411,7 @@
   
 
 
-<time datetime="2013-03-25T18:34:00+08:00" pubdate data-updated="true">Mar 25<span>th</span>, 2013</time>
+<time datetime="2013-03-25T18:34:00-04:00" pubdate data-updated="true">Mar 25<span>th</span>, 2013</time>
         
       </p>
     
@@ -397,7 +459,7 @@
   
 
 
-<time datetime="2013-03-21T15:21:00+08:00" pubdate data-updated="true">Mar 21<span>st</span>, 2013</time>
+<time datetime="2013-03-21T15:21:00-04:00" pubdate data-updated="true">Mar 21<span>st</span>, 2013</time>
         
       </p>
     
@@ -435,7 +497,7 @@
   
 
 
-<time datetime="2013-03-12T11:55:00+08:00" pubdate data-updated="true">Mar 12<span>th</span>, 2013</time>
+<time datetime="2013-03-12T11:55:00-04:00" pubdate data-updated="true">Mar 12<span>th</span>, 2013</time>
         
       </p>
     
@@ -507,7 +569,7 @@
   
 
 
-<time datetime="2013-03-06T09:28:00+08:00" pubdate data-updated="true">Mar 6<span>th</span>, 2013</time>
+<time datetime="2013-03-06T09:28:00-05:00" pubdate data-updated="true">Mar 6<span>th</span>, 2013</time>
         
       </p>
     
@@ -522,52 +584,6 @@
 
 
 <p>So what are you waiting for? Check out &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>&#8221; and learn the ins and outs of Android development! Stay tuned for more articles to come and don&#8217;t forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/03/04/its-a-question-of-wow/">It&#8217;s a Question of Wow</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-04T10:29:00+08:00" pubdate data-updated="true">Mar 4<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Let me ask you a question: do you want to build a mobile website or a mobile app? If your answer is mobile website, then <a href="http://www.ebizmba.com/articles/best-html5-websites">HTML5 is good enough</a>. But if your answer is mobile app then you had better <a href="http://www.trademob.com/why-native-apps-remain-unrivalled-by-web-apps-in-user-experience-and-discoverability/">think about user experience</a>. You see, the user experience bar has been set extraordinarily high by a number of stellar native apps. People expect to be wowed and if they aren&#8217;t, they won&#8217;t use your app. It&#8217;s that simple.</p>
-
-<p><img class="right" src="/images/mine/wow.png">How do you wow someone? You make your app easy to use and aesthetically pleasing to the eye. And it has to work correctly consistently. Unresponsiveness, however minor, won&#8217;t do.</p>
-
-<p>Can you wow someone <a href="http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/">with an HTML5 mobile app</a>? <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">Sometimes</a>. But let me tell you: <a href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/">it&#8217;s not easy</a>. Don&#8217;t think for a second that just because there are a gazillion developers who have an <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">understanding of HTML and JavaScript</a>, that anyone can build an app to inspire a wow. No, it&#8217;s a <a href="http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/">tricky business with HTML5</a> these days.</p>
-
-<p>Yep, there are fewer developers out there that actually can code <a href="http://en.wikipedia.org/wiki/Objective-C">Objective-C</a> or truly understand <a href="http://developer.android.com/index.html">Android</a>. They might be costly too. But the wow comes from native apps these days and it looks to be that way for some time. Native apps are close to the bone &#8211; they don&#8217;t have to rely on browser standards or <a href="https://code.google.com/p/html5shiv/">shivs</a> to <a href="http://paulirish.com/2011/the-history-of-the-html5-shiv/">work correctly</a> 83% of the time.  Coded correctly, they work <em>all the time</em>. They are responsive, fast, and can work offline without a lot of magic.</p>
-
-<p><a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> is great for mobile web sites. Not mobile apps. Until HTML5 can produce a significant wow factor, your best bet is to go native. It&#8217;s that simple.</p>
 </div>
   
   
@@ -593,6 +609,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/18/curling-for-wget/">cURLing for Wget</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/15/chromes-console-commands/">Chrome&#8217;s console commands</a>
       </li>
     
@@ -606,10 +626,6 @@
     
       <li class="post">
         <a href="/blog/2013/04/05/crowd-think-often-lacks-clarity/">Crowd think often lacks clarity</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/27/mongoid-batch-inserts/">Mongoid batch inserts</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-15T10:08:21+08:00</updated>
+  <updated>2013-04-18T09:41:56-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Chrome's console commands]]></title>
     <link href="http://aglover.github.com/blog/2013/04/15/chromes-console-commands/"/>
-    <updated>2013-04-15T10:05:00+08:00</updated>
+    <updated>2013-04-15T10:05:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/04/15/chromes-console-commands</id>
     <content type="html"><![CDATA[<p>As if the JavaScript console in Chrome couldn't be any more awesome. Check it out: <a href="https://developers.google.com/chrome-developer-tools/docs/commandline-api">Command Line API Reference</a>. Yep, it's legit. I've been using Firebug and the like for years and only just ran across this feature of Chrome's JavaScript console.</p>
 
@@ -31,7 +31,7 @@
   <entry>
     <title type="html"><![CDATA[Node.js in 3 commands]]></title>
     <link href="http://aglover.github.com/blog/2013/03/12/node-in-3-commands/"/>
-    <updated>2013-03-12T11:55:00+08:00</updated>
+    <updated>2013-03-12T11:55:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/03/12/node-in-3-commands</id>
     <content type="html"><![CDATA[<p>A few <a href="http://www.javaworld.com/community/node/8140">short years ago</a> when I started to explore <a href="http://nodejs.org/">Node.js</a>, I remember the installation on my MacBook Pro required downloading the source, compiling and installing it, and then updating paths. <em>And then</em> you had to install <a href="https://npmjs.org/">NPM</a>.</p>
 
@@ -70,7 +70,7 @@ nvm install v0.10.0
   <entry>
     <title type="html"><![CDATA[Sinatra, CoffeeScript, and Haml: swinging in 4 steps]]></title>
     <link href="http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/"/>
-    <updated>2012-12-10T21:49:00+08:00</updated>
+    <updated>2012-12-10T21:49:00-05:00</updated>
     <id>http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps</id>
     <content type="html"><![CDATA[<p>I recently decided to ditch plain old JavaScript in a <a href="http://www.sinatrarb.com/">Sinatra</a> based application in favor of <a href="http://coffeescript.org/">CoffeeScript</a>. The existing JavaScript wasn't terribly complex; however, I was looking at having to add some AJAX based long polling and I couldn't bring myself to do it in <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-18/index.html">JavaScript</a>. Accordingly, I decided I'd use <a href="http://www.ibm.com/developerworks/web/library/j-coffeescript/index.html">CoffeeScript</a>, but, as it turns out, there were a few steps I had to put in place before I could enjoy some significant whitespace delimitation.</p>
 
@@ -117,7 +117,7 @@ spinner = new Spinner(opts).spin(document.getElementById('spinner'))
   <entry>
     <title type="html"><![CDATA[Modeling Mongo documents with Mongoose]]></title>
     <link href="http://aglover.github.com/blog/2012/08/29/modeling-mongo-documents-with-mongoose/"/>
-    <updated>2012-08-29T21:45:00+08:00</updated>
+    <updated>2012-08-29T21:45:00-04:00</updated>
     <id>http://aglover.github.com/blog/2012/08/29/modeling-mongo-documents-with-mongoose</id>
     <content type="html"><![CDATA[<p>Without a doubt, one of the quickest ways to build an application that leverages <a href="http://www.mongodb.org/">MongoDB</a> is with Node. It's as if the two platforms were made for each other; the sheer number of Node libraries available for dealing with Mongo is testimony to a vibrant, innovative community. Indeed, one of my favorite Mongo focused libraries these days is <a href="http://mongoosejs.com/">Mongoose</a>.</p>
 
@@ -203,7 +203,7 @@ done(err)
   <entry>
     <title type="html"><![CDATA[Leaner JQuery with Zepto]]></title>
     <link href="http://aglover.github.com/blog/2012/08/28/leaner-jquery-with-zepto/"/>
-    <updated>2012-08-28T13:04:00+08:00</updated>
+    <updated>2012-08-28T13:04:00-04:00</updated>
     <id>http://aglover.github.com/blog/2012/08/28/leaner-jquery-with-zepto</id>
     <content type="html"><![CDATA[<p>In a recent conversation with my friend <a href="http://jonathanstark.com/">Jonathan Stark</a> we talked about how much has changed in mobile web development since <a href="http://www.ibm.com/developerworks/podcast/glover-stark-112911/index.html">he and I chatted about cross-platform mobile development</a> in November of 2011. Of particular interest was how much adoption mobile web sites have achieved in less than a year -- yet, the adoption hasn't always been smooth. In fact, he pointed out a decidedly humorous site dubbed <a href="http://wtfmobileweb.com/">WTF Mobile Web</a>, which aims to educate the mobile web community via examples.</p>
 

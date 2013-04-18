@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: OSX | The Disco Blog]]></title>
+  <link href="http://aglover.github.com/blog/categories/osx/atom.xml" rel="self"/>
+  <link href="http://aglover.github.com/"/>
+  <updated>2013-04-18T09:41:56-04:00</updated>
+  <id>http://aglover.github.com/</id>
+  <author>
+    <name><![CDATA[Andrew Glover]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[cURLing for Wget]]></title>
+    <link href="http://aglover.github.com/blog/2013/04/18/curling-for-wget/"/>
+    <updated>2013-04-18T09:33:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/04/18/curling-for-wget</id>
+    <content type="html"><![CDATA[<p><a href="http://en.wikipedia.org/wiki/Wget">Wget</a> is an extremely handy utility I use all the time when I find myself on a Linux box. It's quite helpful, for example, for downloading files. Need to <a href="https://github.com/aglover/ubuntu-equip/blob/master/equip_ruby.sh">install Ruby</a>? No problem, just download the binary like so:</p>
+
+<p><code>bash wget example of downloading Ruby binary
+wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
+</code></p>
+
+<p>and you're one step closer. There's no flags to remember either.</p>
+
+<p>Wget, however, isn't natively available on OSX. From time to time, I'm stung to see the nefarious 'command not found' message after expectantly waiting to see some file I need downloaded.</p>
+
+<p>Luckily, you can force <a href="http://curl.haxx.se/docs/manpage.html">cURL</a> to act like Wget with a few flags. Simply use the <code>-OL</code> flags like so:</p>
+
+<p><code>bash cURL acting like Wget
+curl -OL http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
+</code></p>
+
+<p>and you'll be on your way to downloading some file.</p>
+
+<p>Of course, it's possible to get <code>wget</code> on your Mac via <a href="http://osxdaily.com/2012/05/22/install-wget-mac-os-x/">MacPorts or Homebrew</a>; nevertheless, knowing you can achieve the same goals with cURL is always handy.</p>
+]]></content>
+  </entry>
+  
+</feed>

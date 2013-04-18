@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Redis | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/redis/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-15T10:08:21+08:00</updated>
+  <updated>2013-04-18T09:41:56-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Redis replication: couldn't be any easier]]></title>
     <link href="http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/"/>
-    <updated>2012-08-29T13:23:00+08:00</updated>
+    <updated>2012-08-29T13:23:00-04:00</updated>
     <id>http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier</id>
     <content type="html"><![CDATA[<p><a href="http://redis.io">Redis</a> supports <a href="http://redis.io/topics/replication">master-slave replication</a> and it's extremely easy to setup.  And the beauty of setting up replication is that all you have to do is fire up a slave instance and have it point to some other Redis instance (which then becomes the master node).</p>
 

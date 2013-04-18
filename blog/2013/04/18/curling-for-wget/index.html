@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: MongoDB - The Disco Blog</title>
+  <title>cURLing for Wget - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="Category: MongoDB">
+  <meta name="description" content="Wget is an extremely handy utility I use all the time when I find myself on a Linux box. It&#8217;s quite helpful, for example, for downloading files &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://aglover.github.comblog/categories/mongodb/">
+  <link rel="canonical" href="http://aglover.github.com/blog/2013/04/18/curling-for-wget/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -77,137 +77,121 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: MongoDB</h1>
+    
+      
+        <h1 class="entry-title">cURLing for Wget</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-18T09:33:00-04:00" pubdate data-updated="true">Apr 18<span>th</span>, 2013</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p><a href="http://en.wikipedia.org/wiki/Wget">Wget</a> is an extremely handy utility I use all the time when I find myself on a Linux box. It&#8217;s quite helpful, for example, for downloading files. Need to <a href="https://github.com/aglover/ubuntu-equip/blob/master/equip_ruby.sh">install Ruby</a>? No problem, just download the binary like so:</p>
 
-  
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/blog/2013/03/27/mongoid-batch-inserts/">Mongoid batch inserts</a></h1>
-<time datetime="2013-03-27T11:34:00-04:00" pubdate><span class='month'>Mar</span> <span class='day'>27</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mongodb/'>MongoDB</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a></span>
-</footer>
+<figure class='code'><figcaption><span>wget example of downloading Ruby binary</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<p></p>
+
+<p>and you&#8217;re one step closer. There&#8217;s no flags to remember either.</p>
+
+<p>Wget, however, isn&#8217;t natively available on OSX. From time to time, I&#8217;m stung to see the nefarious &#8216;command not found&#8217; message after expectantly waiting to see some file I need downloaded.</p>
+
+<p>Luckily, you can force <a href="http://curl.haxx.se/docs/manpage.html">cURL</a> to act like Wget with a few flags. Simply use the <code>-OL</code> flags like so:</p>
+
+<figure class='code'><figcaption><span>cURL acting like Wget</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -OL http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p></p>
 
-<article>
-  
-<h1><a href="/blog/2013/03/21/2013-open-analytics-summit/">2013 Open Analytics Summit</a></h1>
-<time datetime="2013-03-21T15:21:00-04:00" pubdate><span class='month'>Mar</span> <span class='day'>21</span> <span class='year'>2013</span></time>
+<p>and you&#8217;ll be on your way to downloading some file.</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mongodb/'>MongoDB</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/02/23/everything-you-need-to-know-about-mongodb/">Everything you need to know about MongoDB</a></h1>
-<time datetime="2013-02-23T09:39:00-05:00" pubdate><span class='month'>Feb</span> <span class='day'>23</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mongodb/'>MongoDB</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/01/04/savvy-mongo-query-selector-exists/">Savvy Mongo query selector: exists</a></h1>
-<time datetime="2013-01-04T11:57:00-05:00" pubdate><span class='month'>Jan</span> <span class='day'>04</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mongodb/'>MongoDB</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2012</h2>
-
-<article>
-  
-<h1><a href="/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra/">Pushing Mongo GridFS files with Sinatra</a></h1>
-<time datetime="2012-12-21T21:19:00-05:00" pubdate><span class='month'>Dec</span> <span class='day'>21</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mongodb/'>MongoDB</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">MongoDB from the trenches: prudent production planning</a></h1>
-<time datetime="2012-09-11T11:34:00-04:00" pubdate><span class='month'>Sep</span> <span class='day'>11</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mongodb/'>MongoDB</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">MongoDB from the trenches: masochistic embedded collections</a></h1>
-<time datetime="2012-09-03T21:47:00-04:00" pubdate><span class='month'>Sep</span> <span class='day'>03</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mongodb/'>MongoDB</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/08/29/modeling-mongo-documents-with-mongoose/">Modeling Mongo documents with Mongoose</a></h1>
-<time datetime="2012-08-29T21:45:00-04:00" pubdate><span class='month'>Aug</span> <span class='day'>29</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/mongodb/'>MongoDB</a>, <a class='category' href='/blog/categories/node/'>Node</a></span>
-</footer>
-
-
-</article>
-
+<p>Of course, it&#8217;s possible to get <code>wget</code> on your Mac via <a href="http://osxdaily.com/2012/05/22/install-wget-mac-os-x/">MacPorts or Homebrew</a>; nevertheless, knowing you can achieve the same goals with cURL is always handy.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-18T09:33:00-04:00" pubdate data-updated="true">Apr 18<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/osx/'>OSX</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aglover.github.com/blog/2013/04/18/curling-for-wget/" data-via="aglover" data-counturl="http://aglover.github.com/blog/2013/04/18/curling-for-wget/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2013/04/15/chromes-console-commands/" title="Previous Post: Chrome's console commands">&laquo; Chrome's console commands</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -308,7 +292,10 @@
       var disqus_shortname = 'thediscoblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://aglover.github.com/blog/2013/04/18/curling-for-wget/';
+        var disqus_url = 'http://aglover.github.com/blog/2013/04/18/curling-for-wget/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

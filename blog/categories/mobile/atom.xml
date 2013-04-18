@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mobile | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-15T10:08:21+08:00</updated>
+  <updated>2013-04-18T09:41:56-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Hybrid inappropriateness]]></title>
     <link href="http://aglover.github.com/blog/2013/04/14/hybrid-inappropriateness/"/>
-    <updated>2013-04-14T11:14:00+08:00</updated>
+    <updated>2013-04-14T11:14:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/04/14/hybrid-inappropriateness</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/confused.png">The mobile development landscape is <a href="http://skytechgeek.com/2011/09/10-mobile-application-frameworks-for-easy-development/">bursting at the seams</a> with frameworks and tools that enable you to target <a href="http://thediscoblog.com/blog/2013/03/25/modeveast-2012-panel-discussion/">two primary mobile platforms</a>: iOS and <a href="http://thediscoblog.com/blog/categories/android/">Android</a>. And the mobile community has <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">classified these frameworks and tools</a> into three categories: native, hybrid, and web. Unfortunately, limiting the classification to three <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">is inadequate</a> as the term hybrid is too generic.</p>
 
@@ -47,7 +47,7 @@
   <entry>
     <title type="html"><![CDATA[Painless Android swipe detection]]></title>
     <link href="http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection/"/>
-    <updated>2013-04-07T10:37:00+08:00</updated>
+    <updated>2013-04-07T10:37:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection</id>
     <content type="html"><![CDATA[<p><img class="left" src="/images/mine/gesticulate.png">Why bother building navigation buttons in an Android app when you can easily capture finger swipes? But, if you've ever implemented gesture section in Android there's the drudgery of implementing listeners and you also need to do some elementary Cartesian math. Save yourself the boilerplate bother mathematics and use a <a href="https://github.com/aglover/gesticulate">library</a>!</p>
 
@@ -60,7 +60,7 @@
   <entry>
     <title type="html"><![CDATA[Crowd think often lacks clarity]]></title>
     <link href="http://aglover.github.com/blog/2013/04/05/crowd-think-often-lacks-clarity/"/>
-    <updated>2013-04-05T21:04:00+08:00</updated>
+    <updated>2013-04-05T21:04:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/04/05/crowd-think-often-lacks-clarity</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/crowd.jpg">In case you missed it, <a href="http://www.infoq.com/">InfoQ</a> has an <a href="http://www.infoq.com/research/cross-platform-mobile-tools">interesting analysis regarding hybrid mobile app development frameworks</a>. They are profiling 12 tools and soliciting community feedback so as to make a <a href="http://www.thoughtworks.com/insights">ThoughtWorks-like technology radar</a>. If you participate in the voting you are entitled to see the voting distribution.</p>
 
@@ -77,7 +77,7 @@
   <entry>
     <title type="html"><![CDATA[MoDevEast 2012 panel discussion]]></title>
     <link href="http://aglover.github.com/blog/2013/03/25/modeveast-2012-panel-discussion/"/>
-    <updated>2013-03-25T18:34:00+08:00</updated>
+    <updated>2013-03-25T18:34:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/03/25/modeveast-2012-panel-discussion</id>
     <content type="html"><![CDATA[<p>Last fall, I had the pleasure of moderating a panel discussion at <a href="http://modeveast.com/">MoDevEast</a> entitled "<a href="http://www.youtube.com/watch?v=b7P-wNuHPL0">What Developers Love and Hate about iOS, Android, Windows and HTML5</a>" with five super star mobile app developers.</p>
 
@@ -93,7 +93,7 @@
   <entry>
     <title type="html"><![CDATA[The bull's eye on mobility: Mobile for the masses]]></title>
     <link href="http://aglover.github.com/blog/2013/03/06/the-bulls-eye-on-mobility-mobile-for-the-masses/"/>
-    <updated>2013-03-06T09:28:00+08:00</updated>
+    <updated>2013-03-06T09:28:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/03/06/the-bulls-eye-on-mobility-mobile-for-the-masses</id>
     <content type="html"><![CDATA[<p><img class="left" src="/images/mine/mftm_1.jpg">Since joining <a href="http://www.app47.com/">App47</a>, I've been lazer focused on mobility; consquently, I'm pleased to announce that a new mobile development series has debuted on <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>! The inaugural article,  "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">A gentle introduction to Android</a>", begins by exploring the mobile landscape and introduces how to get started with Android app development.</p>
 

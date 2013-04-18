@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-15T10:08:21+08:00</updated>
+  <updated>2013-04-18T09:41:56-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Mongoid batch inserts]]></title>
     <link href="http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts/"/>
-    <updated>2013-03-27T11:34:00+08:00</updated>
+    <updated>2013-03-27T11:34:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts</id>
     <content type="html"><![CDATA[<p>In SQL land, all databases support batch inserts. Batch inserts are an effective and efficient mechanism to insert a lot of similar data. That is, instead of issuing x insert statements, you execute 1 insert with x records. This is much more efficient because the insert statement doesn't need to be re-parsed x times, there is only 1 network trip as opposed to x, and in the case of transactions, there is only 1 transaction instead of x. When compared to x inserts, batch inserts are always faster.</p>
 
@@ -40,7 +40,7 @@ Tag.collection.insert tags
   <entry>
     <title type="html"><![CDATA[Testing Rails migrations]]></title>
     <link href="http://aglover.github.com/blog/2013/02/18/testing-rails-migrations/"/>
-    <updated>2013-02-18T16:22:00+08:00</updated>
+    <updated>2013-02-18T16:22:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/02/18/testing-rails-migrations</id>
     <content type="html"><![CDATA[<p>I recently found myself searching <a href="http://stackoverflow.com/">Stackoverflow</a> and Google for various techniques for automatically testing <a href="http://guides.rubyonrails.org/migrations.html">Rails migrations</a>. I was surprised not to have found <a href="http://stackoverflow.com/questions/6079016/how-do-i-test-rails-migrations">too much</a> information though. While testing a migration is fairly straightforward (migrations are classes and you can easily invoke corresponding methods); the challenge can be setting models up properly. That is, migrations are a tool to update an underlying database to reflect changes in models -- by the time you are writing a migration, the models <em>already</em> reflect what should be.</p>
 
@@ -91,7 +91,7 @@ end
   <entry>
     <title type="html"><![CDATA[Pushing Mongo GridFS files with Sinatra]]></title>
     <link href="http://aglover.github.com/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra/"/>
-    <updated>2012-12-21T21:19:00+08:00</updated>
+    <updated>2012-12-21T21:19:00-05:00</updated>
     <id>http://aglover.github.com/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra</id>
     <content type="html"><![CDATA[<p><a href="http://www.app47.com/">We</a> recently implemented a new feature that required two interesting aspects: storing a file in <a href="http://www.mongodb.org/">MongoDB</a> using <a href="http://docs.mongodb.org/manual/applications/gridfs/">GridFS</a> (think traditional <a href="http://en.wikipedia.org/wiki/Binary_large_object">Blob</a>) and then pushing that file down to a browser. Along the way, I discovered a lot of questions on <a href="http://stackoverflow.com/">stackoverflow</a> and the like pertaining to various aspects of GridFS and <a href="http://www.sinatrarb.com/">Sinatra</a> pushes, so I thought I'd explain what we did.</p>
 
@@ -139,7 +139,7 @@ As you can see, it's all quite easy -- GridFS is simply a facade for two collect
   <entry>
     <title type="html"><![CDATA[Running individual tests in Rails]]></title>
     <link href="http://aglover.github.com/blog/2012/12/17/running-individual-tests-in-rails/"/>
-    <updated>2012-12-17T09:38:00+08:00</updated>
+    <updated>2012-12-17T09:38:00-05:00</updated>
     <id>http://aglover.github.com/blog/2012/12/17/running-individual-tests-in-rails</id>
     <content type="html"><![CDATA[<p>Every now and again, I find myself struggling to remember how to execute a single test in <a href="http://rubyonrails.org/">Rails</a>. While I have <a href="https://github.com/guard/guard">Guard</a> running the entire test suite <em>anytime</em> a change is detected, there are times when I want to focus solely on one test. Accordingly, <a href="http://flavio.castelli.name/2010/05/28/rails_execute_single_test/">Flavio Castelli has a great blog entry</a> detailing the manifold ways one can execute a single test using <a href="http://rake.rubyforge.org/">Rake</a> and/or Ruby.</p>
 ]]></content>
@@ -148,7 +148,7 @@ As you can see, it's all quite easy -- GridFS is simply a facade for two collect
   <entry>
     <title type="html"><![CDATA[Sinatra, CoffeeScript, and Haml: swinging in 4 steps]]></title>
     <link href="http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/"/>
-    <updated>2012-12-10T21:49:00+08:00</updated>
+    <updated>2012-12-10T21:49:00-05:00</updated>
     <id>http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps</id>
     <content type="html"><![CDATA[<p>I recently decided to ditch plain old JavaScript in a <a href="http://www.sinatrarb.com/">Sinatra</a> based application in favor of <a href="http://coffeescript.org/">CoffeeScript</a>. The existing JavaScript wasn't terribly complex; however, I was looking at having to add some AJAX based long polling and I couldn't bring myself to do it in <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-18/index.html">JavaScript</a>. Accordingly, I decided I'd use <a href="http://www.ibm.com/developerworks/web/library/j-coffeescript/index.html">CoffeeScript</a>, but, as it turns out, there were a few steps I had to put in place before I could enjoy some significant whitespace delimitation.</p>
 

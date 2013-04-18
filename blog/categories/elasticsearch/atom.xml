@@ -4,7 +4,7 @@
   <title><![CDATA[Category: elasticsearch | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/elasticsearch/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-15T10:08:21+08:00</updated>
+  <updated>2013-04-18T09:41:56-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Scalable searching with ElasticSearch]]></title>
     <link href="http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch/"/>
-    <updated>2013-01-02T16:02:00+08:00</updated>
+    <updated>2013-01-02T16:02:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/search_flickr.jpg">Search is no longer an optional feature: it's expected of most any application that consumes, produces, or stores data. And not everyone wants to be a search technology specialist, especially given the range of sophisticated algorithms underlying today's complex searches (i.e. SQL queries are no longer sufficient!). Knowing about existing, open source search platforms could save you a lot of time and money and allow you to spend your time fine-tuning your software's main functionality.</p>
 

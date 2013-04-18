@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-15T10:08:21+08:00</updated>
+  <updated>2013-04-18T09:41:56-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,9 +14,42 @@
 
   
   <entry>
+    <title type="html"><![CDATA[cURLing for Wget]]></title>
+    <link href="http://aglover.github.com/blog/2013/04/18/curling-for-wget/"/>
+    <updated>2013-04-18T09:33:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/04/18/curling-for-wget</id>
+    <content type="html"><![CDATA[<p><a href="http://en.wikipedia.org/wiki/Wget">Wget</a> is an extremely handy utility I use all the time when I find myself on a Linux box. It&#8217;s quite helpful, for example, for downloading files. Need to <a href="https://github.com/aglover/ubuntu-equip/blob/master/equip_ruby.sh">install Ruby</a>? No problem, just download the binary like so:</p>
+
+<figure class='code'><figcaption><span>wget example of downloading Ruby binary</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>and you&#8217;re one step closer. There&#8217;s no flags to remember either.</p>
+
+<p>Wget, however, isn&#8217;t natively available on OSX. From time to time, I&#8217;m stung to see the nefarious &#8216;command not found&#8217; message after expectantly waiting to see some file I need downloaded.</p>
+
+<p>Luckily, you can force <a href="http://curl.haxx.se/docs/manpage.html">cURL</a> to act like Wget with a few flags. Simply use the <code>-OL</code> flags like so:</p>
+
+<figure class='code'><figcaption><span>cURL acting like Wget</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -OL http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>and you&#8217;ll be on your way to downloading some file.</p>
+
+<p>Of course, it&#8217;s possible to get <code>wget</code> on your Mac via <a href="http://osxdaily.com/2012/05/22/install-wget-mac-os-x/">MacPorts or Homebrew</a>; nevertheless, knowing you can achieve the same goals with cURL is always handy.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Chrome's console commands]]></title>
     <link href="http://aglover.github.com/blog/2013/04/15/chromes-console-commands/"/>
-    <updated>2013-04-15T10:05:00+08:00</updated>
+    <updated>2013-04-15T10:05:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/04/15/chromes-console-commands</id>
     <content type="html"><![CDATA[<p>As if the JavaScript console in Chrome couldn&#8217;t be any more awesome. Check it out: <a href="https://developers.google.com/chrome-developer-tools/docs/commandline-api">Command Line API Reference</a>. Yep, it&#8217;s legit. I&#8217;ve been using Firebug and the like for years and only just ran across this feature of Chrome&#8217;s JavaScript console.</p>
 
@@ -31,7 +64,7 @@
   <entry>
     <title type="html"><![CDATA[Hybrid inappropriateness]]></title>
     <link href="http://aglover.github.com/blog/2013/04/14/hybrid-inappropriateness/"/>
-    <updated>2013-04-14T11:14:00+08:00</updated>
+    <updated>2013-04-14T11:14:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/04/14/hybrid-inappropriateness</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/confused.png">The mobile development landscape is <a href="http://skytechgeek.com/2011/09/10-mobile-application-frameworks-for-easy-development/">bursting at the seams</a> with frameworks and tools that enable you to target <a href="http://thediscoblog.com/blog/2013/03/25/modeveast-2012-panel-discussion/">two primary mobile platforms</a>: iOS and <a href="http://thediscoblog.com/blog/categories/android/">Android</a>. And the mobile community has <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">classified these frameworks and tools</a> into three categories: native, hybrid, and web. Unfortunately, limiting the classification to three <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">is inadequate</a> as the term hybrid is too generic.</p>
 
@@ -62,7 +95,7 @@
   <entry>
     <title type="html"><![CDATA[Painless Android swipe detection]]></title>
     <link href="http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection/"/>
-    <updated>2013-04-07T10:37:00+08:00</updated>
+    <updated>2013-04-07T10:37:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection</id>
     <content type="html"><![CDATA[<p><img class="left" src="http://aglover.github.com/images/mine/gesticulate.png">Why bother building navigation buttons in an Android app when you can easily capture finger swipes? But, if you&#8217;ve ever implemented gesture section in Android there&#8217;s the drudgery of implementing listeners and you also need to do some elementary Cartesian math. Save yourself the boilerplate bother mathematics and use a <a href="https://github.com/aglover/gesticulate">library</a>!</p>
 
@@ -75,7 +108,7 @@
   <entry>
     <title type="html"><![CDATA[Crowd think often lacks clarity]]></title>
     <link href="http://aglover.github.com/blog/2013/04/05/crowd-think-often-lacks-clarity/"/>
-    <updated>2013-04-05T21:04:00+08:00</updated>
+    <updated>2013-04-05T21:04:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/04/05/crowd-think-often-lacks-clarity</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/crowd.jpg">In case you missed it, <a href="http://www.infoq.com/">InfoQ</a> has an <a href="http://www.infoq.com/research/cross-platform-mobile-tools">interesting analysis regarding hybrid mobile app development frameworks</a>. They are profiling 12 tools and soliciting community feedback so as to make a <a href="http://www.thoughtworks.com/insights">ThoughtWorks-like technology radar</a>. If you participate in the voting you are entitled to see the voting distribution.</p>
 
@@ -92,7 +125,7 @@
   <entry>
     <title type="html"><![CDATA[Mongoid batch inserts]]></title>
     <link href="http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts/"/>
-    <updated>2013-03-27T11:34:00+08:00</updated>
+    <updated>2013-03-27T11:34:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts</id>
     <content type="html"><![CDATA[<p>In SQL land, all databases support batch inserts. Batch inserts are an effective and efficient mechanism to insert a lot of similar data. That is, instead of issuing x insert statements, you execute 1 insert with x records. This is much more efficient because the insert statement doesn&#8217;t need to be re-parsed x times, there is only 1 network trip as opposed to x, and in the case of transactions, there is only 1 transaction instead of x. When compared to x inserts, batch inserts are always faster.</p>
 
@@ -118,7 +151,7 @@
   <entry>
     <title type="html"><![CDATA[MoDevEast 2012 panel discussion]]></title>
     <link href="http://aglover.github.com/blog/2013/03/25/modeveast-2012-panel-discussion/"/>
-    <updated>2013-03-25T18:34:00+08:00</updated>
+    <updated>2013-03-25T18:34:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/03/25/modeveast-2012-panel-discussion</id>
     <content type="html"><![CDATA[<p>Last fall, I had the pleasure of moderating a panel discussion at <a href="http://modeveast.com/">MoDevEast</a> entitled &#8221;<a href="http://www.youtube.com/watch?v=b7P-wNuHPL0">What Developers Love and Hate about iOS, Android, Windows and HTML5</a>&#8221; with five super star mobile app developers.</p>
 
@@ -137,7 +170,7 @@
   <entry>
     <title type="html"><![CDATA[2013 Open Analytics Summit]]></title>
     <link href="http://aglover.github.com/blog/2013/03/21/2013-open-analytics-summit/"/>
-    <updated>2013-03-21T15:21:00+08:00</updated>
+    <updated>2013-03-21T15:21:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/03/21/2013-open-analytics-summit</id>
     <content type="html"><![CDATA[<p><img class="right left" src="http://www.openanalyticssummit.com/wp-content/uploads/2012/12/OAS-logo-Full-colour3-300x85.png">On March 25, 2013, <a href="http://www.openanalyticssummit.com/speakers/">I&#8217;ll be speaking</a> at the <a href="http://www.openanalyticssummit.com/">Open Analytics Summit in Washington DC</a>; specifically, I&#8217;ll be discussing how the <a href="http://www.app47.com/2013/03/20/next-monday-app47-cto-andy-glover-offers-a-database-reality-check-at-the-open-analytics-summit/">App47</a> team has used <a href="http://www.mongodb.org/">MongoDB</a> as the backend of our enterprise mobile application management platform. We&#8217;ve learned quite a few things about <a href="http://thediscoblog.com/blog/categories/mongodb/">Mongo</a> over the last two years! In the process of growing from a few gigabytes of data a month to over a terabyte/month, we&#8217;ve found out first hand what <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Mongo</a> is good at and what it&#8217;s <em>not good at</em>. I&#8217;ll be addressing a number of tips, techniques, and strategies &#8211; if you are a Mongo user or planning on being one, come on by!</p>
 ]]></content>
@@ -146,7 +179,7 @@
   <entry>
     <title type="html"><![CDATA[Node.js in 3 commands]]></title>
     <link href="http://aglover.github.com/blog/2013/03/12/node-in-3-commands/"/>
-    <updated>2013-03-12T11:55:00+08:00</updated>
+    <updated>2013-03-12T11:55:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/03/12/node-in-3-commands</id>
     <content type="html"><![CDATA[<p>A few <a href="http://www.javaworld.com/community/node/8140">short years ago</a> when I started to explore <a href="http://nodejs.org/">Node.js</a>, I remember the installation on my MacBook Pro required downloading the source, compiling and installing it, and then updating paths. <em>And then</em> you had to install <a href="https://npmjs.org/">NPM</a>.</p>
 
@@ -189,7 +222,7 @@
   <entry>
     <title type="html"><![CDATA[The bull's eye on mobility: Mobile for the masses]]></title>
     <link href="http://aglover.github.com/blog/2013/03/06/the-bulls-eye-on-mobility-mobile-for-the-masses/"/>
-    <updated>2013-03-06T09:28:00+08:00</updated>
+    <updated>2013-03-06T09:28:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/03/06/the-bulls-eye-on-mobility-mobile-for-the-masses</id>
     <content type="html"><![CDATA[<p><img class="left" src="http://aglover.github.com/images/mine/mftm_1.jpg">Since joining <a href="http://www.app47.com/">App47</a>, I&#8217;ve been lazer focused on mobility; consquently, I&#8217;m pleased to announce that a new mobile development series has debuted on <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>! The inaugural article,  &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">A gentle introduction to Android</a>&#8221;, begins by exploring the mobile landscape and introduces how to get started with Android app development.</p>
 
@@ -205,7 +238,7 @@
   <entry>
     <title type="html"><![CDATA[It's a question of wow]]></title>
     <link href="http://aglover.github.com/blog/2013/03/04/its-a-question-of-wow/"/>
-    <updated>2013-03-04T10:29:00+08:00</updated>
+    <updated>2013-03-04T10:29:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/03/04/its-a-question-of-wow</id>
     <content type="html"><![CDATA[<p>Let me ask you a question: do you want to build a mobile website or a mobile app? If your answer is mobile website, then <a href="http://www.ebizmba.com/articles/best-html5-websites">HTML5 is good enough</a>. But if your answer is mobile app then you had better <a href="http://www.trademob.com/why-native-apps-remain-unrivalled-by-web-apps-in-user-experience-and-discoverability/">think about user experience</a>. You see, the user experience bar has been set extraordinarily high by a number of stellar native apps. People expect to be wowed and if they aren&#8217;t, they won&#8217;t use your app. It&#8217;s that simple.</p>
 
@@ -222,7 +255,7 @@
   <entry>
     <title type="html"><![CDATA[Everything you need to know about MongoDB]]></title>
     <link href="http://aglover.github.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb/"/>
-    <updated>2013-02-23T09:39:00+08:00</updated>
+    <updated>2013-02-23T09:39:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/mongodb_icon.png">Are you new to <a href="http://www.mongodb.org/">MongoDB</a>? Curious to see what&#8217;s interesting about it?  Document-oriented databases like MongoDB are vastly different from relational databases in that they don&#8217;t store data in tables; instead, they store it in the form of documents. From a developer&#8217;s perspective, document-oriented (or schemaless) data is simpler and <a href="http://thediscoblog.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">far more flexible</a> to manage than relational data. Rather than storing data into a rigid schema of tables, rows, and columns, joined by relationships, documents are written individually, containing whatever data they require.</p>
 
@@ -235,7 +268,7 @@
   <entry>
     <title type="html"><![CDATA[Testing Rails migrations]]></title>
     <link href="http://aglover.github.com/blog/2013/02/18/testing-rails-migrations/"/>
-    <updated>2013-02-18T16:22:00+08:00</updated>
+    <updated>2013-02-18T16:22:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/02/18/testing-rails-migrations</id>
     <content type="html"><![CDATA[<p>I recently found myself searching <a href="http://stackoverflow.com/">Stackoverflow</a> and Google for various techniques for automatically testing <a href="http://guides.rubyonrails.org/migrations.html">Rails migrations</a>. I was surprised not to have found <a href="http://stackoverflow.com/questions/6079016/how-do-i-test-rails-migrations">too much</a> information though. While testing a migration is fairly straightforward (migrations are classes and you can easily invoke corresponding methods); the challenge can be setting models up properly. That is, migrations are a tool to update an underlying database to reflect changes in models &#8211; by the time you are writing a migration, the models <em>already</em> reflect what should be.</p>
 
@@ -298,7 +331,7 @@
   <entry>
     <title type="html"><![CDATA[Circumventing mobile UX expectations]]></title>
     <link href="http://aglover.github.com/blog/2013/02/17/circumventing-mobile-ux-expectations/"/>
-    <updated>2013-02-17T12:10:00+08:00</updated>
+    <updated>2013-02-17T12:10:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/02/17/circumventing-mobile-ux-expectations</id>
     <content type="html"><![CDATA[<p>Recently, a <a href="https://twitter.com/trianglechoke">buddy of mine</a> pointed me to an interesting tweet:</p>
 
@@ -321,7 +354,7 @@
   <entry>
     <title type="html"><![CDATA[Savvy Mongo query selector: exists]]></title>
     <link href="http://aglover.github.com/blog/2013/01/04/savvy-mongo-query-selector-exists/"/>
-    <updated>2013-01-04T11:57:00+08:00</updated>
+    <updated>2013-01-04T11:57:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/01/04/savvy-mongo-query-selector-exists</id>
     <content type="html"><![CDATA[<p><a href="http://www.mongodb.org/">MongoDB</a> supports a <a href="http://docs.mongodb.org/manual/applications/read/">rich query language</a>; in fact, its support of dynamic queries is one of its <a href="http://public.dhe.ibm.com/software/dw/demos/jmongodbdocs/index.html">more distinguishing features</a> compared to other datastores in the <a href="http://www.infoworld.com/d/data-management/flexing-nosql-mongodb-in-review-185922">NoSQL</a> world. Mongo&#8217;s query language has a variety of query selectors that enable you to <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">fashion some powerful document searches</a>. One particular <a href="http://docs.mongodb.org/manual/reference/operators/#element">query selector that comes in handy</a> from time to time is <code>$exists</code>.</p>
 
@@ -343,7 +376,7 @@
   <entry>
     <title type="html"><![CDATA[Scalable searching with ElasticSearch]]></title>
     <link href="http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch/"/>
-    <updated>2013-01-02T16:02:00+08:00</updated>
+    <updated>2013-01-02T16:02:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/search_flickr.jpg">Search is no longer an optional feature: it&#8217;s expected of most any application that consumes, produces, or stores data. And not everyone wants to be a search technology specialist, especially given the range of sophisticated algorithms underlying today&#8217;s complex searches (i.e. SQL queries are no longer sufficient!). Knowing about existing, open source search platforms could save you a lot of time and money and allow you to spend your time fine-tuning your software&#8217;s main functionality.</p>
 
@@ -356,7 +389,7 @@
   <entry>
     <title type="html"><![CDATA[Pushing Mongo GridFS files with Sinatra]]></title>
     <link href="http://aglover.github.com/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra/"/>
-    <updated>2012-12-21T21:19:00+08:00</updated>
+    <updated>2012-12-21T21:19:00-05:00</updated>
     <id>http://aglover.github.com/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra</id>
     <content type="html"><![CDATA[<p><a href="http://www.app47.com/">We</a> recently implemented a new feature that required two interesting aspects: storing a file in <a href="http://www.mongodb.org/">MongoDB</a> using <a href="http://docs.mongodb.org/manual/applications/gridfs/">GridFS</a> (think traditional <a href="http://en.wikipedia.org/wiki/Binary_large_object">Blob</a>) and then pushing that file down to a browser. Along the way, I discovered a lot of questions on <a href="http://stackoverflow.com/">stackoverflow</a> and the like pertaining to various aspects of GridFS and <a href="http://www.sinatrarb.com/">Sinatra</a> pushes, so I thought I&#8217;d explain what we did.</p>
 
@@ -416,7 +449,7 @@ As you can see, it&#8217;s all quite easy &#8211; GridFS is simply a facade for 
   <entry>
     <title type="html"><![CDATA[Running individual tests in Rails]]></title>
     <link href="http://aglover.github.com/blog/2012/12/17/running-individual-tests-in-rails/"/>
-    <updated>2012-12-17T09:38:00+08:00</updated>
+    <updated>2012-12-17T09:38:00-05:00</updated>
     <id>http://aglover.github.com/blog/2012/12/17/running-individual-tests-in-rails</id>
     <content type="html"><![CDATA[<p>Every now and again, I find myself struggling to remember how to execute a single test in <a href="http://rubyonrails.org/">Rails</a>. While I have <a href="https://github.com/guard/guard">Guard</a> running the entire test suite <em>anytime</em> a change is detected, there are times when I want to focus solely on one test. Accordingly, <a href="http://flavio.castelli.name/2010/05/28/rails_execute_single_test/">Flavio Castelli has a great blog entry</a> detailing the manifold ways one can execute a single test using <a href="http://rake.rubyforge.org/">Rake</a> and/or Ruby.</p>
 ]]></content>
@@ -425,7 +458,7 @@ As you can see, it&#8217;s all quite easy &#8211; GridFS is simply a facade for 
   <entry>
     <title type="html"><![CDATA[The cloud files are out!]]></title>
     <link href="http://aglover.github.com/blog/2012/12/12/the-cloud-files-are-out/"/>
-    <updated>2012-12-12T17:22:00+08:00</updated>
+    <updated>2012-12-12T17:22:00-05:00</updated>
     <id>http://aglover.github.com/blog/2012/12/12/the-cloud-files-are-out</id>
     <content type="html"><![CDATA[<p><img class="left" src="http://www.ibm.com/developerworks/i/t-j-f-cloudpodcast_ffffff.jpg">The good folks over at <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a> have recently published <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">season 5 of the Java technical podcast series</a>. This season
 focuses on the technologies, companies, and people influencing cloud computing. I had the pleasure to chat with a cadre of super interesting people, including <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#labourey">Sacha Labourey</a> of CloudBees, <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#engineyard">Bill Platt and Mark Gaydos</a> of Engine Yard, and <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#proudman">Jesse Proudman</a> of BlueBox, just to name a few!</p>
@@ -437,7 +470,7 @@ focuses on the technologies, companies, and people influencing cloud computing. 
   <entry>
     <title type="html"><![CDATA[Sinatra, CoffeeScript, and Haml: swinging in 4 steps]]></title>
     <link href="http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/"/>
-    <updated>2012-12-10T21:49:00+08:00</updated>
+    <updated>2012-12-10T21:49:00-05:00</updated>
     <id>http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps</id>
     <content type="html"><![CDATA[<p>I recently decided to ditch plain old JavaScript in a <a href="http://www.sinatrarb.com/">Sinatra</a> based application in favor of <a href="http://coffeescript.org/">CoffeeScript</a>. The existing JavaScript wasn&#8217;t terribly complex; however, I was looking at having to add some AJAX based long polling and I couldn&#8217;t bring myself to do it in <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-18/index.html">JavaScript</a>. Accordingly, I decided I&#8217;d use <a href="http://www.ibm.com/developerworks/web/library/j-coffeescript/index.html">CoffeeScript</a>, but, as it turns out, there were a few steps I had to put in place before I could enjoy some significant whitespace delimitation.</p>
 
@@ -482,68 +515,6 @@ focuses on the technologies, companies, and people influencing cloud computing. 
 
 
 <p>In short, Barista and <a href="http://www.ibm.com/developerworks/java/library/j-nodejs/">Node</a> make Sinatra swing with CoffeeScript.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Comprehending the mobile development landscape]]></title>
-    <link href="http://aglover.github.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/"/>
-    <updated>2012-12-02T18:11:00+08:00</updated>
-    <id>http://aglover.github.com/blog/2012/12/02/comprehending-the-mobile-development-landscape</id>
-    <content type="html"><![CDATA[<p>There&#8217;s <a href="http://www.forbes.com/sites/parmyolson/2012/12/04/5-eye-opening-stats-that-show-the-world-is-going-mobile/">no shortage</a> of <a href="http://www.forbes.com/sites/connieguglielmo/2012/12/04/mary-meekers-must-read-interent-trends-report-says-android-phone-uptake-bests-apple/">mobile growth</a> statistics, but here&#8217;s a few specific ones paint an overall picture of mobility:</p>
-
-<ul>
-<li><a href="http://www.digitalbuzzblog.com/infographic-2012-mobile-growth-statistics/">Roughly 87% of the worlds population has a mobile device</a></li>
-<li>Earlier this year, <a href="http://readwrite.com/2012/07/05/top-trends-of-2012-the-continuing-rapid-growth-of-mobile">Facebook claimed an astounding 488 million</a> mobile <a href="http://thediscoblog.com/blog/2012/11/28/the-essence-of-mobile-app-performance/">monthly active users </a></li>
-<li>Android&#8217;s user base is growing by <a href="http://www.digitalbuzzblog.com/infographic-2012-mobile-growth-statistics/">700,000 subscribers a day</a></li>
-</ul>
-
-
-<p>These three facts clearly point out that mobility is a growing, global phenomenon, and that it&#8217;s drastically changing how people use the Internet. What&#8217;s more, from a technology standpoint, mobile is where the growth is!</p>
-
-<p>But the mobile landscape is as varied as it is big. Unlike a few short years ago, when doing mobile work implied J2ME on a Blackberry, mobile development now encompasses <a href="http://www.android.com/">Android</a>, <a href="http://en.wikipedia.org/wiki/IOS">iOS</a>, <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a>, and even <a href="http://dev.windowsphone.com/en-us">Windows Phone</a>. That&#8217;s 4 distinct platforms with different development platforms and languages &#8211; and I haven&#8217;t even mentioned the <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">myriad hybrid options</a> available!</p>
-
-<p>The key to understanding the mobile landscape is an appreciation for the various developmental platforms &#8211; their strengths &amp; weaknesses, speed of development, distribution, and, if you are looking at the consumer market, their payout.</p>
-
-<h5>Android</h5>
-
-<p>Android device distribution, as I pointed out earlier, is growing faster than other platforms, and the Android ecosystem has more than one app store: <a href="https://play.google.com/store?hl=en">Google Play</a> and <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Amazon&#8217;s store</a>, just to name the two most popular ones. And by most accounts, <a href="http://www.engadget.com/2012/06/27/google-play-hits-600000-apps/">Google Play has as many</a> or <a href="http://news.cnet.com/8301-1035_3-57521252-94/can-apples-app-store-maintain-its-lead-over-google-play/">more apps</a> than Apple&#8217;s App Store (careful with this statistic though, see details below regarding <em>payouts</em>).</p>
-
-<p>The massive adoption of Android, however, has lead to <a href="http://opensignal.com/reports/fragmentation.php">fragmentation</a>, which does present some significant challenges with respect to testing. In fact, the reality for most developers is that it is almost impossible to test an app on all combinations of device-OS version profiles in a cost effective manner (this is a growing service industry, by the way).</p>
-
-<p>On a positive note, Java, the native language of Android apps, is a fairly ubiquitous language &#8211; some estimates <a href="http://en.wikipedia.org/wiki/Java_%28programming_language%29">peg as many as 10 million active developers</a> so there&#8217;s no shortage of able-bodied Java developers and their associated tools out there.</p>
-
-<p>Thus, with Android, you have a wide audience (both people with Android devices and developers to build apps) and multiple distribution channels. Yet, this large distribution of disparate devices does present some testing challenges; what&#8217;s more, it can be more difficult to make money on the Android platform compared to iOS, as you&#8217;ll see next.</p>
-
-<h5>iOS</h5>
-
-<p>iOS, the OS for iPhones and iPads, has a <a href="http://mobile.tutsplus.com/tutorials/iphone/understanding-the-ios-ecosystem/">tight ecosystem</a> and an avid user base, <a href="http://www.androidauthority.com/are-iphone-users-richer-better-educated-than-android-users-105032/">willing to spend money</a>, ultimately translating into <a href="http://www.forbes.com/sites/darcytravlos/2012/08/22/five-reasons-why-google-android-versus-apple-ios-market-share-numbers-dont-matter/">more money for developers</a>. That is, even though there are far more Android devices globally than iOS ones, the iTunes App Store generates more money than Google Play, which means more money for developers of popular apps. In many respects, users of iOS devices are also more willing to pay a fee for an app as opposed to Android ones.</p>
-
-<p>The development ecosystem for iOS has a higher barrier to entry when compared to something like Java or JavaScript. OSX is a requirement and the <a href="http://store.apple.com/us/browse/home/shop_mac/family/macbook_pro">cost alone</a> here can be a barrier for a lot of developers; moreover, Objective-C can present some challenges for the faint of heart (manual memory management!). Yet, the tooling provided by Apple is almost universally lauded by the community at large (much like Microsoft&#8217;s VisualStudio) &#8211; <a href="https://developer.apple.com/xcode/">XCode</a> is a slick development tool.</p>
-
-<p>While there isn&#8217;t a lot of device <a href="http://bgr.com/2012/06/12/apple-ios-fragmentation-iphone/">fragmentation on iOS</a>, developers do have to deal with OS fragmentation. That is, there are only a handful of Apple devices but quite a lot of different versions living in the field at any given time due to a lagging factor of user upgrades.</p>
-
-<p>The iOS platform certainly offers a direct path to revenue, provided you can build a stellar app; however, compared to Android, this is a closed community, which has the tendency to rub some portion of developmental community wrong. Given you can quickly embrace Objective-C and afford the requisite software, iOS is almost always the first platform app developers target.</p>
-
-<h5>HTML5</h5>
-
-<p>HTML5 is truly universal and its apps are available on all platforms without any need to port them &#8211; JavaScript is as ubiquitous as Java; what&#8217;s more, HTML itself has almost no barrier to entry, making HTML5 and JavaScript a force to content with when it comes to finding talented developers and mass distribution. Cost isn&#8217;t even really part of the HTML5 equation too &#8211; tools and frameworks are free.</p>
-
-<p>Yet, HTML5 apps suffer from a <a href="http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/">distribution challenge</a> &#8211; the major app stores do not carry these apps! Thus, in large part, as an HTML5 app developer, you are relying on a user to type in your URL into a browser. I for one, almost never type in a URL on my iPhone (while I will on my iPad). Lastly, <a href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/">HTML5 is no where near parity with respect to UX</a> compared to native apps (and may <em>never be</em>). This, however, is only a disadvantage if you are building an app that requires a strong UX. There are plenty of great HTML5 apps out there!</p>
-
-<p>HTML5 offers an extremely low developmental barrier to entry and the widest support available &#8211; all smart devices have browsers (note, <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">they aren&#8217;t all created equal</a>!); however, because there isn&#8217;t a viable distribution channel, these apps have limited opportunity to make money.</p>
-
-<h5>Windows Phone</h5>
-
-<p>Windows is <a href="http://www.forbes.com/sites/ericsavitz/2012/12/04/microsoft-dec-qtr-surface-sales-below-1m-units-analyst-says/">still unproven</a> but could be an opportunity to get in early &#8211; first movers in Apple&#8217;s App Store without a doubt made far more money than if they had submitted the same apps today. In this case, you if want a truly native experience you&#8217;ll build apps on the .NET platform (presumably C#). Windows machines are far cheaper than OSX ones, so there is little financial barrier other than license fees for VisualStudio and a developer fee for the Windows Phone Marketplace.</p>
-
-<p>Indeed, it appears that Microsoft is <a href="http://www.windowsphone.com/en-us/store">modeling their app store</a> and corresponding policies off of Apple&#8217;s &#8211; thus there is a <a href="http://www.inquisitr.com/423599/windows-phone-8-app-downloads-improve-by-100/">tightly managed distribution channel</a>, presenting an opportunity to reach a wide audience and earn their money. But, at this point, the wide audience has yet to develop.</p>
-
-<h5>That&#8217;s 4, but there&#8217;s still more!</h5>
-
-<p>As I alluded to in the beginning of this post, there are 4 <em>primary platforms</em> and myriad hybrid options, such as <a href="http://phonegap.com/">PhoneGap</a> and <a href="http://www.appcelerator.com/">Appcelerator</a>, for example. These hybrid options have various advantages and disadvantages; however, the primary concerns one needs to think through are still speed of development, distribution, and payout.</p>
-
-<p>Before you embark on a mobile development effort, it pays to have the end in mind &#8211; that is, before you code, have tangible answers for app distribution, development effort, and potential payout as these points will help guide you through the mobile landscape.</p>
 ]]></content>
   </entry>
   

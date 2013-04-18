@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-15T10:08:21+08:00</updated>
+  <updated>2013-04-18T09:41:56-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Painless Android swipe detection]]></title>
     <link href="http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection/"/>
-    <updated>2013-04-07T10:37:00+08:00</updated>
+    <updated>2013-04-07T10:37:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection</id>
     <content type="html"><![CDATA[<p><img class="left" src="/images/mine/gesticulate.png">Why bother building navigation buttons in an Android app when you can easily capture finger swipes? But, if you've ever implemented gesture section in Android there's the drudgery of implementing listeners and you also need to do some elementary Cartesian math. Save yourself the boilerplate bother mathematics and use a <a href="https://github.com/aglover/gesticulate">library</a>!</p>
 
@@ -29,7 +29,7 @@
   <entry>
     <title type="html"><![CDATA[Comprehending the mobile development landscape]]></title>
     <link href="http://aglover.github.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/"/>
-    <updated>2012-12-02T18:11:00+08:00</updated>
+    <updated>2012-12-02T18:11:00-05:00</updated>
     <id>http://aglover.github.com/blog/2012/12/02/comprehending-the-mobile-development-landscape</id>
     <content type="html"><![CDATA[<p>There's <a href="http://www.forbes.com/sites/parmyolson/2012/12/04/5-eye-opening-stats-that-show-the-world-is-going-mobile/">no shortage</a> of <a href="http://www.forbes.com/sites/connieguglielmo/2012/12/04/mary-meekers-must-read-interent-trends-report-says-android-phone-uptake-bests-apple/">mobile growth</a> statistics, but here's a few specific ones paint an overall picture of mobility:</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-15T10:08:21+08:00</updated>
+  <updated>2013-04-18T09:41:56-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Mongoid batch inserts]]></title>
     <link href="http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts/"/>
-    <updated>2013-03-27T11:34:00+08:00</updated>
+    <updated>2013-03-27T11:34:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts</id>
     <content type="html"><![CDATA[<p>In SQL land, all databases support batch inserts. Batch inserts are an effective and efficient mechanism to insert a lot of similar data. That is, instead of issuing x insert statements, you execute 1 insert with x records. This is much more efficient because the insert statement doesn't need to be re-parsed x times, there is only 1 network trip as opposed to x, and in the case of transactions, there is only 1 transaction instead of x. When compared to x inserts, batch inserts are always faster.</p>
 
@@ -40,7 +40,7 @@ Tag.collection.insert tags
   <entry>
     <title type="html"><![CDATA[2013 Open Analytics Summit]]></title>
     <link href="http://aglover.github.com/blog/2013/03/21/2013-open-analytics-summit/"/>
-    <updated>2013-03-21T15:21:00+08:00</updated>
+    <updated>2013-03-21T15:21:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/03/21/2013-open-analytics-summit</id>
     <content type="html"><![CDATA[<p><img class="right left" src="http://www.openanalyticssummit.com/wp-content/uploads/2012/12/OAS-logo-Full-colour3-300x85.png">On March 25, 2013, <a href="http://www.openanalyticssummit.com/speakers/">I'll be speaking</a> at the <a href="http://www.openanalyticssummit.com/">Open Analytics Summit in Washington DC</a>; specifically, I'll be discussing how the <a href="http://www.app47.com/2013/03/20/next-monday-app47-cto-andy-glover-offers-a-database-reality-check-at-the-open-analytics-summit/">App47</a> team has used <a href="http://www.mongodb.org/">MongoDB</a> as the backend of our enterprise mobile application management platform. We've learned quite a few things about <a href="http://thediscoblog.com/blog/categories/mongodb/">Mongo</a> over the last two years! In the process of growing from a few gigabytes of data a month to over a terabyte/month, we've found out first hand what <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Mongo</a> is good at and what it's <em>not good at</em>. I'll be addressing a number of tips, techniques, and strategies -- if you are a Mongo user or planning on being one, come on by!</p>
 ]]></content>
@@ -49,7 +49,7 @@ Tag.collection.insert tags
   <entry>
     <title type="html"><![CDATA[Everything you need to know about MongoDB]]></title>
     <link href="http://aglover.github.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb/"/>
-    <updated>2013-02-23T09:39:00+08:00</updated>
+    <updated>2013-02-23T09:39:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mongodb_icon.png">Are you new to <a href="http://www.mongodb.org/">MongoDB</a>? Curious to see what's interesting about it?  Document-oriented databases like MongoDB are vastly different from relational databases in that they don't store data in tables; instead, they store it in the form of documents. From a developer's perspective, document-oriented (or schemaless) data is simpler and <a href="http://thediscoblog.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">far more flexible</a> to manage than relational data. Rather than storing data into a rigid schema of tables, rows, and columns, joined by relationships, documents are written individually, containing whatever data they require.</p>
 
@@ -62,7 +62,7 @@ Tag.collection.insert tags
   <entry>
     <title type="html"><![CDATA[Savvy Mongo query selector: exists]]></title>
     <link href="http://aglover.github.com/blog/2013/01/04/savvy-mongo-query-selector-exists/"/>
-    <updated>2013-01-04T11:57:00+08:00</updated>
+    <updated>2013-01-04T11:57:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/01/04/savvy-mongo-query-selector-exists</id>
     <content type="html"><![CDATA[<p><a href="http://www.mongodb.org/">MongoDB</a> supports a <a href="http://docs.mongodb.org/manual/applications/read/">rich query language</a>; in fact, its support of dynamic queries is one of its <a href="http://public.dhe.ibm.com/software/dw/demos/jmongodbdocs/index.html">more distinguishing features</a> compared to other datastores in the <a href="http://www.infoworld.com/d/data-management/flexing-nosql-mongodb-in-review-185922">NoSQL</a> world. Mongo's query language has a variety of query selectors that enable you to <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">fashion some powerful document searches</a>. One particular <a href="http://docs.mongodb.org/manual/reference/operators/#element">query selector that comes in handy</a> from time to time is <code>$exists</code>.</p>
 
@@ -83,7 +83,7 @@ db.words.find({"definitions.part_of_speech":{"$exists":false}}).sort({"spelling"
   <entry>
     <title type="html"><![CDATA[Pushing Mongo GridFS files with Sinatra]]></title>
     <link href="http://aglover.github.com/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra/"/>
-    <updated>2012-12-21T21:19:00+08:00</updated>
+    <updated>2012-12-21T21:19:00-05:00</updated>
     <id>http://aglover.github.com/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra</id>
     <content type="html"><![CDATA[<p><a href="http://www.app47.com/">We</a> recently implemented a new feature that required two interesting aspects: storing a file in <a href="http://www.mongodb.org/">MongoDB</a> using <a href="http://docs.mongodb.org/manual/applications/gridfs/">GridFS</a> (think traditional <a href="http://en.wikipedia.org/wiki/Binary_large_object">Blob</a>) and then pushing that file down to a browser. Along the way, I discovered a lot of questions on <a href="http://stackoverflow.com/">stackoverflow</a> and the like pertaining to various aspects of GridFS and <a href="http://www.sinatrarb.com/">Sinatra</a> pushes, so I thought I'd explain what we did.</p>
 
