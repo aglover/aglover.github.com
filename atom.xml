@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-18T09:41:56-04:00</updated>
+  <updated>2013-04-24T21:19:40-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,24 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mobile for the masses: gestures and test deployments]]></title>
+    <link href="http://aglover.github.com/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments/"/>
+    <updated>2013-04-24T21:13:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/mftm_1.jpg">My second article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>&#8217; series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> is out! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html">This article</a> covers how to go about designing a mobile interface from the standpoint of usability via gestures. In essence, eschew buttons and prefer the swipe! What&#8217;s more, I cover at a high level how to test your app on an Android device.</p>
+
+<p>As the article summary states:</p>
+
+<blockquote><p>Mobile users are typically distracted, busy, and ergonomically constrained, so build your mobile application UIs accordingly. Andrew Glover discusses key factors that differentiate mobile apps from web apps, then guides you through the creation of a mobile application UI that uses swipe gestures for navigation rather than button clicks.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html'>Mobile for the Masses: Take a Swipe at It! Programming Gestures in Android</a></cite></footer></blockquote>
+
+
+<p>So what are you waiting for? Check out &#8221;<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>&#8221; and trade buttons for swipes in your Android mobile apps! And if you missed the first article, check out &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>&#8221; and learn the ins and outs of Android development!</p>
+
+<p>Stay tuned for more articles in this series and don&#8217;t forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[cURLing for Wget]]></title>
@@ -464,57 +482,6 @@ As you can see, it&#8217;s all quite easy &#8211; GridFS is simply a facade for 
 focuses on the technologies, companies, and people influencing cloud computing. I had the pleasure to chat with a cadre of super interesting people, including <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#labourey">Sacha Labourey</a> of CloudBees, <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#engineyard">Bill Platt and Mark Gaydos</a> of Engine Yard, and <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#proudman">Jesse Proudman</a> of BlueBox, just to name a few!</p>
 
 <p><a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">In these podcasts</a>, you&#8217;ll hear from people who not only influence, but directly impact cloud computing, regardless of the underlying language or platform. There&#8217;s a lot to learn here, so put on your headphones and get ready for some interesting conversations! So what are you waiting for? <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">Go listen right this instant</a>!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Sinatra, CoffeeScript, and Haml: swinging in 4 steps]]></title>
-    <link href="http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/"/>
-    <updated>2012-12-10T21:49:00-05:00</updated>
-    <id>http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps</id>
-    <content type="html"><![CDATA[<p>I recently decided to ditch plain old JavaScript in a <a href="http://www.sinatrarb.com/">Sinatra</a> based application in favor of <a href="http://coffeescript.org/">CoffeeScript</a>. The existing JavaScript wasn&#8217;t terribly complex; however, I was looking at having to add some AJAX based long polling and I couldn&#8217;t bring myself to do it in <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-18/index.html">JavaScript</a>. Accordingly, I decided I&#8217;d use <a href="http://www.ibm.com/developerworks/web/library/j-coffeescript/index.html">CoffeeScript</a>, but, as it turns out, there were a few steps I had to put in place before I could enjoy some significant whitespace delimitation.</p>
-
-<p>First, I installed <a href="https://github.com/Sutto/barista">Barista</a>, which is a nifty Ruby gem that adds transparent CoffeeScript support to any Rack app. There were a few other gems available, however, I decided that Barista had the most mature documentation and the project still showed signs of life.</p>
-
-<p>Once I added the Barista gem to my Gemfile and ran <a href="http://gembundler.com/">Bundler</a>, I next had to require Barista in my Sinatra app; moreover, I had to register the Barista extension via <code>Sinatra.register Barista::Integration::Sinatra</code>. Note, that these steps need to be done after <a href="http://haml.info/">Haml</a> is loaded.</p>
-
-<p>In order for Barista to work properly, you&#8217;ll need to have a JavaScript runtime handy &#8211; there are a number of options here, including <a href="https://github.com/cowboyd/therubyracer">therubyracer</a>; however, after a bit of research, I found some <a href="http://stackoverflow.com/questions/6282307/execjs-and-could-not-find-a-javascript-runtime">concerning notes regarding therubyracer&#8217;s memory consumption</a>. After a bit of surfing, I happened upon <a href="https://github.com/sstephenson/execjs">ExecJS</a>, which states that Node will work just fine. Yeah!</p>
-
-<p>Accordingly, since this application runs on Ubuntu, I got to use a nifty script that I happened to have written about a year ago: <a href="https://github.com/aglover/ubuntu-equip">Ubuntu Equip</a>. In less than a minute, I had the latest and greatest version of Node running by running the command:</p>
-
-<figure class='code'><figcaption><span>script for install Node on Ubuntu</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_node.sh <span class="o">&amp;&amp;</span> bash equip_node.sh
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Take note: this script sets a custom <a href="http://en.wikipedia.org/wiki/Advanced_Packaging_Tool">apt-get</a> repository; otherwise, if you don&#8217;t add this repository, you&#8217;ll end up with an ancient version of Node.</p>
-
-<p>Finally, to actually start coding in CoffeeScript, all you have to do is use Haml&#8217;s handy inline <code>:coffeescript</code> filter:</p>
-
-<figure class='code'><figcaption><span>CoffeeScript spinner</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">:</span><span class="nx">coffeescript</span>
-</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span> <span class="o">-&gt;</span>
-</span><span class='line'>    <span class="nx">opts</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">lines</span><span class="o">:</span> <span class="mi">13</span><span class="p">,</span> <span class="p">...}</span>
-</span><span class='line'>    <span class="nx">spinner</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Spinner</span><span class="p">(</span><span class="nx">opts</span><span class="p">).</span><span class="nx">spin</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;spinner&#39;</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>That&#8217;s it! The steps required to get Sinatra, CoffeeScript, and Haml playing together are:</p>
-
-<ul>
-<li>Install Barista</li>
-<li>Configure Sinatra</li>
-<li>Install a JavaScript runtime engine</li>
-<li>Write some CoffeeScript</li>
-</ul>
-
-
-<p>In short, Barista and <a href="http://www.ibm.com/developerworks/java/library/j-nodejs/">Node</a> make Sinatra swing with CoffeeScript.</p>
 ]]></content>
   </entry>
   
