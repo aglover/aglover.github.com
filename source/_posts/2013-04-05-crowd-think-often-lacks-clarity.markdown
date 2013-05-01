@@ -11,6 +11,8 @@ categories: mobile
 
 What's interesting (and not too surprising) about this analysis is that frameworks like [PhoneGap](http://phonegap.com/) or [jQuery Mobile](http://jquerymobile.com/) (and laughably [JQTouch](http://jqtjs.com/)?) are leaning more towards _adoption ready_ when compared to frameworks like [Marmelade](http://www.madewithmarmalade.com/), [Coronona](http://www.coronalabs.com/) or [MoSync](http://www.mosync.com/). But this radar lacks some clarifying dimensions -- for example, if you want to produce a mobile website on a lot of different mobile platforms quickly, then PhoneGap is probably the way to go. But if you're looking to create a mobile app, then the choice to use PhoneGap must be treated with extreme caution. 
 
+<!--more-->
+
 You cannot create a [compelling user experience](http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/) that works across [all platforms consistently](http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/) with this framework right now. And it isn't even the fault of PhoneGap entirely -- it's [HTML5](http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/). That's why going with something like JQTouch without viewing the big picture of what you are building is laughable. 
 
 Frameworks like Marmelade or Corona might be a bit more difficult to get started with (after all, you code in something other than HTML or JavaScript) but they can produce a native app that offers a compelling user experience capable of generating a wow. Remember, native-ness [trumps the browser](http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/) almost always unless your app is a series of screens that don't require the user to interact. 

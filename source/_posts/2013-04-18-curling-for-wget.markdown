@@ -14,6 +14,8 @@ wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
 
 and you're one step closer. There's no flags to remember either. 
 
+<!--more-->
+
 Wget, however, isn't natively available on OSX. From time to time, I'm stung to see the nefarious 'command not found' message after expectantly waiting to see some file I need downloaded. 
 
 Luckily, you can force [cURL](http://curl.haxx.se/docs/manpage.html) to act like Wget with a few flags. Simply use the `-OL` flags like so:

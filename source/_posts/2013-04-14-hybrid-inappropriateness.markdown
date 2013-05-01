@@ -10,6 +10,8 @@ categories: mobile
 
 Web apps are truly ubiquitous because they take advantage of the browser and are thus, cross platform. You, for the most part, can get away with [maintaining one code base](http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/) that can be viewed on iOS, Android, and the other minor players. Yet, the key point of Web apps is that they are [_web sites_, not mobile apps](http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/). 
 
+<!--more-->
+
 As you begin to blur that mobile app/mobile website line, you'll [stumble over various issues](http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/) like performance or varying behaviors depending on the underlying device.  Worse, you'll find that [not all browsers are created equally](http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/) and thus, you'll need to [compensate for various scenarios](http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/) or use assorted compensating tools like [Modernizr][1]. Or, you'll find yourself throwing the web app into a container because you want mass distribution via an app store or because you want to take advantage of some native feature. 
 
 And at that point, in the eyes of many, you've built a hybrid mobile app. But that's not the whole story.
