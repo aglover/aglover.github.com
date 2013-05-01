@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="My second article in IBM developerWorks&#8217; series Mobile for the Masses is out! This article covers how to go about designing a mobile interface &hellip;">
+  <meta name="description" content="Amazon CloudFront is a pay-as-you-go global content delivery network (or CDN) that provides high availability and high performance serving of static &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,53 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku Performance Hat-trick</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-01T09:10:00-04:00" pubdate data-updated="true">May 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
+
+<p>It&#8217;s easy to configure a <a href="http://rubyonrails.org/">Rails</a> app to take advantage of CloudFront; what&#8217;s more, if your Rails app is hosted on <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-21/">Heroku</a>, there&#8217;s <a href="https://github.com/romanbsd/heroku-deflater">a nifty gem</a>, dubbed heroku-deflater, that&#8217;ll enable <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP compression</a> of static assets (<a href="http://stackoverflow.com/questions/12326191/any-way-to-serve-gzip-assets-from-heroku">other than images</a>).</p>
+
+<p>To get these three entities to play nicely together requires a few simple steps. Let me show you how.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -167,22 +214,12 @@
 
 <p>and you&#8217;re one step closer. There&#8217;s no flags to remember either.</p>
 
-<p>Wget, however, isn&#8217;t natively available on OSX. From time to time, I&#8217;m stung to see the nefarious &#8216;command not found&#8217; message after expectantly waiting to see some file I need downloaded.</p>
-
-<p>Luckily, you can force <a href="http://curl.haxx.se/docs/manpage.html">cURL</a> to act like Wget with a few flags. Simply use the <code>-OL</code> flags like so:</p>
-
-<figure class='code'><figcaption><span>cURL acting like Wget</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -OL http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>and you&#8217;ll be on your way to downloading some file.</p>
-
-<p>Of course, it&#8217;s possible to get <code>wget</code> on your Mac via <a href="http://osxdaily.com/2012/05/22/install-wget-mac-os-x/">MacPorts or Homebrew</a>; nevertheless, knowing you can achieve the same goals with cURL is always handy.</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/18/curling-for-wget/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -266,27 +303,12 @@
 
 <p>Web apps are truly ubiquitous because they take advantage of the browser and are thus, cross platform. You, for the most part, can get away with <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">maintaining one code base</a> that can be viewed on iOS, Android, and the other minor players. Yet, the key point of Web apps is that they are <a href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/"><em>web sites</em>, not mobile apps</a>.</p>
 
-<p>As you begin to blur that mobile app/mobile website line, you&#8217;ll <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">stumble over various issues</a> like performance or varying behaviors depending on the underlying device.  Worse, you&#8217;ll find that <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">not all browsers are created equally</a> and thus, you&#8217;ll need to <a href="http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/">compensate for various scenarios</a> or use assorted compensating tools like <a href="http://modernizr.com/">Modernizr</a>. Or, you&#8217;ll find yourself throwing the web app into a container because you want mass distribution via an app store or because you want to take advantage of some native feature.</p>
-
-<p>And at that point, in the eyes of many, you&#8217;ve built a hybrid mobile app. But that&#8217;s not the whole story.</p>
-
-<p>Hybrid frameworks aren&#8217;t all created equal.  There are, in fact, two flavors of hybrid-ness: <em>hybrid-web</em> and <em>hybrid-native</em>. Both are extremely different; in fact, to showcase the difference, I need only compare the &#8220;featured&#8221; apps of two hybrid frameworks: <a href="http://phonegap.com/">PhoneGap</a> and <a href="http://www.madewithmarmalade.com/">Marmalade</a>.</p>
-
-<p>PhoneGap is a great framework for building hybrid-web apps. You code in HTML and JavaScript and the resultant code is run inside of a web view managed by a native container.  You ostensibly write one code base and deploy to all the primary mobile platforms. Similar frameworks are: <a href="http://www-01.ibm.com/software/mobile-solutions/worklight/">IBM&#8217;s Worklight</a> and <a href="http://www.icenium.com/">Icenium</a>. <a href="http://www.sencha.com/products/touch">Sencha Touch</a> falls into this realm as well when you employ their container technology.</p>
-
-<p><img class="center" src="/images/mine/phonegap_example.png"></p>
-
-<p><a href="http://www.madewithmarmalade.com/">Marmalade</a> is a hybrid-native app platform; that is, you can code in an intermediary language like C++ that is ultimately compiled down into native code (i.e. Java for Android, Objective-C for iOS, etc). These apps are not characterized by a web view in any way. They are native, close to the bone as it gets apps. The benefit is that you only had to write <em>one code base</em>, the underlying tool took care of the dirty work in making it work similarly on iOS and Android, for example. Similar frameworks are: <a href="http://www.coronalabs.com/">Corona</a>, <a href="http://www.mosync.com/">MoSync</a>, and <a href="http://www.appcelerator.com/">Appcelerator</a> to name a few.</p>
-
-<p><img class="center" src="/images/mine/marmalate_example.png"></p>
-
-<p>Now look closely at the <a href="http://phonegap.com/app/feature/">featured apps</a> of each <a href="http://www.madewithmarmalade.com/app-showcase">hybrid framework</a>. They&#8217;re <a href="http://phonegap.com/blog/2011/11/07/phonegap-application-craft-pain-free-mobile-app-development/">distinctly</a> <a href="http://www.madewithmarmalade.com/marmaladesdk/application/cut-rope">different</a> aren&#8217;t they?</p>
-
-<p>PhoneGap and the rest of the hybrid-web frameworks are good at producing informational apps. These apps can look beautiful and certainly can have some compelling features like tight integration with social networks and geo-tracking, for example. But they&#8217;re inadequate for games and still lack a rich user experience when compared to more native apps like Flipboard or AngryBirds.</p>
-
-<p>Marmalade and the rest of the hybrid-native crowd shine when it comes to highly interactive apps like games; what&#8217;s more, these frameworks can build an app that generates a wow. And therein lies the crucial aspect that&#8217;s missed when the industry blindly assumes all hybrid options are similar. They couldn&#8217;t be more incorrect &#8211; thus, we need at least four categories (native, web, hybrid-native, and hybrid-web) and we need to eschew the lone term &#8220;hybrid&#8221; as it lacks clarification and therefore has no meaning.</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/14/hybrid-inappropriateness/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -368,13 +390,12 @@
 
 <p>What&#8217;s interesting (and not too surprising) about this analysis is that frameworks like <a href="http://phonegap.com/">PhoneGap</a> or <a href="http://jquerymobile.com/">jQuery Mobile</a> (and laughably <a href="http://jqtjs.com/">JQTouch</a>?) are leaning more towards <em>adoption ready</em> when compared to frameworks like <a href="http://www.madewithmarmalade.com/">Marmelade</a>, <a href="http://www.coronalabs.com/">Coronona</a> or <a href="http://www.mosync.com/">MoSync</a>. But this radar lacks some clarifying dimensions &#8211; for example, if you want to produce a mobile website on a lot of different mobile platforms quickly, then PhoneGap is probably the way to go. But if you&#8217;re looking to create a mobile app, then the choice to use PhoneGap must be treated with extreme caution.</p>
 
-<p>You cannot create a <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">compelling user experience</a> that works across <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">all platforms consistently</a> with this framework right now. And it isn&#8217;t even the fault of PhoneGap entirely &#8211; it&#8217;s <a href="http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/">HTML5</a>. That&#8217;s why going with something like JQTouch without viewing the big picture of what you are building is laughable.</p>
-
-<p>Frameworks like Marmelade or Corona might be a bit more difficult to get started with (after all, you code in something other than HTML or JavaScript) but they can produce a native app that offers a compelling user experience capable of generating a wow. Remember, native-ness <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">trumps the browser</a> almost always unless your app is a series of screens that don&#8217;t require the user to interact.</p>
-
-<p>Accordingly, the study lacks some needed dimensions &#8211; mainly, whether or not you are building a mobile app or mobile website. Don&#8217;t fall into the hype trap and jump into PhoneGap development unless you are sure what you are building is a simple mobile website and your audience isn&#8217;t expecting something like Flipboard or AngryBirds. Otherwise, you&#8217;ll find yourself investigating either pure play native development or frameworks that ultimately produce a native app.</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/05/crowd-think-often-lacks-clarity/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -521,78 +542,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/03/12/node-in-3-commands/">Node.js in 3 Commands</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-12T11:55:00-04:00" pubdate data-updated="true">Mar 12<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A few <a href="http://www.javaworld.com/community/node/8140">short years ago</a> when I started to explore <a href="http://nodejs.org/">Node.js</a>, I remember the installation on my MacBook Pro required downloading the source, compiling and installing it, and then updating paths. <em>And then</em> you had to install <a href="https://npmjs.org/">NPM</a>.</p>
-
-<p>Since then, <a href="http://www.ibm.com/developerworks/library/j-nodejs/">Node</a>&#8217;s installation has been come tremendously easy and NPM is even <em>bundled</em> with <a href="http://www.ibm.com/developerworks/offers/lp/demos/summary/j-jnodejs.html?ca=drs-">Node</a>. And yet, installing Node (and keeping up w/its rapid release schedule) is even easier with a nifty tool: <a href="https://github.com/creationix/nvm">Node Version Manager</a>.</p>
-
-<p>With Node Version Manager (or <a href="https://twitter.com/aglover/status/105824835149627392">nvm</a>) you can be up and running with Node in 3 easy commands.</p>
-
-<p>Step 1: Download and install nvm.</p>
-
-<figure class='code'><figcaption><span>downloading nvm</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl https://raw.github.com/creationix/nvm/master/install.sh | sh
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Step 2: Reload your shell.</p>
-
-<figure class='code'><figcaption><span>reloading .bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">source</span> .bash_profile
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Step 2.5: Obtain a list of available node versions to install.</p>
-
-<figure class='code'><figcaption><span>listing available node versions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>nvm ls-remote
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Step 3: Install your desired version of node.</p>
-
-<figure class='code'><figcaption><span>installing node version 0.10.0</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>nvm install v0.10.0
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After that&#8217;s done, execute a <code>node -v</code> to verify. Now wasn&#8217;t that easy? You bet!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -611,6 +560,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku performance hat-trick</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments/">Mobile for the masses: gestures and test deployments</a>
       </li>
     
@@ -624,10 +577,6 @@
     
       <li class="post">
         <a href="/blog/2013/04/14/hybrid-inappropriateness/">Hybrid inappropriateness</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/04/07/painless-android-swipe-detection/">Painless Android swipe detection</a>
       </li>
     
   </ul>

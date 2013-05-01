@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-24T21:19:40-04:00</updated>
+  <updated>2013-05-01T10:28:23-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,87 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Rails, CloudFront, and Heroku performance hat-trick]]></title>
+    <link href="http://aglover.github.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
+    <updated>2013-05-01T09:10:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
+
+<p>It's easy to configure a <a href="http://rubyonrails.org/">Rails</a> app to take advantage of CloudFront; what's more, if your Rails app is hosted on <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-21/">Heroku</a>, there's <a href="https://github.com/romanbsd/heroku-deflater">a nifty gem</a>, dubbed heroku-deflater, that'll enable <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP compression</a> of static assets (<a href="http://stackoverflow.com/questions/12326191/any-way-to-serve-gzip-assets-from-heroku">other than images</a>).</p>
+
+<p>To get these three entities to play nicely together requires a few simple steps. Let me show you how.</p>
+
+<!--more-->
+
+
+<p>First, if you want to enable HTTP gzip compression of static assets other than images from a Heroku app, then add the heroku-deflater gem to your <code>Gemfile</code>. This gem doesn't compress images as in some cases, zipping images creates bigger ones!</p>
+
+<p>Once you've run <code>bundle install</code> and deployed your app to Heroku, fire up a terminal and run <code>[cURL](http://thediscoblog.com/blog/2013/04/18/curling-for-wget/)</code> to verify that the HTTP response Content-Encoding is gzip like so:</p>
+
+<p><code>bash cURL testing gzip response
+curl -i -H "Accept-Encoding: gzip,deflate" http://your.awesome.web.app
+</code></p>
+
+<p>You should see in the response this key phrase:</p>
+
+<p><code>bash cURL response
+Content-Encoding: gzip
+</code></p>
+
+<p>If you do see the Content-Encoding set to gzip, then you are good to go. If, for some reason, you don't see it, check your environment's configuration file (which you will have to edit to get CloudFront working anyway) and verify that the property <code>config.serve_static_assets</code> is set to <code>true</code>.</p>
+
+<p>Next, sign into the AWS Management Console and enable CloudFront if you haven't already. From the CloudFront admin page, create a new distribution via the Create Distribution button on the top left.</p>
+
+<p><img class="center" src="/images/mine/cloudfront_1.png"></p>
+
+<p>Once the create distribution wizard begins, be sure to select Download as your delivery method.</p>
+
+<p><img class="center" src="/images/mine/cloudfront_2.png"></p>
+
+<p>In the next screen, there are some important fields you'll need to fill out, namely: the Origin Source Name and the Viewer Protocol Policy. For the Origin Source Name, you will need to put in your app's URL or the Heroku URL (if you do not map a custom domain name to it). If you web site supports HTTPS, then be sure to set the Viewer Protocol Policy to HTTP and HTTPS.</p>
+
+<p><img class="center" src="/images/mine/cloudfront_3.png"></p>
+
+<p>The only other important setting after these two is the Price Class. It's here where you can set where CloudFront will essentially serve up your content -- the default setting of Use All Edge Locations is most likely what you need.</p>
+
+<p><img class="center" src="/images/mine/cloudfront_5.png"></p>
+
+<p>Finally, click the Create Distribution button -- once you do that, it'll take a bit for things to initialize (basically, the CDN needs to get built and this may take up to 30 minutes).</p>
+
+<p>Now to configure your Rails app, you'll need to open up your target environment's configuration file (i.e. <code>production.rb</code>). The <a href="http://bindle.me/blog/index.php/395/caches-cdns-and-heroku-cedar">two fields</a> you'll want to be sure are properly set are <code>serve_static_assets</code> and <code>static_cache_control</code>. In particular, you are setting the cache control variable to one year. This means that once a static asset, like a JavaScript file is downloaded to the browser, it'll be cached for one year. Don't fret, however, if you think that'll inhibit change -- the file that is ultimately downloaded has a hash attached to it (via the magic of <a href="http://guides.rubyonrails.org/asset_pipeline.html">Rail's Asset Pipeline</a>). Consequently, the file that is cached is something like <code>your_js_file-asdf098203820980a980</code> where that last bit is a hash value that'll change if the file itself changes.</p>
+
+<p><code>ruby production.rb edited to support CDN
+config.serve_static_assets = true
+config.static_cache_control = 'public, max-age=31536000'
+</code></p>
+
+<p>The last change you need to make to your environment file is to set the <code>asset_host</code> to the CloudFront domain that you just created. You can find this in your AWS Management Console -- it'll be a cryptic URL like http://asdjlkj2321.cloudfront.net.</p>
+
+<p><code>ruby production.rb edited to support asset host
+config.action_controller.asset_host = 'the domain name from AWS Dashboard'
+</code></p>
+
+<p>Commit your changes and deploy your app.</p>
+
+<p>To verify things are kosher, you'll need to give it some time (check the status of your CloudFront CDN -- if it's status is Enabled then you are good to go!). If things are ready, then fire up a browser and go to your app.</p>
+
+<p>In this case, <a href="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/">I'm using Chrome</a>. Go to JavaScript console and hit the Network tab.</p>
+
+<p><img class="center" src="/images/mine/cloudfront_6.png"></p>
+
+<p>Surf around and you'll note a few things -- one, that the assets like images and JavaScript files are being severed up from your CDN (just look at the URL) and that the size will often say "(from cache)" -- that means the CDN is handling the load rather than <a href="http://www.ibm.com/developerworks/podcast/glover-heroku-110811/">Heroku</a>. You should also note that your web app is probably a bit more snappy!</p>
+
+<p><img class="center" src="/images/mine/cloudfront_7.png"></p>
+
+<p>Check out your Heroku logs and you'll note fewer hits in this case -- dynamic pages are still being loaded, however, static assets are not anymore -- that's the job of your CDN!</p>
+
+<p>CloudFront isn't free; nevertheless, I think you'll find the corresponding cost quite reasonable. Pricing will vary depending on how much content you'll be serving up with CloudFront -- this is a function of how many visitors you have <em>along with</em> how many static assets that are ultimately downloaded to a user's browser. For instance, 500GB of average content will cost you less than $75/month.</p>
+
+<p>CloudFront's pay-as-you-go model makes it extremely affordable to add a nice bit of pep to your app's performance along with using gzip compression and HTTP caching. And hopefully as I've shown you, it's rather easy to do with a Rails app running on Heroku.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mongoid batch inserts]]></title>
@@ -142,53 +223,6 @@ As you can see, it's all quite easy -- GridFS is simply a facade for two collect
     <updated>2012-12-17T09:38:00-05:00</updated>
     <id>http://aglover.github.com/blog/2012/12/17/running-individual-tests-in-rails</id>
     <content type="html"><![CDATA[<p>Every now and again, I find myself struggling to remember how to execute a single test in <a href="http://rubyonrails.org/">Rails</a>. While I have <a href="https://github.com/guard/guard">Guard</a> running the entire test suite <em>anytime</em> a change is detected, there are times when I want to focus solely on one test. Accordingly, <a href="http://flavio.castelli.name/2010/05/28/rails_execute_single_test/">Flavio Castelli has a great blog entry</a> detailing the manifold ways one can execute a single test using <a href="http://rake.rubyforge.org/">Rake</a> and/or Ruby.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Sinatra, CoffeeScript, and Haml: swinging in 4 steps]]></title>
-    <link href="http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/"/>
-    <updated>2012-12-10T21:49:00-05:00</updated>
-    <id>http://aglover.github.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps</id>
-    <content type="html"><![CDATA[<p>I recently decided to ditch plain old JavaScript in a <a href="http://www.sinatrarb.com/">Sinatra</a> based application in favor of <a href="http://coffeescript.org/">CoffeeScript</a>. The existing JavaScript wasn't terribly complex; however, I was looking at having to add some AJAX based long polling and I couldn't bring myself to do it in <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-18/index.html">JavaScript</a>. Accordingly, I decided I'd use <a href="http://www.ibm.com/developerworks/web/library/j-coffeescript/index.html">CoffeeScript</a>, but, as it turns out, there were a few steps I had to put in place before I could enjoy some significant whitespace delimitation.</p>
-
-<p>First, I installed <a href="https://github.com/Sutto/barista">Barista</a>, which is a nifty Ruby gem that adds transparent CoffeeScript support to any Rack app. There were a few other gems available, however, I decided that Barista had the most mature documentation and the project still showed signs of life.</p>
-
-<p>Once I added the Barista gem to my Gemfile and ran <a href="http://gembundler.com/">Bundler</a>, I next had to require Barista in my Sinatra app; moreover, I had to register the Barista extension via <code>Sinatra.register Barista::Integration::Sinatra</code>. Note, that these steps need to be done after <a href="http://haml.info/">Haml</a> is loaded.</p>
-
-<p>In order for Barista to work properly, you'll need to have a JavaScript runtime handy -- there are a number of options here, including <a href="https://github.com/cowboyd/therubyracer">therubyracer</a>; however, after a bit of research, I found some <a href="http://stackoverflow.com/questions/6282307/execjs-and-could-not-find-a-javascript-runtime">concerning notes regarding therubyracer's memory consumption</a>. After a bit of surfing, I happened upon <a href="https://github.com/sstephenson/execjs">ExecJS</a>, which states that Node will work just fine. Yeah!</p>
-
-<p>Accordingly, since this application runs on Ubuntu, I got to use a nifty script that I happened to have written about a year ago: <a href="https://github.com/aglover/ubuntu-equip">Ubuntu Equip</a>. In less than a minute, I had the latest and greatest version of Node running by running the command:</p>
-
-<p><code>bash script for install Node on Ubuntu
-wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_node.sh &amp;&amp; bash equip_node.sh
-</code></p>
-
-<p>Take note: this script sets a custom <a href="http://en.wikipedia.org/wiki/Advanced_Packaging_Tool">apt-get</a> repository; otherwise, if you don't add this repository, you'll end up with an ancient version of Node.</p>
-
-<p>Finally, to actually start coding in CoffeeScript, all you have to do is use Haml's handy inline <code>:coffeescript</code> filter:</p>
-
-<p>``` javascript CoffeeScript spinner
-:coffeescript
-  $(document).ready -></p>
-
-<pre><code>opts = { lines: 13, ...}
-spinner = new Spinner(opts).spin(document.getElementById('spinner'))
-</code></pre>
-
-<p>```</p>
-
-<p>That's it! The steps required to get Sinatra, CoffeeScript, and Haml playing together are:</p>
-
-<ul>
-<li>Install Barista</li>
-<li>Configure Sinatra</li>
-<li>Install a JavaScript runtime engine</li>
-<li>Write some CoffeeScript</li>
-</ul>
-
-
-<p>In short, Barista and <a href="http://www.ibm.com/developerworks/java/library/j-nodejs/">Node</a> make Sinatra swing with CoffeeScript.</p>
 ]]></content>
   </entry>
   

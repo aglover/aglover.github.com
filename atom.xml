@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-04-24T21:19:40-04:00</updated>
+  <updated>2013-05-01T10:28:23-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Rails, CloudFront, and Heroku performance hat-trick]]></title>
+    <link href="http://aglover.github.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
+    <updated>2013-05-01T09:10:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
+
+<p>It&#8217;s easy to configure a <a href="http://rubyonrails.org/">Rails</a> app to take advantage of CloudFront; what&#8217;s more, if your Rails app is hosted on <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-21/">Heroku</a>, there&#8217;s <a href="https://github.com/romanbsd/heroku-deflater">a nifty gem</a>, dubbed heroku-deflater, that&#8217;ll enable <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP compression</a> of static assets (<a href="http://stackoverflow.com/questions/12326191/any-way-to-serve-gzip-assets-from-heroku">other than images</a>).</p>
+
+<p>To get these three entities to play nicely together requires a few simple steps. Let me show you how.</p>
+
+<!--more-->
+
+
+<p>First, if you want to enable HTTP gzip compression of static assets other than images from a Heroku app, then add the heroku-deflater gem to your <code>Gemfile</code>. This gem doesn&#8217;t compress images as in some cases, zipping images creates bigger ones!</p>
+
+<p>Once you&#8217;ve run <code>bundle install</code> and deployed your app to Heroku, fire up a terminal and run <code>[cURL](http://thediscoblog.com/blog/2013/04/18/curling-for-wget/)</code> to verify that the HTTP response Content-Encoding is gzip like so:</p>
+
+<figure class='code'><figcaption><span>cURL testing gzip response</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -i -H <span class="s2">&quot;Accept-Encoding: gzip,deflate&quot;</span> http://your.awesome.web.app
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You should see in the response this key phrase:</p>
+
+<figure class='code'><figcaption><span>cURL response</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Content-Encoding: gzip
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you do see the Content-Encoding set to gzip, then you are good to go. If, for some reason, you don&#8217;t see it, check your environment&#8217;s configuration file (which you will have to edit to get CloudFront working anyway) and verify that the property <code>config.serve_static_assets</code> is set to <code>true</code>.</p>
+
+<p>Next, sign into the AWS Management Console and enable CloudFront if you haven&#8217;t already. From the CloudFront admin page, create a new distribution via the Create Distribution button on the top left.</p>
+
+<p><img class="center" src="http://aglover.github.com/images/mine/cloudfront_1.png"></p>
+
+<p>Once the create distribution wizard begins, be sure to select Download as your delivery method.</p>
+
+<p><img class="center" src="http://aglover.github.com/images/mine/cloudfront_2.png"></p>
+
+<p>In the next screen, there are some important fields you&#8217;ll need to fill out, namely: the Origin Source Name and the Viewer Protocol Policy. For the Origin Source Name, you will need to put in your app&#8217;s URL or the Heroku URL (if you do not map a custom domain name to it). If you web site supports HTTPS, then be sure to set the Viewer Protocol Policy to HTTP and HTTPS.</p>
+
+<p><img class="center" src="http://aglover.github.com/images/mine/cloudfront_3.png"></p>
+
+<p>The only other important setting after these two is the Price Class. It&#8217;s here where you can set where CloudFront will essentially serve up your content &#8211; the default setting of Use All Edge Locations is most likely what you need.</p>
+
+<p><img class="center" src="http://aglover.github.com/images/mine/cloudfront_5.png"></p>
+
+<p>Finally, click the Create Distribution button &#8211; once you do that, it&#8217;ll take a bit for things to initialize (basically, the CDN needs to get built and this may take up to 30 minutes).</p>
+
+<p>Now to configure your Rails app, you&#8217;ll need to open up your target environment&#8217;s configuration file (i.e. <code>production.rb</code>). The <a href="http://bindle.me/blog/index.php/395/caches-cdns-and-heroku-cedar">two fields</a> you&#8217;ll want to be sure are properly set are <code>serve_static_assets</code> and <code>static_cache_control</code>. In particular, you are setting the cache control variable to one year. This means that once a static asset, like a JavaScript file is downloaded to the browser, it&#8217;ll be cached for one year. Don&#8217;t fret, however, if you think that&#8217;ll inhibit change &#8211; the file that is ultimately downloaded has a hash attached to it (via the magic of <a href="http://guides.rubyonrails.org/asset_pipeline.html">Rail&#8217;s Asset Pipeline</a>). Consequently, the file that is cached is something like <code>your_js_file-asdf098203820980a980</code> where that last bit is a hash value that&#8217;ll change if the file itself changes.</p>
+
+<figure class='code'><figcaption><span>production.rb edited to support CDN</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">serve_static_assets</span> <span class="o">=</span> <span class="kp">true</span>
+</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">static_cache_control</span> <span class="o">=</span> <span class="s1">&#39;public, max-age=31536000&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The last change you need to make to your environment file is to set the <code>asset_host</code> to the CloudFront domain that you just created. You can find this in your AWS Management Console &#8211; it&#8217;ll be a cryptic URL like http://asdjlkj2321.cloudfront.net.</p>
+
+<figure class='code'><figcaption><span>production.rb edited to support asset host</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">action_controller</span><span class="o">.</span><span class="n">asset_host</span> <span class="o">=</span> <span class="s1">&#39;the domain name from AWS Dashboard&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Commit your changes and deploy your app.</p>
+
+<p>To verify things are kosher, you&#8217;ll need to give it some time (check the status of your CloudFront CDN &#8211; if it&#8217;s status is Enabled then you are good to go!). If things are ready, then fire up a browser and go to your app.</p>
+
+<p>In this case, <a href="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/">I&#8217;m using Chrome</a>. Go to JavaScript console and hit the Network tab.</p>
+
+<p><img class="center" src="http://aglover.github.com/images/mine/cloudfront_6.png"></p>
+
+<p>Surf around and you&#8217;ll note a few things &#8211; one, that the assets like images and JavaScript files are being severed up from your CDN (just look at the URL) and that the size will often say &#8220;(from cache)&#8221; &#8211; that means the CDN is handling the load rather than <a href="http://www.ibm.com/developerworks/podcast/glover-heroku-110811/">Heroku</a>. You should also note that your web app is probably a bit more snappy!</p>
+
+<p><img class="center" src="http://aglover.github.com/images/mine/cloudfront_7.png"></p>
+
+<p>Check out your Heroku logs and you&#8217;ll note fewer hits in this case &#8211; dynamic pages are still being loaded, however, static assets are not anymore &#8211; that&#8217;s the job of your CDN!</p>
+
+<p>CloudFront isn&#8217;t free; nevertheless, I think you&#8217;ll find the corresponding cost quite reasonable. Pricing will vary depending on how much content you&#8217;ll be serving up with CloudFront &#8211; this is a function of how many visitors you have <em>along with</em> how many static assets that are ultimately downloaded to a user&#8217;s browser. For instance, 500GB of average content will cost you less than $75/month.</p>
+
+<p>CloudFront&#8217;s pay-as-you-go model makes it extremely affordable to add a nice bit of pep to your app&#8217;s performance along with using gzip compression and HTTP caching. And hopefully as I&#8217;ve shown you, it&#8217;s rather easy to do with a Rails app running on Heroku.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mobile for the masses: gestures and test deployments]]></title>
@@ -46,6 +132,9 @@
 <p></p>
 
 <p>and you&#8217;re one step closer. There&#8217;s no flags to remember either.</p>
+
+<!--more-->
+
 
 <p>Wget, however, isn&#8217;t natively available on OSX. From time to time, I&#8217;m stung to see the nefarious &#8216;command not found&#8217; message after expectantly waiting to see some file I need downloaded.</p>
 
@@ -87,6 +176,9 @@
     <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/confused.png">The mobile development landscape is <a href="http://skytechgeek.com/2011/09/10-mobile-application-frameworks-for-easy-development/">bursting at the seams</a> with frameworks and tools that enable you to target <a href="http://thediscoblog.com/blog/2013/03/25/modeveast-2012-panel-discussion/">two primary mobile platforms</a>: iOS and <a href="http://thediscoblog.com/blog/categories/android/">Android</a>. And the mobile community has <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">classified these frameworks and tools</a> into three categories: native, hybrid, and web. Unfortunately, limiting the classification to three <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">is inadequate</a> as the term hybrid is too generic.</p>
 
 <p>Web apps are truly ubiquitous because they take advantage of the browser and are thus, cross platform. You, for the most part, can get away with <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">maintaining one code base</a> that can be viewed on iOS, Android, and the other minor players. Yet, the key point of Web apps is that they are <a href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/"><em>web sites</em>, not mobile apps</a>.</p>
+
+<!--more-->
+
 
 <p>As you begin to blur that mobile app/mobile website line, you&#8217;ll <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">stumble over various issues</a> like performance or varying behaviors depending on the underlying device.  Worse, you&#8217;ll find that <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">not all browsers are created equally</a> and thus, you&#8217;ll need to <a href="http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/">compensate for various scenarios</a> or use assorted compensating tools like <a href="http://modernizr.com/">Modernizr</a>. Or, you&#8217;ll find yourself throwing the web app into a container because you want mass distribution via an app store or because you want to take advantage of some native feature.</p>
 
@@ -131,6 +223,9 @@
     <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/crowd.jpg">In case you missed it, <a href="http://www.infoq.com/">InfoQ</a> has an <a href="http://www.infoq.com/research/cross-platform-mobile-tools">interesting analysis regarding hybrid mobile app development frameworks</a>. They are profiling 12 tools and soliciting community feedback so as to make a <a href="http://www.thoughtworks.com/insights">ThoughtWorks-like technology radar</a>. If you participate in the voting you are entitled to see the voting distribution.</p>
 
 <p>What&#8217;s interesting (and not too surprising) about this analysis is that frameworks like <a href="http://phonegap.com/">PhoneGap</a> or <a href="http://jquerymobile.com/">jQuery Mobile</a> (and laughably <a href="http://jqtjs.com/">JQTouch</a>?) are leaning more towards <em>adoption ready</em> when compared to frameworks like <a href="http://www.madewithmarmalade.com/">Marmelade</a>, <a href="http://www.coronalabs.com/">Coronona</a> or <a href="http://www.mosync.com/">MoSync</a>. But this radar lacks some clarifying dimensions &#8211; for example, if you want to produce a mobile website on a lot of different mobile platforms quickly, then PhoneGap is probably the way to go. But if you&#8217;re looking to create a mobile app, then the choice to use PhoneGap must be treated with extreme caution.</p>
+
+<!--more-->
+
 
 <p>You cannot create a <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">compelling user experience</a> that works across <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">all platforms consistently</a> with this framework right now. And it isn&#8217;t even the fault of PhoneGap entirely &#8211; it&#8217;s <a href="http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/">HTML5</a>. That&#8217;s why going with something like JQTouch without viewing the big picture of what you are building is laughable.</p>
 
@@ -470,18 +565,6 @@ As you can see, it&#8217;s all quite easy &#8211; GridFS is simply a facade for 
     <updated>2012-12-17T09:38:00-05:00</updated>
     <id>http://aglover.github.com/blog/2012/12/17/running-individual-tests-in-rails</id>
     <content type="html"><![CDATA[<p>Every now and again, I find myself struggling to remember how to execute a single test in <a href="http://rubyonrails.org/">Rails</a>. While I have <a href="https://github.com/guard/guard">Guard</a> running the entire test suite <em>anytime</em> a change is detected, there are times when I want to focus solely on one test. Accordingly, <a href="http://flavio.castelli.name/2010/05/28/rails_execute_single_test/">Flavio Castelli has a great blog entry</a> detailing the manifold ways one can execute a single test using <a href="http://rake.rubyforge.org/">Rake</a> and/or Ruby.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The cloud files are out!]]></title>
-    <link href="http://aglover.github.com/blog/2012/12/12/the-cloud-files-are-out/"/>
-    <updated>2012-12-12T17:22:00-05:00</updated>
-    <id>http://aglover.github.com/blog/2012/12/12/the-cloud-files-are-out</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://www.ibm.com/developerworks/i/t-j-f-cloudpodcast_ffffff.jpg">The good folks over at <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a> have recently published <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">season 5 of the Java technical podcast series</a>. This season
-focuses on the technologies, companies, and people influencing cloud computing. I had the pleasure to chat with a cadre of super interesting people, including <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#labourey">Sacha Labourey</a> of CloudBees, <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#engineyard">Bill Platt and Mark Gaydos</a> of Engine Yard, and <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#proudman">Jesse Proudman</a> of BlueBox, just to name a few!</p>
-
-<p><a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">In these podcasts</a>, you&#8217;ll hear from people who not only influence, but directly impact cloud computing, regardless of the underlying language or platform. There&#8217;s a lot to learn here, so put on your headphones and get ready for some interesting conversations! So what are you waiting for? <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">Go listen right this instant</a>!</p>
 ]]></content>
   </entry>
   
