@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-05-01T10:28:23-04:00</updated>
+  <updated>2013-05-09T13:24:57-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,43 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hold your horses! It's still only a two horse race.]]></title>
+    <link href="http://aglover.github.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/"/>
+    <updated>2013-05-09T12:49:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://aglover.github.com/images/mine/2horsesracesm.jpg">There has been a lot of excitement in recent months regarding a few new entrants to the mobile operating systems arena including <a href="http://www.mozilla.org/en-US/firefox/partners/">Firefox OS</a>, <a href="https://www.tizen.org/">Tizen</a>, and <a href="https://wiki.ubuntu.com/Touch">Ubuntu Touch</a>. These relatively nascent projects, which are all built on top of a Linux kernel, appear to have fully embraced HTML 5 apps; indeed, HTML 5 apps on these operating systems are first class citizens that can run without a browser. Moreover, the ubiquity of HTML 5 means the same app can run on all 3 of these operating systems plus Android and iOS!</p>
+
+<p>What&#8217;s also exciting is that there are some major players behind these projects &#8211; Mozilla is, of course behind Firefox OS, Canonical is behind Ubuntu Touch, and quite a few large players are behind Tizen, including Samsung. <a href="http://www.forbes.com/sites/haydnshaughnessy/2013/04/13/how-mozillas-firefox-os-will-open-up-the-smartphone-market/">Firefox OS even appears to be courting carriers with an opportunity to run their own app stores</a>. This app store opportunity naturally has carriers foaming at the mouth to re-assert some semblance of control: behold the Verizon app store! All apps are $0.99 and we&#8217;ll just bill you at the end of the month (like we used to do for all those ringtones you were accustomed to download back when we were in control of all things device-related before Apple destroyed that cash cow).</p>
+
+<!--more-->
+
+
+<p>Naturally, we&#8217;re all eager to see how these new entrants fair. It reminds me of how interested I was in learning more about <a href="http://www.windowsphone.com/en-us/how-to/wp8/start/whats-new-in-windows-phone">Windows Phone 8</a> and even <a href="http://global.blackberry.com/blackberry-10.html">Blackberry&#8217;s latest and greatest attempt</a> at regaining some composure.</p>
+
+<p>But then I remember this stunning fact: Apple and Google</p>
+
+<blockquote><p>together control nearly 9 out of 10 smartphones sold globally.</p><footer><strong>Tomi Ahonen</strong> <cite><a href='http://www.forbes.com/sites/haydnshaughnessy/2013/04/09/ios-vs-android-can-competitors-break-apple-and-googles-stranglehold/'>Can These Competitors Break Apple and Google&#8217;s Stranglehold on the Mobile OS?</a></cite></footer></blockquote>
+
+
+<p>Even with industry heavyweight contenders (who are not new to mobile!) like <a href="http://www.windowsphone.com/en-us">Microsoft</a> and <a href="http://us.blackberry.com/">Blackberry</a> (who, we all should remember, <em>owned</em> the smartphone market before Apple got involved) haven&#8217;t really made a dent. Granted, it&#8217;s early to rush to conclusions, however, preliminary signs don&#8217;t bode well for either company.</p>
+
+<p>The co-CEO of Samsung had some stinging criticism for Microsoft:</p>
+
+<blockquote><p>Smartphones and tablets based on Microsoft&#8217;s Windows operating system aren&#8217;t selling very well. There is a preference in the market for Android. In Europe, we&#8217;re also seeing lackluster demand for Windows-based products.</p><footer><strong>JK Shin</strong> <cite><a href='http://www.theverge.com/2013/3/15/4106980/samsung-ceo-jk-shin-says-windows-isnt-selling-very-well'>New Samsung CEO Says There Is &#8216;Lackluster Demand&#8217; for Windows Tablets and Phones</a></cite></footer></blockquote>
+
+
+<p>Blackberry appears to have some demand in the UK and Canada, a recently analyst T. Michael Walkley had this to say:</p>
+
+<blockquote><p>While we anticipate stronger near-term results for BlackBerry as higher margin BB10 smartphones sell into the channel, we do not believe BlackBerry can achieve sell-through market share levels to return to sustained profit levels</p><footer><strong>T. Michael Walkley</strong> <cite><a href='http://business.financialpost.com/2013/05/06/blackberry-estimates-cut-despite-q10-strength-likely-offsetting-z10-weakness/'>BlackBerry Sales Forecast Cut Despite Strong Demand for Q10</a></cite></footer></blockquote>
+
+
+<p>The salient point, nevertheless, is that neither Microsoft or Blackberry have yet to make a dent into the Google-Apple duopoly. And so while it&#8217;s easy to get excited about new entrants like Ubuntu Touch, the reality, at least for the time being, is that these operating systems will have little impact in the smartphone market.</p>
+
+<p>After all, when your competition essentially owns 9 out of every 10 smartphones, evolutionary enhancements aren&#8217;t enough to break that stranglehold: you have to do something <em>revolutionary</em>. Besides, we&#8217;ve already seen this before: the iPhone was not an evolutionary offshoot of the Blackberry. It was revolutionary. Sadly, neither Ubuntu Touch, Tizen, nor Firefox OS appear revolutionary.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Rails, CloudFront, and Heroku performance hat-trick]]></title>
@@ -556,15 +593,6 @@
 
 <p>
 As you can see, it&#8217;s all quite easy &#8211; GridFS is simply a facade for two collections; moreover, forcing a download in Sinatra is three straightforward steps. Can you dig it, man?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Running individual tests in Rails]]></title>
-    <link href="http://aglover.github.com/blog/2012/12/17/running-individual-tests-in-rails/"/>
-    <updated>2012-12-17T09:38:00-05:00</updated>
-    <id>http://aglover.github.com/blog/2012/12/17/running-individual-tests-in-rails</id>
-    <content type="html"><![CDATA[<p>Every now and again, I find myself struggling to remember how to execute a single test in <a href="http://rubyonrails.org/">Rails</a>. While I have <a href="https://github.com/guard/guard">Guard</a> running the entire test suite <em>anytime</em> a change is detected, there are times when I want to focus solely on one test. Accordingly, <a href="http://flavio.castelli.name/2010/05/28/rails_execute_single_test/">Flavio Castelli has a great blog entry</a> detailing the manifold ways one can execute a single test using <a href="http://rake.rubyforge.org/">Rake</a> and/or Ruby.</p>
 ]]></content>
   </entry>
   
