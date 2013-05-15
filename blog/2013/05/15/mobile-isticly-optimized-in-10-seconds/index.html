@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: OSX - The Disco Blog</title>
+  <title>Mobile-isticly optimized in 10 seconds - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="Category: OSX">
+  <meta name="description" content="Anyone ever told you that your website isn&#8217;t mobile optimized? Or have you ever seen a lilliputian-looking website on your device? You know, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://aglover.github.comblog/categories/osx/">
+  <link rel="canonical" href="http://aglover.github.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -77,36 +77,115 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: OSX</h1>
+    
+      
+        <h1 class="entry-title">Mobile-isticly Optimized in 10 Seconds</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-15T13:20:00-04:00" pubdate data-updated="true">May 15<span>th</span>, 2013</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p><img class="right" src="/images/mine/unoptmobile.png">Anyone ever told you that your website isn&#8217;t mobile optimized? Or have you ever seen a lilliputian-looking website on your device? You know, one that renders so small you are forced to squint as you enlarge various parts of the site with your fingers just to read it?</p>
 
-  
-  <h2>2013</h2>
+<p>Websites render this way on mobile devices because they lack a simple <code>meta</code> tag. While the subject of mobile website optimization can be rather involved (especially when dealing with <a href="http://css-tricks.com/css-media-queries/">CSS media queries</a>, which take longer than 10 seconds to understand), there is a simple trick that can at least can make your website render normally on a mobile device. And it can be done in 10 seconds.</p>
 
-<article>
-  
-<h1><a href="/blog/2013/04/18/curling-for-wget/">cURLing for Wget</a></h1>
-<time datetime="2013-04-18T09:33:00-04:00" pubdate><span class='month'>Apr</span> <span class='day'>18</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/osx/'>OSX</a></span>
-</footer>
+<!--more-->
 
 
-</article>
+<p>Simply add the following <code>meta</code> tag in the <code>head</code> element of your website&#8217;s index page:</p>
 
+<figure class='code'><figcaption><span>viewport definition</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content=</span><span class="s">&quot;width=device-width, initial-scale=1&quot;</span><span class="nt">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The viewport <code>meta</code> tag is supported by browsers on both iOS, Android, and by other device browsers including Internet Explorer Mobile on Windows Phone 8. This tag instructs a browser on how to properly display a webpage; without it, a webpage is, unfortunately, displayed mini-style on device browsers, which have a narrow width.</p>
+
+<p>Thus, the viewport tag essentially zooms in the display of a webpage. In the case of the example tag above, the width of the website is set to the device&#8217;s width and the scale is set to 100% &#8211; this&#8217;ll allow the website to be displayed normally on a mobile device. Website visitors won&#8217;t have to squint or pinch and expand to just to read the site&#8217;s relevant text.</p>
+
+<p><a href="http://www.paulund.co.uk">Paulund.co.uk</a> has a really <a href="http://www.paulund.co.uk/understanding-the-viewport-meta-tag">good write up</a> regarding the usage of the viewport <code>meta</code> tag as well as CSS media queries; what&#8217;s more, the good folks who created <a href="http://html5boilerplate.com/mobile/">HTML5boilerplate.com</a> have a <a href="http://t.co/dKP3o1e">nifty presentation</a> that&#8217;s worth a read too.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-15T13:20:00-04:00" pubdate data-updated="true">May 15<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/mobile/'>mobile</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aglover.github.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/" data-via="aglover" data-counturl="http://aglover.github.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2013/05/14/the-democratization-of-search/" title="Previous Post: The democratization of search">&laquo; The democratization of search</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -207,7 +286,10 @@
       var disqus_shortname = 'thediscoblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://aglover.github.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/';
+        var disqus_url = 'http://aglover.github.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

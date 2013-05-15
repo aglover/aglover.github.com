@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mobile | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-05-14T11:56:24-04:00</updated>
+  <updated>2013-05-15T13:35:56-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,32 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mobile-isticly optimized in 10 seconds]]></title>
+    <link href="http://aglover.github.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/"/>
+    <updated>2013-05-15T13:20:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/unoptmobile.png">Anyone ever told you that your website isn't mobile optimized? Or have you ever seen a lilliputian-looking website on your device? You know, one that renders so small you are forced to squint as you enlarge various parts of the site with your fingers just to read it?</p>
+
+<p>Websites render this way on mobile devices because they lack a simple <code>meta</code> tag. While the subject of mobile website optimization can be rather involved (especially when dealing with <a href="http://css-tricks.com/css-media-queries/">CSS media queries</a>, which take longer than 10 seconds to understand), there is a simple trick that can at least can make your website render normally on a mobile device. And it can be done in 10 seconds.</p>
+
+<!--more-->
+
+
+<p>Simply add the following <code>meta</code> tag in the <code>head</code> element of your website's index page:</p>
+
+<p><code>html viewport definition
+&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+</code></p>
+
+<p>The viewport <code>meta</code> tag is supported by browsers on both iOS, Android, and by other device browsers including Internet Explorer Mobile on Windows Phone 8. This tag instructs a browser on how to properly display a webpage; without it, a webpage is, unfortunately, displayed mini-style on device browsers, which have a narrow width.</p>
+
+<p>Thus, the viewport tag essentially zooms in the display of a webpage. In the case of the example tag above, the width of the website is set to the device's width and the scale is set to 100% -- this'll allow the website to be displayed normally on a mobile device. Website visitors won't have to squint or pinch and expand to just to read the site's relevant text.</p>
+
+<p><a href="http://www.paulund.co.uk">Paulund.co.uk</a> has a really <a href="http://www.paulund.co.uk/understanding-the-viewport-meta-tag">good write up</a> regarding the usage of the viewport <code>meta</code> tag as well as CSS media queries; what's more, the good folks who created <a href="http://html5boilerplate.com/mobile/">HTML5boilerplate.com</a> have a <a href="http://t.co/dKP3o1e">nifty presentation</a> that's worth a read too.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hold your horses! It's still only a two horse race.]]></title>
@@ -108,26 +134,6 @@
 <p><a href="https://github.com/aglover/gesticulate">Gesticulate</a> makes it painless to detect straightforward swiping motions like up, down, left, and right. It's a simple jar file you include in your Android <code>libs</code> directory. Throw Gesticulate's <code>SwipeDetector</code> inside an instance of Android's <code>SimpleOnGestureListener</code>, for example, and you're detecting swipes with ease!</p>
 
 <p>Gesticulate is used in Savvy Words, a flash card vocabulary app found on <a href="https://play.google.com/store/apps/details?id=com.b50.savvywords">Google Play</a> and <a href="http://www.amazon.com/Beacon50-Savvy-Words/dp/B00C535D20/ref=sr_1_1?s=mobile-apps&amp;ie=UTF8&amp;qid=1365339189&amp;sr=1-1">Amazon's Appstore for Android</a>. See the <a href="https://github.com/aglover/gesticulate">Github project</a> for more details such as code examples for how to use Gesticulate, how to build it, and to see Gesticulate's tests. Swipe on, baby!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Crowd think often lacks clarity]]></title>
-    <link href="http://aglover.github.com/blog/2013/04/05/crowd-think-often-lacks-clarity/"/>
-    <updated>2013-04-05T21:04:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/04/05/crowd-think-often-lacks-clarity</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/crowd.jpg">In case you missed it, <a href="http://www.infoq.com/">InfoQ</a> has an <a href="http://www.infoq.com/research/cross-platform-mobile-tools">interesting analysis regarding hybrid mobile app development frameworks</a>. They are profiling 12 tools and soliciting community feedback so as to make a <a href="http://www.thoughtworks.com/insights">ThoughtWorks-like technology radar</a>. If you participate in the voting you are entitled to see the voting distribution.</p>
-
-<p>What's interesting (and not too surprising) about this analysis is that frameworks like <a href="http://phonegap.com/">PhoneGap</a> or <a href="http://jquerymobile.com/">jQuery Mobile</a> (and laughably <a href="http://jqtjs.com/">JQTouch</a>?) are leaning more towards <em>adoption ready</em> when compared to frameworks like <a href="http://www.madewithmarmalade.com/">Marmelade</a>, <a href="http://www.coronalabs.com/">Coronona</a> or <a href="http://www.mosync.com/">MoSync</a>. But this radar lacks some clarifying dimensions -- for example, if you want to produce a mobile website on a lot of different mobile platforms quickly, then PhoneGap is probably the way to go. But if you're looking to create a mobile app, then the choice to use PhoneGap must be treated with extreme caution.</p>
-
-<!--more-->
-
-
-<p>You cannot create a <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">compelling user experience</a> that works across <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">all platforms consistently</a> with this framework right now. And it isn't even the fault of PhoneGap entirely -- it's <a href="http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/">HTML5</a>. That's why going with something like JQTouch without viewing the big picture of what you are building is laughable.</p>
-
-<p>Frameworks like Marmelade or Corona might be a bit more difficult to get started with (after all, you code in something other than HTML or JavaScript) but they can produce a native app that offers a compelling user experience capable of generating a wow. Remember, native-ness <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">trumps the browser</a> almost always unless your app is a series of screens that don't require the user to interact.</p>
-
-<p>Accordingly, the study lacks some needed dimensions -- mainly, whether or not you are building a mobile app or mobile website. Don't fall into the hype trap and jump into PhoneGap development unless you are sure what you are building is a simple mobile website and your audience isn't expecting something like Flipboard or AngryBirds. Otherwise, you'll find yourself investigating either pure play native development or frameworks that ultimately produce a native app.</p>
 ]]></content>
   </entry>
   

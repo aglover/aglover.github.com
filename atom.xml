@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-05-14T11:56:24-04:00</updated>
+  <updated>2013-05-15T13:35:56-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,33 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mobile-isticly optimized in 10 seconds]]></title>
+    <link href="http://aglover.github.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/"/>
+    <updated>2013-05-15T13:20:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/unoptmobile.png">Anyone ever told you that your website isn&#8217;t mobile optimized? Or have you ever seen a lilliputian-looking website on your device? You know, one that renders so small you are forced to squint as you enlarge various parts of the site with your fingers just to read it?</p>
+
+<p>Websites render this way on mobile devices because they lack a simple <code>meta</code> tag. While the subject of mobile website optimization can be rather involved (especially when dealing with <a href="http://css-tricks.com/css-media-queries/">CSS media queries</a>, which take longer than 10 seconds to understand), there is a simple trick that can at least can make your website render normally on a mobile device. And it can be done in 10 seconds.</p>
+
+<!--more-->
+
+
+<p>Simply add the following <code>meta</code> tag in the <code>head</code> element of your website&#8217;s index page:</p>
+
+<figure class='code'><figcaption><span>viewport definition</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content=</span><span class="s">&quot;width=device-width, initial-scale=1&quot;</span><span class="nt">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The viewport <code>meta</code> tag is supported by browsers on both iOS, Android, and by other device browsers including Internet Explorer Mobile on Windows Phone 8. This tag instructs a browser on how to properly display a webpage; without it, a webpage is, unfortunately, displayed mini-style on device browsers, which have a narrow width.</p>
+
+<p>Thus, the viewport tag essentially zooms in the display of a webpage. In the case of the example tag above, the width of the website is set to the device&#8217;s width and the scale is set to 100% &#8211; this&#8217;ll allow the website to be displayed normally on a mobile device. Website visitors won&#8217;t have to squint or pinch and expand to just to read the site&#8217;s relevant text.</p>
+
+<p><a href="http://www.paulund.co.uk">Paulund.co.uk</a> has a really <a href="http://www.paulund.co.uk/understanding-the-viewport-meta-tag">good write up</a> regarding the usage of the viewport <code>meta</code> tag as well as CSS media queries; what&#8217;s more, the good folks who created <a href="http://html5boilerplate.com/mobile/">HTML5boilerplate.com</a> have a <a href="http://t.co/dKP3o1e">nifty presentation</a> that&#8217;s worth a read too.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The democratization of search]]></title>
@@ -542,19 +569,6 @@
 <p>Note that the <code>$exists</code> query selector takes a boolean &#8211; <code>true</code> or <code>false</code>.</p>
 
 <p>As you can probably ascertain, Mongo&#8217;s <code>$exists</code> is slightly <a href="http://www.techonthenet.com/sql/exists.php">different than SQL&#8217;s</a> <code>exists</code> &#8211; in fact, in SQL there is no way to fashion a query to find a row not containing a column! Can you dig it?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Scalable searching with ElasticSearch]]></title>
-    <link href="http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch/"/>
-    <updated>2013-01-02T16:02:00-05:00</updated>
-    <id>http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/search_flickr.jpg">Search is no longer an optional feature: it&#8217;s expected of most any application that consumes, produces, or stores data. And not everyone wants to be a search technology specialist, especially given the range of sophisticated algorithms underlying today&#8217;s complex searches (i.e. SQL queries are no longer sufficient!). Knowing about existing, open source search platforms could save you a lot of time and money and allow you to spend your time fine-tuning your software&#8217;s main functionality.</p>
-
-<p>In &#8221;<a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/index.html">Java development 2.0: Scalable searching with ElasticSearch</a>&#8221;, I introduce <a href="http://www.elasticsearch.org/">ElasticSearch</a>, a distributed search platform that is easy to get started with and vastly extendable. ElasticSearch&#8217;s sophistication and ease-of-use are impressive, and its support for horizontal scalability offers a world of options should your data requirements need to scale. So what are you waiting for? Give <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/index.html">it a read</a>!</p>
-
-<p>Thanks to <a href="http://www.flickr.com/photos/danardvincente/2512148775/">Danard Vincente</a> for the search-engine-magnifying-glass image!</p>
 ]]></content>
   </entry>
   
