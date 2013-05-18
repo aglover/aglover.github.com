@@ -23,7 +23,7 @@ Next, fire up a Linux AMI. I, for example, prefer [ami-c30360aa](http://cloud-im
 
 Now, SSH to your newly instantiated AMI.  Once on the AMI, you'll need to install Java. Never fear though, I've got you covered. All you need to do is run a handy script via the [Ubuntu-Equip project](https://github.com/aglover/ubuntu-equip), that I use frequently just for this sorta thing: 
 
-``` bash 
+``` bash installing Java
 wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_java.sh && bash equip_java.sh
 ```
 
@@ -31,13 +31,13 @@ You'll need to accept the license from Oracle. Once that script completes, go ah
 
 Next, download and install ElasticSearch via another nifty [Ubuntu-Equip](https://github.com/aglover/ubuntu-equip) script: 
 
-``` bash
+``` bash installing elasticsearch
 wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_elasticsearch.sh && bash equip_elasticsearch.sh
 ```
 
 This script doesn't start ElasticSearch for you; thus, go ahead and change directories into the `elasticsearch` directory and fire it up like so:
 
-``` bash
+``` bash starting elasticsearch
 ~/elasticsearch$ bin/elasticsearch -f
 ```
 
