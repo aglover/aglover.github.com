@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="Search is no longer an optional feature: it&#8217;s expected of most any application that consumes, produces, or stores data. And not everyone wants &hellip;">
+  <meta name="description" content="Recently, a buddy of mine pointed me to an interesting tweet: New tool converts your Apple #iOS apps to #HTML5 http://dld.bz/cejxz #appdev@ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,109 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/02/17/circumventing-mobile-ux-expectations/">Circumventing Mobile UX Expectations</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-17T12:10:00-05:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently, a <a href="https://twitter.com/trianglechoke">buddy of mine</a> pointed me to an interesting tweet:</p>
+
+<blockquote><p>New tool converts your Apple #iOS apps to #HTML5 http://dld.bz/cejxz  #appdev</p><footer><strong>@effectiveui</strong> <cite><a href='https://twitter.com/effectiveui/status/299626694149537792'>twitter.com/effectiveui/status/&hellip;</a></cite></footer></blockquote>
+
+
+<p>The article about this new tool, dubbed the &#8221;<a href="http://software.intel.com/en-us/articles/technical-reference-intel-html5-app-porter-tool-beta">Intel HTML5 App Porter Tool</a>&#8221; suggests that because iOS apps are limited to one platform, HTML5:</p>
+
+<blockquote><p>represents an opportunity because it’s supported across a wide range of different devices and operating systems, so it enables the same code base to be reused across different app deployments.</p><footer><strong>Softtalkblog</strong> <cite><a href='http://www.develop-online.net/news/43193/New-tool-converts-your-Apple-apps-to-HTML5'>New Tool Converts Your Apple Apps to HTML5</a></cite></footer></blockquote>
+
+
+<p><img class="right" src="http://www.carinsurance.com/imagesvr_ce/6464/152631.jpg"> While technically this statement is true &#8211; HTML5 <em>is ubiquitous</em> and you do end up with a single code base &#8211; HTML5 is the lowest common app development denominator and thus produces an underwhelming experience when compared to its native brethren.</p>
+
+<p>Taking a native iOS (or Android) app and recasting it into an HTML5 app is like taking your beautiful Ferrari and trading it for a station wagon. The experience will never be quite the same.</p>
+
+<p>Don&#8217;t get caught up in the HTML5 hype-cycle. It&#8217;s a great platform for mobile web sites, but if you&#8217;re building a mobile app, the UX bar has been set quite high. You cannot yet meet that bar with HTML5.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/01/04/savvy-mongo-query-selector-exists/">Savvy Mongo Query Selector: Exists</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-04T11:57:00-05:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.mongodb.org/">MongoDB</a> supports a <a href="http://docs.mongodb.org/manual/applications/read/">rich query language</a>; in fact, its support of dynamic queries is one of its <a href="http://public.dhe.ibm.com/software/dw/demos/jmongodbdocs/index.html">more distinguishing features</a> compared to other datastores in the <a href="http://www.infoworld.com/d/data-management/flexing-nosql-mongodb-in-review-185922">NoSQL</a> world. Mongo&#8217;s query language has a variety of query selectors that enable you to <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">fashion some powerful document searches</a>. One particular <a href="http://docs.mongodb.org/manual/reference/operators/#element">query selector that comes in handy</a> from time to time is <code>$exists</code>.</p>
+
+<p>Because <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-12/">Mongo is document oriented</a> and thus lacks a rigid schema, documents (for better or for worse) can have varying structures within a collection. In practice, you probably don&#8217;t see vastly differing documents within a collection; however, from time to time, various document fields might differ (as in, <em>they might not be present</em>). Take for example, the classic example of a business card: some cards (i.e. documents) might list a fax number while others might omit it. As another example, as an application and its corresponding data evolves, new fields might be added (or removed).</p>
+
+<p>The <code>$exists</code> query selector facilitates finding documents that have (or do not have) specific fields. On more than one occasion, I&#8217;ve employed this query selector to find documents in need of a surgical update. For example, in a collection dubbed <code>words</code> with word documents that each contain an embedded <code>definitions</code> document collection, I can find those particular definitions that do not have a <code>part_of_speech</code> element like so:</p>
+
+<figure class='code'><figcaption><span>$exists query selector in action</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">db</span><span class="p">.</span><span class="nx">words</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="s2">&quot;definitions.part_of_speech&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;$exists&quot;</span><span class="o">:</span><span class="kc">false</span><span class="p">}}).</span><span class="nx">sort</span><span class="p">({</span><span class="s2">&quot;spelling&quot;</span><span class="o">:</span><span class="mi">1</span><span class="p">}).</span><span class="nx">limit</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that the <code>$exists</code> query selector takes a boolean &#8211; <code>true</code> or <code>false</code>.</p>
+
+<p>As you can probably ascertain, Mongo&#8217;s <code>$exists</code> is slightly <a href="http://www.techonthenet.com/sql/exists.php">different than SQL&#8217;s</a> <code>exists</code> &#8211; in fact, in SQL there is no way to fashion a query to find a row not containing a column! Can you dig it?</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -595,107 +698,6 @@ focuses on the technologies, companies, and people influencing cloud computing. 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/">MoDevTablet 2012 Video: Mobile Web Realities</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-25T12:51:00-04:00" pubdate data-updated="true">Sep 25<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Recently, I had the distinct pleasure of speaking at <a href="http://modevtablet.com/">MoDevTablet</a> where I gave a presentation entitled &#8220;Mobile Web Realities&#8221; and the <a href="http://www.meetup.com/modevdc/">good folks who put on the conference</a> recorded it.</p>
-
-<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/rqfJS3F_YYk "></iframe></div>
-
-
-
-
-<p></p>
-
-
-<p>In summary: a year ago, hybrid development frameworks like <a href="http://phonegap.com/">PhoneGap</a> that leverage HTML5 were poised to radically alter mobile app development, but the potential has failed to live up to the promise: Faster/Easier/Cheaper <em>doesn&#8217;t always mean</em> Better.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2012/09/24/a-tale-of-three-browsers/">A Tale of Three Browsers</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-24T15:39:00-04:00" pubdate data-updated="true">Sep 24<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently spent time evaluating various mobile browsers&#8217; HTML5 compatibility in an effort to understand the state of the mobile web. Along the way, I discovered that the good folks at Facebook, <a href="http://www.zdnet.com/facebooks-mark-zuckerberg-knocks-html5-in-favor-of-native-apps-7000004082/">who happen to have quite a lot of experience with HTML5</a> and <a href="http://gantdaily.com/2012/09/12/facebook-ceo-mark-zuckerberg-promises-better-mobile-strategy/">mobility</a> put together a handy website called <a href="http://www.rng.io/">Ringmark</a>.</p>
-
-<p>As the Facebook development team puts it, Ringmark</p>
-
-<blockquote><p>helps you understand which mobile browsers support the functionality your app needs.</p><footer><strong>Facebook HTML5 Blog</strong> <cite><a href='http://developers.facebook.com/html5/blog/post/2012/02/27/announcing-ringmark--a-mobile-browser-test-suite/'>developers.facebook.com/html5/&hellip;</a></cite></footer></blockquote>
-
-
-<p>Thus, with Ringmark you can ascertain a particular browser&#8217;s compatibility with HTML5 by simply going to <a href="http://www.rng.io/">rng.io</a>.</p>
-
-<p>Needless to say, I had some fun comparing Mobile Safari on my iPad to my Android 2.3.2 device. Interestingly enough, the fun really started when I decided to see what the feature functionality gap was between three browsers <em>on my desktop</em>.</p>
-
-<p><img class="center" src="/images/mine/rng_io_3_browsers.png">For the test, I used Chrome, Safari, and Firefox &#8211; all three browsers are up to date as of the writing of this entry as well. The center browser is Chrome, left is Safari and right is Firefox.</p>
-
-<p>As you can see, all 3 browsers score <em>differently</em> &#8211; Chrome scoring best with only 29 failures in Ring 1 and Safari, the worst with over 40 failures. None even made it to Ring 2.</p>
-
-<p>If you think HTML5 poses some compatibility issues for mobile devices, you need to widen your scope: HTML5 support varies across <em>everything</em>. Indeed, the <a href="http://en.wikipedia.org/wiki/Browser_wars">Browser Wars</a> are still being fought. The big difference now is that the wars are on multiple fronts.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -716,6 +718,14 @@ focuses on the technologies, companies, and people influencing cloud computing. 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle/">Mobile for the Masses: Activities and icons in your Android application lifecycle</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">ElasticSearch on EC2 in less than 60 seconds</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/">Mobile-isticly optimized in 10 seconds</a>
       </li>
     
@@ -725,14 +735,6 @@ focuses on the technologies, companies, and people influencing cloud computing. 
     
       <li class="post">
         <a href="/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/">Hold your horses! It&#8217;s still only a two horse race.</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku performance hat-trick</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments/">Mobile for the masses: gestures and test deployments</a>
       </li>
     
   </ul>

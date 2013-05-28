@@ -191,11 +191,23 @@
         <lastmod>2013-05-15T13:35:31-04:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://aglover.github.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/
+        </loc>
+        <lastmod>2013-05-27T21:18:43-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://aglover.github.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle/
+        </loc>
+        <lastmod>2013-05-28T15:39:37-04:00</lastmod>
+    </url>
+    <url>
         <loc>http://aglover.github.com/blog/archives/</loc>
-        <lastmod>2013-05-15T13:35:31-04:00</lastmod>
+        <lastmod>2013-05-28T15:39:37-04:00</lastmod>
     </url>
     <url>
         <loc>http://aglover.github.com/</loc>
-        <lastmod>2013-05-15T13:35:31-04:00</lastmod>
+        <lastmod>2013-05-28T15:39:37-04:00</lastmod>
     </url>
 </urlset>
