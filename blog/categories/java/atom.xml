@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-05-28T15:39:48-04:00</updated>
+  <updated>2013-05-29T14:23:41-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,121 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Callbacks in Appcelerator Titanium modules]]></title>
+    <link href="http://aglover.github.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules/"/>
+    <updated>2013-05-29T13:42:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/appc_stacked.png">I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>'s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47's <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
+
+<p>In the end, what I wanted to implement was a <a href="http://recurial.com/programming/understanding-callback-functions-in-javascript/">JavaScript-ish callback</a> associated with a native App47 Agent call. Alas, it took me a lot of digging to achieve this goal.</p>
+
+<!-- more -->
+
+
+<p>For example, for a timed event (which, as you've probably guessed, captures how long an event took), rather than the more traditional call which is inline:</p>
+
+<p><code>javascript Straightforward method invocation
+var id = agent.startTimedEvent("openCrust 2.0.27");
+openCrust({});
+agent.endTimedEvent(id);
+</code></p>
+
+<p>I wanted a more JavaScript friendly call that wraps the timed code like so:</p>
+
+<p><code>javascript Callback invocation
+agent.timedEvent("openCrust 2.0.27", function() {
+  openCrust({});
+});
+</code></p>
+
+<p>This has the benefit of wrapping a desired event -- there is no explicit need for anyone to code the ending -- it is automatically done via the <code>timedEvent</code> call after invoking the passed in function.</p>
+
+<p>The Titanium module documentation is a bit hard to find (that is, finding up-to-date valid documentation is challenging); your best bet to see how to do something interesting is to look at the <a href="https://github.com/appcelerator/titanium_mobile/tree/master/android/modules">various code</a> repositories <a href="https://github.com/appcelerator/titanium_modules">on Github</a> followed by studying the API docs (i.e. JavaDocs and <a href="https://github.com/appcelerator/titanium_mobile/blob/master/iphone/Classes/KrollCallback.m">.h/.m files for iOS</a>).</p>
+
+<p>It turns out, invoking a JavaScript callback in either Android or iOS is fairly straightforward. In the case of Android, you need to use the <code>KrollFunction</code> type like so:</p>
+
+<p><code>java Wrapped Timed Event
+@Kroll.method
+public void timedEvent(String name, KrollFunction callback) {
+  String id = EmbeddedAgent.startTimedEvent(name);
+  callback.call(getKrollObject(), new HashMap&lt;String, String&gt;());
+  EmbeddedAgent.endTimedEvent(id);
+}
+</code></p>
+
+<p>As you can see in the above code, I'm not doing anything special like passing in any arguments to the <code>KrollFunction</code> instance. If you want to do that, say in the case of passing in some special value that the corresponding callback will use, then you can either pass in a <code>Map</code> or an <code>Object[]</code>.</p>
+
+<p>For example, you can implement this style of callback where a custom value is passed in for a timed event like so:</p>
+
+<p><code>java Callback with Java
+@Kroll.method
+public void startTimedEvent(String name, KrollFunction callback) {
+  String id = EmbeddedAgent.startTimedEvent(name);
+  HashMap&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();
+  map.put("id", id);
+  callback.call(getKrollObject(), map);
+}
+</code></p>
+
+<p>This results in a JavaScript call like so:</p>
+
+<p><code>javascript Using a callback but not wrapping the event
+agent.startTimedEvent("openCrust 2.0.27", function(result) {
+  var id = result['id'];
+  openCrust({});
+  agent.endTimedEvent(id);
+});
+</code></p>
+
+<p>In iOS land, invoking a callback is a bit different, but certainly as easy. The same <code>timedEvent</code> JavaScript method that takes a callback to be wrapped by the timed event can be implemented as follows:</p>
+
+<p>``` objective-c Wrapped event by callback
+- (void)timedEvent:(id)args
+{
+  NSString<em> eventName = [args objectAtIndex:0];
+  NSString</em> eventID = [EmbeddedAgent startTimedEvent:eventName];</p>
+
+<p>  KrollCallback* callback = [args objectAtIndex:1];
+  if(callback){</p>
+
+<pre><code>[callback call:nil thisObject:nil];
+</code></pre>
+
+<p>  }</p>
+
+<p>  [EmbeddedAgent endTimedEvent:eventID];
+}
+```</p>
+
+<p>In this case, I'm using the <code>KrollCallback</code> type, which appears to be analogous to Appcelerator's Android <code>KrollFunction</code>.</p>
+
+<p>If you need to pass values to a corresponding JavaScript function, they need to be in <code>NSArray</code> form, thus, you can do something like this to pass in parameters to the underlying JavaScript function:</p>
+
+<p>``` objective-c With callback parameter
+- (void)startTimedEvent:(id)args
+{
+  NSString<em> eventName = [args objectAtIndex:0];
+  NSString</em> eventID = [EmbeddedAgent startTimedEvent:eventName];</p>
+
+<p>  KrollCallback* callback = [args objectAtIndex:1];
+  if(callback){</p>
+
+<pre><code>NSDictionary* dict = [[[NSDictionary alloc] initWithObjectsAndKeys:@"id", eventID, nil] autorelease];
+NSArray* array = [NSArray arrayWithObjects: dict, nil];
+[callback call:array thisObject:nil];
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>As you can see in the above code, a callback instance takes as a parameter an <code>NSArray</code>, thus, I have to covert my <code>NSDictionary</code> into an array via Objective-C's handy <code>arrayWithObjects</code> function.</p>
+
+<p>The default module examples <a href="http://docs.appcelerator.com/titanium/latest/#!/guide/Titanium_Mobile_Module_API">provided by Appcelerator naturally work</a>, but alas, the non-callback style of invocation was less than appealing, especially if you are going to be coding an <a href="http://en.wikipedia.org/wiki/Appcelerator_Titanium">Appcelerator</a> app in JavaScript. Nevertheless, you can do it easily enough provided you are willing to dig through myriad repositories...or you could save yourself the headache and read this blog post.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Painless Android swipe detection]]></title>
@@ -127,29 +242,6 @@ Message.metaClass.static.getMessageProcessor &lt;&lt; { return iprocessor }
 <p>The <code>forkmode</code> attribute can take the values of <code>perTest</code> (which is the default value), <code>once</code>, and <code>perBatch</code> -- in our particular case, the value was initially set to <code>once</code>, which meant that once a <code>Message</code> class was dynamically set with a <code>Processor</code>, it seemingly always had the <em>same one</em>. That is, even in later tests where the underlying logic was setting different <code>Processor</code> instances, they were subsequently ignored in favor of which ever <code>Processor</code> was initially set.  Switching the <code>forkmode</code> attribute to <code>perTest</code> naturally fixed the test failures. This made total sense: each JVM instance for each test had the correctly modified <code>Message</code> class. This incidentally also models how the underlying Java processes work in a production environment: they each have their own JVM.</p>
 
 <p>Therefore, pay particular attention to the settings in an Ant file's JUnit task. The same is true for Maven's <a href="http://maven.apache.org/plugins/maven-surefire-plugin/">Surefire Plugin</a> -- in both cases, the fork mode and the frequency at which tests fork can mean the difference between a successful test suite run or a cacophony of failures.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Scala &amp; Typesafe: exciting. Not disruptive]]></title>
-    <link href="http://aglover.github.com/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive/"/>
-    <updated>2012-08-27T08:35:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive</id>
-    <content type="html"><![CDATA[<p>I recently read an article on <a href="http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework">TheServerSide.com</a> where the author muses about the possible disruptive nature of Typesafe's <a href="http://typesafe.com/company/news/24499">recent Series B cash infusion of $14M</a>:</p>
-
-<p><blockquote><p>It's time for a disruptive event that will change how programs are designed, and how applications target the Java Virtual Machine.</p><footer><strong>Cameron McKenzie</strong> <cite><a href='http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework'>Disruptive Forces in Java: Is Scala the New Spring Framework?</a></cite></footer></blockquote></p>
-
-<p>Indeed, he likens the event to <a href="http://www.springsource.com/">SpringSource</a> and its meteoric rise to prominence in a time when web development was a real pain-in-the-neck. Think <a href="http://struts.apache.org/">Struts</a> (which, impressively, is still putting out releases) along with <a href="http://www.oracle.com/technetwork/java/javaee/ejb/index.html">EJB</a> and you have a perfect storm for a lightweight revolution.</p>
-
-<p>Unfortunately for the author's comparison, the world of web development these days is innovating at a breakneck pace. And this innovation isn't necessarily found in Typesafe's <a href="http://typesafe.com/stack">Typesafe Stack</a>. I don't discount its relevance or applicability -- Typesafe Stack is exciting: witness <a href="http://www.theregister.co.uk/2009/04/01/twitter_on_scala/">Twitter's move to Scala</a> a few years ago.  It is not, however, disruptive.</p>
-
-<p>Disruptive is something that completely changes the game. When Spring was unleashed, building Java apps became easier and consequently, you could produce them quicker. That same disruptiveness is happening now in a different community: <a href="http://nodejs.org/">Node</a>. Specifically, frameworks like <a href="http://www.meteor.com/">Meteor</a> and <a href="http://derbyjs.com/">Derby</a>, which are built using Node along with <a href="http://socket.io/">Socket.io</a>, are on the cusp of <em>revolutionizing</em> the web. These nascent frameworks are blazing new trails with respect to the realtime web -- you can build an extremely interactive application in a fraction of the code compared to something like <a href="http://www.playframework.org/">Play</a>. And you can do it before the download and installation of Play completes.</p>
-
-<p>Indeed, the excitement around these frameworks is attracting serious attention. Meteor's recent announcement that it took <a href="http://gigaom.com/cloud/scoop-meteor-gets-9m-in-funding/">$9M in funding</a> is most likely a harbinger of things to come with smart people making calculated bets in realtime, rapidly built, and rapidly deployed apps.</p>
-
-<p>Combine the ideas of these innovative frameworks with <a href="http://vertx.io/">vert.x</a>, which is an "event driven application framework that runs on the JVM" (Node has made <em>event driven</em> a key phrase) that allows you to write web apps in "Ruby, Java, Groovy, JavaScript and Python" and you have a legitimate shot a disruption that'll "change how programs are designed, and how applications target the Java Virtual Machine."</p>
-
-<p>Typesafe Stack is exciting. It's a safe choice for traditional style web development. But the forces changing web development these days are rapidly converging on the Node community. It's there that you'll find disruption.</p>
 ]]></content>
   </entry>
   

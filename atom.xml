@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-05-28T15:39:48-04:00</updated>
+  <updated>2013-05-29T14:23:41-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,163 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Callbacks in Appcelerator Titanium modules]]></title>
+    <link href="http://aglover.github.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules/"/>
+    <updated>2013-05-29T13:42:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/appc_stacked.png">I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>&#8217;s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47&#8217;s <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
+
+<p>In the end, what I wanted to implement was a <a href="http://recurial.com/programming/understanding-callback-functions-in-javascript/">JavaScript-ish callback</a> associated with a native App47 Agent call. Alas, it took me a lot of digging to achieve this goal.</p>
+
+<!-- more -->
+
+
+<p>For example, for a timed event (which, as you&#8217;ve probably guessed, captures how long an event took), rather than the more traditional call which is inline:</p>
+
+<figure class='code'><figcaption><span>Straightforward method invocation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">agent</span><span class="p">.</span><span class="nx">startTimedEvent</span><span class="p">(</span><span class="s2">&quot;openCrust 2.0.27&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">openCrust</span><span class="p">({});</span>
+</span><span class='line'><span class="nx">agent</span><span class="p">.</span><span class="nx">endTimedEvent</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I wanted a more JavaScript friendly call that wraps the timed code like so:</p>
+
+<figure class='code'><figcaption><span>Callback invocation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">agent</span><span class="p">.</span><span class="nx">timedEvent</span><span class="p">(</span><span class="s2">&quot;openCrust 2.0.27&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">openCrust</span><span class="p">({});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This has the benefit of wrapping a desired event &#8211; there is no explicit need for anyone to code the ending &#8211; it is automatically done via the <code>timedEvent</code> call after invoking the passed in function.</p>
+
+<p>The Titanium module documentation is a bit hard to find (that is, finding up-to-date valid documentation is challenging); your best bet to see how to do something interesting is to look at the <a href="https://github.com/appcelerator/titanium_mobile/tree/master/android/modules">various code</a> repositories <a href="https://github.com/appcelerator/titanium_modules">on Github</a> followed by studying the API docs (i.e. JavaDocs and <a href="https://github.com/appcelerator/titanium_mobile/blob/master/iphone/Classes/KrollCallback.m">.h/.m files for iOS</a>).</p>
+
+<p>It turns out, invoking a JavaScript callback in either Android or iOS is fairly straightforward. In the case of Android, you need to use the <code>KrollFunction</code> type like so:</p>
+
+<figure class='code'><figcaption><span>Wrapped Timed Event</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Kroll.method</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">timedEvent</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">KrollFunction</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">EmbeddedAgent</span><span class="o">.</span><span class="na">startTimedEvent</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+</span><span class='line'>  <span class="n">callback</span><span class="o">.</span><span class="na">call</span><span class="o">(</span><span class="n">getKrollObject</span><span class="o">(),</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;());</span>
+</span><span class='line'>  <span class="n">EmbeddedAgent</span><span class="o">.</span><span class="na">endTimedEvent</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see in the above code, I&#8217;m not doing anything special like passing in any arguments to the <code>KrollFunction</code> instance. If you want to do that, say in the case of passing in some special value that the corresponding callback will use, then you can either pass in a <code>Map</code> or an <code>Object[]</code>.</p>
+
+<p>For example, you can implement this style of callback where a custom value is passed in for a timed event like so:</p>
+
+<figure class='code'><figcaption><span>Callback with Java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Kroll.method</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">startTimedEvent</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">KrollFunction</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">EmbeddedAgent</span><span class="o">.</span><span class="na">startTimedEvent</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+</span><span class='line'>  <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;();</span>
+</span><span class='line'>  <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">,</span> <span class="n">id</span><span class="o">);</span>
+</span><span class='line'>  <span class="n">callback</span><span class="o">.</span><span class="na">call</span><span class="o">(</span><span class="n">getKrollObject</span><span class="o">(),</span> <span class="n">map</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This results in a JavaScript call like so:</p>
+
+<figure class='code'><figcaption><span>Using a callback but not wrapping the event</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">agent</span><span class="p">.</span><span class="nx">startTimedEvent</span><span class="p">(</span><span class="s2">&quot;openCrust 2.0.27&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">result</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">];</span>
+</span><span class='line'>  <span class="nx">openCrust</span><span class="p">({});</span>
+</span><span class='line'>  <span class="nx">agent</span><span class="p">.</span><span class="nx">endTimedEvent</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In iOS land, invoking a callback is a bit different, but certainly as easy. The same <code>timedEvent</code> JavaScript method that takes a callback to be wrapped by the timed event can be implemented as follows:</p>
+
+<figure class='code'><figcaption><span>Wrapped event by callback</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">timedEvent:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">args</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">NSString</span><span class="o">*</span> <span class="n">eventName</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">NSString</span><span class="o">*</span> <span class="n">eventID</span> <span class="o">=</span> <span class="p">[</span><span class="n">EmbeddedAgent</span> <span class="nl">startTimedEvent:</span><span class="n">eventName</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">KrollCallback</span><span class="o">*</span> <span class="n">callback</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span> <span class="nl">objectAtIndex:</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">callback</span><span class="p">){</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">callback</span> <span class="nl">call:</span><span class="nb">nil</span> <span class="nl">thisObject:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">[</span><span class="n">EmbeddedAgent</span> <span class="nl">endTimedEvent:</span><span class="n">eventID</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, I&#8217;m using the <code>KrollCallback</code> type, which appears to be analogous to Appcelerator&#8217;s Android <code>KrollFunction</code>.</p>
+
+<p>If you need to pass values to a corresponding JavaScript function, they need to be in <code>NSArray</code> form, thus, you can do something like this to pass in parameters to the underlying JavaScript function:</p>
+
+<figure class='code'><figcaption><span>With callback parameter</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">startTimedEvent:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">args</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">NSString</span><span class="o">*</span> <span class="n">eventName</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">NSString</span><span class="o">*</span> <span class="n">eventID</span> <span class="o">=</span> <span class="p">[</span><span class="n">EmbeddedAgent</span> <span class="nl">startTimedEvent:</span><span class="n">eventName</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">KrollCallback</span><span class="o">*</span> <span class="n">callback</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span> <span class="nl">objectAtIndex:</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">callback</span><span class="p">){</span>
+</span><span class='line'>    <span class="n">NSDictionary</span><span class="o">*</span> <span class="n">dict</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">NSDictionary</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithObjectsAndKeys:</span><span class="s">@&quot;id&quot;</span><span class="p">,</span> <span class="n">eventID</span><span class="p">,</span> <span class="nb">nil</span><span class="p">]</span> <span class="n">autorelease</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">NSArray</span><span class="o">*</span> <span class="n">array</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSArray</span> <span class="nl">arrayWithObjects:</span> <span class="n">dict</span><span class="p">,</span> <span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">callback</span> <span class="nl">call:</span><span class="n">array</span> <span class="nl">thisObject:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see in the above code, a callback instance takes as a parameter an <code>NSArray</code>, thus, I have to covert my <code>NSDictionary</code> into an array via Objective-C&#8217;s handy <code>arrayWithObjects</code> function.</p>
+
+<p>The default module examples <a href="http://docs.appcelerator.com/titanium/latest/#!/guide/Titanium_Mobile_Module_API">provided by Appcelerator naturally work</a>, but alas, the non-callback style of invocation was less than appealing, especially if you are going to be coding an <a href="http://en.wikipedia.org/wiki/Appcelerator_Titanium">Appcelerator</a> app in JavaScript. Nevertheless, you can do it easily enough provided you are willing to dig through myriad repositories&#8230;or you could save yourself the headache and read this blog post.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mobile for the Masses: Activities and icons in your Android application lifecycle]]></title>
@@ -536,69 +693,6 @@
 <p>Among open source, document-oriented databases, MongoDB is often billed as a <a href="http://www.ibm.com/developerworks/library/j-javadev2-12/">NoSQL database with RDBMS features</a>. One example of this is MongoDB&#8217;s support for dynamic queries that don&#8217;t require predefined MapReduce functions. MongoDB also comes with an interactive shell that makes accessing its datastore refreshingly easy, and its out-of-the-box support for sharding and clustering (via <a href="http://thediscoblog.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">replica sets</a>) enables high scalability across multiple nodes.</p>
 
 <p>Check out this IBM developerWorks&#8217; Knowledge Path dubbed &#8221;<a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Discover MongoDB</a>&#8221; &#8211; watch four videos, read a few articles, listen to a podcast and learn everything you need to know about MongoDB!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Testing Rails migrations]]></title>
-    <link href="http://aglover.github.com/blog/2013/02/18/testing-rails-migrations/"/>
-    <updated>2013-02-18T16:22:00-05:00</updated>
-    <id>http://aglover.github.com/blog/2013/02/18/testing-rails-migrations</id>
-    <content type="html"><![CDATA[<p>I recently found myself searching <a href="http://stackoverflow.com/">Stackoverflow</a> and Google for various techniques for automatically testing <a href="http://guides.rubyonrails.org/migrations.html">Rails migrations</a>. I was surprised not to have found <a href="http://stackoverflow.com/questions/6079016/how-do-i-test-rails-migrations">too much</a> information though. While testing a migration is fairly straightforward (migrations are classes and you can easily invoke corresponding methods); the challenge can be setting models up properly. That is, migrations are a tool to update an underlying database to reflect changes in models &#8211; by the time you are writing a migration, the models <em>already</em> reflect what should be.</p>
-
-<p>Accordingly, to test a migration, you need to set up your test with how things were and then run your migration and verify things have migrated.  As it turns out, this is super easy to do with a document oriented database like <a href="http://www.mongodb.org/">MongoDB</a>. For this particular project, we&#8217;re using <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a>,  which is an Object-Document-Mapper (or ODM) for MongoDB and we&#8217;re also using a nifty gem dubbed <a href="https://github.com/adacosta/mongoid_rails_migrations">mongoid_rails_migrations</a>, which facilitates writing Mongoid migrations.</p>
-
-<p>In order to reflect the state of the underlying datastore before running a migration, I needed to remove a particular collection, which due to changes in our models, is automatically populated with meta data when various events occur (think <a href="http://en.wikipedia.org/wiki/Database_trigger">relational trigger</a> here, for example). As you can probably see, as this new collection doesn&#8217;t exist in production, all the existing data in production needs some corresponding default meta data to reflect the new requirements which brought this collection to life.</p>
-
-<p>Accordingly, once I initialize my models and the corresponding collection is populated, I need to completely <a href="http://docs.mongodb.org/manual/reference/method/db.collection.drop/">drop the collection</a>. Then, I can run my migration and then verify that the previously nuked collection is present with all the required data.</p>
-
-<p>In my case, I&#8217;m using <a href="https://github.com/thoughtbot/shoulda">shoulda</a> in concert with <a href="http://ruby-doc.org/stdlib-1.9.3/libdoc/test/unit/rdoc/Test/Unit.html">Test::Unit</a>, but the details of a test framework really don&#8217;t matter &#8211; in any case, you&#8217;ll need to load your migration, which can be done via a <code>require</code> statement like so:</p>
-
-<figure class='code'><figcaption><span>Requiring a migration</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;db&#39;</span><span class="p">,</span> <span class="s1">&#39;migrate&#39;</span><span class="p">,</span> <span class="s1">&#39;20130217194234_member_app_roles_permissions&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In my <a href="http://en.wikipedia.org/wiki/Test_fixture">fixture</a> logic, I&#8217;ve initialized a few objects and related them, which automatically creates the aforementioned meta data collection; consequently, I need to do two things. First, get a connection to the underlying test datastore and then drop that collection.</p>
-
-<figure class='code'><figcaption><span>Obtaining a connection and dropping a collection</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">db</span> <span class="o">=</span> <span class="vi">@account</span><span class="o">.</span><span class="n">db</span>
-</span><span class='line'><span class="n">db</span><span class="o">[</span><span class="s1">&#39;member_app_roles&#39;</span><span class="o">].</span><span class="n">drop</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now I&#8217;m ready to run my migration &#8211; it&#8217;s as simple as invoking the <a href="http://www.railstips.org/blog/archives/2009/05/11/class-and-instance-methods-in-ruby/">class method</a> <code>up</code>!</p>
-
-<figure class='code'><figcaption><span>Invoking a migration </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">MemberAppRolesPermissions</span><span class="o">.</span><span class="n">up</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once the migration has finished running, I can then verify that everything is cool and copasetic. In this case, I need to go directly to the datastore because those objects in memory won&#8217;t reflect my changes just yet.</p>
-
-<figure class='code'><figcaption><span>Asserting things worked!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">member</span> <span class="o">=</span> <span class="no">Member</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">assert_equal</span> <span class="mi">2</span><span class="p">,</span> <span class="n">member</span><span class="o">.</span><span class="n">member_app_roles</span><span class="o">.</span><span class="n">size</span>
-</span><span class='line'><span class="n">member</span><span class="o">.</span><span class="n">member_app_roles</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">app_role</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">assert_equal</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="n">app_role</span><span class="o">.</span><span class="n">role</span>
-</span><span class='line'>  <span class="n">assert_equal</span> <span class="n">member</span><span class="p">,</span> <span class="n">app_role</span><span class="o">.</span><span class="n">member</span>
-</span><span class='line'>  <span class="n">assert_not_nil</span> <span class="n">app_role</span><span class="o">.</span><span class="n">app</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As a benefit of thinking through how to test a migration, you end up unveiling how you&#8217;d construct the migration&#8217;s <code>down</code> method. That is, in my case, to roll back, all I need to do is blow away the <code>member_app_roles</code> collection!</p>
-
-<p>As you can see, testing migrations isn&#8217;t terribly difficult (probably a good reason why I haven&#8217;t found too much information about it); the key aspect is the logic that is applied to verify your migration actually worked. It should be noted that while I executed this test in the context of a document oriented database, you could certainly do the same in a relational database. For example, by dropping  columns, tables, etc before running a migration. Either way, testing a migration is a snap. Can you dig it?</p>
 ]]></content>
   </entry>
   
