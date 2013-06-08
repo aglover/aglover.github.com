@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Node | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/node/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-05-29T14:23:41-04:00</updated>
+  <updated>2013-06-07T20:12:52-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -192,7 +192,9 @@ done(err)
     <id>http://aglover.github.com/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive</id>
     <content type="html"><![CDATA[<p>I recently read an article on <a href="http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework">TheServerSide.com</a> where the author muses about the possible disruptive nature of Typesafe's <a href="http://typesafe.com/company/news/24499">recent Series B cash infusion of $14M</a>:</p>
 
-<p><blockquote><p>It's time for a disruptive event that will change how programs are designed, and how applications target the Java Virtual Machine.</p><footer><strong>Cameron McKenzie</strong> <cite><a href='http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework'>Disruptive Forces in Java: Is Scala the New Spring Framework?</a></cite></footer></blockquote></p>
+<p>{% blockquote Cameron McKenzie http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework Disruptive forces in Java: Is Scala the new Spring framework? %}
+It's time for a disruptive event that will change how programs are designed, and how applications target the Java Virtual Machine.
+{% endblockquote %}</p>
 
 <p>Indeed, he likens the event to <a href="http://www.springsource.com/">SpringSource</a> and its meteoric rise to prominence in a time when web development was a real pain-in-the-neck. Think <a href="http://struts.apache.org/">Struts</a> (which, impressively, is still putting out releases) along with <a href="http://www.oracle.com/technetwork/java/javaee/ejb/index.html">EJB</a> and you have a perfect storm for a lightweight revolution.</p>
 

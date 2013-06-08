@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-05-29T14:23:41-04:00</updated>
+  <updated>2013-06-07T20:12:52-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,52 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[MongoDB to CSV]]></title>
+    <link href="http://aglover.github.com/blog/2013/06/07/mongodb-to-csv/"/>
+    <updated>2013-06-07T20:01:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/06/07/mongodb-to-csv</id>
+    <content type="html"><![CDATA[<p>Every once in a while, I need to give a non-technical user (like a business analyst) data residing in <a href="http://www.mongodb.org/">MongoDB</a>; consequently, I export the target data as a <a href="http://en.wikipedia.org/wiki/Comma-separated_values">CSV file</a> (which they can presumably slice and dice once they import it into Excel or some similar tool). Mongo has a handy <a href="http://docs.mongodb.org/manual/reference/program/mongoexport/">export utility</a> that takes a bevy of options, however, there is an <a href="https://jira.mongodb.org/browse/SERVER-4224">outstanding bug</a> and some <a href="http://stackoverflow.com/questions/6814151/how-to-export-collection-to-csv-in-mongodb">general confusion</a> as to how to properly export data in CSV format.</p>
+
+<!-- more -->
+
+
+<p>Accordingly, if you need to export some specific data from MongoDB into CSV format, here's how you do it. The key parameters are connection information to include authentication, an output file, and most important, a list of fields to export. What's more, you can provide a query in escaped JSON format.</p>
+
+<p>You can find the <code>mongoexport</code> utility in your Mongo installation <code>bin</code> directory. I tend to favor verbose parameter names and explicit connection information (i.e. rather than a URL syntax, I prefer to spell out the host, port, db, etc directly).  As I'm targeting specific data, I'm going to specify the collection; what's more, I'm going to further filter the data via a query.</p>
+
+<p><code>ObjectId</code>'s can be referenced via the <code>$oid</code> format; furthermore, you'll need to escape all JSON quotes. For example, if my query is against a <code>users</code> collection and filtered by <code>account_id</code> (which is an <code>ObjectId</code>), the query via the <code>mongo</code> shell would be:</p>
+
+<p><code>javascript Mongo Shell Query
+db.users.find({account_id:ObjectId('5058ca07b7628c0002099006')})
+</code></p>
+
+<p>Via the command line &agrave; la <code>monogexport</code>, this translates to:</p>
+
+<p><code>bash Collections and queries
+ --collection users --query "{\"account_id\": {\"\$oid\": \"5058ca07b7628c0002000006\"}}"
+</code></p>
+
+<p>Finally, if you want to only export a portion of the fields in a <code>user</code> document, for example, <code>name</code>, <code>email</code>, and <code>created_at</code>, you need to provide them via the <code>fields</code> parameter like so:</p>
+
+<p><code>bash Fields declaration
+--fields name,email,created_at
+</code></p>
+
+<p>Putting it all together yields the following command:</p>
+
+<p><code>bash Puttin' it all together
+mongoexport --host mgo.acme.com --port 10332 --username acmeman --password 12345  \
+--collection users --csv --fields name,email,created_at --out all_users.csv --db my_db \
+--query "{\"account_id\": {\"\$oid\": \"5058ca07b7628c0999000006\"}}"
+</code></p>
+
+<p>Of course, you can throw this into a bash script and parameterize the <code>collection</code>, <code>fields</code>, output file, and query with bash's handy <code>$1</code>, <code>$2</code>, etc variables.</p>
+
+<p>Got it?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mongoid batch inserts]]></title>
@@ -42,7 +88,7 @@ Tag.collection.insert tags
     <link href="http://aglover.github.com/blog/2013/03/21/2013-open-analytics-summit/"/>
     <updated>2013-03-21T15:21:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/03/21/2013-open-analytics-summit</id>
-    <content type="html"><![CDATA[<p><img class="right left" src="http://www.openanalyticssummit.com/wp-content/uploads/2012/12/OAS-logo-Full-colour3-300x85.png">On March 25, 2013, <a href="http://www.openanalyticssummit.com/speakers/">I'll be speaking</a> at the <a href="http://www.openanalyticssummit.com/">Open Analytics Summit in Washington DC</a>; specifically, I'll be discussing how the <a href="http://www.app47.com/2013/03/20/next-monday-app47-cto-andy-glover-offers-a-database-reality-check-at-the-open-analytics-summit/">App47</a> team has used <a href="http://www.mongodb.org/">MongoDB</a> as the backend of our enterprise mobile application management platform. We've learned quite a few things about <a href="http://thediscoblog.com/blog/categories/mongodb/">Mongo</a> over the last two years! In the process of growing from a few gigabytes of data a month to over a terabyte/month, we've found out first hand what <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Mongo</a> is good at and what it's <em>not good at</em>. I'll be addressing a number of tips, techniques, and strategies -- if you are a Mongo user or planning on being one, come on by!</p>
+    <content type="html"><![CDATA[<p>{% img right left http://www.openanalyticssummit.com/wp-content/uploads/2012/12/OAS-logo-Full-colour3-300x85.png %}On March 25, 2013, <a href="http://www.openanalyticssummit.com/speakers/">I'll be speaking</a> at the <a href="http://www.openanalyticssummit.com/">Open Analytics Summit in Washington DC</a>; specifically, I'll be discussing how the <a href="http://www.app47.com/2013/03/20/next-monday-app47-cto-andy-glover-offers-a-database-reality-check-at-the-open-analytics-summit/">App47</a> team has used <a href="http://www.mongodb.org/">MongoDB</a> as the backend of our enterprise mobile application management platform. We've learned quite a few things about <a href="http://thediscoblog.com/blog/categories/mongodb/">Mongo</a> over the last two years! In the process of growing from a few gigabytes of data a month to over a terabyte/month, we've found out first hand what <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Mongo</a> is good at and what it's <em>not good at</em>. I'll be addressing a number of tips, techniques, and strategies -- if you are a Mongo user or planning on being one, come on by!</p>
 ]]></content>
   </entry>
   
@@ -51,7 +97,7 @@ Tag.collection.insert tags
     <link href="http://aglover.github.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb/"/>
     <updated>2013-02-23T09:39:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mongodb_icon.png">Are you new to <a href="http://www.mongodb.org/">MongoDB</a>? Curious to see what's interesting about it?  Document-oriented databases like MongoDB are vastly different from relational databases in that they don't store data in tables; instead, they store it in the form of documents. From a developer's perspective, document-oriented (or schemaless) data is simpler and <a href="http://thediscoblog.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">far more flexible</a> to manage than relational data. Rather than storing data into a rigid schema of tables, rows, and columns, joined by relationships, documents are written individually, containing whatever data they require.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/mongodb_icon.png %}Are you new to <a href="http://www.mongodb.org/">MongoDB</a>? Curious to see what's interesting about it?  Document-oriented databases like MongoDB are vastly different from relational databases in that they don't store data in tables; instead, they store it in the form of documents. From a developer's perspective, document-oriented (or schemaless) data is simpler and <a href="http://thediscoblog.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">far more flexible</a> to manage than relational data. Rather than storing data into a rigid schema of tables, rows, and columns, joined by relationships, documents are written individually, containing whatever data they require.</p>
 
 <p>Among open source, document-oriented databases, MongoDB is often billed as a <a href="http://www.ibm.com/developerworks/library/j-javadev2-12/">NoSQL database with RDBMS features</a>. One example of this is MongoDB's support for dynamic queries that don't require predefined MapReduce functions. MongoDB also comes with an interactive shell that makes accessing its datastore refreshingly easy, and its out-of-the-box support for sharding and clustering (via <a href="http://thediscoblog.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">replica sets</a>) enables high scalability across multiple nodes.</p>
 
@@ -77,54 +123,6 @@ db.words.find({"definitions.part_of_speech":{"$exists":false}}).sort({"spelling"
 <p>Note that the <code>$exists</code> query selector takes a boolean -- <code>true</code> or <code>false</code>.</p>
 
 <p>As you can probably ascertain, Mongo's <code>$exists</code> is slightly <a href="http://www.techonthenet.com/sql/exists.php">different than SQL's</a> <code>exists</code> -- in fact, in SQL there is no way to fashion a query to find a row not containing a column! Can you dig it?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pushing Mongo GridFS files with Sinatra]]></title>
-    <link href="http://aglover.github.com/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra/"/>
-    <updated>2012-12-21T21:19:00-05:00</updated>
-    <id>http://aglover.github.com/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra</id>
-    <content type="html"><![CDATA[<p><a href="http://www.app47.com/">We</a> recently implemented a new feature that required two interesting aspects: storing a file in <a href="http://www.mongodb.org/">MongoDB</a> using <a href="http://docs.mongodb.org/manual/applications/gridfs/">GridFS</a> (think traditional <a href="http://en.wikipedia.org/wiki/Binary_large_object">Blob</a>) and then pushing that file down to a browser. Along the way, I discovered a lot of questions on <a href="http://stackoverflow.com/">stackoverflow</a> and the like pertaining to various aspects of GridFS and <a href="http://www.sinatrarb.com/">Sinatra</a> pushes, so I thought I'd explain what we did.</p>
-
-<p>First off, GridFS is a specification for storing and retrieving large documents. In essence, Mongo breaks a large document into smaller documents (called <em>chunks</em>) and stores them in one collection and associates the meta data related to the aggregated chunks into another collection. It's a fairly handy feature and in our case, it made sense to use <a href="http://docs.mongodb.org/manual/faq/developers/#faq-developers-when-to-use-gridfs">GridFS</a> rather than <a href="http://aws.amazon.com/s3/">S3</a> (or the underlying file system).</p>
-
-<p>All MongoDB drivers implement a similar access pattern to leverage GridFS and they hide the complexity of working with chunks. For example, <a href="https://github.com/mongodb/mongo-ruby-driver">the Ruby driver</a> simply provides a <a href="https://github.com/mongodb/mongo-ruby-driver/wiki/GridFS">single interface to manage the two GridFS collections</a>. In fact, <a href="https://github.com/mongodb/mongo-ruby-driver/blob/master/lib/mongo/gridfs/grid.rb">the interface</a> basically provides two methods: <code>get</code> &amp; <code>put</code> which might seem somewhat limiting, especially because <code>get</code> takes an <code>_id</code>! What's more, you can add rich meta data to a GridFS document (via the <code>put</code> call) -- data you'd conceivably want to query by, but at first glance, you can't via the <code>get</code> method. Nevertheless, because GridFS is ultimately two collections in Mongo, you can query them as you would any other collection.</p>
-
-<p>Thus, finding files by some attribute other than their <code>_id</code> is as easy as writing the corresponding query:</p>
-
-<p><code>ruby GridFS example
-file = @mongo['user_apks.files'].find({:filename =&gt; user_id.to_s}).first
-</code></p>
-
-<p>Keep in mind, however, that the result returned above is a JSON document -- i.e. the variable <code>file</code> above isn't a pointer to an actual I/O instance but simply a JSON document with its details. To get the actual file, use the <code>get</code> method provided by the driver's GridFS facade -- this'll handle the details of grabbing the file from GridFS. The <code>get</code> method takes an <code>_id</code>, which you can get from the <code>file</code> document. Thus, to get an instance of a readable file, you can grab it like so:</p>
-
-<p><code>ruby get via _id
-@grid.get(file['_id'])
-</code></p>
-
-<p>Thus, with the <code>get</code> call you can actually get ahold of a file instance and not some JSON document describing it.</p>
-
-<p>To push this instance down to a browser using <a href="http://thediscoblog.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/">Sinatra</a>, you need to do 3 things:</p>
-
-<ul>
-<li>set the content type</li>
-<li>set the attachment name</li>
-<li>write the file to the response</li>
-</ul>
-
-
-<p>In our case, the file is an <a href="http://developer.android.com/index.html">Android</a> app; accordingly, the content type is <code>application/vnd.android.package-archive</code> and as you'll note, the attachment is simply the name of the <code>.apk</code> file. Finally, the response to the request is written to by <em>reading</em> from the corresponding GridFS file:</p>
-
-<p><code>ruby Sinatra push
-get '/some/url/:account_id/:user_id', :agent =&gt; /Android/ do |account_id, user_id|
-  file = # get the file from GridFS
-  content_type 'application/vnd.android.package-archive'
-  attachment "#{file.filename}.apk"
-  response.write file.read
-end
-</code>
-As you can see, it's all quite easy -- GridFS is simply a facade for two collections; moreover, forcing a download in Sinatra is three straightforward steps. Can you dig it, man?</p>
 ]]></content>
   </entry>
   
