@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-06-07T20:12:52-04:00</updated>
+  <updated>2013-06-10T13:56:25-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,72 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Backgrounding tasks in Heroku with Delayed Job]]></title>
+    <link href="http://aglover.github.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
+    <updated>2013-06-10T12:56:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what's more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn't be any easier</a>.</p>
+
+<!-- more -->
+
+
+<p>To leverage Delayed Job in Heroku, you'll need for follow a few steps. In my case, since I'm using <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a>, I'm going to use an <a href="https://github.com/collectiveidea/delayed_job_mongoid">alternate Active Record Delayed Job tie-in</a> dubbed <code>delayed_job_mongoid</code>. The reason for this <a href="http://guides.rubyonrails.org/">Active Record</a> integration will become obvious once I show you how to actually force a long running task to be asynchronous. Regardless if you are using Mongoid or not, the Active Record integration is identical.</p>
+
+<p>First and foremost, you'll need to add <code>delayed_job_mongoid</code> to your <code>Gemfile</code> (or if you aren't using Mongoid, add <code>delayed_job_active_record</code>).  Delayed Job stores jobs in your database; consequently, after you run <code>bundle install</code>, proceed to update your underlying MongoDB instance with a new index by running:</p>
+
+<p><code>bash Adding an index and new collection to MongoDB
+$&gt; script/rails runner 'Delayed::Backend::Mongoid::Job.create_indexes'
+</code></p>
+
+<p>Obviously, if you're using a normal RDMBS, your command will be slightly different (i.e. <code>rake db:migrate</code>).</p>
+
+<p>After that step is complete, you'll need to generate a <code>delayed_job</code> script via:</p>
+
+<p><code>bash Generating the Delayed Job script
+$&gt; rails generate delayed_job
+</code></p>
+
+<p>This script allows to you execute the Delayed Job framework with a number of options. As it turns out, you don't really need this script as Delayed Job hooks into Rake as well; it is via the Rake integration that Heroku will work with Delayed Job.</p>
+
+<p>Now that you've set up 80% of the infrastructure required to support Delayed Job, you next need to background some long running task. This is the fun part and like everything else so far, it couldn't be any easier.</p>
+
+<p>Delayed Job hooks directly into Active Record and thus, you can background some unit of work on a model object by inserting a <code>delay</code> call. For example, in my case, I had a <code>Group</code> model object that when updated under certain circumstances required that <em>all associated</em> users also be updated (wouldn't it be nice if <a href="https://jira.mongodb.org/browse/SERVER-124">MongoDB supported triggers</a>?). As you can imagine, updating hundreds of users is rather time intensive.</p>
+
+<p>Thus, the user update logic was thrown into a special method (dubbed <code>aysnc_update_users</code>) and was then invoked like so:</p>
+
+<p><code>ruby Adding in a delay backgrounds the async_update_users call
+group.delay.async_update_users
+</code></p>
+
+<p>This call essentially serializes the logic here into a collection called <code>delayed_backend_mongoid_jobs</code> which can then be invoked asynchronously by another process. And therein lies your last few steps.</p>
+
+<p>Heroku has the notion of <a href="https://devcenter.heroku.com/articles/background-jobs-queueing">worker dynos</a>, which are background processors -- think of worker dynos as engines capable of doing what ever you want them to do. In the case of Delayed Job, you want those worker dynos to invoke jobs residing in the <code>delayed_backend_mongoid_jobs</code> collection (which is conceptually a queue).</p>
+
+<p>To configure a worker dyno, you'll need to do 2 things. First, provision one like so:</p>
+
+<p><code>bash Using Heroku CLI to fire up a worker dyno
+$&gt; heroku ps:scale worker=1
+</code></p>
+
+<p>You'll then need to update your <code>Procfile</code> to include the command the worker dyno should invoke:</p>
+
+<p><code>ruby Updated Procfile command
+worker:  bundle exec rake jobs:work
+</code></p>
+
+<p>As you can see, the worker dyno in this case is invoking a <a href="http://rake.rubyforge.org/">Rake task</a> (<code>jobs:work</code>) which is asynchronously polling for new jobs in your conceptual queue and invoking them as they are found.</p>
+
+<p>Finally, deploy to Heroku and keep an eye on the queue for jobs -- you can isolate the dyno workers logs via</p>
+
+<p><code>
+$&gt; heroku logs -p worker -t
+</code></p>
+
+<p>Was that easy or what?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MongoDB to CSV]]></title>
@@ -88,7 +154,7 @@ Tag.collection.insert tags
     <link href="http://aglover.github.com/blog/2013/03/21/2013-open-analytics-summit/"/>
     <updated>2013-03-21T15:21:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/03/21/2013-open-analytics-summit</id>
-    <content type="html"><![CDATA[<p>{% img right left http://www.openanalyticssummit.com/wp-content/uploads/2012/12/OAS-logo-Full-colour3-300x85.png %}On March 25, 2013, <a href="http://www.openanalyticssummit.com/speakers/">I'll be speaking</a> at the <a href="http://www.openanalyticssummit.com/">Open Analytics Summit in Washington DC</a>; specifically, I'll be discussing how the <a href="http://www.app47.com/2013/03/20/next-monday-app47-cto-andy-glover-offers-a-database-reality-check-at-the-open-analytics-summit/">App47</a> team has used <a href="http://www.mongodb.org/">MongoDB</a> as the backend of our enterprise mobile application management platform. We've learned quite a few things about <a href="http://thediscoblog.com/blog/categories/mongodb/">Mongo</a> over the last two years! In the process of growing from a few gigabytes of data a month to over a terabyte/month, we've found out first hand what <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Mongo</a> is good at and what it's <em>not good at</em>. I'll be addressing a number of tips, techniques, and strategies -- if you are a Mongo user or planning on being one, come on by!</p>
+    <content type="html"><![CDATA[<p><img class="right left" src="http://www.openanalyticssummit.com/wp-content/uploads/2012/12/OAS-logo-Full-colour3-300x85.png">On March 25, 2013, <a href="http://www.openanalyticssummit.com/speakers/">I'll be speaking</a> at the <a href="http://www.openanalyticssummit.com/">Open Analytics Summit in Washington DC</a>; specifically, I'll be discussing how the <a href="http://www.app47.com/2013/03/20/next-monday-app47-cto-andy-glover-offers-a-database-reality-check-at-the-open-analytics-summit/">App47</a> team has used <a href="http://www.mongodb.org/">MongoDB</a> as the backend of our enterprise mobile application management platform. We've learned quite a few things about <a href="http://thediscoblog.com/blog/categories/mongodb/">Mongo</a> over the last two years! In the process of growing from a few gigabytes of data a month to over a terabyte/month, we've found out first hand what <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Mongo</a> is good at and what it's <em>not good at</em>. I'll be addressing a number of tips, techniques, and strategies -- if you are a Mongo user or planning on being one, come on by!</p>
 ]]></content>
   </entry>
   
@@ -97,32 +163,11 @@ Tag.collection.insert tags
     <link href="http://aglover.github.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb/"/>
     <updated>2013-02-23T09:39:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/mongodb_icon.png %}Are you new to <a href="http://www.mongodb.org/">MongoDB</a>? Curious to see what's interesting about it?  Document-oriented databases like MongoDB are vastly different from relational databases in that they don't store data in tables; instead, they store it in the form of documents. From a developer's perspective, document-oriented (or schemaless) data is simpler and <a href="http://thediscoblog.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">far more flexible</a> to manage than relational data. Rather than storing data into a rigid schema of tables, rows, and columns, joined by relationships, documents are written individually, containing whatever data they require.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mongodb_icon.png">Are you new to <a href="http://www.mongodb.org/">MongoDB</a>? Curious to see what's interesting about it?  Document-oriented databases like MongoDB are vastly different from relational databases in that they don't store data in tables; instead, they store it in the form of documents. From a developer's perspective, document-oriented (or schemaless) data is simpler and <a href="http://thediscoblog.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">far more flexible</a> to manage than relational data. Rather than storing data into a rigid schema of tables, rows, and columns, joined by relationships, documents are written individually, containing whatever data they require.</p>
 
 <p>Among open source, document-oriented databases, MongoDB is often billed as a <a href="http://www.ibm.com/developerworks/library/j-javadev2-12/">NoSQL database with RDBMS features</a>. One example of this is MongoDB's support for dynamic queries that don't require predefined MapReduce functions. MongoDB also comes with an interactive shell that makes accessing its datastore refreshingly easy, and its out-of-the-box support for sharding and clustering (via <a href="http://thediscoblog.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">replica sets</a>) enables high scalability across multiple nodes.</p>
 
 <p>Check out this IBM developerWorks' Knowledge Path dubbed "<a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Discover MongoDB</a>" -- watch four videos, read a few articles, listen to a podcast and learn everything you need to know about MongoDB!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Savvy Mongo query selector: exists]]></title>
-    <link href="http://aglover.github.com/blog/2013/01/04/savvy-mongo-query-selector-exists/"/>
-    <updated>2013-01-04T11:57:00-05:00</updated>
-    <id>http://aglover.github.com/blog/2013/01/04/savvy-mongo-query-selector-exists</id>
-    <content type="html"><![CDATA[<p><a href="http://www.mongodb.org/">MongoDB</a> supports a <a href="http://docs.mongodb.org/manual/applications/read/">rich query language</a>; in fact, its support of dynamic queries is one of its <a href="http://public.dhe.ibm.com/software/dw/demos/jmongodbdocs/index.html">more distinguishing features</a> compared to other datastores in the <a href="http://www.infoworld.com/d/data-management/flexing-nosql-mongodb-in-review-185922">NoSQL</a> world. Mongo's query language has a variety of query selectors that enable you to <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">fashion some powerful document searches</a>. One particular <a href="http://docs.mongodb.org/manual/reference/operators/#element">query selector that comes in handy</a> from time to time is <code>$exists</code>.</p>
-
-<p>Because <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-12/">Mongo is document oriented</a> and thus lacks a rigid schema, documents (for better or for worse) can have varying structures within a collection. In practice, you probably don't see vastly differing documents within a collection; however, from time to time, various document fields might differ (as in, <em>they might not be present</em>). Take for example, the classic example of a business card: some cards (i.e. documents) might list a fax number while others might omit it. As another example, as an application and its corresponding data evolves, new fields might be added (or removed).</p>
-
-<p>The <code>$exists</code> query selector facilitates finding documents that have (or do not have) specific fields. On more than one occasion, I've employed this query selector to find documents in need of a surgical update. For example, in a collection dubbed <code>words</code> with word documents that each contain an embedded <code>definitions</code> document collection, I can find those particular definitions that do not have a <code>part_of_speech</code> element like so:</p>
-
-<p><code>javascript $exists query selector in action
-db.words.find({"definitions.part_of_speech":{"$exists":false}}).sort({"spelling":1}).limit(100)
-</code></p>
-
-<p>Note that the <code>$exists</code> query selector takes a boolean -- <code>true</code> or <code>false</code>.</p>
-
-<p>As you can probably ascertain, Mongo's <code>$exists</code> is slightly <a href="http://www.techonthenet.com/sql/exists.php">different than SQL's</a> <code>exists</code> -- in fact, in SQL there is no way to fashion a query to find a row not containing a column! Can you dig it?</p>
 ]]></content>
   </entry>
   

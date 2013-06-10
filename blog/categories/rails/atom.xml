@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-06-07T20:12:52-04:00</updated>
+  <updated>2013-06-10T13:56:25-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,11 +14,77 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Backgrounding tasks in Heroku with Delayed Job]]></title>
+    <link href="http://aglover.github.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
+    <updated>2013-06-10T12:56:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what's more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn't be any easier</a>.</p>
+
+<!-- more -->
+
+
+<p>To leverage Delayed Job in Heroku, you'll need for follow a few steps. In my case, since I'm using <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a>, I'm going to use an <a href="https://github.com/collectiveidea/delayed_job_mongoid">alternate Active Record Delayed Job tie-in</a> dubbed <code>delayed_job_mongoid</code>. The reason for this <a href="http://guides.rubyonrails.org/">Active Record</a> integration will become obvious once I show you how to actually force a long running task to be asynchronous. Regardless if you are using Mongoid or not, the Active Record integration is identical.</p>
+
+<p>First and foremost, you'll need to add <code>delayed_job_mongoid</code> to your <code>Gemfile</code> (or if you aren't using Mongoid, add <code>delayed_job_active_record</code>).  Delayed Job stores jobs in your database; consequently, after you run <code>bundle install</code>, proceed to update your underlying MongoDB instance with a new index by running:</p>
+
+<p><code>bash Adding an index and new collection to MongoDB
+$&gt; script/rails runner 'Delayed::Backend::Mongoid::Job.create_indexes'
+</code></p>
+
+<p>Obviously, if you're using a normal RDMBS, your command will be slightly different (i.e. <code>rake db:migrate</code>).</p>
+
+<p>After that step is complete, you'll need to generate a <code>delayed_job</code> script via:</p>
+
+<p><code>bash Generating the Delayed Job script
+$&gt; rails generate delayed_job
+</code></p>
+
+<p>This script allows to you execute the Delayed Job framework with a number of options. As it turns out, you don't really need this script as Delayed Job hooks into Rake as well; it is via the Rake integration that Heroku will work with Delayed Job.</p>
+
+<p>Now that you've set up 80% of the infrastructure required to support Delayed Job, you next need to background some long running task. This is the fun part and like everything else so far, it couldn't be any easier.</p>
+
+<p>Delayed Job hooks directly into Active Record and thus, you can background some unit of work on a model object by inserting a <code>delay</code> call. For example, in my case, I had a <code>Group</code> model object that when updated under certain circumstances required that <em>all associated</em> users also be updated (wouldn't it be nice if <a href="https://jira.mongodb.org/browse/SERVER-124">MongoDB supported triggers</a>?). As you can imagine, updating hundreds of users is rather time intensive.</p>
+
+<p>Thus, the user update logic was thrown into a special method (dubbed <code>aysnc_update_users</code>) and was then invoked like so:</p>
+
+<p><code>ruby Adding in a delay backgrounds the async_update_users call
+group.delay.async_update_users
+</code></p>
+
+<p>This call essentially serializes the logic here into a collection called <code>delayed_backend_mongoid_jobs</code> which can then be invoked asynchronously by another process. And therein lies your last few steps.</p>
+
+<p>Heroku has the notion of <a href="https://devcenter.heroku.com/articles/background-jobs-queueing">worker dynos</a>, which are background processors -- think of worker dynos as engines capable of doing what ever you want them to do. In the case of Delayed Job, you want those worker dynos to invoke jobs residing in the <code>delayed_backend_mongoid_jobs</code> collection (which is conceptually a queue).</p>
+
+<p>To configure a worker dyno, you'll need to do 2 things. First, provision one like so:</p>
+
+<p><code>bash Using Heroku CLI to fire up a worker dyno
+$&gt; heroku ps:scale worker=1
+</code></p>
+
+<p>You'll then need to update your <code>Procfile</code> to include the command the worker dyno should invoke:</p>
+
+<p><code>ruby Updated Procfile command
+worker:  bundle exec rake jobs:work
+</code></p>
+
+<p>As you can see, the worker dyno in this case is invoking a <a href="http://rake.rubyforge.org/">Rake task</a> (<code>jobs:work</code>) which is asynchronously polling for new jobs in your conceptual queue and invoking them as they are found.</p>
+
+<p>Finally, deploy to Heroku and keep an eye on the queue for jobs -- you can isolate the dyno workers logs via</p>
+
+<p><code>
+$&gt; heroku logs -p worker -t
+</code></p>
+
+<p>Was that easy or what?</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[The Rails, CloudFront, and Heroku performance hat-trick]]></title>
     <link href="http://aglover.github.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
     <updated>2013-05-01T09:10:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/hat-trick.png %}<a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
 
 <p>It's easy to configure a <a href="http://rubyonrails.org/">Rails</a> app to take advantage of CloudFront; what's more, if your Rails app is hosted on <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-21/">Heroku</a>, there's <a href="https://github.com/romanbsd/heroku-deflater">a nifty gem</a>, dubbed heroku-deflater, that'll enable <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP compression</a> of static assets (<a href="http://stackoverflow.com/questions/12326191/any-way-to-serve-gzip-assets-from-heroku">other than images</a>).</p>
 
@@ -45,19 +111,19 @@ Content-Encoding: gzip
 
 <p>Next, sign into the AWS Management Console and enable CloudFront if you haven't already. From the CloudFront admin page, create a new distribution via the Create Distribution button on the top left.</p>
 
-<p>{% img center /images/mine/cloudfront_1.png %}</p>
+<p><img class="center" src="/images/mine/cloudfront_1.png"></p>
 
 <p>Once the create distribution wizard begins, be sure to select Download as your delivery method.</p>
 
-<p>{% img center /images/mine/cloudfront_2.png %}</p>
+<p><img class="center" src="/images/mine/cloudfront_2.png"></p>
 
 <p>In the next screen, there are some important fields you'll need to fill out, namely: the Origin Source Name and the Viewer Protocol Policy. For the Origin Source Name, you will need to put in your app's URL or the Heroku URL (if you do not map a custom domain name to it). If you web site supports HTTPS, then be sure to set the Viewer Protocol Policy to HTTP and HTTPS.</p>
 
-<p>{% img center /images/mine/cloudfront_3.png %}</p>
+<p><img class="center" src="/images/mine/cloudfront_3.png"></p>
 
 <p>The only other important setting after these two is the Price Class. It's here where you can set where CloudFront will essentially serve up your content -- the default setting of Use All Edge Locations is most likely what you need.</p>
 
-<p>{% img center /images/mine/cloudfront_5.png %}</p>
+<p><img class="center" src="/images/mine/cloudfront_5.png"></p>
 
 <p>Finally, click the Create Distribution button -- once you do that, it'll take a bit for things to initialize (basically, the CDN needs to get built and this may take up to 30 minutes).</p>
 
@@ -80,11 +146,11 @@ config.action_controller.asset_host = 'the domain name from AWS Dashboard'
 
 <p>In this case, <a href="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/">I'm using Chrome</a>. Go to JavaScript console and hit the Network tab.</p>
 
-<p>{% img center /images/mine/cloudfront_6.png %}</p>
+<p><img class="center" src="/images/mine/cloudfront_6.png"></p>
 
 <p>Surf around and you'll note a few things -- one, that the assets like images and JavaScript files are being severed up from your CDN (just look at the URL) and that the size will often say "(from cache)" -- that means the CDN is handling the load rather than <a href="http://www.ibm.com/developerworks/podcast/glover-heroku-110811/">Heroku</a>. You should also note that your web app is probably a bit more snappy!</p>
 
-<p>{% img center /images/mine/cloudfront_7.png %}</p>
+<p><img class="center" src="/images/mine/cloudfront_7.png"></p>
 
 <p>Check out your Heroku logs and you'll note fewer hits in this case -- dynamic pages are still being loaded, however, static assets are not anymore -- that's the job of your CDN!</p>
 

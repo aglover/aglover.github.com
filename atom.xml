@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-06-07T20:10:57-04:00</updated>
+  <updated>2013-06-10T13:56:25-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,78 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Backgrounding tasks in Heroku with Delayed Job]]></title>
+    <link href="http://aglover.github.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
+    <updated>2013-06-10T12:56:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what&#8217;s more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn&#8217;t be any easier</a>.</p>
+
+<!-- more -->
+
+
+<p>To leverage Delayed Job in Heroku, you&#8217;ll need for follow a few steps. In my case, since I&#8217;m using <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a>, I&#8217;m going to use an <a href="https://github.com/collectiveidea/delayed_job_mongoid">alternate Active Record Delayed Job tie-in</a> dubbed <code>delayed_job_mongoid</code>. The reason for this <a href="http://guides.rubyonrails.org/">Active Record</a> integration will become obvious once I show you how to actually force a long running task to be asynchronous. Regardless if you are using Mongoid or not, the Active Record integration is identical.</p>
+
+<p>First and foremost, you&#8217;ll need to add <code>delayed_job_mongoid</code> to your <code>Gemfile</code> (or if you aren&#8217;t using Mongoid, add <code>delayed_job_active_record</code>).  Delayed Job stores jobs in your database; consequently, after you run <code>bundle install</code>, proceed to update your underlying MongoDB instance with a new index by running:</p>
+
+<figure class='code'><figcaption><span>Adding an index and new collection to MongoDB</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$&gt;</span> script/rails runner <span class="s1">&#39;Delayed::Backend::Mongoid::Job.create_indexes&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Obviously, if you&#8217;re using a normal RDMBS, your command will be slightly different (i.e. <code>rake db:migrate</code>).</p>
+
+<p>After that step is complete, you&#8217;ll need to generate a <code>delayed_job</code> script via:</p>
+
+<figure class='code'><figcaption><span>Generating the Delayed Job script</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$&gt;</span> rails generate delayed_job
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This script allows to you execute the Delayed Job framework with a number of options. As it turns out, you don&#8217;t really need this script as Delayed Job hooks into Rake as well; it is via the Rake integration that Heroku will work with Delayed Job.</p>
+
+<p>Now that you&#8217;ve set up 80% of the infrastructure required to support Delayed Job, you next need to background some long running task. This is the fun part and like everything else so far, it couldn&#8217;t be any easier.</p>
+
+<p>Delayed Job hooks directly into Active Record and thus, you can background some unit of work on a model object by inserting a <code>delay</code> call. For example, in my case, I had a <code>Group</code> model object that when updated under certain circumstances required that <em>all associated</em> users also be updated (wouldn&#8217;t it be nice if <a href="https://jira.mongodb.org/browse/SERVER-124">MongoDB supported triggers</a>?). As you can imagine, updating hundreds of users is rather time intensive.</p>
+
+<p>Thus, the user update logic was thrown into a special method (dubbed <code>aysnc_update_users</code>) and was then invoked like so:</p>
+
+<figure class='code'><figcaption><span>Adding in a delay backgrounds the async_update_users call</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span><span class="o">.</span><span class="n">delay</span><span class="o">.</span><span class="n">async_update_users</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This call essentially serializes the logic here into a collection called <code>delayed_backend_mongoid_jobs</code> which can then be invoked asynchronously by another process. And therein lies your last few steps.</p>
+
+<p>Heroku has the notion of <a href="https://devcenter.heroku.com/articles/background-jobs-queueing">worker dynos</a>, which are background processors &#8211; think of worker dynos as engines capable of doing what ever you want them to do. In the case of Delayed Job, you want those worker dynos to invoke jobs residing in the <code>delayed_backend_mongoid_jobs</code> collection (which is conceptually a queue).</p>
+
+<p>To configure a worker dyno, you&#8217;ll need to do 2 things. First, provision one like so:</p>
+
+<figure class='code'><figcaption><span>Using Heroku CLI to fire up a worker dyno</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$&gt;</span> heroku ps:scale <span class="nv">worker</span><span class="o">=</span>1
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You&#8217;ll then need to update your <code>Procfile</code> to include the command the worker dyno should invoke:</p>
+
+<figure class='code'><figcaption><span>Updated Procfile command</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">worker</span><span class="p">:</span>  <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">rake</span> <span class="n">jobs</span><span class="ss">:work</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, the worker dyno in this case is invoking a <a href="http://rake.rubyforge.org/">Rake task</a> (<code>jobs:work</code>) which is asynchronously polling for new jobs in your conceptual queue and invoking them as they are found.</p>
+
+<p>Finally, deploy to Heroku and keep an eye on the queue for jobs &#8211; you can isolate the dyno workers logs via</p>
+
+<figure class='code'><figcaption><span>Updated Procfile command</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vg">$&gt;</span> <span class="n">heroku</span> <span class="n">logs</span> <span class="o">-</span><span class="nb">p</span> <span class="n">worker</span> <span class="o">-</span><span class="n">t</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Was that easy or what?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MongoDB to CSV]]></title>
@@ -60,6 +132,8 @@
 
 
 <p>Of course, you can throw this into a bash script and parameterize the <code>collection</code>, <code>fields</code>, output file, and query with bash&#8217;s handy <code>$1</code>, <code>$2</code>, etc variables.</p>
+
+<p>Got it?</p>
 ]]></content>
   </entry>
   
@@ -713,23 +787,6 @@
 
 
 <p>So what are you waiting for? Check out &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>&#8221; and learn the ins and outs of Android development! Stay tuned for more articles to come and don&#8217;t forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[It's a question of wow]]></title>
-    <link href="http://aglover.github.com/blog/2013/03/04/its-a-question-of-wow/"/>
-    <updated>2013-03-04T10:29:00-05:00</updated>
-    <id>http://aglover.github.com/blog/2013/03/04/its-a-question-of-wow</id>
-    <content type="html"><![CDATA[<p>Let me ask you a question: do you want to build a mobile website or a mobile app? If your answer is mobile website, then <a href="http://www.ebizmba.com/articles/best-html5-websites">HTML5 is good enough</a>. But if your answer is mobile app then you had better <a href="http://www.trademob.com/why-native-apps-remain-unrivalled-by-web-apps-in-user-experience-and-discoverability/">think about user experience</a>. You see, the user experience bar has been set extraordinarily high by a number of stellar native apps. People expect to be wowed and if they aren&#8217;t, they won&#8217;t use your app. It&#8217;s that simple.</p>
-
-<p><img class="right" src="http://aglover.github.com/images/mine/wow.png">How do you wow someone? You make your app easy to use and aesthetically pleasing to the eye. And it has to work correctly consistently. Unresponsiveness, however minor, won&#8217;t do.</p>
-
-<p>Can you wow someone <a href="http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/">with an HTML5 mobile app</a>? <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">Sometimes</a>. But let me tell you: <a href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/">it&#8217;s not easy</a>. Don&#8217;t think for a second that just because there are a gazillion developers who have an <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">understanding of HTML and JavaScript</a>, that anyone can build an app to inspire a wow. No, it&#8217;s a <a href="http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/">tricky business with HTML5</a> these days.</p>
-
-<p>Yep, there are fewer developers out there that actually can code <a href="http://en.wikipedia.org/wiki/Objective-C">Objective-C</a> or truly understand <a href="http://developer.android.com/index.html">Android</a>. They might be costly too. But the wow comes from native apps these days and it looks to be that way for some time. Native apps are close to the bone &#8211; they don&#8217;t have to rely on browser standards or <a href="https://code.google.com/p/html5shiv/">shivs</a> to <a href="http://paulirish.com/2011/the-history-of-the-html5-shiv/">work correctly</a> 83% of the time.  Coded correctly, they work <em>all the time</em>. They are responsive, fast, and can work offline without a lot of magic.</p>
-
-<p><a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> is great for mobile web sites. Not mobile apps. Until HTML5 can produce a significant wow factor, your best bet is to go native. It&#8217;s that simple.</p>
 ]]></content>
   </entry>
   

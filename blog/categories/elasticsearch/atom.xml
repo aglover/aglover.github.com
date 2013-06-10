@@ -4,7 +4,7 @@
   <title><![CDATA[Category: elasticsearch | The Disco Blog]]></title>
   <link href="http://aglover.github.com/blog/categories/elasticsearch/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-06-07T20:12:52-04:00</updated>
+  <updated>2013-06-10T13:56:25-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://aglover.github.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/"/>
     <updated>2013-05-17T17:24:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds</id>
-    <content type="html"><![CDATA[<p>{% img left /images/mine/es-bonzai.jpg %}Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend -- in less than 60 seconds, I'll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/es-bonzai.jpg">Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend -- in less than 60 seconds, I'll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
 
 <p>You'll first <a href="http://www.drdobbs.com/web-development/getting-started-with-the-cloud-amazon-we/231601598">need an AWS account</a> along with an SSH key pair. If you don't already have those two steps done, go ahead and do that. The steps that follow suggest a particular AMI; however, you are free to select the <a href="http://aws.amazon.com/ec2/instance-types/">instance type</a>. <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Micro instance types</a> are free to use; consequently, you can get <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">up and running with ElasticSearch</a> in less than a minute <em>for free</em>.</p>
 
@@ -72,7 +72,7 @@ wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/e
     <link href="http://aglover.github.com/blog/2013/05/14/the-democratization-of-search/"/>
     <updated>2013-05-14T11:33:00-04:00</updated>
     <id>http://aglover.github.com/blog/2013/05/14/the-democratization-of-search</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/democracy.jpg %}Over the past year and a half, I've watched <a href="http://www.elasticsearch.org/">ElasticSearch</a> grow from a seemingly part-time code experiment into a thriving ecosystem. Not only has the number of <a href="http://www.elasticsearch.org/guide/clients/">client libraries</a> grown from 1 to over 25 (and counting!); it's now a <a href="http://www.elasticsearch.com/">commercially sponsored project</a> to the tune of <a href="http://www.whiteboardmag.com/youre-hot-or-not-why-elasticsearch-raised-24-million-just-3-months-after-a-10-million-round/">$34 million</a> (a <a href="http://www.zdnet.com/elasticsearch-raises-24-million-big-data-analytics-7000011496/">$10M series A</a> and a <a href="http://gigaom.com/2013/02/19/open-source-search-tool-elasticsearch-gets-24m/">$24M series B</a>) with 200,000 downloads a month.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/democracy.jpg">Over the past year and a half, I've watched <a href="http://www.elasticsearch.org/">ElasticSearch</a> grow from a seemingly part-time code experiment into a thriving ecosystem. Not only has the number of <a href="http://www.elasticsearch.org/guide/clients/">client libraries</a> grown from 1 to over 25 (and counting!); it's now a <a href="http://www.elasticsearch.com/">commercially sponsored project</a> to the tune of <a href="http://www.whiteboardmag.com/youre-hot-or-not-why-elasticsearch-raised-24-million-just-3-months-after-a-10-million-round/">$34 million</a> (a <a href="http://www.zdnet.com/elasticsearch-raises-24-million-big-data-analytics-7000011496/">$10M series A</a> and a <a href="http://gigaom.com/2013/02/19/open-source-search-tool-elasticsearch-gets-24m/">$24M series B</a>) with 200,000 downloads a month.</p>
 
 <p>Search is the touchstone of the Internet; without search the Internet wouldn't be all that useful. Google's meteoric rise and its resultant eponymous name for search is clear evidence as to the importance of search. Search, however, hasn't always been that easy nor affordable to implement.</p>
 
@@ -94,7 +94,7 @@ wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/e
     <link href="http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch/"/>
     <updated>2013-01-02T16:02:00-05:00</updated>
     <id>http://aglover.github.com/blog/2013/01/02/scalable-searching-with-elasticsearch</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/search_flickr.jpg %}Search is no longer an optional feature: it's expected of most any application that consumes, produces, or stores data. And not everyone wants to be a search technology specialist, especially given the range of sophisticated algorithms underlying today's complex searches (i.e. SQL queries are no longer sufficient!). Knowing about existing, open source search platforms could save you a lot of time and money and allow you to spend your time fine-tuning your software's main functionality.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/search_flickr.jpg">Search is no longer an optional feature: it's expected of most any application that consumes, produces, or stores data. And not everyone wants to be a search technology specialist, especially given the range of sophisticated algorithms underlying today's complex searches (i.e. SQL queries are no longer sufficient!). Knowing about existing, open source search platforms could save you a lot of time and money and allow you to spend your time fine-tuning your software's main functionality.</p>
 
 <p>In "<a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/index.html">Java development 2.0: Scalable searching with ElasticSearch</a>", I introduce <a href="http://www.elasticsearch.org/">ElasticSearch</a>, a distributed search platform that is easy to get started with and vastly extendable. ElasticSearch's sophistication and ease-of-use are impressive, and its support for horizontal scalability offers a world of options should your data requirements need to scale. So what are you waiting for? Give <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/index.html">it a read</a>!</p>
 
