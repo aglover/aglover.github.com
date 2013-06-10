@@ -3,7 +3,7 @@ layout: post
 title: "ElasticSearch on EC2 in less than 60 seconds"
 date: 2013-05-17 17:24
 comments: true
-categories: [elasticsearch, aws]
+categories: [elasticsearch, AWS]
 ---
 
 {% img left /images/mine/es-bonzai.jpg %}Curious to see what all the [ElasticSearch](http://www.elasticsearch.org/) hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend -- in less than 60 seconds, I'll show you how to install [ElasticSearch](http://www.ibm.com/developerworks/java/library/j-javadev2-24/) on an [AWS AMI](http://aws.amazon.com/). 
