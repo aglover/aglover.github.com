@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="Redis supports master-slave replication and it&#8217;s extremely easy to setup. And the beauty of setting up replication is that all you have to do &hellip;">
+  <meta name="description" content="Without a doubt, one of the quickest ways to build an application that leverages MongoDB is with Node. It&#8217;s as if the two platforms were made &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,147 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/08/29/modeling-mongo-documents-with-mongoose/">Modeling Mongo Documents With Mongoose</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-29T21:45:00-04:00" pubdate data-updated="true">Aug 29<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Without a doubt, one of the quickest ways to build an application that leverages <a href="http://www.mongodb.org/">MongoDB</a> is with Node. It&#8217;s as if the two platforms were made for each other; the sheer number of Node libraries available for dealing with Mongo is testimony to a vibrant, innovative community. Indeed, one of my favorite Mongo focused libraries these days is <a href="http://mongoosejs.com/">Mongoose</a>.</p>
+
+<p>Briefly, Mongoose is an object modeling framework that makes it incredibly easy to model collections and ultimately work with intuitive objects that support a rich feature set. Like most things in Node, it couldn&#8217;t be any easier to get set up. Essentially, to use Mongoose, you&#8217;ll need to define <code>Schema</code> objects &#8211; these are your documents &#8211; either top level or even embedded.</p>
+
+<p>For example, I&#8217;ve defined a <code>words</code> collection that contains documents (representing&#8230;words) that each contain an embedded collection of <code>definition</code> documents. A sample document looks like this:</p>
+
+<figure class='code'><figcaption><span>Word Document</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nx">_id</span><span class="o">:</span> <span class="s2">&quot;4fd7c7ac8b5b27f21b000001&quot;</span><span class="p">,</span>    
+</span><span class='line'>  <span class="nx">spelling</span><span class="o">:</span> <span class="s2">&quot;drivel&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">synonyms</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;garbage&quot;</span><span class="p">,</span> <span class="s2">&quot;dribble&quot;</span><span class="p">,</span> <span class="s2">&quot;drool&quot;</span><span class="p">],</span>
+</span><span class='line'>  <span class="nx">definitions</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>  <span class="p">{</span> <span class="nx">part_of_speech</span><span class="o">:</span> <span class="s2">&quot;noun&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">definition</span><span class="o">:</span><span class="s2">&quot;saliva flowing from the mouth, or mucus from the nose; slaver.&quot;</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="p">{</span> <span class="nx">part_of_speech</span><span class="o">:</span> <span class="s2">&quot;noun&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">definition</span><span class="o">:</span><span class="s2">&quot;childish, silly, or meaningless talk or thinking; nonsense; twaddle.&quot;</span>
+</span><span class='line'>  <span class="p">}]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>From an document modeling standpoint, I&#8217;d like to work with a <code>Word</code> object that contains a list of <code>Definition</code> objects and a number of related attributes (i.e. synonyms, parts of speech, etc). To model this relationship with Mongoose, I&#8217;ll need to define two <code>Schema</code> types and I&#8217;ll start with the simplest:</p>
+
+<figure class='code'><figcaption><span>Definition Schema</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Definition</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span> <span class="s1">&#39;definition&#39;</span><span class="p">,</span> <span class="k">new</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Schema</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">part_of_speech</span> <span class="o">:</span> <span class="p">{</span> <span class="nx">type</span><span class="o">:</span> <span class="nb">String</span><span class="p">,</span> <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">trim</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="kr">enum</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;adjective&#39;</span><span class="p">,</span> <span class="s1">&#39;noun&#39;</span><span class="p">,</span> <span class="s1">&#39;verb&#39;</span><span class="p">,</span> <span class="s1">&#39;adverb&#39;</span><span class="p">]</span> <span class="p">},</span>
+</span><span class='line'>  <span class="nx">definition</span> <span class="o">:</span> <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="nb">String</span><span class="p">,</span> <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">trim</span><span class="o">:</span> <span class="kc">true</span><span class="p">}</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, a <code>Definition</code> is simple &#8211; the <code>part_of_speech</code> attribute is an enumerated <code>String</code> that&#8217;s required; what&#8217;s more, the <code>definition</code> attribute is also a required <code>String</code>.</p>
+
+<p>Next, I&#8217;ll define a <code>Word</code>:</p>
+
+<figure class='code'><figcaption><span>Word Schema</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Word</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span> <span class="s1">&#39;word&#39;</span><span class="p">,</span> <span class="k">new</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Schema</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">spelling</span> <span class="o">:</span> <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="nb">String</span><span class="p">,</span> <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">trim</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">lowercase</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">unique</span><span class="o">:</span> <span class="kc">true</span><span class="p">},</span>
+</span><span class='line'>  <span class="nx">definitions</span> <span class="o">:</span> <span class="p">[</span><span class="nx">Definition</span><span class="p">.</span><span class="nx">schema</span><span class="p">],</span>
+</span><span class='line'>  <span class="nx">synonyms</span> <span class="o">:</span> <span class="p">[{</span> <span class="nx">type</span><span class="o">:</span> <span class="nb">String</span><span class="p">,</span> <span class="nx">trim</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">lowercase</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}]</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>As you can see, a <code>Word</code> instance embeds a collection of <code>Definition</code>s. Here I&#8217;m also demonstrating the usage of <code>lowercase</code> and the index <code>unique</code> placed on the <code>spelling</code> attribute.</p>
+
+<p>To create a <code>Word</code> instance and save the corresponding document couldn&#8217;t be easier. Mongo array&#8217;s leverage the <code>push</code> command and Mongoose follows this pattern to the tee.</p>
+
+<figure class='code'><figcaption><span>saving with Mongoose</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">word</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">models</span><span class="p">.</span><span class="nx">Word</span><span class="p">({</span><span class="nx">spelling</span> <span class="o">:</span> <span class="s1">&#39;loquacious&#39;</span><span class="p">})</span>
+</span><span class='line'><span class="nx">word</span><span class="p">.</span><span class="nx">synonyms</span><span class="p">.</span><span class="nx">push</span> <span class="s1">&#39;verbose&#39;</span>
+</span><span class='line'><span class="nx">word</span><span class="p">.</span><span class="nx">definitions</span><span class="p">.</span><span class="nx">push</span> <span class="p">{</span><span class="nx">definition</span><span class="o">:</span> <span class="s1">&#39;talking or tending to talk much or freely; talkative; \</span>
+</span><span class='line'><span class="s1">  chattering; babbling; garrulous.&#39;</span><span class="p">,</span> <span class="nx">part_of_speech</span><span class="o">:</span> <span class="s1">&#39;adjective&#39;</span> <span class="p">}</span>
+</span><span class='line'><span class="nx">word</span><span class="p">.</span><span class="nx">save</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finding a word is easy too:</p>
+
+<figure class='code'><figcaption><span>findOne in action</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">it</span> <span class="s1">&#39;findOne should return one&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="nx">models</span><span class="p">.</span><span class="nx">Word</span><span class="p">.</span><span class="nx">findOne</span> <span class="nx">spelling</span><span class="o">:</span><span class="s1">&#39;nefarious&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nb">document</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>    <span class="nb">document</span><span class="p">.</span><span class="nx">spelling</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">eql</span> <span class="s1">&#39;nefarious&#39;</span>
+</span><span class='line'>    <span class="nb">document</span><span class="p">.</span><span class="nx">definitions</span><span class="p">.</span><span class="nx">length</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">eql</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="nb">document</span><span class="p">.</span><span class="nx">synonyms</span><span class="p">.</span><span class="nx">length</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">eql</span> <span class="mi">2</span>
+</span><span class='line'>    <span class="nb">document</span><span class="p">.</span><span class="nx">definitions</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;part_of_speech&#39;</span><span class="p">].</span><span class="nx">should</span><span class="p">.</span><span class="nx">eql</span> <span class="s1">&#39;adjective&#39;</span>
+</span><span class='line'>    <span class="nx">done</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, the above code is a <a href="http://visionmedia.github.com/mocha/">Mocha</a> test case (which uses <a href="https://github.com/visionmedia/should.js">should</a> for assertions) that demonstrates Mongoose&#8217;s <code>findOne</code>.</p>
+
+<p>You can find the code for these examples and more at my Github repo dubbed <a href="https://github.com/aglover/exegesis">Exegesis</a> and while you&#8217;re at it, check out the <a href="http://www.ibm.com/developerworks/training/kp/j-kp-node/index.html">developerWorks videos I did for Node</a>!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -301,6 +442,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/12/lickety-split-custom-validations-in-rails/">Lickety-split custom validations in Rails</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Backgrounding tasks in Heroku with Delayed Job</a>
       </li>
     
@@ -314,10 +459,6 @@
     
       <li class="post">
         <a href="/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle/">Mobile for the Masses: Activities and icons in your Android application lifecycle</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">ElasticSearch on EC2 in less than 60 seconds</a>
       </li>
     
   </ul>

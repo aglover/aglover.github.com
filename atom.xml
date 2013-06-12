@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://aglover.github.com/atom.xml" rel="self"/>
   <link href="http://aglover.github.com/"/>
-  <updated>2013-06-10T13:56:25-04:00</updated>
+  <updated>2013-06-12T14:05:50-04:00</updated>
   <id>http://aglover.github.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,39 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Lickety-split custom validations in Rails]]></title>
+    <link href="http://aglover.github.com/blog/2013/06/12/lickety-split-custom-validations-in-rails/"/>
+    <updated>2013-06-12T13:19:00-04:00</updated>
+    <id>http://aglover.github.com/blog/2013/06/12/lickety-split-custom-validations-in-rails</id>
+    <content type="html"><![CDATA[<p>Have a highly specific, yet custom validation for a particular field on one of your <a href="http://thediscoblog.com/blog/categories/rails/">Rails</a> model objects? Don&#8217;t want to create a <code>ActiveModel::Validator</code> type? Not a problem!</p>
+
+<p>You can just as easily <a href="http://guides.rubyonrails.org/active_record_validations_callbacks.html">create a method</a> that can be invoked as part of the validation process. For example, imagine a field dubbed <code>uri</code> in some model object; this field must begin with a protocol (i.e. http or https). You can create a validation method like so:</p>
+
+<figure class='code'><figcaption><span>Custom validator</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">uri_should_start_with_protocol</span>
+</span><span class='line'>  <span class="k">if</span> <span class="o">!</span><span class="n">uri</span><span class="o">.</span><span class="n">start_with?</span><span class="p">(</span><span class="s1">&#39;http://&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">uri</span><span class="o">.</span><span class="n">start_with?</span><span class="p">(</span><span class="s1">&#39;https://&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:uri</span><span class="p">,</span> <span class="s1">&#39;Web Address should start with http:// or https://&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This method resides in your model. You can then register this method as a validation for your model like so:</p>
+
+<figure class='code'><figcaption><span>Wiring the validation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">validate</span> <span class="ss">:uri_should_start_with_protocol</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now if the <code>uri</code> field doesn&#8217;t contain http or https, <code>model.save</code> will return <code>false</code>. Done!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Backgrounding tasks in Heroku with Delayed Job]]></title>
@@ -771,22 +804,6 @@
 
 
 <p>After that&#8217;s done, execute a <code>node -v</code> to verify. Now wasn&#8217;t that easy? You bet!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The bull's eye on mobility: Mobile for the masses]]></title>
-    <link href="http://aglover.github.com/blog/2013/03/06/the-bulls-eye-on-mobility-mobile-for-the-masses/"/>
-    <updated>2013-03-06T09:28:00-05:00</updated>
-    <id>http://aglover.github.com/blog/2013/03/06/the-bulls-eye-on-mobility-mobile-for-the-masses</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://aglover.github.com/images/mine/mftm_1.jpg">Since joining <a href="http://www.app47.com/">App47</a>, I&#8217;ve been lazer focused on mobility; consquently, I&#8217;m pleased to announce that a new mobile development series has debuted on <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>! The inaugural article,  &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">A gentle introduction to Android</a>&#8221;, begins by exploring the mobile landscape and introduces how to get started with Android app development.</p>
-
-<p>As the article summary states:</p>
-
-<blockquote><p>The mobile landscape is rich with promise, and Android is a viable and exciting platform for developers who seek a way in. This new series starts with an introduction to Android that is tailored specifically for Java developers just getting started with mobile. Learn about Android&#8217;s three-layer versioning system (and find out why it matters), then set up your development environment and build your first Android app.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/library/j-mobileforthemasses1/'>Mobile for the Masses: A Gentle Introduction to Android</a></cite></footer></blockquote>
-
-
-<p>So what are you waiting for? Check out &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>&#8221; and learn the ins and outs of Android development! Stay tuned for more articles to come and don&#8217;t forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
 ]]></content>
   </entry>
   
