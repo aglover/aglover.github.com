@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
-  <link href="http://aglover.github.com/blog/categories/mongodb/atom.xml" rel="self"/>
-  <link href="http://aglover.github.com/"/>
-  <updated>2013-06-12T14:05:50-04:00</updated>
-  <id>http://aglover.github.com/</id>
+  <link href="http://thediscoblog.com/blog/categories/mongodb/atom.xml" rel="self"/>
+  <link href="http://thediscoblog.com/"/>
+  <updated>2013-06-12T14:18:48-04:00</updated>
+  <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Backgrounding tasks in Heroku with Delayed Job]]></title>
-    <link href="http://aglover.github.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
+    <link href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
     <updated>2013-06-10T12:56:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
+    <id>http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what's more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn't be any easier</a>.</p>
 
 <!-- more -->
@@ -81,9 +81,9 @@ $&gt; heroku logs -p worker -t
   
   <entry>
     <title type="html"><![CDATA[MongoDB to CSV]]></title>
-    <link href="http://aglover.github.com/blog/2013/06/07/mongodb-to-csv/"/>
+    <link href="http://thediscoblog.com/blog/2013/06/07/mongodb-to-csv/"/>
     <updated>2013-06-07T20:01:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/06/07/mongodb-to-csv</id>
+    <id>http://thediscoblog.com/blog/2013/06/07/mongodb-to-csv</id>
     <content type="html"><![CDATA[<p>Every once in a while, I need to give a non-technical user (like a business analyst) data residing in <a href="http://www.mongodb.org/">MongoDB</a>; consequently, I export the target data as a <a href="http://en.wikipedia.org/wiki/Comma-separated_values">CSV file</a> (which they can presumably slice and dice once they import it into Excel or some similar tool). Mongo has a handy <a href="http://docs.mongodb.org/manual/reference/program/mongoexport/">export utility</a> that takes a bevy of options, however, there is an <a href="https://jira.mongodb.org/browse/SERVER-4224">outstanding bug</a> and some <a href="http://stackoverflow.com/questions/6814151/how-to-export-collection-to-csv-in-mongodb">general confusion</a> as to how to properly export data in CSV format.</p>
 
 <!-- more -->
@@ -127,9 +127,9 @@ mongoexport --host mgo.acme.com --port 10332 --username acmeman --password 12345
   
   <entry>
     <title type="html"><![CDATA[Mongoid batch inserts]]></title>
-    <link href="http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts/"/>
+    <link href="http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts/"/>
     <updated>2013-03-27T11:34:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts</id>
+    <id>http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts</id>
     <content type="html"><![CDATA[<p>In SQL land, all databases support batch inserts. Batch inserts are an effective and efficient mechanism to insert a lot of similar data. That is, instead of issuing x insert statements, you execute 1 insert with x records. This is much more efficient because the insert statement doesn't need to be re-parsed x times, there is only 1 network trip as opposed to x, and in the case of transactions, there is only 1 transaction instead of x. When compared to x inserts, batch inserts are always faster.</p>
 
 <p>As it turns out, <a href="http://www.mongodb.org/">MongoDB</a> supports <a href="http://docs.mongodb.org/manual/applications/create/#bulk-insert-multiple-documents">batch inserts</a>! And just like in SQL land, Mongo's batching feature is much faster at inserting a lot of data in one insert rather than x inserts.</p>
@@ -151,18 +151,18 @@ Tag.collection.insert tags
   
   <entry>
     <title type="html"><![CDATA[2013 Open Analytics Summit]]></title>
-    <link href="http://aglover.github.com/blog/2013/03/21/2013-open-analytics-summit/"/>
+    <link href="http://thediscoblog.com/blog/2013/03/21/2013-open-analytics-summit/"/>
     <updated>2013-03-21T15:21:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/03/21/2013-open-analytics-summit</id>
+    <id>http://thediscoblog.com/blog/2013/03/21/2013-open-analytics-summit</id>
     <content type="html"><![CDATA[<p><img class="right left" src="http://www.openanalyticssummit.com/wp-content/uploads/2012/12/OAS-logo-Full-colour3-300x85.png">On March 25, 2013, <a href="http://www.openanalyticssummit.com/speakers/">I'll be speaking</a> at the <a href="http://www.openanalyticssummit.com/">Open Analytics Summit in Washington DC</a>; specifically, I'll be discussing how the <a href="http://www.app47.com/2013/03/20/next-monday-app47-cto-andy-glover-offers-a-database-reality-check-at-the-open-analytics-summit/">App47</a> team has used <a href="http://www.mongodb.org/">MongoDB</a> as the backend of our enterprise mobile application management platform. We've learned quite a few things about <a href="http://thediscoblog.com/blog/categories/mongodb/">Mongo</a> over the last two years! In the process of growing from a few gigabytes of data a month to over a terabyte/month, we've found out first hand what <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Mongo</a> is good at and what it's <em>not good at</em>. I'll be addressing a number of tips, techniques, and strategies -- if you are a Mongo user or planning on being one, come on by!</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Everything you need to know about MongoDB]]></title>
-    <link href="http://aglover.github.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb/"/>
+    <link href="http://thediscoblog.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb/"/>
     <updated>2013-02-23T09:39:00-05:00</updated>
-    <id>http://aglover.github.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb</id>
+    <id>http://thediscoblog.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mongodb_icon.png">Are you new to <a href="http://www.mongodb.org/">MongoDB</a>? Curious to see what's interesting about it?  Document-oriented databases like MongoDB are vastly different from relational databases in that they don't store data in tables; instead, they store it in the form of documents. From a developer's perspective, document-oriented (or schemaless) data is simpler and <a href="http://thediscoblog.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">far more flexible</a> to manage than relational data. Rather than storing data into a rigid schema of tables, rows, and columns, joined by relationships, documents are written individually, containing whatever data they require.</p>
 
 <p>Among open source, document-oriented databases, MongoDB is often billed as a <a href="http://www.ibm.com/developerworks/library/j-javadev2-12/">NoSQL database with RDBMS features</a>. One example of this is MongoDB's support for dynamic queries that don't require predefined MapReduce functions. MongoDB also comes with an interactive shell that makes accessing its datastore refreshingly easy, and its out-of-the-box support for sharding and clustering (via <a href="http://thediscoblog.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">replica sets</a>) enables high scalability across multiple nodes.</p>

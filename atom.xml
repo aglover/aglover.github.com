@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[The Disco Blog]]></title>
-  <link href="http://aglover.github.com/atom.xml" rel="self"/>
-  <link href="http://aglover.github.com/"/>
-  <updated>2013-06-12T14:05:50-04:00</updated>
-  <id>http://aglover.github.com/</id>
+  <link href="http://thediscoblog.com/atom.xml" rel="self"/>
+  <link href="http://thediscoblog.com/"/>
+  <updated>2013-06-12T14:18:48-04:00</updated>
+  <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Lickety-split custom validations in Rails]]></title>
-    <link href="http://aglover.github.com/blog/2013/06/12/lickety-split-custom-validations-in-rails/"/>
+    <link href="http://thediscoblog.com/blog/2013/06/12/lickety-split-custom-validations-in-rails/"/>
     <updated>2013-06-12T13:19:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/06/12/lickety-split-custom-validations-in-rails</id>
+    <id>http://thediscoblog.com/blog/2013/06/12/lickety-split-custom-validations-in-rails</id>
     <content type="html"><![CDATA[<p>Have a highly specific, yet custom validation for a particular field on one of your <a href="http://thediscoblog.com/blog/categories/rails/">Rails</a> model objects? Don&#8217;t want to create a <code>ActiveModel::Validator</code> type? Not a problem!</p>
 
 <p>You can just as easily <a href="http://guides.rubyonrails.org/active_record_validations_callbacks.html">create a method</a> that can be invoked as part of the validation process. For example, imagine a field dubbed <code>uri</code> in some model object; this field must begin with a protocol (i.e. http or https). You can create a validation method like so:</p>
@@ -48,10 +48,10 @@
   
   <entry>
     <title type="html"><![CDATA[Backgrounding tasks in Heroku with Delayed Job]]></title>
-    <link href="http://aglover.github.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
+    <link href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
     <updated>2013-06-10T12:56:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what&#8217;s more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn&#8217;t be any easier</a>.</p>
+    <id>http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what&#8217;s more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn&#8217;t be any easier</a>.</p>
 
 <!-- more -->
 
@@ -120,9 +120,9 @@
   
   <entry>
     <title type="html"><![CDATA[MongoDB to CSV]]></title>
-    <link href="http://aglover.github.com/blog/2013/06/07/mongodb-to-csv/"/>
+    <link href="http://thediscoblog.com/blog/2013/06/07/mongodb-to-csv/"/>
     <updated>2013-06-07T20:01:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/06/07/mongodb-to-csv</id>
+    <id>http://thediscoblog.com/blog/2013/06/07/mongodb-to-csv</id>
     <content type="html"><![CDATA[<p>Every once in a while, I need to give a non-technical user (like a business analyst) data residing in <a href="http://www.mongodb.org/">MongoDB</a>; consequently, I export the target data as a <a href="http://en.wikipedia.org/wiki/Comma-separated_values">CSV file</a> (which they can presumably slice and dice once they import it into Excel or some similar tool). Mongo has a handy <a href="http://docs.mongodb.org/manual/reference/program/mongoexport/">export utility</a> that takes a bevy of options, however, there is an <a href="https://jira.mongodb.org/browse/SERVER-4224">outstanding bug</a> and some <a href="http://stackoverflow.com/questions/6814151/how-to-export-collection-to-csv-in-mongodb">general confusion</a> as to how to properly export data in CSV format.</p>
 
 <!-- more -->
@@ -172,10 +172,10 @@
   
   <entry>
     <title type="html"><![CDATA[Callbacks in Appcelerator Titanium modules]]></title>
-    <link href="http://aglover.github.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules/"/>
+    <link href="http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules/"/>
     <updated>2013-05-29T13:42:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/appc_stacked.png">I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>&#8217;s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47&#8217;s <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
+    <id>http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/appc_stacked.png">I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>&#8217;s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47&#8217;s <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
 
 <p>In the end, what I wanted to implement was a <a href="http://recurial.com/programming/understanding-callback-functions-in-javascript/">JavaScript-ish callback</a> associated with a native App47 Agent call. Alas, it took me a lot of digging to achieve this goal.</p>
 
@@ -329,9 +329,9 @@
   
   <entry>
     <title type="html"><![CDATA[Mobile for the Masses: Activities and icons in your Android application lifecycle]]></title>
-    <link href="http://aglover.github.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle/"/>
+    <link href="http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle/"/>
     <updated>2013-05-28T15:28:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle</id>
+    <id>http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle</id>
     <content type="html"><![CDATA[<p>My third article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>&#8217; series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> is now out! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">This hip article</a> covers the lifecycle events associated with <code>Activity</code> classes and then shows you how to implement menus and/or activity bars (for newer devices) along with associating icons for an app itself and its corresponding activity items.</p>
 
 <p>As the article summary states:</p>
@@ -347,10 +347,10 @@
   
   <entry>
     <title type="html"><![CDATA[ElasticSearch on EC2 in less than 60 seconds]]></title>
-    <link href="http://aglover.github.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/"/>
+    <link href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/"/>
     <updated>2013-05-17T17:24:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://aglover.github.com/images/mine/es-bonzai.jpg">Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend &#8211; in less than 60 seconds, I&#8217;ll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
+    <id>http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/es-bonzai.jpg">Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend &#8211; in less than 60 seconds, I&#8217;ll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
 
 <p>You&#8217;ll first <a href="http://www.drdobbs.com/web-development/getting-started-with-the-cloud-amazon-we/231601598">need an AWS account</a> along with an SSH key pair. If you don&#8217;t already have those two steps done, go ahead and do that. The steps that follow suggest a particular AMI; however, you are free to select the <a href="http://aws.amazon.com/ec2/instance-types/">instance type</a>. <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Micro instance types</a> are free to use; consequently, you can get <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">up and running with ElasticSearch</a> in less than a minute <em>for free</em>.</p>
 
@@ -404,10 +404,10 @@
   
   <entry>
     <title type="html"><![CDATA[Mobile-isticly optimized in 10 seconds]]></title>
-    <link href="http://aglover.github.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/"/>
+    <link href="http://thediscoblog.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/"/>
     <updated>2013-05-15T13:20:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/unoptmobile.png">Anyone ever told you that your website isn&#8217;t mobile optimized? Or have you ever seen a lilliputian-looking website on your device? You know, one that renders so small you are forced to squint as you enlarge various parts of the site with your fingers just to read it?</p>
+    <id>http://thediscoblog.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/unoptmobile.png">Anyone ever told you that your website isn&#8217;t mobile optimized? Or have you ever seen a lilliputian-looking website on your device? You know, one that renders so small you are forced to squint as you enlarge various parts of the site with your fingers just to read it?</p>
 
 <p>Websites render this way on mobile devices because they lack a simple <code>meta</code> tag. While the subject of mobile website optimization can be rather involved (especially when dealing with <a href="http://css-tricks.com/css-media-queries/">CSS media queries</a>, which take longer than 10 seconds to understand), there is a simple trick that can at least can make your website render normally on a mobile device. And it can be done in 10 seconds.</p>
 
@@ -431,10 +431,10 @@
   
   <entry>
     <title type="html"><![CDATA[The democratization of search]]></title>
-    <link href="http://aglover.github.com/blog/2013/05/14/the-democratization-of-search/"/>
+    <link href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/"/>
     <updated>2013-05-14T11:33:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/05/14/the-democratization-of-search</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/democracy.jpg">Over the past year and a half, I&#8217;ve watched <a href="http://www.elasticsearch.org/">ElasticSearch</a> grow from a seemingly part-time code experiment into a thriving ecosystem. Not only has the number of <a href="http://www.elasticsearch.org/guide/clients/">client libraries</a> grown from 1 to over 25 (and counting!); it&#8217;s now a <a href="http://www.elasticsearch.com/">commercially sponsored project</a> to the tune of <a href="http://www.whiteboardmag.com/youre-hot-or-not-why-elasticsearch-raised-24-million-just-3-months-after-a-10-million-round/">$34 million</a> (a <a href="http://www.zdnet.com/elasticsearch-raises-24-million-big-data-analytics-7000011496/">$10M series A</a> and a <a href="http://gigaom.com/2013/02/19/open-source-search-tool-elasticsearch-gets-24m/">$24M series B</a>) with 200,000 downloads a month.</p>
+    <id>http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/democracy.jpg">Over the past year and a half, I&#8217;ve watched <a href="http://www.elasticsearch.org/">ElasticSearch</a> grow from a seemingly part-time code experiment into a thriving ecosystem. Not only has the number of <a href="http://www.elasticsearch.org/guide/clients/">client libraries</a> grown from 1 to over 25 (and counting!); it&#8217;s now a <a href="http://www.elasticsearch.com/">commercially sponsored project</a> to the tune of <a href="http://www.whiteboardmag.com/youre-hot-or-not-why-elasticsearch-raised-24-million-just-3-months-after-a-10-million-round/">$34 million</a> (a <a href="http://www.zdnet.com/elasticsearch-raises-24-million-big-data-analytics-7000011496/">$10M series A</a> and a <a href="http://gigaom.com/2013/02/19/open-source-search-tool-elasticsearch-gets-24m/">$24M series B</a>) with 200,000 downloads a month.</p>
 
 <p>Search is the touchstone of the Internet; without search the Internet wouldn&#8217;t be all that useful. Google&#8217;s meteoric rise and its resultant eponymous name for search is clear evidence as to the importance of search. Search, however, hasn&#8217;t always been that easy nor affordable to implement.</p>
 
@@ -453,10 +453,10 @@
   
   <entry>
     <title type="html"><![CDATA[Hold your horses! It's still only a two horse race.]]></title>
-    <link href="http://aglover.github.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/"/>
+    <link href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/"/>
     <updated>2013-05-09T12:49:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://aglover.github.com/images/mine/2horsesracesm.jpg">There has been a lot of excitement in recent months regarding a few new entrants to the mobile operating systems arena including <a href="http://www.mozilla.org/en-US/firefox/partners/">Firefox OS</a>, <a href="https://www.tizen.org/">Tizen</a>, and <a href="https://wiki.ubuntu.com/Touch">Ubuntu Touch</a>. These relatively nascent projects, which are all built on top of a Linux kernel, appear to have fully embraced HTML 5 apps; indeed, HTML 5 apps on these operating systems are first class citizens that can run without a browser. Moreover, the ubiquity of HTML 5 means the same app can run on all 3 of these operating systems plus Android and iOS!</p>
+    <id>http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/2horsesracesm.jpg">There has been a lot of excitement in recent months regarding a few new entrants to the mobile operating systems arena including <a href="http://www.mozilla.org/en-US/firefox/partners/">Firefox OS</a>, <a href="https://www.tizen.org/">Tizen</a>, and <a href="https://wiki.ubuntu.com/Touch">Ubuntu Touch</a>. These relatively nascent projects, which are all built on top of a Linux kernel, appear to have fully embraced HTML 5 apps; indeed, HTML 5 apps on these operating systems are first class citizens that can run without a browser. Moreover, the ubiquity of HTML 5 means the same app can run on all 3 of these operating systems plus Android and iOS!</p>
 
 <p>What&#8217;s also exciting is that there are some major players behind these projects &#8211; Mozilla is, of course behind Firefox OS, Canonical is behind Ubuntu Touch, and quite a few large players are behind Tizen, including Samsung. <a href="http://www.forbes.com/sites/haydnshaughnessy/2013/04/13/how-mozillas-firefox-os-will-open-up-the-smartphone-market/">Firefox OS even appears to be courting carriers with an opportunity to run their own app stores</a>. This app store opportunity naturally has carriers foaming at the mouth to re-assert some semblance of control: behold the Verizon app store! All apps are $0.99 and we&#8217;ll just bill you at the end of the month (like we used to do for all those ringtones you were accustomed to download back when we were in control of all things device-related before Apple destroyed that cash cow).</p>
 
@@ -490,10 +490,10 @@
   
   <entry>
     <title type="html"><![CDATA[The Rails, CloudFront, and Heroku performance hat-trick]]></title>
-    <link href="http://aglover.github.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
+    <link href="http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
     <updated>2013-05-01T09:10:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
+    <id>http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
 
 <p>It&#8217;s easy to configure a <a href="http://rubyonrails.org/">Rails</a> app to take advantage of CloudFront; what&#8217;s more, if your Rails app is hosted on <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-21/">Heroku</a>, there&#8217;s <a href="https://github.com/romanbsd/heroku-deflater">a nifty gem</a>, dubbed heroku-deflater, that&#8217;ll enable <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP compression</a> of static assets (<a href="http://stackoverflow.com/questions/12326191/any-way-to-serve-gzip-assets-from-heroku">other than images</a>).</p>
 
@@ -522,19 +522,19 @@
 
 <p>Next, sign into the AWS Management Console and enable CloudFront if you haven&#8217;t already. From the CloudFront admin page, create a new distribution via the Create Distribution button on the top left.</p>
 
-<p><img class="center" src="http://aglover.github.com/images/mine/cloudfront_1.png"></p>
+<p><img class="center" src="http://thediscoblog.com/images/mine/cloudfront_1.png"></p>
 
 <p>Once the create distribution wizard begins, be sure to select Download as your delivery method.</p>
 
-<p><img class="center" src="http://aglover.github.com/images/mine/cloudfront_2.png"></p>
+<p><img class="center" src="http://thediscoblog.com/images/mine/cloudfront_2.png"></p>
 
 <p>In the next screen, there are some important fields you&#8217;ll need to fill out, namely: the Origin Source Name and the Viewer Protocol Policy. For the Origin Source Name, you will need to put in your app&#8217;s URL or the Heroku URL (if you do not map a custom domain name to it). If you web site supports HTTPS, then be sure to set the Viewer Protocol Policy to HTTP and HTTPS.</p>
 
-<p><img class="center" src="http://aglover.github.com/images/mine/cloudfront_3.png"></p>
+<p><img class="center" src="http://thediscoblog.com/images/mine/cloudfront_3.png"></p>
 
 <p>The only other important setting after these two is the Price Class. It&#8217;s here where you can set where CloudFront will essentially serve up your content &#8211; the default setting of Use All Edge Locations is most likely what you need.</p>
 
-<p><img class="center" src="http://aglover.github.com/images/mine/cloudfront_5.png"></p>
+<p><img class="center" src="http://thediscoblog.com/images/mine/cloudfront_5.png"></p>
 
 <p>Finally, click the Create Distribution button &#8211; once you do that, it&#8217;ll take a bit for things to initialize (basically, the CDN needs to get built and this may take up to 30 minutes).</p>
 
@@ -560,11 +560,11 @@
 
 <p>In this case, <a href="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/">I&#8217;m using Chrome</a>. Go to JavaScript console and hit the Network tab.</p>
 
-<p><img class="center" src="http://aglover.github.com/images/mine/cloudfront_6.png"></p>
+<p><img class="center" src="http://thediscoblog.com/images/mine/cloudfront_6.png"></p>
 
 <p>Surf around and you&#8217;ll note a few things &#8211; one, that the assets like images and JavaScript files are being severed up from your CDN (just look at the URL) and that the size will often say &#8220;(from cache)&#8221; &#8211; that means the CDN is handling the load rather than <a href="http://www.ibm.com/developerworks/podcast/glover-heroku-110811/">Heroku</a>. You should also note that your web app is probably a bit more snappy!</p>
 
-<p><img class="center" src="http://aglover.github.com/images/mine/cloudfront_7.png"></p>
+<p><img class="center" src="http://thediscoblog.com/images/mine/cloudfront_7.png"></p>
 
 <p>Check out your Heroku logs and you&#8217;ll note fewer hits in this case &#8211; dynamic pages are still being loaded, however, static assets are not anymore &#8211; that&#8217;s the job of your CDN!</p>
 
@@ -576,10 +576,10 @@
   
   <entry>
     <title type="html"><![CDATA[Mobile for the masses: gestures and test deployments]]></title>
-    <link href="http://aglover.github.com/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments/"/>
+    <link href="http://thediscoblog.com/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments/"/>
     <updated>2013-04-24T21:13:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/mftm_1.jpg">My second article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>&#8217; series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> is out! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html">This article</a> covers how to go about designing a mobile interface from the standpoint of usability via gestures. In essence, eschew buttons and prefer the swipe! What&#8217;s more, I cover at a high level how to test your app on an Android device.</p>
+    <id>http://thediscoblog.com/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/mftm_1.jpg">My second article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>&#8217; series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> is out! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html">This article</a> covers how to go about designing a mobile interface from the standpoint of usability via gestures. In essence, eschew buttons and prefer the swipe! What&#8217;s more, I cover at a high level how to test your app on an Android device.</p>
 
 <p>As the article summary states:</p>
 
@@ -594,9 +594,9 @@
   
   <entry>
     <title type="html"><![CDATA[cURLing for Wget]]></title>
-    <link href="http://aglover.github.com/blog/2013/04/18/curling-for-wget/"/>
+    <link href="http://thediscoblog.com/blog/2013/04/18/curling-for-wget/"/>
     <updated>2013-04-18T09:33:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/04/18/curling-for-wget</id>
+    <id>http://thediscoblog.com/blog/2013/04/18/curling-for-wget</id>
     <content type="html"><![CDATA[<p><a href="http://en.wikipedia.org/wiki/Wget">Wget</a> is an extremely handy utility I use all the time when I find myself on a Linux box. It&#8217;s quite helpful, for example, for downloading files. Need to <a href="https://github.com/aglover/ubuntu-equip/blob/master/equip_ruby.sh">install Ruby</a>? No problem, just download the binary like so:</p>
 
 <figure class='code'><figcaption><span>wget example of downloading Ruby binary</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -630,12 +630,12 @@
   
   <entry>
     <title type="html"><![CDATA[Chrome's console commands]]></title>
-    <link href="http://aglover.github.com/blog/2013/04/15/chromes-console-commands/"/>
+    <link href="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/"/>
     <updated>2013-04-15T10:05:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/04/15/chromes-console-commands</id>
+    <id>http://thediscoblog.com/blog/2013/04/15/chromes-console-commands</id>
     <content type="html"><![CDATA[<p>As if the JavaScript console in Chrome couldn&#8217;t be any more awesome. Check it out: <a href="https://developers.google.com/chrome-developer-tools/docs/commandline-api">Command Line API Reference</a>. Yep, it&#8217;s legit. I&#8217;ve been using Firebug and the like for years and only just ran across this feature of Chrome&#8217;s JavaScript console.</p>
 
-<p><img class="center" src="http://aglover.github.com/images/mine/jschrome.png"></p>
+<p><img class="center" src="http://thediscoblog.com/images/mine/jschrome.png"></p>
 
 <p>My favorite: <code>getEventListeners</code>. Understanding how the DOM is augmented with listeners is amazingly helpful!</p>
 
@@ -645,10 +645,10 @@
   
   <entry>
     <title type="html"><![CDATA[Hybrid inappropriateness]]></title>
-    <link href="http://aglover.github.com/blog/2013/04/14/hybrid-inappropriateness/"/>
+    <link href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/"/>
     <updated>2013-04-14T11:14:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/04/14/hybrid-inappropriateness</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/confused.png">The mobile development landscape is <a href="http://skytechgeek.com/2011/09/10-mobile-application-frameworks-for-easy-development/">bursting at the seams</a> with frameworks and tools that enable you to target <a href="http://thediscoblog.com/blog/2013/03/25/modeveast-2012-panel-discussion/">two primary mobile platforms</a>: iOS and <a href="http://thediscoblog.com/blog/categories/android/">Android</a>. And the mobile community has <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">classified these frameworks and tools</a> into three categories: native, hybrid, and web. Unfortunately, limiting the classification to three <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">is inadequate</a> as the term hybrid is too generic.</p>
+    <id>http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/confused.png">The mobile development landscape is <a href="http://skytechgeek.com/2011/09/10-mobile-application-frameworks-for-easy-development/">bursting at the seams</a> with frameworks and tools that enable you to target <a href="http://thediscoblog.com/blog/2013/03/25/modeveast-2012-panel-discussion/">two primary mobile platforms</a>: iOS and <a href="http://thediscoblog.com/blog/categories/android/">Android</a>. And the mobile community has <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">classified these frameworks and tools</a> into three categories: native, hybrid, and web. Unfortunately, limiting the classification to three <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">is inadequate</a> as the term hybrid is too generic.</p>
 
 <p>Web apps are truly ubiquitous because they take advantage of the browser and are thus, cross platform. You, for the most part, can get away with <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">maintaining one code base</a> that can be viewed on iOS, Android, and the other minor players. Yet, the key point of Web apps is that they are <a href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/"><em>web sites</em>, not mobile apps</a>.</p>
 
@@ -663,11 +663,11 @@
 
 <p>PhoneGap is a great framework for building hybrid-web apps. You code in HTML and JavaScript and the resultant code is run inside of a web view managed by a native container.  You ostensibly write one code base and deploy to all the primary mobile platforms. Similar frameworks are: <a href="http://www-01.ibm.com/software/mobile-solutions/worklight/">IBM&#8217;s Worklight</a> and <a href="http://www.icenium.com/">Icenium</a>. <a href="http://www.sencha.com/products/touch">Sencha Touch</a> falls into this realm as well when you employ their container technology.</p>
 
-<p><img class="center" src="http://aglover.github.com/images/mine/phonegap_example.png"></p>
+<p><img class="center" src="http://thediscoblog.com/images/mine/phonegap_example.png"></p>
 
 <p><a href="http://www.madewithmarmalade.com/">Marmalade</a> is a hybrid-native app platform; that is, you can code in an intermediary language like C++ that is ultimately compiled down into native code (i.e. Java for Android, Objective-C for iOS, etc). These apps are not characterized by a web view in any way. They are native, close to the bone as it gets apps. The benefit is that you only had to write <em>one code base</em>, the underlying tool took care of the dirty work in making it work similarly on iOS and Android, for example. Similar frameworks are: <a href="http://www.coronalabs.com/">Corona</a>, <a href="http://www.mosync.com/">MoSync</a>, and <a href="http://www.appcelerator.com/">Appcelerator</a> to name a few.</p>
 
-<p><img class="center" src="http://aglover.github.com/images/mine/marmalate_example.png"></p>
+<p><img class="center" src="http://thediscoblog.com/images/mine/marmalate_example.png"></p>
 
 <p>Now look closely at the <a href="http://phonegap.com/app/feature/">featured apps</a> of each <a href="http://www.madewithmarmalade.com/app-showcase">hybrid framework</a>. They&#8217;re <a href="http://phonegap.com/blog/2011/11/07/phonegap-application-craft-pain-free-mobile-app-development/">distinctly</a> <a href="http://www.madewithmarmalade.com/marmaladesdk/application/cut-rope">different</a> aren&#8217;t they?</p>
 
@@ -679,10 +679,10 @@
   
   <entry>
     <title type="html"><![CDATA[Painless Android swipe detection]]></title>
-    <link href="http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection/"/>
+    <link href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/"/>
     <updated>2013-04-07T10:37:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/04/07/painless-android-swipe-detection</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://aglover.github.com/images/mine/gesticulate.png">Why bother building navigation buttons in an Android app when you can easily capture finger swipes? But, if you&#8217;ve ever implemented gesture section in Android there&#8217;s the drudgery of implementing listeners and you also need to do some elementary Cartesian math. Save yourself the boilerplate bother mathematics and use a <a href="https://github.com/aglover/gesticulate">library</a>!</p>
+    <id>http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/gesticulate.png">Why bother building navigation buttons in an Android app when you can easily capture finger swipes? But, if you&#8217;ve ever implemented gesture section in Android there&#8217;s the drudgery of implementing listeners and you also need to do some elementary Cartesian math. Save yourself the boilerplate bother mathematics and use a <a href="https://github.com/aglover/gesticulate">library</a>!</p>
 
 <p><a href="https://github.com/aglover/gesticulate">Gesticulate</a> makes it painless to detect straightforward swiping motions like up, down, left, and right. It&#8217;s a simple jar file you include in your Android <code>libs</code> directory. Throw Gesticulate&#8217;s <code>SwipeDetector</code> inside an instance of Android&#8217;s <code>SimpleOnGestureListener</code>, for example, and you&#8217;re detecting swipes with ease!</p>
 
@@ -692,10 +692,10 @@
   
   <entry>
     <title type="html"><![CDATA[Crowd think often lacks clarity]]></title>
-    <link href="http://aglover.github.com/blog/2013/04/05/crowd-think-often-lacks-clarity/"/>
+    <link href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/"/>
     <updated>2013-04-05T21:04:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/04/05/crowd-think-often-lacks-clarity</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://aglover.github.com/images/mine/crowd.jpg">In case you missed it, <a href="http://www.infoq.com/">InfoQ</a> has an <a href="http://www.infoq.com/research/cross-platform-mobile-tools">interesting analysis regarding hybrid mobile app development frameworks</a>. They are profiling 12 tools and soliciting community feedback so as to make a <a href="http://www.thoughtworks.com/insights">ThoughtWorks-like technology radar</a>. If you participate in the voting you are entitled to see the voting distribution.</p>
+    <id>http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/crowd.jpg">In case you missed it, <a href="http://www.infoq.com/">InfoQ</a> has an <a href="http://www.infoq.com/research/cross-platform-mobile-tools">interesting analysis regarding hybrid mobile app development frameworks</a>. They are profiling 12 tools and soliciting community feedback so as to make a <a href="http://www.thoughtworks.com/insights">ThoughtWorks-like technology radar</a>. If you participate in the voting you are entitled to see the voting distribution.</p>
 
 <p>What&#8217;s interesting (and not too surprising) about this analysis is that frameworks like <a href="http://phonegap.com/">PhoneGap</a> or <a href="http://jquerymobile.com/">jQuery Mobile</a> (and laughably <a href="http://jqtjs.com/">JQTouch</a>?) are leaning more towards <em>adoption ready</em> when compared to frameworks like <a href="http://www.madewithmarmalade.com/">Marmelade</a>, <a href="http://www.coronalabs.com/">Coronona</a> or <a href="http://www.mosync.com/">MoSync</a>. But this radar lacks some clarifying dimensions &#8211; for example, if you want to produce a mobile website on a lot of different mobile platforms quickly, then PhoneGap is probably the way to go. But if you&#8217;re looking to create a mobile app, then the choice to use PhoneGap must be treated with extreme caution.</p>
 
@@ -712,9 +712,9 @@
   
   <entry>
     <title type="html"><![CDATA[Mongoid batch inserts]]></title>
-    <link href="http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts/"/>
+    <link href="http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts/"/>
     <updated>2013-03-27T11:34:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/03/27/mongoid-batch-inserts</id>
+    <id>http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts</id>
     <content type="html"><![CDATA[<p>In SQL land, all databases support batch inserts. Batch inserts are an effective and efficient mechanism to insert a lot of similar data. That is, instead of issuing x insert statements, you execute 1 insert with x records. This is much more efficient because the insert statement doesn&#8217;t need to be re-parsed x times, there is only 1 network trip as opposed to x, and in the case of transactions, there is only 1 transaction instead of x. When compared to x inserts, batch inserts are always faster.</p>
 
 <p>As it turns out, <a href="http://www.mongodb.org/">MongoDB</a> supports <a href="http://docs.mongodb.org/manual/applications/create/#bulk-insert-multiple-documents">batch inserts</a>! And just like in SQL land, Mongo&#8217;s batching feature is much faster at inserting a lot of data in one insert rather than x inserts.</p>
@@ -738,9 +738,9 @@
   
   <entry>
     <title type="html"><![CDATA[MoDevEast 2012 panel discussion]]></title>
-    <link href="http://aglover.github.com/blog/2013/03/25/modeveast-2012-panel-discussion/"/>
+    <link href="http://thediscoblog.com/blog/2013/03/25/modeveast-2012-panel-discussion/"/>
     <updated>2013-03-25T18:34:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/03/25/modeveast-2012-panel-discussion</id>
+    <id>http://thediscoblog.com/blog/2013/03/25/modeveast-2012-panel-discussion</id>
     <content type="html"><![CDATA[<p>Last fall, I had the pleasure of moderating a panel discussion at <a href="http://modeveast.com/">MoDevEast</a> entitled &#8221;<a href="http://www.youtube.com/watch?v=b7P-wNuHPL0">What Developers Love and Hate about iOS, Android, Windows and HTML5</a>&#8221; with five super star mobile app developers.</p>
 
 <div class="embed-video-container"><iframe src="http://www.youtube.com/embed/b7P-wNuHPL0 "></iframe></div>
@@ -757,18 +757,18 @@
   
   <entry>
     <title type="html"><![CDATA[2013 Open Analytics Summit]]></title>
-    <link href="http://aglover.github.com/blog/2013/03/21/2013-open-analytics-summit/"/>
+    <link href="http://thediscoblog.com/blog/2013/03/21/2013-open-analytics-summit/"/>
     <updated>2013-03-21T15:21:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/03/21/2013-open-analytics-summit</id>
+    <id>http://thediscoblog.com/blog/2013/03/21/2013-open-analytics-summit</id>
     <content type="html"><![CDATA[<p><img class="right left" src="http://www.openanalyticssummit.com/wp-content/uploads/2012/12/OAS-logo-Full-colour3-300x85.png">On March 25, 2013, <a href="http://www.openanalyticssummit.com/speakers/">I&#8217;ll be speaking</a> at the <a href="http://www.openanalyticssummit.com/">Open Analytics Summit in Washington DC</a>; specifically, I&#8217;ll be discussing how the <a href="http://www.app47.com/2013/03/20/next-monday-app47-cto-andy-glover-offers-a-database-reality-check-at-the-open-analytics-summit/">App47</a> team has used <a href="http://www.mongodb.org/">MongoDB</a> as the backend of our enterprise mobile application management platform. We&#8217;ve learned quite a few things about <a href="http://thediscoblog.com/blog/categories/mongodb/">Mongo</a> over the last two years! In the process of growing from a few gigabytes of data a month to over a terabyte/month, we&#8217;ve found out first hand what <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Mongo</a> is good at and what it&#8217;s <em>not good at</em>. I&#8217;ll be addressing a number of tips, techniques, and strategies &#8211; if you are a Mongo user or planning on being one, come on by!</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Node.js in 3 commands]]></title>
-    <link href="http://aglover.github.com/blog/2013/03/12/node-in-3-commands/"/>
+    <link href="http://thediscoblog.com/blog/2013/03/12/node-in-3-commands/"/>
     <updated>2013-03-12T11:55:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/03/12/node-in-3-commands</id>
+    <id>http://thediscoblog.com/blog/2013/03/12/node-in-3-commands</id>
     <content type="html"><![CDATA[<p>A few <a href="http://www.javaworld.com/community/node/8140">short years ago</a> when I started to explore <a href="http://nodejs.org/">Node.js</a>, I remember the installation on my MacBook Pro required downloading the source, compiling and installing it, and then updating paths. <em>And then</em> you had to install <a href="https://npmjs.org/">NPM</a>.</p>
 
 <p>Since then, <a href="http://www.ibm.com/developerworks/library/j-nodejs/">Node</a>&#8217;s installation has been come tremendously easy and NPM is even <em>bundled</em> with <a href="http://www.ibm.com/developerworks/offers/lp/demos/summary/j-jnodejs.html?ca=drs-">Node</a>. And yet, installing Node (and keeping up w/its rapid release schedule) is even easier with a nifty tool: <a href="https://github.com/creationix/nvm">Node Version Manager</a>.</p>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Heroku | The Disco Blog]]></title>
-  <link href="http://aglover.github.com/blog/categories/heroku/atom.xml" rel="self"/>
-  <link href="http://aglover.github.com/"/>
-  <updated>2013-06-12T14:05:50-04:00</updated>
-  <id>http://aglover.github.com/</id>
+  <link href="http://thediscoblog.com/blog/categories/heroku/atom.xml" rel="self"/>
+  <link href="http://thediscoblog.com/"/>
+  <updated>2013-06-12T14:18:48-04:00</updated>
+  <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Backgrounding tasks in Heroku with Delayed Job]]></title>
-    <link href="http://aglover.github.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
+    <link href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
     <updated>2013-06-10T12:56:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
+    <id>http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what's more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn't be any easier</a>.</p>
 
 <!-- more -->
@@ -81,9 +81,9 @@ $&gt; heroku logs -p worker -t
   
   <entry>
     <title type="html"><![CDATA[The Rails, CloudFront, and Heroku performance hat-trick]]></title>
-    <link href="http://aglover.github.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
+    <link href="http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
     <updated>2013-05-01T09:10:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
+    <id>http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
 
 <p>It's easy to configure a <a href="http://rubyonrails.org/">Rails</a> app to take advantage of CloudFront; what's more, if your Rails app is hosted on <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-21/">Heroku</a>, there's <a href="https://github.com/romanbsd/heroku-deflater">a nifty gem</a>, dubbed heroku-deflater, that'll enable <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP compression</a> of static assets (<a href="http://stackoverflow.com/questions/12326191/any-way-to-serve-gzip-assets-from-heroku">other than images</a>).</p>

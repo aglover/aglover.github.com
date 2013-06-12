@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Redis | The Disco Blog]]></title>
-  <link href="http://aglover.github.com/blog/categories/redis/atom.xml" rel="self"/>
-  <link href="http://aglover.github.com/"/>
-  <updated>2013-06-12T14:05:50-04:00</updated>
-  <id>http://aglover.github.com/</id>
+  <link href="http://thediscoblog.com/blog/categories/redis/atom.xml" rel="self"/>
+  <link href="http://thediscoblog.com/"/>
+  <updated>2013-06-12T14:18:48-04:00</updated>
+  <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Redis replication: couldn't be any easier]]></title>
-    <link href="http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/"/>
+    <link href="http://thediscoblog.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/"/>
     <updated>2012-08-29T13:23:00-04:00</updated>
-    <id>http://aglover.github.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier</id>
+    <id>http://thediscoblog.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier</id>
     <content type="html"><![CDATA[<p><a href="http://redis.io">Redis</a> supports <a href="http://redis.io/topics/replication">master-slave replication</a> and it's extremely easy to setup.  And the beauty of setting up replication is that all you have to do is fire up a slave instance and have it point to some other Redis instance (which then becomes the master node).</p>
 
 <p>Accordingly, open up the <code>redis.conf</code> file for an intended secondary (or slave node) and find the section containing a <code>slaveof</code> phrase. Uncomment it and add the IP address &amp; port of the master node:</p>
