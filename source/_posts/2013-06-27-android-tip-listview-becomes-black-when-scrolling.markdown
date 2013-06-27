@@ -8,6 +8,8 @@ categories: [mobile, Android, Java]
 
 One of [my Android apps](https://play.google.com/store/apps/details?id=com.b50.hoproll) recently suffered from a nefariously ugly UI glitch that, embarrassingly, a user reported to me.  Strangely, this phenomenon did not surface itself in local testing on either emulators or devices when I first wrote the app; nevertheless, I was able to reproduce the error after the bug report came in. I suspect that recent updates in the Android platform might have exacerbated the issue for my app as I'm fairly certain I never saw it before. 
 
+<!-- more --> 
+
 [HopRoll](http://www.amazon.com/Beacon50-Hop-Roll/dp/B00A9Z5P42/ref=sr_1_1?ie=UTF8&qid=1370959609&sr=8-1&keywords=hoproll) displays a ListView of hops and has a custom background like so: 
 
 {% img center /images/mine/hop_roll_2.png %}
