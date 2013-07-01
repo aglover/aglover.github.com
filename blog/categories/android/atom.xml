@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-06-12T14:18:48-04:00</updated>
+  <updated>2013-07-01T12:19:43-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,94 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mobile for the masses: Words and gestures with Overheard Word]]></title>
+    <link href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/"/>
+    <updated>2013-07-01T12:10:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word</id>
+    <content type="html"><![CDATA[<p>The fourth article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>' series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> has been published! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">This copasetic article</a> shows you how to take the Overheard Word demo app up a level with a JSON-based word engine and some prebaked, swipe-gesture functionality.</p>
+
+<!-- more -->
+
+
+<p>As the article summary states:</p>
+
+<p><blockquote><p>You might feel like a kid in a candy store grabbing third-party code from GitHub or another repository, but there are still some tricks to integrating it with your Android UI. This month, Andrew Glover shows you how to take the Overheard Word demo app up a level with a JSON-based word engine and some prebaked, swipe-gesture functionality. As it turns out, Android easily accommodates third-party code, but you still have to do some careful logic if you want your app's UI to run it smoothly.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html'>Mobile for the Masses: Words and Gestures With Overheard Word</a></cite></footer></blockquote></p>
+
+<p>Check out "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">Mobile for the masses: Mobile for the masses: Words and gestures with Overheard Word</a>" and programmatically integrate third-party code into your Android UI! If you missed the first article, check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>"; what's more, don't forget to read my second article, entitled "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>" and the third article "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>".</p>
+
+<p>Stay tuned for more articles in this series and don't forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Android tip: ListView becomes black when scrolling]]></title>
+    <link href="http://thediscoblog.com/blog/2013/06/27/android-tip-listview-becomes-black-when-scrolling/"/>
+    <updated>2013-06-27T13:15:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/06/27/android-tip-listview-becomes-black-when-scrolling</id>
+    <content type="html"><![CDATA[<p>One of <a href="https://play.google.com/store/apps/details?id=com.b50.hoproll">my Android apps</a> recently suffered from a nefariously ugly UI glitch that, embarrassingly, a user reported to me.  Strangely, this phenomenon did not surface itself in local testing on either emulators or devices when I first wrote the app; nevertheless, I was able to reproduce the error after the bug report came in. I suspect that recent updates in the Android platform might have exacerbated the issue for my app as I'm fairly certain I never saw it before.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p><a href="http://www.amazon.com/Beacon50-Hop-Roll/dp/B00A9Z5P42/ref=sr_1_1?ie=UTF8&amp;qid=1370959609&amp;sr=8-1&amp;keywords=hoproll">HopRoll</a> displays a ListView of hops and has a custom background like so:</p>
+
+<p><img class="center" src="/images/mine/hop_roll_2.png"></p>
+
+<p>When people scrolled through that list, however, they would see a nasty black partially rendered screen that made the app completely unusable as you can see below:</p>
+
+<p><img class="center" src="/images/mine/hop_roll_1.png"></p>
+
+<p>If you start to notice that your <a href="http://developer.android.com/reference/android/widget/ListView.html">ListView</a> containing custom backgrounds become <a href="http://android-developers.blogspot.com/2009/01/why-is-my-list-black-android.html">horribly black</a> when scrolling then you've got the same issue.</p>
+
+<p>Luckily, it's quite easy to rectify. It turns out that when scrolling, there is some rendering magic going on that can obstruct the background in an ungainly way; you <a href="http://stackoverflow.com/questions/2833057/background-listview-becomes-black-when-scrolling">can fix it</a> by adding one line to the ListView's layout definition:</p>
+
+<p><code>xml Adding this to your ListView Layout definition will fix the issue
+android:cacheColorHint="@android:color/transparent"
+</code></p>
+
+<p>With that line in place, scrolling, once again, becomes clean and smooth.</p>
+
+<p>You can find my app, Hop Roll, which is your go-to home brew resource for all hop related information on <a href="https://play.google.com/store/apps/details?id=com.b50.hoproll">Google Play</a> and <a href="http://www.amazon.com/Beacon50-Hop-Roll/dp/B00A9Z5P42/ref=sr_1_1?ie=UTF8&amp;qid=1370959609&amp;sr=8-1&amp;keywords=hoproll">Amazon's Android App Store</a> -- keep on trucking, baby!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Mobile for the Masses: Activities and icons in your Android application lifecycle]]></title>
+    <link href="http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle/"/>
+    <updated>2013-05-28T15:28:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle</id>
+    <content type="html"><![CDATA[<p>My third article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>' series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> is now out! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">This hip article</a> covers the lifecycle events associated with <code>Activity</code> classes and then shows you how to implement menus and/or activity bars (for newer devices) along with associating icons for an app itself and its corresponding activity items.</p>
+
+<p>As the article summary states:</p>
+
+<p><blockquote><p>The Activity class is the workhorse of an Android mobile app, and it's also where you can fine-tune your app's interactions with both the user and the mobile device. Get things working exactly the way you want them in your app's lifecycle, then use icons and action bars to guide users through UI navigation and other app features.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html'>Mobile for the Masses: Activities and Icons in Your Android Application Lifecycle</a></cite></footer></blockquote></p>
+
+<p>Check out "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>" and add navigation with style to your Android mobile apps! If you missed the first article, check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>"; what's more, don't forget to read my second article, entitled "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>".</p>
+
+<p>Stay tuned for more articles in this series and don't forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Mobile for the masses: gestures and test deployments]]></title>
+    <link href="http://thediscoblog.com/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments/"/>
+    <updated>2013-04-24T21:13:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mftm_1.jpg">My second article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>' series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> is out! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html">This article</a> covers how to go about designing a mobile interface from the standpoint of usability via gestures. In essence, eschew buttons and prefer the swipe! What's more, I cover at a high level how to test your app on an Android device.</p>
+
+<p>As the article summary states:</p>
+
+<p><blockquote><p>Mobile users are typically distracted, busy, and ergonomically constrained, so build your mobile application UIs accordingly. Andrew Glover discusses key factors that differentiate mobile apps from web apps, then guides you through the creation of a mobile application UI that uses swipe gestures for navigation rather than button clicks.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html'>Mobile for the Masses: Take a Swipe at It! Programming Gestures in Android</a></cite></footer></blockquote></p>
+
+<p>So what are you waiting for? Check out "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>" and trade buttons for swipes in your Android mobile apps! And if you missed the first article, check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>" and learn the ins and outs of Android development!</p>
+
+<p>Stay tuned for more articles in this series and don't forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Painless Android swipe detection]]></title>
@@ -23,68 +111,6 @@
 <p><a href="https://github.com/aglover/gesticulate">Gesticulate</a> makes it painless to detect straightforward swiping motions like up, down, left, and right. It's a simple jar file you include in your Android <code>libs</code> directory. Throw Gesticulate's <code>SwipeDetector</code> inside an instance of Android's <code>SimpleOnGestureListener</code>, for example, and you're detecting swipes with ease!</p>
 
 <p>Gesticulate is used in Savvy Words, a flash card vocabulary app found on <a href="https://play.google.com/store/apps/details?id=com.b50.savvywords">Google Play</a> and <a href="http://www.amazon.com/Beacon50-Savvy-Words/dp/B00C535D20/ref=sr_1_1?s=mobile-apps&amp;ie=UTF8&amp;qid=1365339189&amp;sr=1-1">Amazon's Appstore for Android</a>. See the <a href="https://github.com/aglover/gesticulate">Github project</a> for more details such as code examples for how to use Gesticulate, how to build it, and to see Gesticulate's tests. Swipe on, baby!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Comprehending the mobile development landscape]]></title>
-    <link href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/"/>
-    <updated>2012-12-02T18:11:00-05:00</updated>
-    <id>http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape</id>
-    <content type="html"><![CDATA[<p>There's <a href="http://www.forbes.com/sites/parmyolson/2012/12/04/5-eye-opening-stats-that-show-the-world-is-going-mobile/">no shortage</a> of <a href="http://www.forbes.com/sites/connieguglielmo/2012/12/04/mary-meekers-must-read-interent-trends-report-says-android-phone-uptake-bests-apple/">mobile growth</a> statistics, but here's a few specific ones paint an overall picture of mobility:</p>
-
-<ul>
-<li><a href="http://www.digitalbuzzblog.com/infographic-2012-mobile-growth-statistics/">Roughly 87% of the worlds population has a mobile device</a></li>
-<li>Earlier this year, <a href="http://readwrite.com/2012/07/05/top-trends-of-2012-the-continuing-rapid-growth-of-mobile">Facebook claimed an astounding 488 million</a> mobile <a href="http://thediscoblog.com/blog/2012/11/28/the-essence-of-mobile-app-performance/">monthly active users </a></li>
-<li>Android's user base is growing by <a href="http://www.digitalbuzzblog.com/infographic-2012-mobile-growth-statistics/">700,000 subscribers a day</a></li>
-</ul>
-
-
-<p>These three facts clearly point out that mobility is a growing, global phenomenon, and that it's drastically changing how people use the Internet. What's more, from a technology standpoint, mobile is where the growth is!</p>
-
-<p>But the mobile landscape is as varied as it is big. Unlike a few short years ago, when doing mobile work implied J2ME on a Blackberry, mobile development now encompasses <a href="http://www.android.com/">Android</a>, <a href="http://en.wikipedia.org/wiki/IOS">iOS</a>, <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a>, and even <a href="http://dev.windowsphone.com/en-us">Windows Phone</a>. That's 4 distinct platforms with different development platforms and languages -- and I haven't even mentioned the <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">myriad hybrid options</a> available!</p>
-
-<p>The key to understanding the mobile landscape is an appreciation for the various developmental platforms -- their strengths &amp; weaknesses, speed of development, distribution, and, if you are looking at the consumer market, their payout.</p>
-
-<h5>Android</h5>
-
-<p>Android device distribution, as I pointed out earlier, is growing faster than other platforms, and the Android ecosystem has more than one app store: <a href="https://play.google.com/store?hl=en">Google Play</a> and <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Amazon's store</a>, just to name the two most popular ones. And by most accounts, <a href="http://www.engadget.com/2012/06/27/google-play-hits-600000-apps/">Google Play has as many</a> or <a href="http://news.cnet.com/8301-1035_3-57521252-94/can-apples-app-store-maintain-its-lead-over-google-play/">more apps</a> than Apple's App Store (careful with this statistic though, see details below regarding <em>payouts</em>).</p>
-
-<p>The massive adoption of Android, however, has lead to <a href="http://opensignal.com/reports/fragmentation.php">fragmentation</a>, which does present some significant challenges with respect to testing. In fact, the reality for most developers is that it is almost impossible to test an app on all combinations of device-OS version profiles in a cost effective manner (this is a growing service industry, by the way).</p>
-
-<p>On a positive note, Java, the native language of Android apps, is a fairly ubiquitous language -- some estimates <a href="http://en.wikipedia.org/wiki/Java_%28programming_language%29">peg as many as 10 million active developers</a> so there's no shortage of able-bodied Java developers and their associated tools out there.</p>
-
-<p>Thus, with Android, you have a wide audience (both people with Android devices and developers to build apps) and multiple distribution channels. Yet, this large distribution of disparate devices does present some testing challenges; what's more, it can be more difficult to make money on the Android platform compared to iOS, as you'll see next.</p>
-
-<h5>iOS</h5>
-
-<p>iOS, the OS for iPhones and iPads, has a <a href="http://mobile.tutsplus.com/tutorials/iphone/understanding-the-ios-ecosystem/">tight ecosystem</a> and an avid user base, <a href="http://www.androidauthority.com/are-iphone-users-richer-better-educated-than-android-users-105032/">willing to spend money</a>, ultimately translating into <a href="http://www.forbes.com/sites/darcytravlos/2012/08/22/five-reasons-why-google-android-versus-apple-ios-market-share-numbers-dont-matter/">more money for developers</a>. That is, even though there are far more Android devices globally than iOS ones, the iTunes App Store generates more money than Google Play, which means more money for developers of popular apps. In many respects, users of iOS devices are also more willing to pay a fee for an app as opposed to Android ones.</p>
-
-<p>The development ecosystem for iOS has a higher barrier to entry when compared to something like Java or JavaScript. OSX is a requirement and the <a href="http://store.apple.com/us/browse/home/shop_mac/family/macbook_pro">cost alone</a> here can be a barrier for a lot of developers; moreover, Objective-C can present some challenges for the faint of heart (manual memory management!). Yet, the tooling provided by Apple is almost universally lauded by the community at large (much like Microsoft's VisualStudio) -- <a href="https://developer.apple.com/xcode/">XCode</a> is a slick development tool.</p>
-
-<p>While there isn't a lot of device <a href="http://bgr.com/2012/06/12/apple-ios-fragmentation-iphone/">fragmentation on iOS</a>, developers do have to deal with OS fragmentation. That is, there are only a handful of Apple devices but quite a lot of different versions living in the field at any given time due to a lagging factor of user upgrades.</p>
-
-<p>The iOS platform certainly offers a direct path to revenue, provided you can build a stellar app; however, compared to Android, this is a closed community, which has the tendency to rub some portion of developmental community wrong. Given you can quickly embrace Objective-C and afford the requisite software, iOS is almost always the first platform app developers target.</p>
-
-<h5>HTML5</h5>
-
-<p>HTML5 is truly universal and its apps are available on all platforms without any need to port them -- JavaScript is as ubiquitous as Java; what's more, HTML itself has almost no barrier to entry, making HTML5 and JavaScript a force to content with when it comes to finding talented developers and mass distribution. Cost isn't even really part of the HTML5 equation too -- tools and frameworks are free.</p>
-
-<p>Yet, HTML5 apps suffer from a <a href="http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/">distribution challenge</a> -- the major app stores do not carry these apps! Thus, in large part, as an HTML5 app developer, you are relying on a user to type in your URL into a browser. I for one, almost never type in a URL on my iPhone (while I will on my iPad). Lastly, <a href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/">HTML5 is no where near parity with respect to UX</a> compared to native apps (and may <em>never be</em>). This, however, is only a disadvantage if you are building an app that requires a strong UX. There are plenty of great HTML5 apps out there!</p>
-
-<p>HTML5 offers an extremely low developmental barrier to entry and the widest support available -- all smart devices have browsers (note, <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">they aren't all created equal</a>!); however, because there isn't a viable distribution channel, these apps have limited opportunity to make money.</p>
-
-<h5>Windows Phone</h5>
-
-<p>Windows is <a href="http://www.forbes.com/sites/ericsavitz/2012/12/04/microsoft-dec-qtr-surface-sales-below-1m-units-analyst-says/">still unproven</a> but could be an opportunity to get in early -- first movers in Apple's App Store without a doubt made far more money than if they had submitted the same apps today. In this case, you if want a truly native experience you'll build apps on the .NET platform (presumably C#). Windows machines are far cheaper than OSX ones, so there is little financial barrier other than license fees for VisualStudio and a developer fee for the Windows Phone Marketplace.</p>
-
-<p>Indeed, it appears that Microsoft is <a href="http://www.windowsphone.com/en-us/store">modeling their app store</a> and corresponding policies off of Apple's -- thus there is a <a href="http://www.inquisitr.com/423599/windows-phone-8-app-downloads-improve-by-100/">tightly managed distribution channel</a>, presenting an opportunity to reach a wide audience and earn their money. But, at this point, the wide audience has yet to develop.</p>
-
-<h5>That's 4, but there's still more!</h5>
-
-<p>As I alluded to in the beginning of this post, there are 4 <em>primary platforms</em> and myriad hybrid options, such as <a href="http://phonegap.com/">PhoneGap</a> and <a href="http://www.appcelerator.com/">Appcelerator</a>, for example. These hybrid options have various advantages and disadvantages; however, the primary concerns one needs to think through are still speed of development, distribution, and payout.</p>
-
-<p>Before you embark on a mobile development effort, it pays to have the end in mind -- that is, before you code, have tangible answers for app distribution, development effort, and potential payout as these points will help guide you through the mobile landscape.</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-06-12T14:18:48-04:00</updated>
+  <updated>2013-07-01T12:19:43-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,117 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[MongoDB primary keys are your friend]]></title>
+    <link href="http://thediscoblog.com/blog/2013/06/22/mongodb-primary-keys-are-your-friend/"/>
+    <updated>2013-06-22T15:00:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/06/22/mongodb-primary-keys-are-your-friend</id>
+    <content type="html"><![CDATA[<p>All documents in a <a href="http://www.mongodb.org/">MongoDB</a> collection have a primary key dubbed <code>_id</code>. This field is automatically assigned to a document upon insert, so there's rarely a need to provide it. What's interesting about the <code>_id</code> field is that it is <em>time based</em>. That is, the underlying type of <code>_id</code>, which is <code>ObjectId</code>, is a <a href="http://docs.mongodb.org/manual/reference/object-id/">12-byte BSON type</a>, and 4 of those bytes represent the seconds since Unix epoch.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p>What's also special about the <code>_id</code> field is that it is automatically indexed as you can see below by calling <code>getIndexes</code> on any collection.</p>
+
+<p>``` javascript All MongoDB collections have an _id field as an index</p>
+
+<blockquote><p>db.things.getIndexes()
+[</p>
+
+<pre><code> {
+      "v" : 1,
+      "key" : {
+           "_id" : 1
+      },
+      "ns" : "test.things",
+      "name" : "_id_"
+ }
+</code></pre>
+
+<p>]
+```</p></blockquote>
+
+<p>And as everyone remembers from traditional RDBMSs, <a href="http://en.wikipedia.org/wiki/Database_index">indexes are important</a> because they can make document retrieval faster; nevertheless, indexes do consume memory and there is a slight performance penalty when inserting documents as all corresponding indexes must be updated. Thus, while you should seriously consider using indexes, you need to be economical in their usage.</p>
+
+<p>Naturally, searching by a document's <code>_id</code> is only convenient when you <em>know</em> it. More often than not, documents are searched via other fields and if you find yourself searching <a href="http://cookbook.mongodb.org/patterns/date_range/">via a time series</a>, such as <code>created_at</code> then you are in for a treat.</p>
+
+<p>Imagine a collection dubbed <code>logs</code> that contains simple documents capturing various log messages. A sample document could look like so:</p>
+
+<p>``` javascript A simple document in a logs collection
+{</p>
+
+<pre><code> "_id" : ObjectId("51c4ab6d4d6906d494460728"),
+ "message" : "crashed, no such method exception",
+ "type" : "crash",
+ "created_at" : ISODate("2013-06-21T19:37:17.992Z")
+</code></pre>
+
+<p>}
+```</p>
+
+<p>What if I wanted to find all log messages for some date, like today? I could write my query like so:</p>
+
+<p><code>javascript finding all logs created since June 20th, 2013
+db.logs.find({created_at:{'$gt': new Date(2013, 5, 20)}})
+</code></p>
+
+<p>If I throw an explain to that query, I can see that because I do not have an index on <code>created_at</code>, a basic cursor is leveraged and all documents in the collection were scanned in order to retrieve my result.</p>
+
+<p>``` javascript An explain plan attached to my find</p>
+
+<blockquote><p>db.logs.find({created_at:{'$gt': new Date(2013, 5, 20)}}).explain()
+{</p>
+
+<pre><code> "cursor" : "BasicCursor",
+ "isMultiKey" : false,
+ "n" : 2,
+ "nscannedObjects" : 4,
+ "nscanned" : 4,
+ "nscannedObjectsAllPlans" : 4,
+ "nscannedAllPlans" : 4,
+ "scanAndOrder" : false,
+ "indexOnly" : false,
+ "nYields" : 0,
+ "nChunkSkips" : 0,
+ "millis" : 0,
+ "indexBounds" : {
+</code></pre></blockquote>
+
+<pre><code> },
+ "server" : "ghome-computer.home:27017"
+</code></pre>
+
+<p>}
+```</p>
+
+<p>As you can see, searching via the <code>created_at</code> field can be inefficient; thus, you might be tempted to throw an index on that field. This would naturally make that particular query more efficient, however, you would incur the cost of a new index which is more memory consumed and inserts would be slightly slower due to an update to that newly created index.</p>
+
+<p>As it turns out, because the <code>_id</code> field embeds Unix epoch in it, you can just as easily craft a find expression <em>without</em> including the <code>created_at</code> field. For example, the <a href="https://github.com/mongodb/mongo-ruby-driver">MongoDB Ruby driver</a> allows you to create <code>ObjectId</code>'s from a <code>Time</code> like so:</p>
+
+<p><code>ruby Creating a new ObjectId via the from_time factory method
+yesterday = Time.now - (60*60*(24*1))
+custom_id = BSON::ObjectId.from_time(yesterday)
+=&gt; BSON::ObjectId('51c397800000000000000000')
+</code></p>
+
+<p>As you can see, I've created a new <code>ObjectId</code> via the <code>from_time</code> factory method.  51c397800000000000000000 is a hexadecimal representation and the first 8 digits represent the time with everything else zeroed out. Note, you can create <code>ObjectId</code> types via some notion of time in other language drivers as well.</p>
+
+<p>Now I can leverage my <code>custom_id</code> in any <code>find</code> expression. Via the Ruby driver, I can also attach an <code>explain</code>, which'll demonstrate the usage of the free <code>_id</code> index.</p>
+
+<p>``` ruby Using a date derived ObjectId forces a find to use the <em>id index
+ mongodb[:logs].find({</em>id: {'$gt' => custom_id}}).explain</p>
+
+<p>=> {"cursor"=>"BtreeCursor <em>id</em>", "isMultiKey"=>false, "n"=>1, "nscannedObjects"=>1, "nscanned"=>1, ....}
+```</p>
+
+<p>If you see <code>BtreeCusor</code>, then you know you're using an index; if you see <code>BasicCursor</code>, you know you're not.</p>
+
+<p>Thus, if you find yourself executing queries and creating indexes for some time or date field like <code>created_at</code>, you might be better off just using Mongo's <code>_id</code> field as it already embeds the notion of <em>created at</em> and is indexed by default. Dig it?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Backgrounding tasks in Heroku with Delayed Job]]></title>
@@ -155,19 +266,6 @@ Tag.collection.insert tags
     <updated>2013-03-21T15:21:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/03/21/2013-open-analytics-summit</id>
     <content type="html"><![CDATA[<p><img class="right left" src="http://www.openanalyticssummit.com/wp-content/uploads/2012/12/OAS-logo-Full-colour3-300x85.png">On March 25, 2013, <a href="http://www.openanalyticssummit.com/speakers/">I'll be speaking</a> at the <a href="http://www.openanalyticssummit.com/">Open Analytics Summit in Washington DC</a>; specifically, I'll be discussing how the <a href="http://www.app47.com/2013/03/20/next-monday-app47-cto-andy-glover-offers-a-database-reality-check-at-the-open-analytics-summit/">App47</a> team has used <a href="http://www.mongodb.org/">MongoDB</a> as the backend of our enterprise mobile application management platform. We've learned quite a few things about <a href="http://thediscoblog.com/blog/categories/mongodb/">Mongo</a> over the last two years! In the process of growing from a few gigabytes of data a month to over a terabyte/month, we've found out first hand what <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Mongo</a> is good at and what it's <em>not good at</em>. I'll be addressing a number of tips, techniques, and strategies -- if you are a Mongo user or planning on being one, come on by!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Everything you need to know about MongoDB]]></title>
-    <link href="http://thediscoblog.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb/"/>
-    <updated>2013-02-23T09:39:00-05:00</updated>
-    <id>http://thediscoblog.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mongodb_icon.png">Are you new to <a href="http://www.mongodb.org/">MongoDB</a>? Curious to see what's interesting about it?  Document-oriented databases like MongoDB are vastly different from relational databases in that they don't store data in tables; instead, they store it in the form of documents. From a developer's perspective, document-oriented (or schemaless) data is simpler and <a href="http://thediscoblog.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">far more flexible</a> to manage than relational data. Rather than storing data into a rigid schema of tables, rows, and columns, joined by relationships, documents are written individually, containing whatever data they require.</p>
-
-<p>Among open source, document-oriented databases, MongoDB is often billed as a <a href="http://www.ibm.com/developerworks/library/j-javadev2-12/">NoSQL database with RDBMS features</a>. One example of this is MongoDB's support for dynamic queries that don't require predefined MapReduce functions. MongoDB also comes with an interactive shell that makes accessing its datastore refreshingly easy, and its out-of-the-box support for sharding and clustering (via <a href="http://thediscoblog.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">replica sets</a>) enables high scalability across multiple nodes.</p>
-
-<p>Check out this IBM developerWorks' Knowledge Path dubbed "<a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Discover MongoDB</a>" -- watch four videos, read a few articles, listen to a podcast and learn everything you need to know about MongoDB!</p>
 ]]></content>
   </entry>
   
