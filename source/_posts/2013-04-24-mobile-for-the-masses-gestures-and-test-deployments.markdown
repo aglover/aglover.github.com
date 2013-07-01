@@ -3,7 +3,7 @@ layout: post
 title: "Mobile for the masses: gestures and test deployments"
 date: 2013-04-24 21:13
 comments: true
-categories: mobile
+categories: [mobile, Java, Android]
 ---
 
 

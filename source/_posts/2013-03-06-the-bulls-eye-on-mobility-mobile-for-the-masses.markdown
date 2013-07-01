@@ -3,7 +3,7 @@ layout: post
 title: "The bull's eye on mobility: Mobile for the masses"
 date: 2013-03-06 09:28
 comments: true
-categories: mobile
+categories: [mobile, Android, Java]
 ---
 
 

@@ -3,7 +3,7 @@ layout: post
 title: "Mobile for the Masses: Activities and icons in your Android application lifecycle"
 date: 2013-05-28 15:28
 comments: true
-categories: mobile
+categories: [mobile, Android, Java]
 ---
 
 My third article in [IBM developerWorks](http://www.ibm.com/developerworks/)' series [Mobile for the Masses](http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses) is now out! [This hip article](http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html) covers the lifecycle events associated with `Activity` classes and then shows you how to implement menus and/or activity bars (for newer devices) along with associating icons for an app itself and its corresponding activity items. 
