@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Redis | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/redis/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-07-01T12:19:43-04:00</updated>
+  <updated>2013-07-15T15:45:34-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,58 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Sampling Redis keys for memory consumption]]></title>
+    <link href="http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys/"/>
+    <updated>2013-07-03T14:05:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/redis_logo.png"><a href="http://www.app47.com">We</a> run a farm of <a href="http://redis.io/">Redis</a> instances for storing real time analytics. Because Redis stores objects in memory, it happens to be an extremely fast way to retrieve data; thus, most of our charts and graphs pull data from various Redis instances that contain desired data.</p>
+
+<p>Our Redis boxes are running in <a href="http://thediscoblog.com/blog/categories/aws/">AWS</a> on <a href="http://aws.amazon.com/ec2/instance-types/instance-details/">m2.2xlarge instances</a>, which contain a bit over 30GB of memory. Every once in awhile, it's helpful to get an idea of how much memory various key <em>patterns</em> are consuming because we hold over 20GB across several hundred thousand keys in some cases. There's a nifty gem dubbed <a href="https://github.com/snmaynard/redis-audit">redis-audit</a> (<a href="https://github.com/aglover/redis-audit">my fork</a> of it adds <a href="http://bundler.io/">Bundler</a>) that is quite helpful in painting a broad picture of memory usage across a sampling of key patterns.</p>
+
+<!-- more -->
+
+
+<p>Redis-audit works by sampling a configurable portion of keys residing in a Redis database. It then prints out a report of key patterns that delineates, among other things, memory usage. The summary portion of the output report looks something like:</p>
+
+<p>``` bash redis-audit summary
+------------------------------------+--------------+-------------------+---------------------------------------------------
+Key                                 | Memory Usage | Expiry Proportion | Last Access Time
+------------------------------------+--------------+-------------------+---------------------------------------------------
+se::4f733211e::02/03/13::model::SGT | 19.03%    | 14.81%   | 1 days, 8 hours, 8 minutes, 40 seconds
+se::4f7332a3e::03/08/13::manufactur | 8.76%     | 71.43%   | 6 hours, 14 minutes, 50 seconds</p>
+
+<h1>more keys omitted</h1>
+
+<p>```</p>
+
+<p>You can also get more details on individual key patterns; for example, the key above using 19% of Redis's memory is detailed like so:</p>
+
+<h1>``` bash redis-audit details for a key pattern</h1>
+
+<p>Found 27 keys containing hashs, like:
+se::4f7332a300011e::02/03/13::model::SGT SMA2+::aggregations,
+se::4f7332a300011e::06/06/13::model::SGH-M919V::aggregations,
+se::4f7332a300011e::05/19/13::model::vivo S7::aggregations,
+se::4f7332a300011e::02/15/13::model::PAD707::aggregations,
+se::4f7332a300011e::06/12/13::model::Rise::aggregations,
+se::4f7332a300011e::04/12/13::model::Micromax A91::aggregations,
+se::4f7332a300011e::06/11/13::model::900TPCII::aggregations,
+se::4f7332a300011e::07/01/13::model::HUAWEI U8825D::aggregations,
+se::4f7332a300011e::02/20/13::model::AT7D-TE25DA::aggregations,
+se::4f7332a300011e::02/14/13::model::HUAWEI G510-0010::aggregations</p>
+
+<p>These keys use 19.03% of the total sampled memory (990 bytes)
+14.81% of these keys expire (4), with maximum ttl of 28 days, 15 hours, 51 minutes, 20 seconds
+Average last accessed time: 69 days, 19 hours, 14 minutes, 15 seconds - (Max: 95 days, 23 hours, 10 minutes, 10 seconds Min:1 days, 8 hours, 8 minutes, 40 seconds)
+```</p>
+
+<p>This data is helpful in a number of ways; for instance, we discovered that a significant portion of memory was being consumed by keys containing old time series data that for some reason did not have associated TTLs. Thus, we were able to achieve that particular data (into <a href="http://localhost:4000/blog/categories/mongodb/">MongoDB</a>) and free up memory.</p>
+
+<p>If you want to understand how memory is distributed across key patterns in a Redis instance, then I think you'll find <a href="https://github.com/snmaynard/redis-audit">Redis-audit</a> quite helpful!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Redis replication: couldn't be any easier]]></title>

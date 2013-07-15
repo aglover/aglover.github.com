@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Chrome's console commands - The Disco Blog</title>
+  <title>Sampling Redis keys for memory consumption - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="As if the JavaScript console in Chrome couldn&#8217;t be any more awesome. Check it out: Command Line API Reference. Yep, it&#8217;s legit. I&#8217; &hellip;">
+  <meta name="description" content="We run a farm of Redis instances for storing real time analytics. Because Redis stores objects in memory, it happens to be an extremely fast way to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/">
+  <link rel="canonical" href="http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +83,7 @@
   <header>
     
       
-        <h1 class="entry-title">Chrome's Console Commands</h1>
+        <h1 class="entry-title">Sampling Redis Keys for Memory Consumption</h1>
       
     
     
@@ -100,20 +100,77 @@
   
 
 
-<time datetime="2013-04-15T10:05:00-04:00" pubdate data-updated="true">Apr 15<span>th</span>, 2013</time>
+<time datetime="2013-07-03T14:05:00-04:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>As if the JavaScript console in Chrome couldn&#8217;t be any more awesome. Check it out: <a href="https://developers.google.com/chrome-developer-tools/docs/commandline-api">Command Line API Reference</a>. Yep, it&#8217;s legit. I&#8217;ve been using Firebug and the like for years and only just ran across this feature of Chrome&#8217;s JavaScript console.</p>
+<div class="entry-content"><p><img class="right" src="/images/mine/redis_logo.png"><a href="http://www.app47.com">We</a> run a farm of <a href="http://redis.io/">Redis</a> instances for storing real time analytics. Because Redis stores objects in memory, it happens to be an extremely fast way to retrieve data; thus, most of our charts and graphs pull data from various Redis instances that contain desired data.</p>
 
-<p><img class="center" src="/images/mine/jschrome.png"></p>
+<p>Our Redis boxes are running in <a href="http://thediscoblog.com/blog/categories/aws/">AWS</a> on <a href="http://aws.amazon.com/ec2/instance-types/instance-details/">m2.2xlarge instances</a>, which contain a bit over 30GB of memory. Every once in awhile, it&#8217;s helpful to get an idea of how much memory various key <em>patterns</em> are consuming because we hold over 20GB across several hundred thousand keys in some cases. There&#8217;s a nifty gem dubbed <a href="https://github.com/snmaynard/redis-audit">redis-audit</a> (<a href="https://github.com/aglover/redis-audit">my fork</a> of it adds <a href="http://bundler.io/">Bundler</a>) that is quite helpful in painting a broad picture of memory usage across a sampling of key patterns.</p>
 
-<p>My favorite: <code>getEventListeners</code>. Understanding how the DOM is augmented with listeners is amazingly helpful!</p>
+<!-- more -->
 
-<p>All you have to do is fire up the JavaScript Console in Chrome and in the actual console window, you have a host a commands you can execute now just like you have in any other terminal app. Very helpful!</p>
+
+<p>Redis-audit works by sampling a configurable portion of keys residing in a Redis database. It then prints out a report of key patterns that delineates, among other things, memory usage. The summary portion of the output report looks something like:</p>
+
+<figure class='code'><figcaption><span>redis-audit summary</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>------------------------------------+--------------+-------------------+---------------------------------------------------
+</span><span class='line'>Key                                 | Memory Usage | Expiry Proportion | Last Access Time
+</span><span class='line'>------------------------------------+--------------+-------------------+---------------------------------------------------
+</span><span class='line'>se::4f733211e::02/03/13::model::SGT | 19.03%    | 14.81%   | 1 days, 8 hours, 8 minutes, 40 seconds
+</span><span class='line'>se::4f7332a3e::03/08/13::manufactur | 8.76%     | 71.43%   | 6 hours, 14 minutes, 50 seconds
+</span><span class='line'><span class="c"># more keys omitted</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can also get more details on individual key patterns; for example, the key above using 19% of Redis&#8217;s memory is detailed like so:</p>
+
+<figure class='code'><figcaption><span>redis-audit details for a key pattern</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">==============================================================================</span>
+</span><span class='line'>Found 27 keys containing hashs, like:
+</span><span class='line'>se::4f7332a300011e::02/03/13::model::SGT SMA2+::aggregations,
+</span><span class='line'>se::4f7332a300011e::06/06/13::model::SGH-M919V::aggregations,
+</span><span class='line'>se::4f7332a300011e::05/19/13::model::vivo S7::aggregations,
+</span><span class='line'>se::4f7332a300011e::02/15/13::model::PAD707::aggregations,
+</span><span class='line'>se::4f7332a300011e::06/12/13::model::Rise::aggregations,
+</span><span class='line'>se::4f7332a300011e::04/12/13::model::Micromax A91::aggregations,
+</span><span class='line'>se::4f7332a300011e::06/11/13::model::900TPCII::aggregations,
+</span><span class='line'>se::4f7332a300011e::07/01/13::model::HUAWEI U8825D::aggregations,
+</span><span class='line'>se::4f7332a300011e::02/20/13::model::AT7D-TE25DA::aggregations,
+</span><span class='line'>se::4f7332a300011e::02/14/13::model::HUAWEI G510-0010::aggregations
+</span><span class='line'>
+</span><span class='line'>These keys use 19.03% of the total sampled memory <span class="o">(</span>990 bytes<span class="o">)</span>
+</span><span class='line'>14.81% of these keys expire <span class="o">(</span>4<span class="o">)</span>, with maximum ttl of 28 days, 15 hours, 51 minutes, 20 seconds
+</span><span class='line'>Average last accessed <span class="nb">time</span>: 69 days, 19 hours, 14 minutes, 15 seconds - <span class="o">(</span>Max: 95 days, 23 hours, 10 minutes, 10 seconds Min:1 days, 8 hours, 8 minutes, 40 seconds<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This data is helpful in a number of ways; for instance, we discovered that a significant portion of memory was being consumed by keys containing old time series data that for some reason did not have associated TTLs. Thus, we were able to achieve that particular data (into <a href="http://localhost:4000/blog/categories/mongodb/">MongoDB</a>) and free up memory.</p>
+
+<p>If you want to understand how memory is distributed across key patterns in a Redis instance, then I think you&#8217;ll find <a href="https://github.com/snmaynard/redis-audit">Redis-audit</a> quite helpful!</p>
 </div>
 
 
@@ -136,12 +193,12 @@
   
 
 
-<time datetime="2013-04-15T10:05:00-04:00" pubdate data-updated="true">Apr 15<span>th</span>, 2013</time>
+<time datetime="2013-07-03T14:05:00-04:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
+    <a class='category' href='/blog/categories/redis/'>Redis</a>
   
 </span>
 
@@ -150,7 +207,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -163,10 +220,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left articlenav" href="/blog/2013/04/14/hybrid-inappropriateness/" title="Previous Post: Hybrid inappropriateness">&laquo; Hybrid inappropriateness</a>
+        <a class="basic-alignment left articlenav" href="/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/" title="Previous Post: Mobile for the masses: Words and gestures with Overheard Word">&laquo; Mobile for the masses: Words and gestures with Overheard Word</a>
       
       
-        <a class="basic-alignment right articlenav" href="/blog/2013/04/18/curling-for-wget/" title="Next Post: cURLing for Wget">cURLing for Wget &raquo;</a>
+        <a class="basic-alignment right articlenav" href="/blog/2013/07/15/mongodb-pro-tip-field-projections/" title="Next Post: MongoDB pro tip: field projections">MongoDB pro tip: field projections &raquo;</a>
       
     </p>
   </footer>
@@ -265,8 +322,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/';
-        var disqus_url = 'http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/';
+        var disqus_identifier = 'http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys/';
+        var disqus_url = 'http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys/';
         var disqus_script = 'embed.js';
       
     (function () {

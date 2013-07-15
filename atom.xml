@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-07-01T12:19:43-04:00</updated>
+  <updated>2013-07-15T15:45:34-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,117 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[MongoDB pro tip: field projections]]></title>
+    <link href="http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections/"/>
+    <updated>2013-07-15T15:07:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/mongodb_icon.png">Did you ever learn that <code>select * from table</code> in RDBMS-land is bad? Of course, you did! If you&#8217;re only looking for the email address of a user and not the other 15 columns worth of data, then why ask for that data and incur a penalty? The query <code>select email from user where user_id = 1;</code> is far more efficient for the database and the corresponding application that issued it, because there is <em>less data to fetch and consume</em>.</p>
+
+<!-- more -->
+
+
+<p>As it turns out, the same rule of thumb is true in <a href="http://www.mongodb.org/">MongoDB-land</a>. That is, <code>db.users.find({user_id:1})</code> is just as inefficient as the <code>select *</code> query if all you want is the user&#8217;s email address. With MongoDB, you can specify a <a href="http://docs.mongodb.org/manual/reference/method/db.collection.find/">projection</a> as a part of your query that ultimately can limit what fields come back.</p>
+
+<p>Thus, if I only want the <code>email</code> field on a user, I can issue a query like so:</p>
+
+<figure class='code'><figcaption><span>MongoDB field projection</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">db</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">user_id</span><span class="o">:</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="nx">email</span><span class="o">:</span><span class="mi">1</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The second clause specifies that you only want the <code>email</code> field returned. You can also negate fields by issuing a 0, which means false. To negate <code>first_name</code> and <code>last_name</code>, you would type:</p>
+
+<figure class='code'><figcaption><span>MongoDB field negation with 0 or false</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">db</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">user_id</span><span class="o">:</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="nx">first_name</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span> <span class="nx">last_name</span><span class="o">:</span><span class="mi">0</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, I&#8217;d get all fields on that user document <em>except</em> <code>first_name</code> and <code>last_name</code>. Note, you cannot issue both an include and exclude in the same statement.</p>
+
+<p>For you <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a> users, including specific fields translates to <code>only</code> and excluding them translates to <code>without</code> &#8211; each clause can be attached to a criteria (but not both at the same time). For example, if <code>User</code> is a Mongoid document and I only want an underlying query to grab the <code>email</code> field, then the corresponding Mongoid query would be:</p>
+
+<figure class='code'><figcaption><span>Mongoid field projection</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">only</span><span class="p">(</span><span class="ss">:email</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Field projection reduces document sizes on a fetch &#8211; this decreases memory consumption (for example, in the case of Mongoid your models aren&#8217;t fully populated with data) as well as bandwidth (that is, document retrieval is faster). Both MongoDB and the calling application benefit from field projection &#8211; it&#8217;s a win-win all the way around.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sampling Redis keys for memory consumption]]></title>
+    <link href="http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys/"/>
+    <updated>2013-07-03T14:05:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/redis_logo.png"><a href="http://www.app47.com">We</a> run a farm of <a href="http://redis.io/">Redis</a> instances for storing real time analytics. Because Redis stores objects in memory, it happens to be an extremely fast way to retrieve data; thus, most of our charts and graphs pull data from various Redis instances that contain desired data.</p>
+
+<p>Our Redis boxes are running in <a href="http://thediscoblog.com/blog/categories/aws/">AWS</a> on <a href="http://aws.amazon.com/ec2/instance-types/instance-details/">m2.2xlarge instances</a>, which contain a bit over 30GB of memory. Every once in awhile, it&#8217;s helpful to get an idea of how much memory various key <em>patterns</em> are consuming because we hold over 20GB across several hundred thousand keys in some cases. There&#8217;s a nifty gem dubbed <a href="https://github.com/snmaynard/redis-audit">redis-audit</a> (<a href="https://github.com/aglover/redis-audit">my fork</a> of it adds <a href="http://bundler.io/">Bundler</a>) that is quite helpful in painting a broad picture of memory usage across a sampling of key patterns.</p>
+
+<!-- more -->
+
+
+<p>Redis-audit works by sampling a configurable portion of keys residing in a Redis database. It then prints out a report of key patterns that delineates, among other things, memory usage. The summary portion of the output report looks something like:</p>
+
+<figure class='code'><figcaption><span>redis-audit summary</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>------------------------------------+--------------+-------------------+---------------------------------------------------
+</span><span class='line'>Key                                 | Memory Usage | Expiry Proportion | Last Access Time
+</span><span class='line'>------------------------------------+--------------+-------------------+---------------------------------------------------
+</span><span class='line'>se::4f733211e::02/03/13::model::SGT | 19.03%    | 14.81%   | 1 days, 8 hours, 8 minutes, 40 seconds
+</span><span class='line'>se::4f7332a3e::03/08/13::manufactur | 8.76%     | 71.43%   | 6 hours, 14 minutes, 50 seconds
+</span><span class='line'><span class="c"># more keys omitted</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can also get more details on individual key patterns; for example, the key above using 19% of Redis&#8217;s memory is detailed like so:</p>
+
+<figure class='code'><figcaption><span>redis-audit details for a key pattern</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">==============================================================================</span>
+</span><span class='line'>Found 27 keys containing hashs, like:
+</span><span class='line'>se::4f7332a300011e::02/03/13::model::SGT SMA2+::aggregations,
+</span><span class='line'>se::4f7332a300011e::06/06/13::model::SGH-M919V::aggregations,
+</span><span class='line'>se::4f7332a300011e::05/19/13::model::vivo S7::aggregations,
+</span><span class='line'>se::4f7332a300011e::02/15/13::model::PAD707::aggregations,
+</span><span class='line'>se::4f7332a300011e::06/12/13::model::Rise::aggregations,
+</span><span class='line'>se::4f7332a300011e::04/12/13::model::Micromax A91::aggregations,
+</span><span class='line'>se::4f7332a300011e::06/11/13::model::900TPCII::aggregations,
+</span><span class='line'>se::4f7332a300011e::07/01/13::model::HUAWEI U8825D::aggregations,
+</span><span class='line'>se::4f7332a300011e::02/20/13::model::AT7D-TE25DA::aggregations,
+</span><span class='line'>se::4f7332a300011e::02/14/13::model::HUAWEI G510-0010::aggregations
+</span><span class='line'>
+</span><span class='line'>These keys use 19.03% of the total sampled memory <span class="o">(</span>990 bytes<span class="o">)</span>
+</span><span class='line'>14.81% of these keys expire <span class="o">(</span>4<span class="o">)</span>, with maximum ttl of 28 days, 15 hours, 51 minutes, 20 seconds
+</span><span class='line'>Average last accessed <span class="nb">time</span>: 69 days, 19 hours, 14 minutes, 15 seconds - <span class="o">(</span>Max: 95 days, 23 hours, 10 minutes, 10 seconds Min:1 days, 8 hours, 8 minutes, 40 seconds<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This data is helpful in a number of ways; for instance, we discovered that a significant portion of memory was being consumed by keys containing old time series data that for some reason did not have associated TTLs. Thus, we were able to achieve that particular data (into <a href="http://localhost:4000/blog/categories/mongodb/">MongoDB</a>) and free up memory.</p>
+
+<p>If you want to understand how memory is distributed across key patterns in a Redis instance, then I think you&#8217;ll find <a href="https://github.com/snmaynard/redis-audit">Redis-audit</a> quite helpful!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mobile for the masses: Words and gestures with Overheard Word]]></title>
@@ -885,52 +996,6 @@
 <p><a href="https://github.com/aglover/gesticulate">Gesticulate</a> makes it painless to detect straightforward swiping motions like up, down, left, and right. It&#8217;s a simple jar file you include in your Android <code>libs</code> directory. Throw Gesticulate&#8217;s <code>SwipeDetector</code> inside an instance of Android&#8217;s <code>SimpleOnGestureListener</code>, for example, and you&#8217;re detecting swipes with ease!</p>
 
 <p>Gesticulate is used in Savvy Words, a flash card vocabulary app found on <a href="https://play.google.com/store/apps/details?id=com.b50.savvywords">Google Play</a> and <a href="http://www.amazon.com/Beacon50-Savvy-Words/dp/B00C535D20/ref=sr_1_1?s=mobile-apps&amp;ie=UTF8&amp;qid=1365339189&amp;sr=1-1">Amazon&#8217;s Appstore for Android</a>. See the <a href="https://github.com/aglover/gesticulate">Github project</a> for more details such as code examples for how to use Gesticulate, how to build it, and to see Gesticulate&#8217;s tests. Swipe on, baby!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Crowd think often lacks clarity]]></title>
-    <link href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/"/>
-    <updated>2013-04-05T21:04:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/crowd.jpg">In case you missed it, <a href="http://www.infoq.com/">InfoQ</a> has an <a href="http://www.infoq.com/research/cross-platform-mobile-tools">interesting analysis regarding hybrid mobile app development frameworks</a>. They are profiling 12 tools and soliciting community feedback so as to make a <a href="http://www.thoughtworks.com/insights">ThoughtWorks-like technology radar</a>. If you participate in the voting you are entitled to see the voting distribution.</p>
-
-<p>What&#8217;s interesting (and not too surprising) about this analysis is that frameworks like <a href="http://phonegap.com/">PhoneGap</a> or <a href="http://jquerymobile.com/">jQuery Mobile</a> (and laughably <a href="http://jqtjs.com/">JQTouch</a>?) are leaning more towards <em>adoption ready</em> when compared to frameworks like <a href="http://www.madewithmarmalade.com/">Marmelade</a>, <a href="http://www.coronalabs.com/">Coronona</a> or <a href="http://www.mosync.com/">MoSync</a>. But this radar lacks some clarifying dimensions &#8211; for example, if you want to produce a mobile website on a lot of different mobile platforms quickly, then PhoneGap is probably the way to go. But if you&#8217;re looking to create a mobile app, then the choice to use PhoneGap must be treated with extreme caution.</p>
-
-<!--more-->
-
-
-<p>You cannot create a <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">compelling user experience</a> that works across <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">all platforms consistently</a> with this framework right now. And it isn&#8217;t even the fault of PhoneGap entirely &#8211; it&#8217;s <a href="http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/">HTML5</a>. That&#8217;s why going with something like JQTouch without viewing the big picture of what you are building is laughable.</p>
-
-<p>Frameworks like Marmelade or Corona might be a bit more difficult to get started with (after all, you code in something other than HTML or JavaScript) but they can produce a native app that offers a compelling user experience capable of generating a wow. Remember, native-ness <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">trumps the browser</a> almost always unless your app is a series of screens that don&#8217;t require the user to interact.</p>
-
-<p>Accordingly, the study lacks some needed dimensions &#8211; mainly, whether or not you are building a mobile app or mobile website. Don&#8217;t fall into the hype trap and jump into PhoneGap development unless you are sure what you are building is a simple mobile website and your audience isn&#8217;t expecting something like Flipboard or AngryBirds. Otherwise, you&#8217;ll find yourself investigating either pure play native development or frameworks that ultimately produce a native app.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mongoid batch inserts]]></title>
-    <link href="http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts/"/>
-    <updated>2013-03-27T11:34:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts</id>
-    <content type="html"><![CDATA[<p>In SQL land, all databases support batch inserts. Batch inserts are an effective and efficient mechanism to insert a lot of similar data. That is, instead of issuing x insert statements, you execute 1 insert with x records. This is much more efficient because the insert statement doesn&#8217;t need to be re-parsed x times, there is only 1 network trip as opposed to x, and in the case of transactions, there is only 1 transaction instead of x. When compared to x inserts, batch inserts are always faster.</p>
-
-<p>As it turns out, <a href="http://www.mongodb.org/">MongoDB</a> supports <a href="http://docs.mongodb.org/manual/applications/create/#bulk-insert-multiple-documents">batch inserts</a>! And just like in SQL land, Mongo&#8217;s batching feature is much faster at inserting a lot of data in one insert rather than x inserts.</p>
-
-<p>For example, the <a href="https://github.com/mongodb/mongo-ruby-driver">Mongo Ruby driver</a>&#8217;s <a href="https://github.com/mongodb/mongo-ruby-driver/blob/master/lib/mongo/collection.rb#L371">insert method takes a collection</a>; thus, you can insert an array of hashes quite efficiently. Even if you are using a <a href="http://mongoid.org/en/mongoid/index.html">ODM like Mongoid</a>, you can still perform batch inserts as all you need to do is get a reference to the model object&#8217;s underlying collection and then issue an <code>insert</code> with an array of hashes matching the collection&#8217;s intended document structure.</p>
-
-<p>For instance, to insert a collection of <code>Tag</code> models (each having 3 fields: <code>name</code>, <code>system_tag</code>, and <code>account_id</code>) in one fell swoop I can do the following:</p>
-
-<figure class='code'><figcaption><span>Batch inserts with Mongoid model example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">tags</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;bunch&#39;</span><span class="p">,</span> <span class="s1">&#39;of&#39;</span><span class="p">,</span> <span class="s1">&#39;tags&#39;</span><span class="o">].</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">tag</span><span class="o">|</span> <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="n">tag</span><span class="p">,</span> <span class="n">system_tag</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="n">account_id</span><span class="p">:</span> <span class="nb">id</span><span class="p">}</span> <span class="p">}</span>
-</span><span class='line'><span class="no">Tag</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">insert</span> <span class="n">tags</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In the code above, the <code>insert</code> takes a collection of hashes; what&#8217;s more, the <code>insert</code> is tied to the <code>tags</code> collection via the <code>Tag.collection</code> call.</p>
-
-<p>Batch inserts are always faster if you have a lot of similar documents &#8211; in our case, we saw a <em>tremendous</em> performance increase when employing batching.</p>
 ]]></content>
   </entry>
   

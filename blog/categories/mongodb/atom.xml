@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-07-01T12:19:43-04:00</updated>
+  <updated>2013-07-15T15:45:34-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,42 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[MongoDB pro tip: field projections]]></title>
+    <link href="http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections/"/>
+    <updated>2013-07-15T15:07:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mongodb_icon.png">Did you ever learn that <code>select * from table</code> in RDBMS-land is bad? Of course, you did! If you're only looking for the email address of a user and not the other 15 columns worth of data, then why ask for that data and incur a penalty? The query <code>select email from user where user_id = 1;</code> is far more efficient for the database and the corresponding application that issued it, because there is <em>less data to fetch and consume</em>.</p>
+
+<!-- more -->
+
+
+<p>As it turns out, the same rule of thumb is true in <a href="http://www.mongodb.org/">MongoDB-land</a>. That is, <code>db.users.find({user_id:1})</code> is just as inefficient as the <code>select *</code> query if all you want is the user's email address. With MongoDB, you can specify a <a href="http://docs.mongodb.org/manual/reference/method/db.collection.find/">projection</a> as a part of your query that ultimately can limit what fields come back.</p>
+
+<p>Thus, if I only want the <code>email</code> field on a user, I can issue a query like so:</p>
+
+<p><code>javascript MongoDB field projection
+db.users.find({user_id:1}, {email:1})
+</code></p>
+
+<p>The second clause specifies that you only want the <code>email</code> field returned. You can also negate fields by issuing a 0, which means false. To negate <code>first_name</code> and <code>last_name</code>, you would type:</p>
+
+<p><code>javascript MongoDB field negation with 0 or false
+db.users.find({user_id:1}, {first_name:0, last_name:0})
+</code></p>
+
+<p>In this case, I'd get all fields on that user document <em>except</em> <code>first_name</code> and <code>last_name</code>. Note, you cannot issue both an include and exclude in the same statement.</p>
+
+<p>For you <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a> users, including specific fields translates to <code>only</code> and excluding them translates to <code>without</code> -- each clause can be attached to a criteria (but not both at the same time). For example, if <code>User</code> is a Mongoid document and I only want an underlying query to grab the <code>email</code> field, then the corresponding Mongoid query would be:</p>
+
+<p><code>ruby Mongoid field projection
+User.where(user_id:1).only(:email)
+</code></p>
+
+<p>Field projection reduces document sizes on a fetch -- this decreases memory consumption (for example, in the case of Mongoid your models aren't fully populated with data) as well as bandwidth (that is, document retrieval is faster). Both MongoDB and the calling application benefit from field projection -- it's a win-win all the way around.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MongoDB primary keys are your friend]]></title>
@@ -257,15 +293,6 @@ Tag.collection.insert tags
 <p>In the code above, the <code>insert</code> takes a collection of hashes; what's more, the <code>insert</code> is tied to the <code>tags</code> collection via the <code>Tag.collection</code> call.</p>
 
 <p>Batch inserts are always faster if you have a lot of similar documents -- in our case, we saw a <em>tremendous</em> performance increase when employing batching.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[2013 Open Analytics Summit]]></title>
-    <link href="http://thediscoblog.com/blog/2013/03/21/2013-open-analytics-summit/"/>
-    <updated>2013-03-21T15:21:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/03/21/2013-open-analytics-summit</id>
-    <content type="html"><![CDATA[<p><img class="right left" src="http://www.openanalyticssummit.com/wp-content/uploads/2012/12/OAS-logo-Full-colour3-300x85.png">On March 25, 2013, <a href="http://www.openanalyticssummit.com/speakers/">I'll be speaking</a> at the <a href="http://www.openanalyticssummit.com/">Open Analytics Summit in Washington DC</a>; specifically, I'll be discussing how the <a href="http://www.app47.com/2013/03/20/next-monday-app47-cto-andy-glover-offers-a-database-reality-check-at-the-open-analytics-summit/">App47</a> team has used <a href="http://www.mongodb.org/">MongoDB</a> as the backend of our enterprise mobile application management platform. We've learned quite a few things about <a href="http://thediscoblog.com/blog/categories/mongodb/">Mongo</a> over the last two years! In the process of growing from a few gigabytes of data a month to over a terabyte/month, we've found out first hand what <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Mongo</a> is good at and what it's <em>not good at</em>. I'll be addressing a number of tips, techniques, and strategies -- if you are a Mongo user or planning on being one, come on by!</p>
 ]]></content>
   </entry>
   

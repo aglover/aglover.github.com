@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Mongoid | The Disco Blog]]></title>
+  <link href="http://thediscoblog.com/blog/categories/mongoid/atom.xml" rel="self"/>
+  <link href="http://thediscoblog.com/"/>
+  <updated>2013-07-15T15:45:34-04:00</updated>
+  <id>http://thediscoblog.com/</id>
+  <author>
+    <name><![CDATA[Andrew Glover]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[MongoDB pro tip: field projections]]></title>
+    <link href="http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections/"/>
+    <updated>2013-07-15T15:07:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mongodb_icon.png">Did you ever learn that <code>select * from table</code> in RDBMS-land is bad? Of course, you did! If you're only looking for the email address of a user and not the other 15 columns worth of data, then why ask for that data and incur a penalty? The query <code>select email from user where user_id = 1;</code> is far more efficient for the database and the corresponding application that issued it, because there is <em>less data to fetch and consume</em>.</p>
+
+<!-- more -->
+
+
+<p>As it turns out, the same rule of thumb is true in <a href="http://www.mongodb.org/">MongoDB-land</a>. That is, <code>db.users.find({user_id:1})</code> is just as inefficient as the <code>select *</code> query if all you want is the user's email address. With MongoDB, you can specify a <a href="http://docs.mongodb.org/manual/reference/method/db.collection.find/">projection</a> as a part of your query that ultimately can limit what fields come back.</p>
+
+<p>Thus, if I only want the <code>email</code> field on a user, I can issue a query like so:</p>
+
+<p><code>javascript MongoDB field projection
+db.users.find({user_id:1}, {email:1})
+</code></p>
+
+<p>The second clause specifies that you only want the <code>email</code> field returned. You can also negate fields by issuing a 0, which means false. To negate <code>first_name</code> and <code>last_name</code>, you would type:</p>
+
+<p><code>javascript MongoDB field negation with 0 or false
+db.users.find({user_id:1}, {first_name:0, last_name:0})
+</code></p>
+
+<p>In this case, I'd get all fields on that user document <em>except</em> <code>first_name</code> and <code>last_name</code>. Note, you cannot issue both an include and exclude in the same statement.</p>
+
+<p>For you <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a> users, including specific fields translates to <code>only</code> and excluding them translates to <code>without</code> -- each clause can be attached to a criteria (but not both at the same time). For example, if <code>User</code> is a Mongoid document and I only want an underlying query to grab the <code>email</code> field, then the corresponding Mongoid query would be:</p>
+
+<p><code>ruby Mongoid field projection
+User.where(user_id:1).only(:email)
+</code></p>
+
+<p>Field projection reduces document sizes on a fetch -- this decreases memory consumption (for example, in the case of Mongoid your models aren't fully populated with data) as well as bandwidth (that is, document retrieval is faster). Both MongoDB and the calling application benefit from field projection -- it's a win-win all the way around.</p>
+]]></content>
+  </entry>
+  
+</feed>

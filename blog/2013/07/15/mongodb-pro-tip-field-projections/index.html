@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Chrome's console commands - The Disco Blog</title>
+  <title>MongoDB pro tip: field projections - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="As if the JavaScript console in Chrome couldn&#8217;t be any more awesome. Check it out: Command Line API Reference. Yep, it&#8217;s legit. I&#8217; &hellip;">
+  <meta name="description" content="Did you ever learn that select * from table in RDBMS-land is bad? Of course, you did! If you&#8217;re only looking for the email address of a user &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/">
+  <link rel="canonical" href="http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +83,7 @@
   <header>
     
       
-        <h1 class="entry-title">Chrome's Console Commands</h1>
+        <h1 class="entry-title">MongoDB Pro Tip: Field Projections</h1>
       
     
     
@@ -100,20 +100,44 @@
   
 
 
-<time datetime="2013-04-15T10:05:00-04:00" pubdate data-updated="true">Apr 15<span>th</span>, 2013</time>
+<time datetime="2013-07-15T15:07:00-04:00" pubdate data-updated="true">Jul 15<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>As if the JavaScript console in Chrome couldn&#8217;t be any more awesome. Check it out: <a href="https://developers.google.com/chrome-developer-tools/docs/commandline-api">Command Line API Reference</a>. Yep, it&#8217;s legit. I&#8217;ve been using Firebug and the like for years and only just ran across this feature of Chrome&#8217;s JavaScript console.</p>
+<div class="entry-content"><p><img class="right" src="/images/mine/mongodb_icon.png">Did you ever learn that <code>select * from table</code> in RDBMS-land is bad? Of course, you did! If you&#8217;re only looking for the email address of a user and not the other 15 columns worth of data, then why ask for that data and incur a penalty? The query <code>select email from user where user_id = 1;</code> is far more efficient for the database and the corresponding application that issued it, because there is <em>less data to fetch and consume</em>.</p>
 
-<p><img class="center" src="/images/mine/jschrome.png"></p>
+<!-- more -->
 
-<p>My favorite: <code>getEventListeners</code>. Understanding how the DOM is augmented with listeners is amazingly helpful!</p>
 
-<p>All you have to do is fire up the JavaScript Console in Chrome and in the actual console window, you have a host a commands you can execute now just like you have in any other terminal app. Very helpful!</p>
+<p>As it turns out, the same rule of thumb is true in <a href="http://www.mongodb.org/">MongoDB-land</a>. That is, <code>db.users.find({user_id:1})</code> is just as inefficient as the <code>select *</code> query if all you want is the user&#8217;s email address. With MongoDB, you can specify a <a href="http://docs.mongodb.org/manual/reference/method/db.collection.find/">projection</a> as a part of your query that ultimately can limit what fields come back.</p>
+
+<p>Thus, if I only want the <code>email</code> field on a user, I can issue a query like so:</p>
+
+<figure class='code'><figcaption><span>MongoDB field projection</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">db</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">user_id</span><span class="o">:</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="nx">email</span><span class="o">:</span><span class="mi">1</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The second clause specifies that you only want the <code>email</code> field returned. You can also negate fields by issuing a 0, which means false. To negate <code>first_name</code> and <code>last_name</code>, you would type:</p>
+
+<figure class='code'><figcaption><span>MongoDB field negation with 0 or false</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">db</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">user_id</span><span class="o">:</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="nx">first_name</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span> <span class="nx">last_name</span><span class="o">:</span><span class="mi">0</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, I&#8217;d get all fields on that user document <em>except</em> <code>first_name</code> and <code>last_name</code>. Note, you cannot issue both an include and exclude in the same statement.</p>
+
+<p>For you <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a> users, including specific fields translates to <code>only</code> and excluding them translates to <code>without</code> &#8211; each clause can be attached to a criteria (but not both at the same time). For example, if <code>User</code> is a Mongoid document and I only want an underlying query to grab the <code>email</code> field, then the corresponding Mongoid query would be:</p>
+
+<figure class='code'><figcaption><span>Mongoid field projection</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">only</span><span class="p">(</span><span class="ss">:email</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Field projection reduces document sizes on a fetch &#8211; this decreases memory consumption (for example, in the case of Mongoid your models aren&#8217;t fully populated with data) as well as bandwidth (that is, document retrieval is faster). Both MongoDB and the calling application benefit from field projection &#8211; it&#8217;s a win-win all the way around.</p>
 </div>
 
 
@@ -136,12 +160,12 @@
   
 
 
-<time datetime="2013-04-15T10:05:00-04:00" pubdate data-updated="true">Apr 15<span>th</span>, 2013</time>
+<time datetime="2013-07-15T15:07:00-04:00" pubdate data-updated="true">Jul 15<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
+    <a class='category' href='/blog/categories/mongodb/'>MongoDB</a>, <a class='category' href='/blog/categories/mongoid/'>Mongoid</a>
   
 </span>
 
@@ -150,7 +174,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -163,10 +187,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left articlenav" href="/blog/2013/04/14/hybrid-inappropriateness/" title="Previous Post: Hybrid inappropriateness">&laquo; Hybrid inappropriateness</a>
+        <a class="basic-alignment left articlenav" href="/blog/2013/07/03/sampling-redis-keys/" title="Previous Post: Sampling Redis keys for memory consumption">&laquo; Sampling Redis keys for memory consumption</a>
       
-      
-        <a class="basic-alignment right articlenav" href="/blog/2013/04/18/curling-for-wget/" title="Next Post: cURLing for Wget">cURLing for Wget &raquo;</a>
       
     </p>
   </footer>
@@ -265,8 +287,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/';
-        var disqus_url = 'http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/';
+        var disqus_identifier = 'http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections/';
+        var disqus_url = 'http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections/';
         var disqus_script = 'embed.js';
       
     (function () {
