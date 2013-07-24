@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-07-15T15:45:34-04:00</updated>
+  <updated>2013-07-24T13:52:47-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,247 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Introducing Android migrations]]></title>
+    <link href="http://thediscoblog.com/blog/2013/07/24/introducing-android-migrations/"/>
+    <updated>2013-07-24T09:46:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/07/24/introducing-android-migrations</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/android_platform.png">Have you ever worked with <a href="http://guides.rubyonrails.org/migrations.html">Rails' migrations</a>? They make <a href="http://www.tutorialspoint.com/ruby-on-rails/rails-migrations.htm">database changes a breeze</a>, don't they?  While every software release doesn't necessarily involve a migration, when one does happen to make use of one, <a href="http://thediscoblog.com/blog/2013/02/18/testing-rails-migrations/">I'm always pleased</a> on how easily things work out. Whether it's to add new data or alter existing data structures, Rails migrations make evolving a datastore (be it an RDMBS or NoSQL one like MongoDB) painless.</p>
+
+<p>When I recently found myself altering the data structure of a SQLite database for <a href="https://play.google.com/store/apps/details?id=com.b50.hoproll&amp;hl=en">one of my Android apps</a>, I found myself wishing there was some similar migration mechanism for Android as there is in Rails. Alas, I could fine none, so I did what any other developer would do: <a href="https://github.com/aglover/droid-migrate">I wrote one</a>.</p>
+
+<!-- more -->
+
+
+<p><a href="https://github.com/aglover/droid-migrate">Droid Migrate</a> is a simple command line framework that generates and runs database migrations for your Android apps that use <a href="http://www.sqlite.org/">SQLite</a>. A migration is encapsulated by a <code>DBVersion</code> class that contains an <code>up</code> and <code>down</code> method. The <code>up</code> method is called for an upgrade and <code>down</code> for a rollback. What those methods do is entirely up to you.</p>
+
+<p>In addition, Droid Migrate generates a <code>DatabaseHelper</code> class through which you obtain underlying connections to a SQLite instance -- this is <a href="http://developer.android.com/reference/android/database/sqlite/SQLiteOpenHelper.html">the canonical way</a> to <a href="http://www.stevenmcmillan.co.uk/blog/2012/java-sqlite-database-helper-class-for-android/">interact with SQLite</a> in <a href="http://www.androidhive.info/2011/11/android-sqlite-database-tutorial/">an Android app</a> anyway, but with Droid Migrate, you get a specially enhanced <code>DatabaseHelper</code> that determines which version of a target database instance is the most current and runs the appropriate migrations to bring the database to that version.</p>
+
+<p>Thus, with your newly minted <code>DatabaseHelper</code> class, you can still interact with your app's database like you would normally, however, by using this class, all migrations are handled for you. Allow me to demonstrate.</p>
+
+<p><a href="https://github.com/aglover/tidbit">I've created a simple app</a> that doesn't interact with any database at this point -- it simply creates a <code>ListView</code> that is intended to hold a list of records for viewing. You can find this app on <a href="https://github.com/aglover/tidbit">Github</a> if you'd like to follow along. Nevertheless, the app's main Activity is shown below.</p>
+
+<p>``` java Simple Android app w/o any SQLite logic
+package com.b50.db.ex;</p>
+
+<p>import android.app.Activity;
+import android.os.Bundle;
+import android.widget.TextView;</p>
+
+<p>public class MainActivity extends Activity {</p>
+
+<p>  protected void onCreate(Bundle savedInstanceState) {</p>
+
+<pre><code>super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+TextView textView = (TextView) findViewById(R.id.textView1);
+textView.setText("This would be a list from a DB if there was a DB");
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>What I'd like to do is add the ability to interact with a SQLite database; plus, I'd like to be able to evolve the data model on subsequent releases. This is where Droid Migrate shines.</p>
+
+<p>After I've installed Droid Migrate (simply clone or download the code, build it, and put it into your <code>PATH</code> and create new environment variable dubbed <code>DROID_MIGRATE_HOME</code>), I can initialize my app to use Droid Migrate by opening up a terminal in the root of my app and typing:</p>
+
+<p><code>bash Initializing Droid Migrate
+$&gt; droid-migrate init -d a_catalog
+</code></p>
+
+<p>The <code>-d</code> flag specifies the name of my desired database. I can optionally provide a package name via the <code>-p</code> flag if I'd like my newly generated classes in a separate package from my main app.</p>
+
+<p>If you take a look at your app's code, you should notice a number of new things. First, you'll see two new classes and a new jar file. The classes are the aforementioned <code>DatabaseHelper</code> and a class dubbed <code>DBVersion1</code>. The newly added jar file in your app's <code>libs</code> folder contains a few classes that correspond to Droid Migrate's runtime dependencies -- this jar is extremely compact at 4KB.</p>
+
+<p>The <code>DatabaseHelper</code> class is brutally simple:</p>
+
+<p>```java DatabaseHelper couldn't be any easier
+package com.b50.db.ex;</p>
+
+<p>import com.b50.db.ex.R;
+import android.content.Context;
+import com.b50.migrations.MigrationsDatabaseHelper;</p>
+
+<p>public class DatabaseHelper extends MigrationsDatabaseHelper {</p>
+
+<p>  public DatabaseHelper(Context context) {</p>
+
+<pre><code>super(context, context.getString(R.string.database_name), null, 
+  context.getResources().getInteger(R.integer.database_version), 
+  context.getString(R.string.package_name));
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>This class extends Droid Migrate's <code>MigrationsDatabaseHelper</code>, which ultimately extends Android's <code>SQLiteOpenHelper</code> so as I mentioned earlier, you've got everything you need to interact with SQLite at your fingertips via <code>DatabaseHelper</code>. If you look closely, you'll see that this class makes use of a specialized XML file (that is ultimately generated into your <code>R</code> class).</p>
+
+<p>Take a look in the <code>res/values</code> folder and open up the newly created <code>migrations.xml</code> file. It should look something like this:</p>
+
+<p>```xml migrations.xml contains database version, package name and database name
+&lt;?xml version="1.0" encoding="utf-8"?>
+<resources></p>
+
+<pre><code>&lt;integer name="database_version"&gt;1&lt;/integer&gt;
+&lt;string name="database_name"&gt;a_catalog&lt;/string&gt;
+&lt;string name="package_name"&gt;com.b50.db.ex&lt;/string&gt;
+</code></pre>
+
+<p></resources>
+```</p>
+
+<p>Note the value of <code>database_version</code> -- it's 1. This corresponds to the <code>DBVersion1</code> class that was generated. Take a look at that class:</p>
+
+<p>```java DBVersion1 is your initial migration class
+package com.b50.db.ex;</p>
+
+<p>import com.b50.migrations.AbstractMigration;</p>
+
+<p>public class DBVersion1 extends AbstractMigration {</p>
+
+<pre><code>public void up() {
+    //execSQL("some sql create stmts");
+}
+
+public void down() {
+    //execSQL("some delete sql stmts");
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>This class is where you implement your initial migration, which would create various tables and populate them. Use the <code>execSQL</code> method to pass in a valid SQL <code>String</code>. For example, I'll create an initial migration like so:</p>
+
+<p>```java DBVersion1 is now implemented
+package com.b50.db.ex;</p>
+
+<p>import com.b50.migrations.AbstractMigration;</p>
+
+<p>public class DBVersion1 extends AbstractMigration {</p>
+
+<pre><code>public void up() {
+    String create = "CREATE TABLE hops (_id integer  PRIMARY KEY AUTOINCREMENT DEFAULT NULL, name TEXT, description TEXT, substitutions TEXT DEFAULT '', alpha_acid TEXT DEFAULT '', beer_styles TEXT DEFAULT '', type TEXT DEFAULT '', user_notes TEXT DEFAULT '');";
+    execSQL(create);
+    String oneThing = "INSERT INTO 'hops' VALUES(1,'Amarillo','Spicy hop with mild bitterness and a noble aroma.  Good all around hop.','Cascade, Centennial','7 to 10','Ale, IPA','Aroma', '');";
+    execSQL(oneThing);
+}
+
+public void down() {
+    execSQL("DROP TABLE hops;");
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>As you can see, my <code>up</code> method creates a table and inserts one record. My <code>down</code> method rolls things back, which in this case means dropping the created table.</p>
+
+<p>Now all I have to do is make use of my app's <code>DatabaseHelper</code> instance and Droid Migrate will ensure things are properly initialized. Therefore, I'll update the original Activity to display a list of what's in the database, which I know only to be one record based upon my initial migration.</p>
+
+<p>```java Updated Activity to interact with SQLite
+package com.b50.db.ex;</p>
+
+<p>import android.app.Activity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;</p>
+
+<p>public class MainActivity extends Activity {</p>
+
+<p>  protected SQLiteDatabase db;</p>
+
+<p>  protected void onCreate(Bundle savedInstanceState) {</p>
+
+<pre><code>super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+
+this.db = (new DatabaseHelper(this)).getWritableDatabase();
+ListView list = (ListView) findViewById(R.id.list);
+
+ListAdapter adapter = getAdaptorForQuery("SELECT _id, name, description FROM hops ORDER BY name ASC", null);
+list.setAdapter(adapter);
+</code></pre>
+
+<p>  }</p>
+
+<p>  private ListAdapter getAdaptorForQuery(String queryString, String[] parameters) {</p>
+
+<pre><code>Cursor cursor = this.db.rawQuery(queryString, parameters);
+return new SimpleCursorAdapter(this, R.layout.list_item, cursor,
+            new String[] { "name", "description" }, new int[] { R.id.hopName, R.id.description }, 0);
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>As you can see from the code above, the app now makes a query to the underlying SQLite instance and builds a <code>ListView</code> from the result set of the query.</p>
+
+<p>The key line is how the <code>SQLiteDatabase</code> instance is obtained: <code>this.db = (new DatabaseHelper(this)).getWritableDatabase();</code> -- that is where all the magic takes place. Droid Migrate passes along the version number to the Android platform and if there is a change, the Android platform will call a series of life-cycle methods, which Droid Migrate wires up with your migrations.</p>
+
+<p>For instance, let's imagine that a subsequent release of this app adds more data to the <code>hops</code> table. Therefore, I'll generate a new migration. This is done by typing the following command within the root directory of your project like so:</p>
+
+<p><code>bash Generating a new migration
+$&gt; droid-migrate generate up
+</code></p>
+
+<p>The <code>up</code> flag signifies an increase in the database version (i.e. version++) and <code>down</code> indicates a rollback (i.e. version--). If you take a look at your app's code, you'll notice a new class: <code>DBVersion2</code> and your <code>migrations.xml</code> file has been updated: the <code>database_version</code> value is now 2.</p>
+
+<p>I'll implement my <code>DBVersion2</code> class like so:</p>
+
+<p>```java Implementing DBVersion2 to add one more row of data
+package com.b50.db.ex;</p>
+
+<p>import com.b50.migrations.AbstractMigration;</p>
+
+<p>public class DBVersion2 extends AbstractMigration {</p>
+
+<pre><code>public void up() {
+    execSQL("INSERT INTO 'hops' VALUES(100,'Zythos','New IPA style hop blend created to optimize and exceed the aroma characteristics of the traditional, and sometimes hard to get, IPA hops.','Amarillo, Columbus, Cascade','9.5 to 12','IPAs','Bittering and Aroma', '');");
+}
+
+public void down() {
+    execSQL("DELETE from 'hops' where _id = 100");
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Now if I fire up my app, the <code>ListView</code> will have 2 items in it!</p>
+
+<p><img class="center" src="/images/mine/migrate_2.png"></p>
+
+<p>What about if you need to rollback? That's just as easy. Imagine that the addition of that second row of data was a gigantic mistake and instead I really only want one row (i.e. I only want the data originally created in <code>DBVersion1</code>). All I have to do is type within the root of my project:</p>
+
+<p><code>bash Rollbacks in Droid Migrate are just as easy
+$&gt; droid-migrate generate down
+</code></p>
+
+<p>After typing the above command, you should see the following output:</p>
+
+<p><code>bash Rollback to version 1!
+Generating a rollback migration...
+Rolling back your migrations.xml file to indicate database version 1
+Done!
+</code></p>
+
+<p>The only thing that'll change in your project is the <code>migrations.xml</code> file -- the <code>database_version</code> value will be rolled back to 1 (or what ever 1 minus the current version is).</p>
+
+<p>Fire the app back up, and behold: one value is displayed because <code>DBVersion2</code>'s <code>down</code> method was executed!</p>
+
+<p>Droid Migrate makes upgrades and rollbacks to your underlying SQLite database a breeze; what's more, it can handle upgrades or rollbacks beyond just one version. That is, if an app instance is upgraded from version 2 to version 6, each migration will be run in order (3, 4, 5, and 6). The same is true of a rollback.</p>
+
+<p>If you are working with SQLite in an Android app, I highly recommend you take a look at <a href="https://github.com/aglover/droid-migrate">Droid Migrate</a>!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mobile for the masses: Words and gestures with Overheard Word]]></title>
@@ -194,23 +435,6 @@ NSArray* array = [NSArray arrayWithObjects: dict, nil];
 <p><blockquote><p>The Activity class is the workhorse of an Android mobile app, and it's also where you can fine-tune your app's interactions with both the user and the mobile device. Get things working exactly the way you want them in your app's lifecycle, then use icons and action bars to guide users through UI navigation and other app features.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html'>Mobile for the Masses: Activities and Icons in Your Android Application Lifecycle</a></cite></footer></blockquote></p>
 
 <p>Check out "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>" and add navigation with style to your Android mobile apps! If you missed the first article, check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>"; what's more, don't forget to read my second article, entitled "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>".</p>
-
-<p>Stay tuned for more articles in this series and don't forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mobile for the masses: gestures and test deployments]]></title>
-    <link href="http://thediscoblog.com/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments/"/>
-    <updated>2013-04-24T21:13:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mftm_1.jpg">My second article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>' series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> is out! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html">This article</a> covers how to go about designing a mobile interface from the standpoint of usability via gestures. In essence, eschew buttons and prefer the swipe! What's more, I cover at a high level how to test your app on an Android device.</p>
-
-<p>As the article summary states:</p>
-
-<p><blockquote><p>Mobile users are typically distracted, busy, and ergonomically constrained, so build your mobile application UIs accordingly. Andrew Glover discusses key factors that differentiate mobile apps from web apps, then guides you through the creation of a mobile application UI that uses swipe gestures for navigation rather than button clicks.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html'>Mobile for the Masses: Take a Swipe at It! Programming Gestures in Android</a></cite></footer></blockquote></p>
-
-<p>So what are you waiting for? Check out "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>" and trade buttons for swipes in your Android mobile apps! And if you missed the first article, check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>" and learn the ins and outs of Android development!</p>
 
 <p>Stay tuned for more articles in this series and don't forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
 ]]></content>
