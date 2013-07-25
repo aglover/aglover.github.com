@@ -16,7 +16,7 @@ To get these three entities to play nicely together requires a few simple steps.
 
 First, if you want to enable HTTP gzip compression of static assets other than images from a Heroku app, then add the heroku-deflater gem to your `Gemfile`. This gem doesn't compress images as in some cases, zipping images creates bigger ones! 
 
-Once you've run `bundle install` and deployed your app to Heroku, fire up a terminal and run `[cURL](http://thediscoblog.com/blog/2013/04/18/curling-for-wget/)` to verify that the HTTP response Content-Encoding is gzip like so:
+Once you've run `bundle install` and deployed your app to Heroku, fire up a terminal and run [cURL](http://thediscoblog.com/blog/2013/04/18/curling-for-wget/) to verify that the HTTP response Content-Encoding is gzip like so:
 
 ``` bash cURL testing gzip response
 curl -i -H "Accept-Encoding: gzip,deflate" http://your.awesome.web.app
