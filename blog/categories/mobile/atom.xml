@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mobile | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-07-24T13:52:47-04:00</updated>
+  <updated>2013-07-30T13:48:59-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,69 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Swipe gestures in jQuery Mobile apps]]></title>
+    <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
+    <updated>2013-07-30T12:52:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
+
+<p>Implementing right and left swipes in an <a href="http://jquerymobile.com/">jQuery Mobile</a> app is fairly straightforward, but there are a few gotchas that I was able to piece together via multiple <a href="http://stackoverflow.com/questions/7533772/how-to-swipe-between-several-jquery-mobile-pages">stackoverflow threads</a>, blogs, and finally <a href="http://api.jquerymobile.com/">jQuery Mobile's own documentation</a>.</p>
+
+<!-- more -->
+
+
+<p>In a jQuery Mobile app, you <a href="http://the-jquerymobile-tutorial.org/jquery-mobile-tutorial-CH02.php">define pages</a> within <code>div</code> tags that represent a UI screen -- you can then declare transitions between pages well -- slide, flip, etc.  The key aspect with swiping between page <code>div</code>s is the selector for them, which is <code>div[data-role='page']</code>.</p>
+
+<p>Once you have a handle to that <code>div</code>, you can proceed forward with a left swipe via jQuery's <a href="http://api.jquery.com/next/"><code>next</code></a> function. Conversely, swiping right with the intent of going back is facilitated by finding the previous matching <code>div[data-role='page']</code> via jQuery's <a href="http://api.jquery.com/prev/"><code>prev</code></a> function.</p>
+
+<p>Also note, going backwards via a swipe requires that you <em>reverse</em> the slide transition, otherwise it looks misleading to the user (i.e. the transition is from left to right rather than the other way around!).</p>
+
+<p>Accordingly, the JavaScript for swipe gestures should be placed within a <a href="http://jquerymobile.com/demos/1.2.0/docs/api/events.html"><code>pageinit</code> event</a> like so:</p>
+
+<p>``` javascript Enabling swipe between page divs
+$(document).on('pageinit', function(event){
+  $('div.ui-page').on("swipeleft", function () {</p>
+
+<pre><code>var nextpage = $(this).next('div[data-role="page"]');
+  if (nextpage.length &gt; 0) {
+    $.mobile.changePage(nextpage, "slide", false, true);
+  }
+</code></pre>
+
+<p>  });</p>
+
+<p>  $('div.ui-page').on("swiperight", function () {</p>
+
+<pre><code>var prevpage = $(this).prev('div[data-role="page"]');
+if (prevpage.length &gt; 0) {
+  $.mobile.changePage(prevpage, { transition: "slide", reverse: true }, true, true);
+}
+</code></pre>
+
+<p>  });
+});
+```</p>
+
+<p>Note, this script should be referenced in your DOM <em>before</em> you pull in the jQuery mobile js file. That is, put the code above where you add jQuery mobile in your document's header (but <em>after</em> you load jQuery itself):</p>
+
+<p>``` html Including jQuery Mobile</p>
+
+<script src="https://d10ajoocuyu32n.cloudfront.net/jquery-1.9.1.min.js"></script>
+
+
+<!-- add pageinit swipe initialization here -->
+
+
+<script src="https://d10ajoocuyu32n.cloudfront.net/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+
+
+<p>```</p>
+
+<p>Once you've done that, you'll be able to swipe between page <code>div</code>s.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Introducing Android migrations]]></title>
@@ -420,23 +483,6 @@ NSArray* array = [NSArray arrayWithObjects: dict, nil];
 <p>As you can see in the above code, a callback instance takes as a parameter an <code>NSArray</code>, thus, I have to covert my <code>NSDictionary</code> into an array via Objective-C's handy <code>arrayWithObjects</code> function.</p>
 
 <p>The default module examples <a href="http://docs.appcelerator.com/titanium/latest/#!/guide/Titanium_Mobile_Module_API">provided by Appcelerator naturally work</a>, but alas, the non-callback style of invocation was less than appealing, especially if you are going to be coding an <a href="http://en.wikipedia.org/wiki/Appcelerator_Titanium">Appcelerator</a> app in JavaScript. Nevertheless, you can do it easily enough provided you are willing to dig through myriad repositories...or you could save yourself the headache and read this blog post.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mobile for the Masses: Activities and icons in your Android application lifecycle]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle/"/>
-    <updated>2013-05-28T15:28:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle</id>
-    <content type="html"><![CDATA[<p>My third article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>' series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> is now out! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">This hip article</a> covers the lifecycle events associated with <code>Activity</code> classes and then shows you how to implement menus and/or activity bars (for newer devices) along with associating icons for an app itself and its corresponding activity items.</p>
-
-<p>As the article summary states:</p>
-
-<p><blockquote><p>The Activity class is the workhorse of an Android mobile app, and it's also where you can fine-tune your app's interactions with both the user and the mobile device. Get things working exactly the way you want them in your app's lifecycle, then use icons and action bars to guide users through UI navigation and other app features.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html'>Mobile for the Masses: Activities and Icons in Your Android Application Lifecycle</a></cite></footer></blockquote></p>
-
-<p>Check out "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>" and add navigation with style to your Android mobile apps! If you missed the first article, check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>"; what's more, don't forget to read my second article, entitled "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>".</p>
-
-<p>Stay tuned for more articles in this series and don't forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
 ]]></content>
   </entry>
   

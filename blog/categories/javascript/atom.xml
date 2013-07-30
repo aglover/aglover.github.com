@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-07-24T13:52:47-04:00</updated>
+  <updated>2013-07-30T13:48:59-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,69 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Swipe gestures in jQuery Mobile apps]]></title>
+    <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
+    <updated>2013-07-30T12:52:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
+
+<p>Implementing right and left swipes in an <a href="http://jquerymobile.com/">jQuery Mobile</a> app is fairly straightforward, but there are a few gotchas that I was able to piece together via multiple <a href="http://stackoverflow.com/questions/7533772/how-to-swipe-between-several-jquery-mobile-pages">stackoverflow threads</a>, blogs, and finally <a href="http://api.jquerymobile.com/">jQuery Mobile's own documentation</a>.</p>
+
+<!-- more -->
+
+
+<p>In a jQuery Mobile app, you <a href="http://the-jquerymobile-tutorial.org/jquery-mobile-tutorial-CH02.php">define pages</a> within <code>div</code> tags that represent a UI screen -- you can then declare transitions between pages well -- slide, flip, etc.  The key aspect with swiping between page <code>div</code>s is the selector for them, which is <code>div[data-role='page']</code>.</p>
+
+<p>Once you have a handle to that <code>div</code>, you can proceed forward with a left swipe via jQuery's <a href="http://api.jquery.com/next/"><code>next</code></a> function. Conversely, swiping right with the intent of going back is facilitated by finding the previous matching <code>div[data-role='page']</code> via jQuery's <a href="http://api.jquery.com/prev/"><code>prev</code></a> function.</p>
+
+<p>Also note, going backwards via a swipe requires that you <em>reverse</em> the slide transition, otherwise it looks misleading to the user (i.e. the transition is from left to right rather than the other way around!).</p>
+
+<p>Accordingly, the JavaScript for swipe gestures should be placed within a <a href="http://jquerymobile.com/demos/1.2.0/docs/api/events.html"><code>pageinit</code> event</a> like so:</p>
+
+<p>``` javascript Enabling swipe between page divs
+$(document).on('pageinit', function(event){
+  $('div.ui-page').on("swipeleft", function () {</p>
+
+<pre><code>var nextpage = $(this).next('div[data-role="page"]');
+  if (nextpage.length &gt; 0) {
+    $.mobile.changePage(nextpage, "slide", false, true);
+  }
+</code></pre>
+
+<p>  });</p>
+
+<p>  $('div.ui-page').on("swiperight", function () {</p>
+
+<pre><code>var prevpage = $(this).prev('div[data-role="page"]');
+if (prevpage.length &gt; 0) {
+  $.mobile.changePage(prevpage, { transition: "slide", reverse: true }, true, true);
+}
+</code></pre>
+
+<p>  });
+});
+```</p>
+
+<p>Note, this script should be referenced in your DOM <em>before</em> you pull in the jQuery mobile js file. That is, put the code above where you add jQuery mobile in your document's header (but <em>after</em> you load jQuery itself):</p>
+
+<p>``` html Including jQuery Mobile</p>
+
+<script src="https://d10ajoocuyu32n.cloudfront.net/jquery-1.9.1.min.js"></script>
+
+
+<!-- add pageinit swipe initialization here -->
+
+
+<script src="https://d10ajoocuyu32n.cloudfront.net/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+
+
+<p>```</p>
+
+<p>Once you've done that, you'll be able to swipe between page <code>div</code>s.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Callbacks in Appcelerator Titanium modules]]></title>
@@ -226,92 +289,6 @@ spinner = new Spinner(opts).spin(document.getElementById('spinner'))
 
 
 <p>In short, Barista and <a href="http://www.ibm.com/developerworks/java/library/j-nodejs/">Node</a> make Sinatra swing with CoffeeScript.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Modeling Mongo documents with Mongoose]]></title>
-    <link href="http://thediscoblog.com/blog/2012/08/29/modeling-mongo-documents-with-mongoose/"/>
-    <updated>2012-08-29T21:45:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2012/08/29/modeling-mongo-documents-with-mongoose</id>
-    <content type="html"><![CDATA[<p>Without a doubt, one of the quickest ways to build an application that leverages <a href="http://www.mongodb.org/">MongoDB</a> is with Node. It's as if the two platforms were made for each other; the sheer number of Node libraries available for dealing with Mongo is testimony to a vibrant, innovative community. Indeed, one of my favorite Mongo focused libraries these days is <a href="http://mongoosejs.com/">Mongoose</a>.</p>
-
-<p>Briefly, Mongoose is an object modeling framework that makes it incredibly easy to model collections and ultimately work with intuitive objects that support a rich feature set. Like most things in Node, it couldn't be any easier to get set up. Essentially, to use Mongoose, you'll need to define <code>Schema</code> objects -- these are your documents -- either top level or even embedded.</p>
-
-<p>For example, I've defined a <code>words</code> collection that contains documents (representing...words) that each contain an embedded collection of <code>definition</code> documents. A sample document looks like this:</p>
-
-<p>``` javascript Word Document
-{<br/>
-  _id: "4fd7c7ac8b5b27f21b000001",<br/>
-  spelling: "drivel",
-  synonyms: ["garbage", "dribble", "drool"],
-  definitions: [
-  { part_of_speech: "noun",</p>
-
-<pre><code>definition:"saliva flowing from the mouth, or mucus from the nose; slaver."
-</code></pre>
-
-<p>  },
-  { part_of_speech: "noun",</p>
-
-<pre><code>definition:"childish, silly, or meaningless talk or thinking; nonsense; twaddle." 
-</code></pre>
-
-<p>  }]
-}
-```</p>
-
-<p>From an document modeling standpoint, I'd like to work with a <code>Word</code> object that contains a list of <code>Definition</code> objects and a number of related attributes (i.e. synonyms, parts of speech, etc). To model this relationship with Mongoose, I'll need to define two <code>Schema</code> types and I'll start with the simplest:</p>
-
-<p><code>javascript Definition Schema
-Definition = mongoose.model 'definition', new mongoose.Schema({
-  part_of_speech : { type: String, required: true, trim: true, enum: ['adjective', 'noun', 'verb', 'adverb'] },
-  definition : {type: String, required: true, trim: true}
-})
-</code></p>
-
-<p>As you can see, a <code>Definition</code> is simple -- the <code>part_of_speech</code> attribute is an enumerated <code>String</code> that's required; what's more, the <code>definition</code> attribute is also a required <code>String</code>.</p>
-
-<p>Next, I'll define a <code>Word</code>:</p>
-
-<p><code>javascript Word Schema
-Word = mongoose.model 'word', new mongoose.Schema({
-  spelling : {type: String, required: true, trim: true, lowercase: true, unique: true},
-  definitions : [Definition.schema],
-  synonyms : [{ type: String, trim: true, lowercase: true }]
-})
-</code></p>
-
-<p>As you can see, a <code>Word</code> instance embeds a collection of <code>Definition</code>s. Here I'm also demonstrating the usage of <code>lowercase</code> and the index <code>unique</code> placed on the <code>spelling</code> attribute.</p>
-
-<p>To create a <code>Word</code> instance and save the corresponding document couldn't be easier. Mongo array's leverage the <code>push</code> command and Mongoose follows this pattern to the tee.</p>
-
-<p><code>javascript saving with Mongoose
-word = new models.Word({spelling : 'loquacious'})
-word.synonyms.push 'verbose'
-word.definitions.push {definition: 'talking or tending to talk much or freely; talkative; \
-  chattering; babbling; garrulous.', part_of_speech: 'adjective' }
-word.save (err, data) -&gt;
-</code></p>
-
-<p>Finding a word is easy too:</p>
-
-<p>``` javascript findOne in action
-it 'findOne should return one', (done) ->
-  models.Word.findOne spelling:'nefarious', (err, document) -></p>
-
-<pre><code>document.spelling.should.eql 'nefarious'
-document.definitions.length.should.eql 1
-document.synonyms.length.should.eql 2
-document.definitions[0]['part_of_speech'].should.eql 'adjective'
-done(err)
-</code></pre>
-
-<p>```</p>
-
-<p>In this case, the above code is a <a href="http://visionmedia.github.com/mocha/">Mocha</a> test case (which uses <a href="https://github.com/visionmedia/should.js">should</a> for assertions) that demonstrates Mongoose's <code>findOne</code>.</p>
-
-<p>You can find the code for these examples and more at my Github repo dubbed <a href="https://github.com/aglover/exegesis">Exegesis</a> and while you're at it, check out the <a href="http://www.ibm.com/developerworks/training/kp/j-kp-node/index.html">developerWorks videos I did for Node</a>!</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-07-24T13:52:47-04:00</updated>
+  <updated>2013-07-30T13:48:59-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,74 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Swipe gestures in jQuery Mobile apps]]></title>
+    <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
+    <updated>2013-07-30T12:52:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
+
+<p>Implementing right and left swipes in an <a href="http://jquerymobile.com/">jQuery Mobile</a> app is fairly straightforward, but there are a few gotchas that I was able to piece together via multiple <a href="http://stackoverflow.com/questions/7533772/how-to-swipe-between-several-jquery-mobile-pages">stackoverflow threads</a>, blogs, and finally <a href="http://api.jquerymobile.com/">jQuery Mobile&#8217;s own documentation</a>.</p>
+
+<!-- more -->
+
+
+<p>In a jQuery Mobile app, you <a href="http://the-jquerymobile-tutorial.org/jquery-mobile-tutorial-CH02.php">define pages</a> within <code>div</code> tags that represent a UI screen &#8211; you can then declare transitions between pages well &#8211; slide, flip, etc.  The key aspect with swiping between page <code>div</code>s is the selector for them, which is <code>div[data-role='page']</code>.</p>
+
+<p>Once you have a handle to that <code>div</code>, you can proceed forward with a left swipe via jQuery&#8217;s <a href="http://api.jquery.com/next/"><code>next</code></a> function. Conversely, swiping right with the intent of going back is facilitated by finding the previous matching <code>div[data-role='page']</code> via jQuery&#8217;s <a href="http://api.jquery.com/prev/"><code>prev</code></a> function.</p>
+
+<p>Also note, going backwards via a swipe requires that you <em>reverse</em> the slide transition, otherwise it looks misleading to the user (i.e. the transition is from left to right rather than the other way around!).</p>
+
+<p>Accordingly, the JavaScript for swipe gestures should be placed within a <a href="http://jquerymobile.com/demos/1.2.0/docs/api/events.html"><code>pageinit</code> event</a> like so:</p>
+
+<figure class='code'><figcaption><span>Enabling swipe between page divs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;pageinit&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;div.ui-page&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;swipeleft&quot;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">nextpage</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">next</span><span class="p">(</span><span class="s1">&#39;div[data-role=&quot;page&quot;]&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">nextpage</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">$</span><span class="p">.</span><span class="nx">mobile</span><span class="p">.</span><span class="nx">changePage</span><span class="p">(</span><span class="nx">nextpage</span><span class="p">,</span> <span class="s2">&quot;slide&quot;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;div.ui-page&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;swiperight&quot;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">prevpage</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">prev</span><span class="p">(</span><span class="s1">&#39;div[data-role=&quot;page&quot;]&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">prevpage</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">.</span><span class="nx">mobile</span><span class="p">.</span><span class="nx">changePage</span><span class="p">(</span><span class="nx">prevpage</span><span class="p">,</span> <span class="p">{</span> <span class="nx">transition</span><span class="o">:</span> <span class="s2">&quot;slide&quot;</span><span class="p">,</span> <span class="nx">reverse</span><span class="o">:</span> <span class="kc">true</span> <span class="p">},</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note, this script should be referenced in your DOM <em>before</em> you pull in the jQuery mobile js file. That is, put the code above where you add jQuery mobile in your document&#8217;s header (but <em>after</em> you load jQuery itself):</p>
+
+<figure class='code'><figcaption><span>Including jQuery Mobile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;https://d10ajoocuyu32n.cloudfront.net/jquery-1.9.1.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'><span class="c">&lt;!-- add pageinit swipe initialization here --&gt;</span>
+</span><span class='line'><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;https://d10ajoocuyu32n.cloudfront.net/mobile/1.3.1/jquery.mobile-1.3.1.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you&#8217;ve done that, you&#8217;ll be able to swipe between page <code>div</code>s.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Introducing Android migrations]]></title>
@@ -1152,7 +1220,7 @@
 
 <p>First, if you want to enable HTTP gzip compression of static assets other than images from a Heroku app, then add the heroku-deflater gem to your <code>Gemfile</code>. This gem doesn&#8217;t compress images as in some cases, zipping images creates bigger ones!</p>
 
-<p>Once you&#8217;ve run <code>bundle install</code> and deployed your app to Heroku, fire up a terminal and run <code>[cURL](http://thediscoblog.com/blog/2013/04/18/curling-for-wget/)</code> to verify that the HTTP response Content-Encoding is gzip like so:</p>
+<p>Once you&#8217;ve run <code>bundle install</code> and deployed your app to Heroku, fire up a terminal and run <a href="http://thediscoblog.com/blog/2013/04/18/curling-for-wget/">cURL</a> to verify that the HTTP response Content-Encoding is gzip like so:</p>
 
 <figure class='code'><figcaption><span>cURL testing gzip response</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -i -H <span class="s2">&quot;Accept-Encoding: gzip,deflate&quot;</span> http://your.awesome.web.app
@@ -1288,40 +1356,6 @@
 <p>My favorite: <code>getEventListeners</code>. Understanding how the DOM is augmented with listeners is amazingly helpful!</p>
 
 <p>All you have to do is fire up the JavaScript Console in Chrome and in the actual console window, you have a host a commands you can execute now just like you have in any other terminal app. Very helpful!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hybrid inappropriateness]]></title>
-    <link href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/"/>
-    <updated>2013-04-14T11:14:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/confused.png">The mobile development landscape is <a href="http://skytechgeek.com/2011/09/10-mobile-application-frameworks-for-easy-development/">bursting at the seams</a> with frameworks and tools that enable you to target <a href="http://thediscoblog.com/blog/2013/03/25/modeveast-2012-panel-discussion/">two primary mobile platforms</a>: iOS and <a href="http://thediscoblog.com/blog/categories/android/">Android</a>. And the mobile community has <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">classified these frameworks and tools</a> into three categories: native, hybrid, and web. Unfortunately, limiting the classification to three <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">is inadequate</a> as the term hybrid is too generic.</p>
-
-<p>Web apps are truly ubiquitous because they take advantage of the browser and are thus, cross platform. You, for the most part, can get away with <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">maintaining one code base</a> that can be viewed on iOS, Android, and the other minor players. Yet, the key point of Web apps is that they are <a href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/"><em>web sites</em>, not mobile apps</a>.</p>
-
-<!--more-->
-
-
-<p>As you begin to blur that mobile app/mobile website line, you&#8217;ll <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">stumble over various issues</a> like performance or varying behaviors depending on the underlying device.  Worse, you&#8217;ll find that <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">not all browsers are created equally</a> and thus, you&#8217;ll need to <a href="http://thediscoblog.com/blog/2013/02/17/circumventing-mobile-ux-expectations/">compensate for various scenarios</a> or use assorted compensating tools like <a href="http://modernizr.com/">Modernizr</a>. Or, you&#8217;ll find yourself throwing the web app into a container because you want mass distribution via an app store or because you want to take advantage of some native feature.</p>
-
-<p>And at that point, in the eyes of many, you&#8217;ve built a hybrid mobile app. But that&#8217;s not the whole story.</p>
-
-<p>Hybrid frameworks aren&#8217;t all created equal.  There are, in fact, two flavors of hybrid-ness: <em>hybrid-web</em> and <em>hybrid-native</em>. Both are extremely different; in fact, to showcase the difference, I need only compare the &#8220;featured&#8221; apps of two hybrid frameworks: <a href="http://phonegap.com/">PhoneGap</a> and <a href="http://www.madewithmarmalade.com/">Marmalade</a>.</p>
-
-<p>PhoneGap is a great framework for building hybrid-web apps. You code in HTML and JavaScript and the resultant code is run inside of a web view managed by a native container.  You ostensibly write one code base and deploy to all the primary mobile platforms. Similar frameworks are: <a href="http://www-01.ibm.com/software/mobile-solutions/worklight/">IBM&#8217;s Worklight</a> and <a href="http://www.icenium.com/">Icenium</a>. <a href="http://www.sencha.com/products/touch">Sencha Touch</a> falls into this realm as well when you employ their container technology.</p>
-
-<p><img class="center" src="http://thediscoblog.com/images/mine/phonegap_example.png"></p>
-
-<p><a href="http://www.madewithmarmalade.com/">Marmalade</a> is a hybrid-native app platform; that is, you can code in an intermediary language like C++ that is ultimately compiled down into native code (i.e. Java for Android, Objective-C for iOS, etc). These apps are not characterized by a web view in any way. They are native, close to the bone as it gets apps. The benefit is that you only had to write <em>one code base</em>, the underlying tool took care of the dirty work in making it work similarly on iOS and Android, for example. Similar frameworks are: <a href="http://www.coronalabs.com/">Corona</a>, <a href="http://www.mosync.com/">MoSync</a>, and <a href="http://www.appcelerator.com/">Appcelerator</a> to name a few.</p>
-
-<p><img class="center" src="http://thediscoblog.com/images/mine/marmalate_example.png"></p>
-
-<p>Now look closely at the <a href="http://phonegap.com/app/feature/">featured apps</a> of each <a href="http://www.madewithmarmalade.com/app-showcase">hybrid framework</a>. They&#8217;re <a href="http://phonegap.com/blog/2011/11/07/phonegap-application-craft-pain-free-mobile-app-development/">distinctly</a> <a href="http://www.madewithmarmalade.com/marmaladesdk/application/cut-rope">different</a> aren&#8217;t they?</p>
-
-<p>PhoneGap and the rest of the hybrid-web frameworks are good at producing informational apps. These apps can look beautiful and certainly can have some compelling features like tight integration with social networks and geo-tracking, for example. But they&#8217;re inadequate for games and still lack a rich user experience when compared to more native apps like Flipboard or AngryBirds.</p>
-
-<p>Marmalade and the rest of the hybrid-native crowd shine when it comes to highly interactive apps like games; what&#8217;s more, these frameworks can build an app that generates a wow. And therein lies the crucial aspect that&#8217;s missed when the industry blindly assumes all hybrid options are similar. They couldn&#8217;t be more incorrect &#8211; thus, we need at least four categories (native, web, hybrid-native, and hybrid-web) and we need to eschew the lone term &#8220;hybrid&#8221; as it lacks clarification and therefore has no meaning.</p>
 ]]></content>
   </entry>
   

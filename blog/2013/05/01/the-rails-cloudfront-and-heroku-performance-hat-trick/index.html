@@ -118,7 +118,7 @@
 
 <p>First, if you want to enable HTTP gzip compression of static assets other than images from a Heroku app, then add the heroku-deflater gem to your <code>Gemfile</code>. This gem doesn&#8217;t compress images as in some cases, zipping images creates bigger ones!</p>
 
-<p>Once you&#8217;ve run <code>bundle install</code> and deployed your app to Heroku, fire up a terminal and run <code>[cURL](http://thediscoblog.com/blog/2013/04/18/curling-for-wget/)</code> to verify that the HTTP response Content-Encoding is gzip like so:</p>
+<p>Once you&#8217;ve run <code>bundle install</code> and deployed your app to Heroku, fire up a terminal and run <a href="http://thediscoblog.com/blog/2013/04/18/curling-for-wget/">cURL</a> to verify that the HTTP response Content-Encoding is gzip like so:</p>
 
 <figure class='code'><figcaption><span>cURL testing gzip response</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -i -H <span class="s2">&quot;Accept-Encoding: gzip,deflate&quot;</span> http://your.awesome.web.app
@@ -261,6 +261,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/">Swipe gestures in jQuery Mobile apps</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/07/24/introducing-android-migrations/">Introducing Android migrations</a>
       </li>
     
@@ -274,10 +278,6 @@
     
       <li class="post">
         <a href="/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">Mobile for the masses: Words and gestures with Overheard Word</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/27/android-tip-listview-becomes-black-when-scrolling/">Android tip: ListView becomes black when scrolling</a>
       </li>
     
   </ul>
