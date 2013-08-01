@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-07-30T13:48:59-04:00</updated>
+  <updated>2013-08-01T16:43:41-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,109 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Imbibing the fluency of Mockito]]></title>
+    <link href="http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito/"/>
+    <updated>2013-08-01T15:37:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/Mockito.jpg">I recently found myself writing some code to integrate two disparate platforms. One of these systems is Java based and the other, while not written in Java, offers a Java API. I'll call these systems Foo and Bar, respectively.</p>
+
+<p>It became obvious before I had written a line of code, however, that testing the eventual adapter would require I explicitly mock the later system's API (i.e. Foo's) as all I had to go with was a jar file whose classes and methods made it clear they communicated with a live instance.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p>I spent a few cycles to see what's new in the world of Java mocking and I was pleased to see that my old friend <a href="https://code.google.com/p/mockito/">Mockito</a> is still active and is indeed, still an <a href="http://www.javaworld.com/community/node/3772">excellent tool</a> for general purpose mocking. For the uninitiated, <a href="http://refcardz.dzone.com/refcardz/mockito">Mockito</a> is Java based mocking framework that:</p>
+
+<p><blockquote><p>...tastes really good. It lets you write beautiful tests with [a] clean &amp; simple API. Mockito doesn't give you hangover because the tests are very readable and they produce clean verification errors.</p><footer><strong>Google code mockito project page</strong> <cite><a href='https://code.google.com/p/mockito/'>Why Drink It?</a></cite></footer></blockquote></p>
+
+<p>Indeed, Mockito offers a <a href="https://code.google.com/p/easyb/wiki/UsingMockito">simple, fluent API</a> that allows you to precisely mock behaviors without a lot of fuss. For instance, the main facade to interface with Bar is via a <code>QTP</code> class that has methods like <code>logIn</code>, <code>logOut</code>, etc. Rather than relying on classes under test to actually invoke these methods, I can easily create mock instances of <code>QTP</code> with Mockito like so:</p>
+
+<p><code>java Mocking an instance of QTP
+QTP qtpThing = mock(QTP.class);
+</code></p>
+
+<p>Where <code>mock</code> is a statically imported method from <code>org.mockito.Mockito</code>. With a mock instance, I can then dictate how I wish certain methods to behave, <em>provided I pass along this mocked instance to my classes under test</em>.</p>
+
+<p>For example, the method <code>logIn</code> doesn't return anything; in fact, one must invoke that method first and then call another method to generate a ticket (or token), which will be used on subsequent method invocations. Thus, the adapter that I'm writing will receive some input values (from Foo in the form of XML) and the adapter will return a ticket (in the form of an XML document as per Foo's required XML schema).</p>
+
+<p>Accordingly, the test this interaction, I need to do two things:</p>
+
+<ul>
+<li>ensure that the <code>logIn</code> method was invoked with specific parameters</li>
+<li>mock the response of a valid ticket, via the <code>getTicket</code> method</li>
+</ul>
+
+
+<p>What's more, I'd also like to verify that a <code>logIn</code> failure results in a particular interaction from within my adapter code. Therefore, I'll need to mock out some exceptional behavior as well.</p>
+
+<p>In the case of mocking out a particular method, you simply chain together a few methods; in my case, <code>when</code> and <code>thenReturn</code> do the trick like so:</p>
+
+<p><code>java Mocking the behavior of getTicket
+when(qtpThing.getTicket()).thenReturn("test-ticket");
+</code></p>
+
+<p>In the code above, when the <code>getTicket</code> method is invoked on my mock instance, the <code>String</code> "test-ticket" will be returned.</p>
+
+<p>Next, to ensure that <code>logIn</code> was invoked with parameters obtained from an incoming XML document, I can use Mockito's <code>verify</code> method.</p>
+
+<p><code>java Using Mockito's verify to ensure proper interaction
+verify(qtpThing, times(1)).logIn("some_value", "some_user_name", "password");
+</code></p>
+
+<p>In this case, the <code>verify</code> method checks that <code>logIn</code> is invoked one time and that three particular <code>String</code> values are passed in. If these expectations are not met, Mockito will throw an exception (and your corresponding test case will fail).</p>
+
+<p>Thus, my test case for verifying my adapter is quite simple, yet highly readable.</p>
+
+<p><code>java JUnit test case for verifying logIn behavior
+@Test
+public void testLoginRequest() throws Exception {
+  QTP qtpThing = mock(QTP.class);
+  when(qtpThing.getTicket()).thenReturn("test-ticket");
+  AdapterRequest request = new AdapterRequest(XML.read("etc/test-login-req.xml"));
+  QbosAdapter adapter = new QbosAdapter();
+  adapter.setQtpInstance(qtpThing);
+  AdapterResponse adapterResponse = adapter.performAction(request);
+  assertNotNull(adapterResponse);
+  verify(qtpThing, times(1)).logIn("some_value", "some_user_name", "password");
+  assertEquals("test-ticket", adapterResponse.getData().getText());
+}
+</code></p>
+
+<p>What if I need to simulate an exception thrown by the <code>QTP</code> object, ostensibly from an invalid parameter or incorrect credentials during a log in? Again, Mockito's fluent API makes this a breeze.</p>
+
+<p>In my case, I'd like the <code>logIn</code> method to throw one of the checked methods in its method signature named <code>UnknownQtpException</code>. You can do this via the <code>doThrow</code> and <code>when</code> methods.</p>
+
+<p><code>java Mocking out exceptions in Mockito
+doThrow(new UnknownQtpException()).when(qtpThing).logIn("", "blah", "blah");
+</code></p>
+
+<p>In the code above, I'm explicitly declaring that if the first parameter to the <code>logIn</code> command is blank, then my mocked <code>QTP</code> instance should throw <code>UnknownQtpException</code>. Putting everything together yields the following test case:</p>
+
+<p><code>java Testing exceptional circumstances with JUnit &amp; Mockito
+@Test
+public void testFailureLoginRequest() throws Exception {
+  QTP qtpThing = mock(QTP.class);
+  doThrow(new UnknownQtpException()).when(qtpThing).logIn("", "blah", "blah");
+  XML xml = XML.read("etc/test-login-req-err.xml");
+  AdapterRequest request = new AdapterRequest(xml);
+  QbosAdapter adapter = new QbosAdapter();
+  adapter.setQtpInstance(qtpThing);
+  AdapterResponse adapterResponse = adapter.performAction(request);
+  assertNotNull(adapterResponse);
+  verify(qtpThing, times(1)).logIn("", "blah", "blah");
+  assertEquals("FAILURE", adapterResponse.getData().getText());
+}
+</code></p>
+
+<p>The beauty, of course, is that my test cases effectively test my adapter code without relying on a third party system (in this case, Bar). This is naturally a time honored testing technique employable in any language with a mocking framework worth its salt!</p>
+
+<p>If you find yourself writing some integration code in Java, then I can't recommend Mockito enough. <a href="http://www.javaworld.com/community/node/3772">Mockito's API</a> is quite straightforward and it makes tests easy to comprehend. I mean, it makes tests easy to imbibe.  Dig it?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Introducing Android migrations]]></title>
@@ -420,23 +523,6 @@ NSArray* array = [NSArray arrayWithObjects: dict, nil];
 <p>As you can see in the above code, a callback instance takes as a parameter an <code>NSArray</code>, thus, I have to covert my <code>NSDictionary</code> into an array via Objective-C's handy <code>arrayWithObjects</code> function.</p>
 
 <p>The default module examples <a href="http://docs.appcelerator.com/titanium/latest/#!/guide/Titanium_Mobile_Module_API">provided by Appcelerator naturally work</a>, but alas, the non-callback style of invocation was less than appealing, especially if you are going to be coding an <a href="http://en.wikipedia.org/wiki/Appcelerator_Titanium">Appcelerator</a> app in JavaScript. Nevertheless, you can do it easily enough provided you are willing to dig through myriad repositories...or you could save yourself the headache and read this blog post.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mobile for the Masses: Activities and icons in your Android application lifecycle]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle/"/>
-    <updated>2013-05-28T15:28:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle</id>
-    <content type="html"><![CDATA[<p>My third article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>' series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> is now out! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">This hip article</a> covers the lifecycle events associated with <code>Activity</code> classes and then shows you how to implement menus and/or activity bars (for newer devices) along with associating icons for an app itself and its corresponding activity items.</p>
-
-<p>As the article summary states:</p>
-
-<p><blockquote><p>The Activity class is the workhorse of an Android mobile app, and it's also where you can fine-tune your app's interactions with both the user and the mobile device. Get things working exactly the way you want them in your app's lifecycle, then use icons and action bars to guide users through UI navigation and other app features.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html'>Mobile for the Masses: Activities and Icons in Your Android Application Lifecycle</a></cite></footer></blockquote></p>
-
-<p>Check out "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>" and add navigation with style to your Android mobile apps! If you missed the first article, check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>"; what's more, don't forget to read my second article, entitled "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>".</p>
-
-<p>Stay tuned for more articles in this series and don't forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
 ]]></content>
   </entry>
   
