@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-08-01T16:43:41-04:00</updated>
+  <updated>2013-08-04T11:33:33-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,106 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Sometimes TDD requires a hammer]]></title>
+    <link href="http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer/"/>
+    <updated>2013-08-04T11:08:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/hammerj.jpg">While there are myriad mocking libraries available for the Java platform, only a select few of these nifty frameworks is capable of mocking the non-mock-friendly modifiers of <code>static</code> and <code>final</code>. Static (or class) methods, while handy for factories, become a nuisance for a framework like <a href="https://code.google.com/p/mockito/">Mockito</a>, however, with the inclusion of <a href="https://code.google.com/p/powermock/">PowerMock</a>, you&#8217;ve got yourself a proverbial hammer.</p>
+
+<p><a href="http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito/">As I wrote about previously</a>, I had to deal with a 3rd party library that is used to integrate with a networked service. This library is essentially hardwired to interact with homebase, which naturally provides some challenges when trying to test ones code that relies on this library. Moreover, the said library contained a <code>static</code> method for creating instances of a specialized class, which, naturally, my code depended on.</p>
+
+<!-- more -->
+
+
+<p>PowerMock is made to work in concert with either <a href="http://easymock.org/">EasyMock</a> or <a href="https://code.google.com/p/powermock/wiki/MockitoUsage13">Mockito</a>; what&#8217;s more, it comes with a custom runner for inclusion in <a href="https://github.com/junit-team/junit">JUnit</a>. I&#8217;m going to show you how to use PowerMock with Mockito as I happen to find Mockito&#8217;s syntax much more fluent than EasyMock&#8217;s.</p>
+
+<p>For starters, you&#8217;ll need to use two class level annotations &#8211; <code>@RunWith</code> for specifying the <code>PowerMockRunner</code> class (this is a JUnit annotation) and another dubbed <code>@PrepareForTest</code>, which takes the class with <code>static</code> methods you wish to mock. <code>@PrepareForTest</code> is provided by PowerMock.</p>
+
+<p>In my case, the class containing a <code>static</code> method is named <code>QTP</code>, accordingly; my test class looks like this:</p>
+
+<figure class='code'><figcaption><span>JUnit test class with class level annotations</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@RunWith</span><span class="o">(</span><span class="n">PowerMockRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class='line'><span class="nd">@PrepareForTest</span><span class="o">(</span><span class="n">QTP</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CreateCommandTest</span> <span class="o">{</span>
+</span><span class='line'>  <span class="nd">@Test</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testCreateRequest</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, in your test method, you use <code>PowerMokito</code>&#8217;s <code>mockStatic</code> method, which takes the class (again) with static methods you wish to mock.</p>
+
+<figure class='code'><figcaption><span>JUnit test case using PowerMock & Mockito</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Test</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">testCreateRequest</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">PowerMockito</span><span class="o">.</span><span class="na">mockStatic</span><span class="o">(</span><span class="n">QTP</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>  <span class="c1">//....</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can then mock a static method on the class you&#8217;ve been passing around to <code>mockStatic</code> and the <code>@PrepareForTest</code> annotation like you would normally do with Mockito. For instance, I can use the <code>when</code> method to specify what I want to happen when this static method is invoked.</p>
+
+<figure class='code'><figcaption><span>Using normal Mockito actions for mocking</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Test</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">testCreateRequest</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">PowerMockito</span><span class="o">.</span><span class="na">mockStatic</span><span class="o">(</span><span class="n">QTP</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>  <span class="n">QTP</span> <span class="n">qtpThing</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">QTP</span><span class="o">.</span><span class="na">class</span><span class="o">);</span> <span class="c1">//normal Mockito mocking</span>
+</span><span class='line'>  <span class="c1">//QTP.create is static</span>
+</span><span class='line'>  <span class="n">when</span><span class="o">(</span><span class="n">QTP</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">&quot;dm2q&quot;</span><span class="o">,</span> <span class="s">&quot;0C4F7501UDC8C1EB43B06C988&quot;</span><span class="o">)).</span><span class="na">thenReturn</span><span class="o">(</span><span class="n">qtpThing</span><span class="o">);</span>
+</span><span class='line'>  <span class="c1">//QTP.createRecord isn&#39;t static</span>
+</span><span class='line'>  <span class="n">when</span><span class="o">(</span><span class="n">qtpThing</span><span class="o">.</span><span class="na">createRecord</span><span class="o">(</span><span class="n">any</span><span class="o">(</span><span class="n">Tckt</span><span class="o">.</span><span class="na">class</span><span class="o">))).</span><span class="na">thenReturn</span><span class="o">(</span><span class="k">new</span> <span class="n">Long</span><span class="o">(</span><span class="mi">1000000L</span><span class="o">));</span>
+</span><span class='line'>  <span class="c1">//...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, you can use <a href="http://metlos.wordpress.com/2012/09/14/the-dark-powers-of-powermock/">PowerMock</a> to ensure your mocked static method is actually invoked. The requirements here are a bit funky; that is, it requires you <em>first</em> specify how many times with one line of code and then you <em>actually call the static method</em>.</p>
+
+<figure class='code'><figcaption><span>Verifying your mocked static method was invoked</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Test</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">testCreateRequest</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">//...</span>
+</span><span class='line'>  <span class="n">PowerMockito</span><span class="o">.</span><span class="na">verifyStatic</span><span class="o">(</span><span class="n">Mockito</span><span class="o">.</span><span class="na">times</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
+</span><span class='line'>  <span class="n">QTP</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">&quot;dm2q&quot;</span><span class="o">,</span> <span class="s">&quot;0C4F7501UDC8C1EB43B06C988&quot;</span><span class="o">);</span>
+</span><span class='line'>  <span class="c1">//...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Yeah, that&#8217;s sorta confusing, I know.</p>
+
+<p>Nevertheless, as most people in the world of Java figured out long ago, <a href="http://stackoverflow.com/questions/2671496/java-when-to-use-static-methods">static methods</a> are <a href="http://misko.hevery.com/2008/12/15/static-methods-are-death-to-testability/">somewhat difficult</a> when it <a href="http://blog.codecentric.de/en/2011/11/testing-and-mocking-of-static-methods-in-java/">comes to testing</a>. That is, while a method that conceptually has no state, at first glance, seems straightforward enough to test, the <a href="http://stackoverflow.com/questions/2472690/in-java-is-there-any-disadvantage-to-static-methods-on-a-class">issues arise</a> when that static method does something like hit a database or in my case, call a web service to a networked asset. There is no easy way to override such behavior (unless, of course, you pull out a hammer).</p>
+
+<p>Static methods have a place. But when it comes to testing code, whether it be legacy or some 3rd party library, the <code>static</code> modifier requires a hammer and as I hope I&#8217;ve shown you, <a href="https://code.google.com/p/powermock/">PowerMock</a> is that hammer.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Imbibing the fluency of Mockito]]></title>
@@ -1438,42 +1538,6 @@
 <p>So what are you waiting for? Check out &#8221;<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>&#8221; and trade buttons for swipes in your Android mobile apps! And if you missed the first article, check out &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>&#8221; and learn the ins and outs of Android development!</p>
 
 <p>Stay tuned for more articles in this series and don&#8217;t forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[cURLing for Wget]]></title>
-    <link href="http://thediscoblog.com/blog/2013/04/18/curling-for-wget/"/>
-    <updated>2013-04-18T09:33:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/04/18/curling-for-wget</id>
-    <content type="html"><![CDATA[<p><a href="http://en.wikipedia.org/wiki/Wget">Wget</a> is an extremely handy utility I use all the time when I find myself on a Linux box. It&#8217;s quite helpful, for example, for downloading files. Need to <a href="https://github.com/aglover/ubuntu-equip/blob/master/equip_ruby.sh">install Ruby</a>? No problem, just download the binary like so:</p>
-
-<figure class='code'><figcaption><span>wget example of downloading Ruby binary</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>and you&#8217;re one step closer. There&#8217;s no flags to remember either.</p>
-
-<!--more-->
-
-
-<p>Wget, however, isn&#8217;t natively available on OSX. From time to time, I&#8217;m stung to see the nefarious &#8216;command not found&#8217; message after expectantly waiting to see some file I need downloaded.</p>
-
-<p>Luckily, you can force <a href="http://curl.haxx.se/docs/manpage.html">cURL</a> to act like Wget with a few flags. Simply use the <code>-OL</code> flags like so:</p>
-
-<figure class='code'><figcaption><span>cURL acting like Wget</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -OL http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>and you&#8217;ll be on your way to downloading some file.</p>
-
-<p>Of course, it&#8217;s possible to get <code>wget</code> on your Mac via <a href="http://osxdaily.com/2012/05/22/install-wget-mac-os-x/">MacPorts or Homebrew</a>; nevertheless, knowing you can achieve the same goals with cURL is always handy.</p>
 ]]></content>
   </entry>
   

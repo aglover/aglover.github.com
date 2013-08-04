@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: TDD | The Disco Blog]]></title>
+  <link href="http://thediscoblog.com/blog/categories/tdd/atom.xml" rel="self"/>
+  <link href="http://thediscoblog.com/"/>
+  <updated>2013-08-04T11:33:33-04:00</updated>
+  <id>http://thediscoblog.com/</id>
+  <author>
+    <name><![CDATA[Andrew Glover]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Sometimes TDD requires a hammer]]></title>
+    <link href="http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer/"/>
+    <updated>2013-08-04T11:08:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/hammerj.jpg">While there are myriad mocking libraries available for the Java platform, only a select few of these nifty frameworks is capable of mocking the non-mock-friendly modifiers of <code>static</code> and <code>final</code>. Static (or class) methods, while handy for factories, become a nuisance for a framework like <a href="https://code.google.com/p/mockito/">Mockito</a>, however, with the inclusion of <a href="https://code.google.com/p/powermock/">PowerMock</a>, you've got yourself a proverbial hammer.</p>
+
+<p><a href="http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito/">As I wrote about previously</a>, I had to deal with a 3rd party library that is used to integrate with a networked service. This library is essentially hardwired to interact with homebase, which naturally provides some challenges when trying to test ones code that relies on this library. Moreover, the said library contained a <code>static</code> method for creating instances of a specialized class, which, naturally, my code depended on.</p>
+
+<!-- more -->
+
+
+<p>PowerMock is made to work in concert with either <a href="http://easymock.org/">EasyMock</a> or <a href="https://code.google.com/p/powermock/wiki/MockitoUsage13">Mockito</a>; what's more, it comes with a custom runner for inclusion in <a href="https://github.com/junit-team/junit">JUnit</a>. I'm going to show you how to use PowerMock with Mockito as I happen to find Mockito's syntax much more fluent than EasyMock's.</p>
+
+<p>For starters, you'll need to use two class level annotations -- <code>@RunWith</code> for specifying the <code>PowerMockRunner</code> class (this is a JUnit annotation) and another dubbed <code>@PrepareForTest</code>, which takes the class with <code>static</code> methods you wish to mock. <code>@PrepareForTest</code> is provided by PowerMock.</p>
+
+<p>In my case, the class containing a <code>static</code> method is named <code>QTP</code>, accordingly; my test class looks like this:</p>
+
+<p><code>java JUnit test class with class level annotations
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(QTP.class)
+public class CreateCommandTest {
+  @Test
+  public void testCreateRequest() throws Exception {}
+}
+</code></p>
+
+<p>Next, in your test method, you use <code>PowerMokito</code>'s <code>mockStatic</code> method, which takes the class (again) with static methods you wish to mock.</p>
+
+<p><code>java JUnit test case using PowerMock &amp; Mockito
+@Test
+public void testCreateRequest() throws Exception {
+  PowerMockito.mockStatic(QTP.class);
+  //....
+}
+</code></p>
+
+<p>You can then mock a static method on the class you've been passing around to <code>mockStatic</code> and the <code>@PrepareForTest</code> annotation like you would normally do with Mockito. For instance, I can use the <code>when</code> method to specify what I want to happen when this static method is invoked.</p>
+
+<p><code>java Using normal Mockito actions for mocking
+@Test
+public void testCreateRequest() throws Exception {
+  PowerMockito.mockStatic(QTP.class);
+  QTP qtpThing = mock(QTP.class); //normal Mockito mocking
+  //QTP.create is static
+  when(QTP.create("dm2q", "0C4F7501UDC8C1EB43B06C988")).thenReturn(qtpThing);
+  //QTP.createRecord isn't static
+  when(qtpThing.createRecord(any(Tckt.class))).thenReturn(new Long(1000000L));
+  //...
+}
+</code></p>
+
+<p>Finally, you can use <a href="http://metlos.wordpress.com/2012/09/14/the-dark-powers-of-powermock/">PowerMock</a> to ensure your mocked static method is actually invoked. The requirements here are a bit funky; that is, it requires you <em>first</em> specify how many times with one line of code and then you <em>actually call the static method</em>.</p>
+
+<p><code>java Verifying your mocked static method was invoked
+@Test
+public void testCreateRequest() throws Exception {  
+  //...
+  PowerMockito.verifyStatic(Mockito.times(1));
+  QTP.create("dm2q", "0C4F7501UDC8C1EB43B06C988");
+  //...
+}
+</code></p>
+
+<p>Yeah, that's sorta confusing, I know.</p>
+
+<p>Nevertheless, as most people in the world of Java figured out long ago, <a href="http://stackoverflow.com/questions/2671496/java-when-to-use-static-methods">static methods</a> are <a href="http://misko.hevery.com/2008/12/15/static-methods-are-death-to-testability/">somewhat difficult</a> when it <a href="http://blog.codecentric.de/en/2011/11/testing-and-mocking-of-static-methods-in-java/">comes to testing</a>. That is, while a method that conceptually has no state, at first glance, seems straightforward enough to test, the <a href="http://stackoverflow.com/questions/2472690/in-java-is-there-any-disadvantage-to-static-methods-on-a-class">issues arise</a> when that static method does something like hit a database or in my case, call a web service to a networked asset. There is no easy way to override such behavior (unless, of course, you pull out a hammer).</p>
+
+<p>Static methods have a place. But when it comes to testing code, whether it be legacy or some 3rd party library, the <code>static</code> modifier requires a hammer and as I hope I've shown you, <a href="https://code.google.com/p/powermock/">PowerMock</a> is that hammer.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="Every once in a while, I need to give a non-technical user (like a business analyst) data residing in MongoDB; consequently, I export the target data &hellip;">
+  <meta name="description" content="Long running web requests are bad. They create resource contention among other waiting incoming requests; what&#8217;s more, with HTTP servers like &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,49 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Backgrounding Tasks in Heroku With Delayed Job</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-10T12:56:00-04:00" pubdate data-updated="true">Jun 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what&#8217;s more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn&#8217;t be any easier</a>.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -489,58 +532,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/04/18/curling-for-wget/">cURLing for Wget</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-18T09:33:00-04:00" pubdate data-updated="true">Apr 18<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://en.wikipedia.org/wiki/Wget">Wget</a> is an extremely handy utility I use all the time when I find myself on a Linux box. It&#8217;s quite helpful, for example, for downloading files. Need to <a href="https://github.com/aglover/ubuntu-equip/blob/master/equip_ruby.sh">install Ruby</a>? No problem, just download the binary like so:</p>
-
-<figure class='code'><figcaption><span>wget example of downloading Ruby binary</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>and you&#8217;re one step closer. There&#8217;s no flags to remember either.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/04/18/curling-for-wget/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -561,6 +552,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/04/sometimes-tdd-requires-a-hammer/">Sometimes TDD requires a hammer</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/01/imbibing-the-fluency-of-mockito/">Imbibing the fluency of Mockito</a>
       </li>
     
@@ -574,10 +569,6 @@
     
       <li class="post">
         <a href="/blog/2013/07/15/mongodb-pro-tip-field-projections/">MongoDB pro tip: field projections</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/03/sampling-redis-keys/">Sampling Redis keys for memory consumption</a>
       </li>
     
   </ul>
