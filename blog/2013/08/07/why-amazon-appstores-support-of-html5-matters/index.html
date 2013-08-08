@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Everything you need to know about MongoDB - The Disco Blog</title>
+  <title>Why Amazon Appstore's support of HTML5 matters - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="Are you new to MongoDB? Curious to see what&#8217;s interesting about it? Document-oriented databases like MongoDB are vastly different from &hellip;">
+  <meta name="description" content="Today, Amazon announced that their Appstore for Android now supports the submission of HTML5 apps. This is a game changer for HTML5 because now there &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://thediscoblog.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb/">
+  <link rel="canonical" href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +83,7 @@
   <header>
     
       
-        <h1 class="entry-title">Everything You Need to Know About MongoDB</h1>
+        <h1 class="entry-title">Why Amazon Appstore's Support of HTML5 Matters</h1>
       
     
     
@@ -100,18 +100,35 @@
   
 
 
-<time datetime="2013-02-23T09:39:00-05:00" pubdate data-updated="true">Feb 23<span>rd</span>, 2013</time>
+<time datetime="2013-08-07T21:09:00-04:00" pubdate data-updated="true">Aug 7<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><img class="right" src="/images/mine/mongodb_icon.png">Are you new to <a href="http://www.mongodb.org/">MongoDB</a>? Curious to see what&#8217;s interesting about it?  Document-oriented databases like MongoDB are vastly different from relational databases in that they don&#8217;t store data in tables; instead, they store it in the form of documents. From a developer&#8217;s perspective, document-oriented (or schemaless) data is simpler and <a href="http://thediscoblog.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">far more flexible</a> to manage than relational data. Rather than storing data into a rigid schema of tables, rows, and columns, joined by relationships, documents are written individually, containing whatever data they require.</p>
+<div class="entry-content"><p><img class="right" src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114._V379662584_.png">Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
 
-<p>Among open source, document-oriented databases, MongoDB is often billed as a <a href="http://www.ibm.com/developerworks/library/j-javadev2-12/">NoSQL database with RDBMS features</a>. One example of this is MongoDB&#8217;s support for dynamic queries that don&#8217;t require predefined MapReduce functions. MongoDB also comes with an interactive shell that makes accessing its datastore refreshingly easy, and its out-of-the-box support for sharding and clustering (via <a href="http://thediscoblog.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">replica sets</a>) enables high scalability across multiple nodes.</p>
+<p>As I wrote almost a year ago:</p>
 
-<p>Check out this IBM developerWorks&#8217; Knowledge Path dubbed &#8221;<a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Discover MongoDB</a>&#8221; &#8211; watch four videos, read a few articles, listen to a podcast and learn everything you need to know about MongoDB!</p>
+<blockquote><p>software delivery on the mobile platform is, at least for the foreseeable future, firmly established via app stores. And app stores cater to native apps (100% native and/or hybrid) only. The average person will not look for useful apps via their device’s browser: that route is still a jungle. And, at this point, there is no viable pure play mobile web app delivery channel.</p><footer><strong>thediscoblog.com</strong> <cite><a href='http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/'>Past Performance Is No Guarantee of Future Results</a></cite></footer></blockquote>
+
+
+<p>Today, it&#8217;s still true that the most convenient mechanism  for app delivery on mobile devices (and increasingly desktops) is via various app stores. And until today, HTML5 apps were not included in these app stores (unless they were wrapped by some hybrid-web container like <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">PhoneGap</a>).</p>
+
+<!-- more -->
+
+
+<p>But now with Amazon&#8217;s announcement, <a href="http://thediscoblog.com/blog/categories/html5/">HTML5</a> apps <em>without any native container</em> can be submitted into their Appstore. What&#8217;s more, these apps can take advantage of monetization features like <a href="https://developer.amazon.com/sdk/webapps/iap/understanding.html">In-App purchasing</a> using Amazon&#8217;s API.</p>
+
+<p>Now HTML5 apps have a direct channel to consumers along with an API to make HTML5 app developers money. HTML5 apps are now icon-ized and people don&#8217;t have to use a search engine to find them!</p>
+
+<p>As <a href="https://developer.amazon.com/blog/author/Mike+Hines.html">Mike Hines</a> of Amazon puts it:</p>
+
+<blockquote><p>Starting today, you can submit your web apps and mobile optimized web sites and have them merchandised alongside native apps on Amazon and Kindle Fire in nearly 200 countries worldwide, without any third-party software or doing any native app development.</p><footer><strong>https://developer.amazon.com/blog/</strong> <cite><a href='https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html'>Amazon Is Now Accepting HTML5 Web Apps—Making It Easy for You to Reach Millions of Kindle Fire and Android Customers Worldwide</a></cite></footer></blockquote>
+
+
+<p>This is big news for HTML5 developers. A direct channel to the masses and monetization APIs to boot &#8211; what more could you ask for? Standby folks because it&#8217;s about to get even more interesting, as I&#8217;m willing to bet that Google and Apple will follow suit in the near future.</p>
 </div>
 
 
@@ -134,12 +151,12 @@
   
 
 
-<time datetime="2013-02-23T09:39:00-05:00" pubdate data-updated="true">Feb 23<span>rd</span>, 2013</time>
+<time datetime="2013-08-07T21:09:00-04:00" pubdate data-updated="true">Aug 7<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/mongodb/'>MongoDB</a>
+    <a class='category' href='/blog/categories/html5/'>HTML5</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/mobile/'>mobile</a>
   
 </span>
 
@@ -148,7 +165,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -161,10 +178,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left articlenav" href="/blog/2013/02/18/testing-rails-migrations/" title="Previous Post: Testing Rails migrations">&laquo; Testing Rails migrations</a>
+        <a class="basic-alignment left articlenav" href="/blog/2013/08/04/sometimes-tdd-requires-a-hammer/" title="Previous Post: Sometimes TDD requires a hammer">&laquo; Sometimes TDD requires a hammer</a>
       
-      
-        <a class="basic-alignment right articlenav" href="/blog/2013/03/04/its-a-question-of-wow/" title="Next Post: It's a question of wow">It's a question of wow &raquo;</a>
       
     </p>
   </footer>
@@ -263,8 +278,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://thediscoblog.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb/';
-        var disqus_url = 'http://thediscoblog.com/blog/2013/02/23/everything-you-need-to-know-about-mongodb/';
+        var disqus_identifier = 'http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/';
+        var disqus_url = 'http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/';
         var disqus_script = 'embed.js';
       
     (function () {

@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-08-04T11:33:33-04:00</updated>
+  <updated>2013-08-07T21:32:57-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Why Amazon Appstore's support of HTML5 matters]]></title>
+    <link href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/"/>
+    <updated>2013-08-07T21:09:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters</id>
+    <content type="html"><![CDATA[<p><img class="right" src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114._V379662584_.png">Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
+
+<p>As I wrote almost a year ago:</p>
+
+<blockquote><p>software delivery on the mobile platform is, at least for the foreseeable future, firmly established via app stores. And app stores cater to native apps (100% native and/or hybrid) only. The average person will not look for useful apps via their device’s browser: that route is still a jungle. And, at this point, there is no viable pure play mobile web app delivery channel.</p><footer><strong>thediscoblog.com</strong> <cite><a href='http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/'>Past Performance Is No Guarantee of Future Results</a></cite></footer></blockquote>
+
+
+<p>Today, it&#8217;s still true that the most convenient mechanism  for app delivery on mobile devices (and increasingly desktops) is via various app stores. And until today, HTML5 apps were not included in these app stores (unless they were wrapped by some hybrid-web container like <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">PhoneGap</a>).</p>
+
+<!-- more -->
+
+
+<p>But now with Amazon&#8217;s announcement, <a href="http://thediscoblog.com/blog/categories/html5/">HTML5</a> apps <em>without any native container</em> can be submitted into their Appstore. What&#8217;s more, these apps can take advantage of monetization features like <a href="https://developer.amazon.com/sdk/webapps/iap/understanding.html">In-App purchasing</a> using Amazon&#8217;s API.</p>
+
+<p>Now HTML5 apps have a direct channel to consumers along with an API to make HTML5 app developers money. HTML5 apps are now icon-ized and people don&#8217;t have to use a search engine to find them!</p>
+
+<p>As <a href="https://developer.amazon.com/blog/author/Mike+Hines.html">Mike Hines</a> of Amazon puts it:</p>
+
+<blockquote><p>Starting today, you can submit your web apps and mobile optimized web sites and have them merchandised alongside native apps on Amazon and Kindle Fire in nearly 200 countries worldwide, without any third-party software or doing any native app development.</p><footer><strong>https://developer.amazon.com/blog/</strong> <cite><a href='https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html'>Amazon Is Now Accepting HTML5 Web Apps—Making It Easy for You to Reach Millions of Kindle Fire and Android Customers Worldwide</a></cite></footer></blockquote>
+
+
+<p>This is big news for HTML5 developers. A direct channel to the masses and monetization APIs to boot &#8211; what more could you ask for? Standby folks because it&#8217;s about to get even more interesting, as I&#8217;m willing to bet that Google and Apple will follow suit in the near future.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Sometimes TDD requires a hammer]]></title>
@@ -1520,24 +1550,6 @@
 <p>CloudFront isn&#8217;t free; nevertheless, I think you&#8217;ll find the corresponding cost quite reasonable. Pricing will vary depending on how much content you&#8217;ll be serving up with CloudFront &#8211; this is a function of how many visitors you have <em>along with</em> how many static assets that are ultimately downloaded to a user&#8217;s browser. For instance, 500GB of average content will cost you less than $75/month.</p>
 
 <p>CloudFront&#8217;s pay-as-you-go model makes it extremely affordable to add a nice bit of pep to your app&#8217;s performance along with using gzip compression and HTTP caching. And hopefully as I&#8217;ve shown you, it&#8217;s rather easy to do with a Rails app running on Heroku.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mobile for the masses: gestures and test deployments]]></title>
-    <link href="http://thediscoblog.com/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments/"/>
-    <updated>2013-04-24T21:13:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/mftm_1.jpg">My second article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>&#8217; series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> is out! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html">This article</a> covers how to go about designing a mobile interface from the standpoint of usability via gestures. In essence, eschew buttons and prefer the swipe! What&#8217;s more, I cover at a high level how to test your app on an Android device.</p>
-
-<p>As the article summary states:</p>
-
-<blockquote><p>Mobile users are typically distracted, busy, and ergonomically constrained, so build your mobile application UIs accordingly. Andrew Glover discusses key factors that differentiate mobile apps from web apps, then guides you through the creation of a mobile application UI that uses swipe gestures for navigation rather than button clicks.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html'>Mobile for the Masses: Take a Swipe at It! Programming Gestures in Android</a></cite></footer></blockquote>
-
-
-<p>So what are you waiting for? Check out &#8221;<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses2/index.html">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>&#8221; and trade buttons for swipes in your Android mobile apps! And if you missed the first article, check out &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>&#8221; and learn the ins and outs of Android development!</p>
-
-<p>Stay tuned for more articles in this series and don&#8217;t forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
 ]]></content>
   </entry>
   
