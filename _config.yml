@@ -7,7 +7,7 @@ title: The Disco Blog
 subtitle: Can you dig it?
 author: Andrew Glover   
 simple_search: http://google.com/search
-description:
+description: "Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code." 
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -24,6 +24,8 @@ email:
 # ----------------------- #
 #    Jekyll & Plugins     #
 # ----------------------- #
+
+lsi: true
 
 # If publishing to a subdirectory as in http://site.com/project set 'root: /project'
 root: /
