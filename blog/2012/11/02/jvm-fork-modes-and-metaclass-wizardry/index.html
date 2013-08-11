@@ -9,8 +9,10 @@
   <meta name="author" content="Andrew Glover">
 
   
-  <meta name="description" content="Over the past decade of finding myself staring at innumerable Ant build files containing a JUnit task, I&#8217;ve come to realize a subtle, yet &hellip;">
+  <meta name="description" content="Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code.">
   
+  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, "/>
+
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -131,6 +133,37 @@
 <p>The <code>forkmode</code> attribute can take the values of <code>perTest</code> (which is the default value), <code>once</code>, and <code>perBatch</code> &#8211; in our particular case, the value was initially set to <code>once</code>, which meant that once a <code>Message</code> class was dynamically set with a <code>Processor</code>, it seemingly always had the <em>same one</em>. That is, even in later tests where the underlying logic was setting different <code>Processor</code> instances, they were subsequently ignored in favor of which ever <code>Processor</code> was initially set.  Switching the <code>forkmode</code> attribute to <code>perTest</code> naturally fixed the test failures. This made total sense: each JVM instance for each test had the correctly modified <code>Message</code> class. This incidentally also models how the underlying Java processes work in a production environment: they each have their own JVM.</p>
 
 <p>Therefore, pay particular attention to the settings in an Ant file&#8217;s JUnit task. The same is true for Maven&#8217;s <a href="http://maven.apache.org/plugins/maven-surefire-plugin/">Surefire Plugin</a> &#8211; in both cases, the fork mode and the frequency at which tests fork can mean the difference between a successful test suite run or a cacophony of failures.</p>
+</div>
+<!-- related posts -->
+<div id='related_posts'>
+  <h4>Related Posts</h4>
+      <ul class="posts">
+      
+          
+          <!-- nothing, skip it as its the same as the post itself -->
+          
+      
+          
+            <li class="related"><a href="/blog/2013/07/24/introducing-android-migrations/">Introducing Android migrations</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/08/01/imbibing-the-fluency-of-mockito/">Imbibing the fluency of Mockito</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku performance hat-trick</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/02/18/testing-rails-migrations/">Testing Rails migrations</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/08/04/sometimes-tdd-requires-a-hammer/">Sometimes TDD requires a hammer</a></li>
+          
+      
+      </ul>
 </div>
 
 
