@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mobile | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-08-11T12:07:20-04:00</updated>
+  <updated>2013-08-13T21:39:36-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Why Amazon Appstore's support of HTML5 matters]]></title>
     <link href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/"/>
-    <updated>2013-08-07T21:09:00-04:00</updated>
+    <updated>2013-08-07T21:09:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters</id>
     <content type="html"><![CDATA[<p><img class="right" src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114.<em>V379662584</em>.png">Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
 
@@ -44,7 +44,7 @@
   <entry>
     <title type="html"><![CDATA[Swipe gestures in jQuery Mobile apps]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
-    <updated>2013-07-30T12:52:00-04:00</updated>
+    <updated>2013-07-30T12:52:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
     <content type="html"><![CDATA[<p><img class="left" src="/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
 
@@ -107,7 +107,7 @@ if (prevpage.length &gt; 0) {
   <entry>
     <title type="html"><![CDATA[Introducing Android migrations]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/24/introducing-android-migrations/"/>
-    <updated>2013-07-24T09:46:00-04:00</updated>
+    <updated>2013-07-24T09:46:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/24/introducing-android-migrations</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/android_platform.png">Have you ever worked with <a href="http://guides.rubyonrails.org/migrations.html">Rails' migrations</a>? They make <a href="http://www.tutorialspoint.com/ruby-on-rails/rails-migrations.htm">database changes a breeze</a>, don't they?  While every software release doesn't necessarily involve a migration, when one does happen to make use of one, <a href="http://thediscoblog.com/blog/2013/02/18/testing-rails-migrations/">I'm always pleased</a> on how easily things work out. Whether it's to add new data or alter existing data structures, Rails migrations make evolving a datastore (be it an RDMBS or NoSQL one like MongoDB) painless.</p>
 
@@ -348,7 +348,7 @@ Done!
   <entry>
     <title type="html"><![CDATA[Mobile for the masses: Words and gestures with Overheard Word]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/"/>
-    <updated>2013-07-01T12:10:00-04:00</updated>
+    <updated>2013-07-01T12:10:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word</id>
     <content type="html"><![CDATA[<p>The fourth article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>' series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> has been published! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">This copasetic article</a> shows you how to take the Overheard Word demo app up a level with a JSON-based word engine and some prebaked, swipe-gesture functionality.</p>
 
@@ -368,7 +368,7 @@ Done!
   <entry>
     <title type="html"><![CDATA[Android tip: ListView becomes black when scrolling]]></title>
     <link href="http://thediscoblog.com/blog/2013/06/27/android-tip-listview-becomes-black-when-scrolling/"/>
-    <updated>2013-06-27T13:15:00-04:00</updated>
+    <updated>2013-06-27T13:15:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/27/android-tip-listview-becomes-black-when-scrolling</id>
     <content type="html"><![CDATA[<p>One of <a href="https://play.google.com/store/apps/details?id=com.b50.hoproll">my Android apps</a> recently suffered from a nefariously ugly UI glitch that, embarrassingly, a user reported to me.  Strangely, this phenomenon did not surface itself in local testing on either emulators or devices when I first wrote the app; nevertheless, I was able to reproduce the error after the bug report came in. I suspect that recent updates in the Android platform might have exacerbated the issue for my app as I'm fairly certain I never saw it before.</p>
 

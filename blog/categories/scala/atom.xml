@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Scala | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-08-11T12:07:20-04:00</updated>
+  <updated>2013-08-13T21:39:36-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Scala &amp; Typesafe: exciting. Not disruptive]]></title>
     <link href="http://thediscoblog.com/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive/"/>
-    <updated>2012-08-27T08:35:00-04:00</updated>
+    <updated>2012-08-27T08:35:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive</id>
     <content type="html"><![CDATA[<p>I recently read an article on <a href="http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework">TheServerSide.com</a> where the author muses about the possible disruptive nature of Typesafe's <a href="http://typesafe.com/company/news/24499">recent Series B cash infusion of $14M</a>:</p>
 

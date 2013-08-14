@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Node | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/node/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-08-11T12:07:20-04:00</updated>
+  <updated>2013-08-13T21:39:36-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,9 +14,93 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Whiskered Node views]]></title>
+    <link href="http://thediscoblog.com/blog/2013/08/13/whiskered-node-views/"/>
+    <updated>2013-08-13T12:00:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2013/08/13/whiskered-node-views</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mustache_template.png">As we draw closer to the glorious month of <a href="http://us.movember.com/">Movember</a>, I find myself pondering the <a href="http://paularmstrong.github.io/node-templates/">myriad template engines</a> available for Node apps. The most popular is still probably <a href="http://jade-lang.com/">Jade</a> as its syntax is <a href="http://haml.info/">Haml</a>-like and results in quite clean views, lacking in HTMLish clutter.</p>
+
+<p>While Jade is handy, it takes some time to get used to. Plus, if you find yourself working with a UI person who prefers to speak in HTML, you'll find yourself translating between HTML and Jade (which isn't that hard with web apps like <a href="http://html2jade.aaron-powell.com/">HTML2Jade</a>, but nevertheless involves an extra <em>translation</em> step).</p>
+
+<!-- more -->
+
+
+<p>There are other template engines that map more closely to pure HTML. <a href="http://mustache.github.io/">Mustache</a>, for instance, forgoes reducing HTML entirely and introduces <code>{}</code>'s (i.e. mustaches) as a substitution delimiter. Thus, you can take normal HTML files and add some <code>{}</code>'s to make pages dynamic.</p>
+
+<p>In the world of Node, there are <a href="https://github.com/raycmorgan/Mu">a few</a> Mustache implementations. One of the more interesting ones that I've used is <a href="https://github.com/gsf/whiskers.js/">Whiskers</a>. Whiskers is fairly lightweight and doesn't offer a lot of bells and whistles. As the project's README states</p>
+
+<p><blockquote><p>Whiskers is focused on template readability. By limiting template logic, careful preparation of the context is encouraged, and the processing and formatting of data is kept separate from the design of the display.</p><footer><strong>https://github.com/gsf/whiskers.js/</strong> <cite><a href='https://github.com/gsf/whiskers.js/'>About Whiskers.js</a></cite></footer></blockquote></p>
+
+<p>Accordingly, you can do variable substitution, conditional logic, and looping out-of-the-box easily. But that's about all.</p>
+
+<p>To get started with Whiskers, you'll need to add it as a dependency to your project's NPM file like so:</p>
+
+<p><code>json package.json NPM file
+"whiskers" : "latest"
+</code></p>
+
+<p>In this case, I'll always be grabbing the latest version.</p>
+
+<p>I prefer <a href="http://localhost:4000/blog/categories/coffeescript/">CoffeeScript</a> when writing Node apps; consequently, the code examples I show you will be in <a href="/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/">CoffeeScript</a>. Accordingly, in my <code>App.coffee</code> file, I need to then require Whiskers:</p>
+
+<p><code>coffeescript Requiring whiskers in your Node app
+whiskers = require 'whiskers'
+</code></p>
+
+<p>You'll need to configure Express to leverage Whiskers; luckily, Express makes plugging in alternate template engines quite easy.</p>
+
+<p><code>coffeescript Configuring a template engine with Express
+app.set 'view engine', 'html'
+app.engine 'html', whiskers.__express
+</code></p>
+
+<p>This indicates that your template files will end in <code>.html</code> and that for those file types, use the Whiskers framework.</p>
+
+<p>You can then render a Whiskers template like normal. For example, if I want to pass an <code>allWords</code> collection as the variable <code>words</code> to a template file dubbed <code>index.html</code>, I can do it like so:</p>
+
+<p><code>coffeescript Rending a view
+res.render 'index', {words: allWords}
+</code></p>
+
+<p>In this case, <code>allWords</code> is an array full of <code>Word</code> classes.</p>
+
+<p>Inside my <code>index.html</code> file, I can access the <code>words</code> variable inside a bracketed <code>for</code> loop like so:</p>
+
+<p>``` html Mustached HTML
+<body>
+  {for word in words}</p>
+
+<pre><code>&lt;div data-role="page" id="page_{word.id}" data-theme='c'&gt;
+  &lt;div data-theme="g" data-role="header"&gt;
+    &lt;h3&gt;
+        Overheard Word
+    &lt;/h3&gt;
+  &lt;/div&gt;
+
+  &lt;div data-role="content"&gt;
+    &lt;div class="center-wrapper"&gt;
+       &lt;h2&gt;{word.spelling} &lt;/h2&gt;
+       &lt;p&gt;&lt;em&gt;{word.partOfSpeech}&lt;/em&gt; - {word.definition}&lt;/p&gt;
+       &lt;p&gt;"{word.exampleSentence}"&lt;/p&gt;
+     &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p>  {/for}
+</body>
+```</p>
+
+<p>Note inside the <code>for</code> loop, I have access to a <code>word</code> instance. I can call properties on it as well. Note, with Whiskers, you can't invoke methods on passed in objects. Only properties (i.e. <code>word.definition</code> isn't a function).</p>
+
+<p>Jade certainly produces more elegant, less verbose view code. But Jade's whitespace delimiting coupled with the fact that basic HTML knowledge is near universal, make template frameworks like Whiskers, which permit normal HTML with <code>{}</code> delimiters appealing from time to time.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Node.js in 3 commands]]></title>
     <link href="http://thediscoblog.com/blog/2013/03/12/node-in-3-commands/"/>
-    <updated>2013-03-12T11:55:00-04:00</updated>
+    <updated>2013-03-12T11:55:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/03/12/node-in-3-commands</id>
     <content type="html"><![CDATA[<p>A few <a href="http://www.javaworld.com/community/node/8140">short years ago</a> when I started to explore <a href="http://nodejs.org/">Node.js</a>, I remember the installation on my MacBook Pro required downloading the source, compiling and installing it, and then updating paths. <em>And then</em> you had to install <a href="https://npmjs.org/">NPM</a>.</p>
 
@@ -55,7 +139,7 @@ nvm install v0.10.0
   <entry>
     <title type="html"><![CDATA[Sinatra, CoffeeScript, and Haml: swinging in 4 steps]]></title>
     <link href="http://thediscoblog.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/"/>
-    <updated>2012-12-10T21:49:00-05:00</updated>
+    <updated>2012-12-10T21:49:00-08:00</updated>
     <id>http://thediscoblog.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps</id>
     <content type="html"><![CDATA[<p>I recently decided to ditch plain old JavaScript in a <a href="http://www.sinatrarb.com/">Sinatra</a> based application in favor of <a href="http://coffeescript.org/">CoffeeScript</a>. The existing JavaScript wasn't terribly complex; however, I was looking at having to add some AJAX based long polling and I couldn't bring myself to do it in <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-18/index.html">JavaScript</a>. Accordingly, I decided I'd use <a href="http://www.ibm.com/developerworks/web/library/j-coffeescript/index.html">CoffeeScript</a>, but, as it turns out, there were a few steps I had to put in place before I could enjoy some significant whitespace delimitation.</p>
 
@@ -102,7 +186,7 @@ spinner = new Spinner(opts).spin(document.getElementById('spinner'))
   <entry>
     <title type="html"><![CDATA[Modeling Mongo documents with Mongoose]]></title>
     <link href="http://thediscoblog.com/blog/2012/08/29/modeling-mongo-documents-with-mongoose/"/>
-    <updated>2012-08-29T21:45:00-04:00</updated>
+    <updated>2012-08-29T21:45:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2012/08/29/modeling-mongo-documents-with-mongoose</id>
     <content type="html"><![CDATA[<p>Without a doubt, one of the quickest ways to build an application that leverages <a href="http://www.mongodb.org/">MongoDB</a> is with Node. It's as if the two platforms were made for each other; the sheer number of Node libraries available for dealing with Mongo is testimony to a vibrant, innovative community. Indeed, one of my favorite Mongo focused libraries these days is <a href="http://mongoosejs.com/">Mongoose</a>.</p>
 
@@ -188,7 +272,7 @@ done(err)
   <entry>
     <title type="html"><![CDATA[Scala &amp; Typesafe: exciting. Not disruptive]]></title>
     <link href="http://thediscoblog.com/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive/"/>
-    <updated>2012-08-27T08:35:00-04:00</updated>
+    <updated>2012-08-27T08:35:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive</id>
     <content type="html"><![CDATA[<p>I recently read an article on <a href="http://www.theserverside.com/feature/Disruptive-forces-in-Java-Is-Scala-the-new-Spring-framework">TheServerSide.com</a> where the author muses about the possible disruptive nature of Typesafe's <a href="http://typesafe.com/company/news/24499">recent Series B cash infusion of $14M</a>:</p>
 

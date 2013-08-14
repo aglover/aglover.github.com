@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-08-11T12:07:20-04:00</updated>
+  <updated>2013-08-13T21:39:36-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,9 +14,115 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Whiskered Node views]]></title>
+    <link href="http://thediscoblog.com/blog/2013/08/13/whiskered-node-views/"/>
+    <updated>2013-08-13T12:00:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2013/08/13/whiskered-node-views</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/mustache_template.png">As we draw closer to the glorious month of <a href="http://us.movember.com/">Movember</a>, I find myself pondering the <a href="http://paularmstrong.github.io/node-templates/">myriad template engines</a> available for Node apps. The most popular is still probably <a href="http://jade-lang.com/">Jade</a> as its syntax is <a href="http://haml.info/">Haml</a>-like and results in quite clean views, lacking in HTMLish clutter.</p>
+
+<p>While Jade is handy, it takes some time to get used to. Plus, if you find yourself working with a UI person who prefers to speak in HTML, you&#8217;ll find yourself translating between HTML and Jade (which isn&#8217;t that hard with web apps like <a href="http://html2jade.aaron-powell.com/">HTML2Jade</a>, but nevertheless involves an extra <em>translation</em> step).</p>
+
+<!-- more -->
+
+
+<p>There are other template engines that map more closely to pure HTML. <a href="http://mustache.github.io/">Mustache</a>, for instance, forgoes reducing HTML entirely and introduces <code>{}</code>&#8217;s (i.e. mustaches) as a substitution delimiter. Thus, you can take normal HTML files and add some <code>{}</code>&#8217;s to make pages dynamic.</p>
+
+<p>In the world of Node, there are <a href="https://github.com/raycmorgan/Mu">a few</a> Mustache implementations. One of the more interesting ones that I&#8217;ve used is <a href="https://github.com/gsf/whiskers.js/">Whiskers</a>. Whiskers is fairly lightweight and doesn&#8217;t offer a lot of bells and whistles. As the project&#8217;s README states</p>
+
+<blockquote><p>Whiskers is focused on template readability. By limiting template logic, careful preparation of the context is encouraged, and the processing and formatting of data is kept separate from the design of the display.</p><footer><strong>https://github.com/gsf/whiskers.js/</strong> <cite><a href='https://github.com/gsf/whiskers.js/'>About Whiskers.js</a></cite></footer></blockquote>
+
+
+<p>Accordingly, you can do variable substitution, conditional logic, and looping out-of-the-box easily. But that&#8217;s about all.</p>
+
+<p>To get started with Whiskers, you&#8217;ll need to add it as a dependency to your project&#8217;s NPM file like so:</p>
+
+<figure class='code'><figcaption><span>package.json NPM file</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="s2">&quot;whiskers&quot;</span> <span class="err">:</span> <span class="s2">&quot;latest&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, I&#8217;ll always be grabbing the latest version.</p>
+
+<p>I prefer <a href="http://localhost:4000/blog/categories/coffeescript/">CoffeeScript</a> when writing Node apps; consequently, the code examples I show you will be in <a href="http://thediscoblog.com/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/">CoffeeScript</a>. Accordingly, in my <code>App.coffee</code> file, I need to then require Whiskers:</p>
+
+<figure class='code'><figcaption><span>Requiring whiskers in your Node app</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nv">whiskers = </span><span class="nx">require</span> <span class="s">&#39;whiskers&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You&#8217;ll need to configure Express to leverage Whiskers; luckily, Express makes plugging in alternate template engines quite easy.</p>
+
+<figure class='code'><figcaption><span>Configuring a template engine with Express</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">set</span> <span class="s">&#39;view engine&#39;</span><span class="p">,</span> <span class="s">&#39;html&#39;</span>
+</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">engine</span> <span class="s">&#39;html&#39;</span><span class="p">,</span> <span class="nx">whiskers</span><span class="p">.</span><span class="nx">__express</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This indicates that your template files will end in <code>.html</code> and that for those file types, use the Whiskers framework.</p>
+
+<p>You can then render a Whiskers template like normal. For example, if I want to pass an <code>allWords</code> collection as the variable <code>words</code> to a template file dubbed <code>index.html</code>, I can do it like so:</p>
+
+<figure class='code'><figcaption><span>Rending a view</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nx">res</span><span class="p">.</span><span class="nx">render</span> <span class="s">&#39;index&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">words: </span><span class="nx">allWords</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, <code>allWords</code> is an array full of <code>Word</code> classes.</p>
+
+<p>Inside my <code>index.html</code> file, I can access the <code>words</code> variable inside a bracketed <code>for</code> loop like so:</p>
+
+<figure class='code'><figcaption><span>Mustached HTML</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;body&gt;</span>
+</span><span class='line'>  {for word in words}
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">data-role=</span><span class="s">&quot;page&quot;</span> <span class="na">id=</span><span class="s">&quot;page_{word.id}&quot;</span> <span class="na">data-theme=</span><span class="s">&#39;c&#39;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">data-theme=</span><span class="s">&quot;g&quot;</span> <span class="na">data-role=</span><span class="s">&quot;header&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;h3&gt;</span>
+</span><span class='line'>            Overheard Word
+</span><span class='line'>        <span class="nt">&lt;/h3&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">data-role=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;center-wrapper&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>           <span class="nt">&lt;h2&gt;</span>{word.spelling} <span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>           <span class="nt">&lt;p&gt;&lt;em&gt;</span>{word.partOfSpeech}<span class="nt">&lt;/em&gt;</span> - {word.definition}<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>           <span class="nt">&lt;p&gt;</span>&quot;{word.exampleSentence}&quot;<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>         <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  {/for}
+</span><span class='line'><span class="nt">&lt;/body&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note inside the <code>for</code> loop, I have access to a <code>word</code> instance. I can call properties on it as well. Note, with Whiskers, you can&#8217;t invoke methods on passed in objects. Only properties (i.e. <code>word.definition</code> isn&#8217;t a function).</p>
+
+<p>Jade certainly produces more elegant, less verbose view code. But Jade&#8217;s whitespace delimiting coupled with the fact that basic HTML knowledge is near universal, make template frameworks like Whiskers, which permit normal HTML with <code>{}</code> delimiters appealing from time to time.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Why Amazon Appstore's support of HTML5 matters]]></title>
     <link href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/"/>
-    <updated>2013-08-07T21:09:00-04:00</updated>
+    <updated>2013-08-07T21:09:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters</id>
     <content type="html"><![CDATA[<p><img class="right" src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114._V379662584_.png">Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
 
@@ -46,7 +152,7 @@
   <entry>
     <title type="html"><![CDATA[Sometimes TDD requires a hammer]]></title>
     <link href="http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer/"/>
-    <updated>2013-08-04T11:08:00-04:00</updated>
+    <updated>2013-08-04T11:08:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer</id>
     <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/hammerj.jpg">While there are myriad mocking libraries available for the Java platform, only a select few of these nifty frameworks is capable of mocking the non-mock-friendly modifiers of <code>static</code> and <code>final</code>. Static (or class) methods, while handy for factories, become a nuisance for a framework like <a href="https://code.google.com/p/mockito/">Mockito</a>, however, with the inclusion of <a href="https://code.google.com/p/powermock/">PowerMock</a>, you&#8217;ve got yourself a proverbial hammer.</p>
 
@@ -146,7 +252,7 @@
   <entry>
     <title type="html"><![CDATA[Imbibing the fluency of Mockito]]></title>
     <link href="http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito/"/>
-    <updated>2013-08-01T15:37:00-04:00</updated>
+    <updated>2013-08-01T15:37:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/Mockito.jpg">I recently found myself writing some code to integrate two disparate platforms. One of these systems is Java based and the other, while not written in Java, offers a Java API. I&#8217;ll call these systems Foo and Bar, respectively.</p>
 
@@ -279,7 +385,7 @@
   <entry>
     <title type="html"><![CDATA[Swipe gestures in jQuery Mobile apps]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
-    <updated>2013-07-30T12:52:00-04:00</updated>
+    <updated>2013-07-30T12:52:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
     <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
 
@@ -347,7 +453,7 @@
   <entry>
     <title type="html"><![CDATA[Introducing Android migrations]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/24/introducing-android-migrations/"/>
-    <updated>2013-07-24T09:46:00-04:00</updated>
+    <updated>2013-07-24T09:46:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/24/introducing-android-migrations</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/android_platform.png">Have you ever worked with <a href="http://guides.rubyonrails.org/migrations.html">Rails&#8217; migrations</a>? They make <a href="http://www.tutorialspoint.com/ruby-on-rails/rails-migrations.htm">database changes a breeze</a>, don&#8217;t they?  While every software release doesn&#8217;t necessarily involve a migration, when one does happen to make use of one, <a href="http://thediscoblog.com/blog/2013/02/18/testing-rails-migrations/">I&#8217;m always pleased</a> on how easily things work out. Whether it&#8217;s to add new data or alter existing data structures, Rails migrations make evolving a datastore (be it an RDMBS or NoSQL one like MongoDB) painless.</p>
 
@@ -686,7 +792,7 @@
   <entry>
     <title type="html"><![CDATA[MongoDB pro tip: field projections]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections/"/>
-    <updated>2013-07-15T15:07:00-04:00</updated>
+    <updated>2013-07-15T15:07:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/mongodb_icon.png">Did you ever learn that <code>select * from table</code> in RDBMS-land is bad? Of course, you did! If you&#8217;re only looking for the email address of a user and not the other 15 columns worth of data, then why ask for that data and incur a penalty? The query <code>select email from user where user_id = 1;</code> is far more efficient for the database and the corresponding application that issued it, because there is <em>less data to fetch and consume</em>.</p>
 
@@ -725,7 +831,7 @@
   <entry>
     <title type="html"><![CDATA[Sampling Redis keys for memory consumption]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys/"/>
-    <updated>2013-07-03T14:05:00-04:00</updated>
+    <updated>2013-07-03T14:05:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/redis_logo.png"><a href="http://www.app47.com">We</a> run a farm of <a href="http://redis.io/">Redis</a> instances for storing real time analytics. Because Redis stores objects in memory, it happens to be an extremely fast way to retrieve data; thus, most of our charts and graphs pull data from various Redis instances that contain desired data.</p>
 
@@ -797,7 +903,7 @@
   <entry>
     <title type="html"><![CDATA[Mobile for the masses: Words and gestures with Overheard Word]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/"/>
-    <updated>2013-07-01T12:10:00-04:00</updated>
+    <updated>2013-07-01T12:10:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word</id>
     <content type="html"><![CDATA[<p>The fourth article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>&#8217; series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> has been published! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">This copasetic article</a> shows you how to take the Overheard Word demo app up a level with a JSON-based word engine and some prebaked, swipe-gesture functionality.</p>
 
@@ -818,7 +924,7 @@
   <entry>
     <title type="html"><![CDATA[Android tip: ListView becomes black when scrolling]]></title>
     <link href="http://thediscoblog.com/blog/2013/06/27/android-tip-listview-becomes-black-when-scrolling/"/>
-    <updated>2013-06-27T13:15:00-04:00</updated>
+    <updated>2013-06-27T13:15:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/27/android-tip-listview-becomes-black-when-scrolling</id>
     <content type="html"><![CDATA[<p>One of <a href="https://play.google.com/store/apps/details?id=com.b50.hoproll">my Android apps</a> recently suffered from a nefariously ugly UI glitch that, embarrassingly, a user reported to me.  Strangely, this phenomenon did not surface itself in local testing on either emulators or devices when I first wrote the app; nevertheless, I was able to reproduce the error after the bug report came in. I suspect that recent updates in the Android platform might have exacerbated the issue for my app as I&#8217;m fairly certain I never saw it before.</p>
 
@@ -853,7 +959,7 @@
   <entry>
     <title type="html"><![CDATA[MongoDB primary keys are your friend]]></title>
     <link href="http://thediscoblog.com/blog/2013/06/22/mongodb-primary-keys-are-your-friend/"/>
-    <updated>2013-06-22T15:00:00-04:00</updated>
+    <updated>2013-06-22T15:00:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/22/mongodb-primary-keys-are-your-friend</id>
     <content type="html"><![CDATA[<p>All documents in a <a href="http://www.mongodb.org/">MongoDB</a> collection have a primary key dubbed <code>_id</code>. This field is automatically assigned to a document upon insert, so there&#8217;s rarely a need to provide it. What&#8217;s interesting about the <code>_id</code> field is that it is <em>time based</em>. That is, the underlying type of <code>_id</code>, which is <code>ObjectId</code>, is a <a href="http://docs.mongodb.org/manual/reference/object-id/">12-byte BSON type</a>, and 4 of those bytes represent the seconds since Unix epoch.</p>
 
@@ -995,7 +1101,7 @@
   <entry>
     <title type="html"><![CDATA[Lickety-split custom validations in Rails]]></title>
     <link href="http://thediscoblog.com/blog/2013/06/12/lickety-split-custom-validations-in-rails/"/>
-    <updated>2013-06-12T13:19:00-04:00</updated>
+    <updated>2013-06-12T13:19:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/12/lickety-split-custom-validations-in-rails</id>
     <content type="html"><![CDATA[<p>Have a highly specific, yet custom validation for a particular field on one of your <a href="http://thediscoblog.com/blog/categories/rails/">Rails</a> model objects? Don&#8217;t want to create a <code>ActiveModel::Validator</code> type? Not a problem!</p>
 
@@ -1028,7 +1134,7 @@
   <entry>
     <title type="html"><![CDATA[Backgrounding tasks in Heroku with Delayed Job]]></title>
     <link href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
-    <updated>2013-06-10T12:56:00-04:00</updated>
+    <updated>2013-06-10T12:56:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what&#8217;s more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn&#8217;t be any easier</a>.</p>
 
@@ -1100,7 +1206,7 @@
   <entry>
     <title type="html"><![CDATA[MongoDB to CSV]]></title>
     <link href="http://thediscoblog.com/blog/2013/06/07/mongodb-to-csv/"/>
-    <updated>2013-06-07T20:01:00-04:00</updated>
+    <updated>2013-06-07T20:01:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/07/mongodb-to-csv</id>
     <content type="html"><![CDATA[<p>Every once in a while, I need to give a non-technical user (like a business analyst) data residing in <a href="http://www.mongodb.org/">MongoDB</a>; consequently, I export the target data as a <a href="http://en.wikipedia.org/wiki/Comma-separated_values">CSV file</a> (which they can presumably slice and dice once they import it into Excel or some similar tool). Mongo has a handy <a href="http://docs.mongodb.org/manual/reference/program/mongoexport/">export utility</a> that takes a bevy of options, however, there is an <a href="https://jira.mongodb.org/browse/SERVER-4224">outstanding bug</a> and some <a href="http://stackoverflow.com/questions/6814151/how-to-export-collection-to-csv-in-mongodb">general confusion</a> as to how to properly export data in CSV format.</p>
 
@@ -1152,7 +1258,7 @@
   <entry>
     <title type="html"><![CDATA[Callbacks in Appcelerator Titanium modules]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules/"/>
-    <updated>2013-05-29T13:42:00-04:00</updated>
+    <updated>2013-05-29T13:42:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/appc_stacked.png">I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>&#8217;s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47&#8217;s <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
 
@@ -1309,7 +1415,7 @@
   <entry>
     <title type="html"><![CDATA[Mobile for the Masses: Activities and icons in your Android application lifecycle]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle/"/>
-    <updated>2013-05-28T15:28:00-04:00</updated>
+    <updated>2013-05-28T15:28:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle</id>
     <content type="html"><![CDATA[<p>My third article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>&#8217; series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> is now out! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">This hip article</a> covers the lifecycle events associated with <code>Activity</code> classes and then shows you how to implement menus and/or activity bars (for newer devices) along with associating icons for an app itself and its corresponding activity items.</p>
 
@@ -1327,7 +1433,7 @@
   <entry>
     <title type="html"><![CDATA[ElasticSearch on EC2 in less than 60 seconds]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/"/>
-    <updated>2013-05-17T17:24:00-04:00</updated>
+    <updated>2013-05-17T17:24:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds</id>
     <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/es-bonzai.jpg">Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend &#8211; in less than 60 seconds, I&#8217;ll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
 
@@ -1384,7 +1490,7 @@
   <entry>
     <title type="html"><![CDATA[Mobile-isticly optimized in 10 seconds]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/"/>
-    <updated>2013-05-15T13:20:00-04:00</updated>
+    <updated>2013-05-15T13:20:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/unoptmobile.png">Anyone ever told you that your website isn&#8217;t mobile optimized? Or have you ever seen a lilliputian-looking website on your device? You know, one that renders so small you are forced to squint as you enlarge various parts of the site with your fingers just to read it?</p>
 
@@ -1411,7 +1517,7 @@
   <entry>
     <title type="html"><![CDATA[The democratization of search]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/"/>
-    <updated>2013-05-14T11:33:00-04:00</updated>
+    <updated>2013-05-14T11:33:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/democracy.jpg">Over the past year and a half, I&#8217;ve watched <a href="http://www.elasticsearch.org/">ElasticSearch</a> grow from a seemingly part-time code experiment into a thriving ecosystem. Not only has the number of <a href="http://www.elasticsearch.org/guide/clients/">client libraries</a> grown from 1 to over 25 (and counting!); it&#8217;s now a <a href="http://www.elasticsearch.com/">commercially sponsored project</a> to the tune of <a href="http://www.whiteboardmag.com/youre-hot-or-not-why-elasticsearch-raised-24-million-just-3-months-after-a-10-million-round/">$34 million</a> (a <a href="http://www.zdnet.com/elasticsearch-raises-24-million-big-data-analytics-7000011496/">$10M series A</a> and a <a href="http://gigaom.com/2013/02/19/open-source-search-tool-elasticsearch-gets-24m/">$24M series B</a>) with 200,000 downloads a month.</p>
 
@@ -1433,7 +1539,7 @@
   <entry>
     <title type="html"><![CDATA[Hold your horses! It's still only a two horse race.]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/"/>
-    <updated>2013-05-09T12:49:00-04:00</updated>
+    <updated>2013-05-09T12:49:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race</id>
     <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/2horsesracesm.jpg">There has been a lot of excitement in recent months regarding a few new entrants to the mobile operating systems arena including <a href="http://www.mozilla.org/en-US/firefox/partners/">Firefox OS</a>, <a href="https://www.tizen.org/">Tizen</a>, and <a href="https://wiki.ubuntu.com/Touch">Ubuntu Touch</a>. These relatively nascent projects, which are all built on top of a Linux kernel, appear to have fully embraced HTML 5 apps; indeed, HTML 5 apps on these operating systems are first class citizens that can run without a browser. Moreover, the ubiquity of HTML 5 means the same app can run on all 3 of these operating systems plus Android and iOS!</p>
 
@@ -1464,92 +1570,6 @@
 <p>The salient point, nevertheless, is that neither Microsoft or Blackberry have yet to make a dent into the Google-Apple duopoly. And so while it&#8217;s easy to get excited about new entrants like Ubuntu Touch, the reality, at least for the time being, is that these operating systems will have little impact in the smartphone market.</p>
 
 <p>After all, when your competition essentially owns 9 out of every 10 smartphones, evolutionary enhancements aren&#8217;t enough to break that stranglehold: you have to do something <em>revolutionary</em>. Besides, we&#8217;ve already seen this before: the iPhone was not an evolutionary offshoot of the Blackberry. It was revolutionary. Sadly, neither Ubuntu Touch, Tizen, nor Firefox OS appear revolutionary.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The Rails, CloudFront, and Heroku performance hat-trick]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
-    <updated>2013-05-01T09:10:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
-
-<p>It&#8217;s easy to configure a <a href="http://rubyonrails.org/">Rails</a> app to take advantage of CloudFront; what&#8217;s more, if your Rails app is hosted on <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-21/">Heroku</a>, there&#8217;s <a href="https://github.com/romanbsd/heroku-deflater">a nifty gem</a>, dubbed heroku-deflater, that&#8217;ll enable <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP compression</a> of static assets (<a href="http://stackoverflow.com/questions/12326191/any-way-to-serve-gzip-assets-from-heroku">other than images</a>).</p>
-
-<p>To get these three entities to play nicely together requires a few simple steps. Let me show you how.</p>
-
-<!--more-->
-
-
-<p>First, if you want to enable HTTP gzip compression of static assets other than images from a Heroku app, then add the heroku-deflater gem to your <code>Gemfile</code>. This gem doesn&#8217;t compress images as in some cases, zipping images creates bigger ones!</p>
-
-<p>Once you&#8217;ve run <code>bundle install</code> and deployed your app to Heroku, fire up a terminal and run <a href="http://thediscoblog.com/blog/2013/04/18/curling-for-wget/">cURL</a> to verify that the HTTP response Content-Encoding is gzip like so:</p>
-
-<figure class='code'><figcaption><span>cURL testing gzip response</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -i -H <span class="s2">&quot;Accept-Encoding: gzip,deflate&quot;</span> http://your.awesome.web.app
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You should see in the response this key phrase:</p>
-
-<figure class='code'><figcaption><span>cURL response</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>Content-Encoding: gzip
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you do see the Content-Encoding set to gzip, then you are good to go. If, for some reason, you don&#8217;t see it, check your environment&#8217;s configuration file (which you will have to edit to get CloudFront working anyway) and verify that the property <code>config.serve_static_assets</code> is set to <code>true</code>.</p>
-
-<p>Next, sign into the AWS Management Console and enable CloudFront if you haven&#8217;t already. From the CloudFront admin page, create a new distribution via the Create Distribution button on the top left.</p>
-
-<p><img class="center" src="http://thediscoblog.com/images/mine/cloudfront_1.png"></p>
-
-<p>Once the create distribution wizard begins, be sure to select Download as your delivery method.</p>
-
-<p><img class="center" src="http://thediscoblog.com/images/mine/cloudfront_2.png"></p>
-
-<p>In the next screen, there are some important fields you&#8217;ll need to fill out, namely: the Origin Source Name and the Viewer Protocol Policy. For the Origin Source Name, you will need to put in your app&#8217;s URL or the Heroku URL (if you do not map a custom domain name to it). If you web site supports HTTPS, then be sure to set the Viewer Protocol Policy to HTTP and HTTPS.</p>
-
-<p><img class="center" src="http://thediscoblog.com/images/mine/cloudfront_3.png"></p>
-
-<p>The only other important setting after these two is the Price Class. It&#8217;s here where you can set where CloudFront will essentially serve up your content &#8211; the default setting of Use All Edge Locations is most likely what you need.</p>
-
-<p><img class="center" src="http://thediscoblog.com/images/mine/cloudfront_5.png"></p>
-
-<p>Finally, click the Create Distribution button &#8211; once you do that, it&#8217;ll take a bit for things to initialize (basically, the CDN needs to get built and this may take up to 30 minutes).</p>
-
-<p>Now to configure your Rails app, you&#8217;ll need to open up your target environment&#8217;s configuration file (i.e. <code>production.rb</code>). The <a href="http://bindle.me/blog/index.php/395/caches-cdns-and-heroku-cedar">two fields</a> you&#8217;ll want to be sure are properly set are <code>serve_static_assets</code> and <code>static_cache_control</code>. In particular, you are setting the cache control variable to one year. This means that once a static asset, like a JavaScript file is downloaded to the browser, it&#8217;ll be cached for one year. Don&#8217;t fret, however, if you think that&#8217;ll inhibit change &#8211; the file that is ultimately downloaded has a hash attached to it (via the magic of <a href="http://guides.rubyonrails.org/asset_pipeline.html">Rail&#8217;s Asset Pipeline</a>). Consequently, the file that is cached is something like <code>your_js_file-asdf098203820980a980</code> where that last bit is a hash value that&#8217;ll change if the file itself changes.</p>
-
-<figure class='code'><figcaption><span>production.rb edited to support CDN</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">serve_static_assets</span> <span class="o">=</span> <span class="kp">true</span>
-</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">static_cache_control</span> <span class="o">=</span> <span class="s1">&#39;public, max-age=31536000&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The last change you need to make to your environment file is to set the <code>asset_host</code> to the CloudFront domain that you just created. You can find this in your AWS Management Console &#8211; it&#8217;ll be a cryptic URL like http://asdjlkj2321.cloudfront.net.</p>
-
-<figure class='code'><figcaption><span>production.rb edited to support asset host</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">action_controller</span><span class="o">.</span><span class="n">asset_host</span> <span class="o">=</span> <span class="s1">&#39;the domain name from AWS Dashboard&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Commit your changes and deploy your app.</p>
-
-<p>To verify things are kosher, you&#8217;ll need to give it some time (check the status of your CloudFront CDN &#8211; if it&#8217;s status is Enabled then you are good to go!). If things are ready, then fire up a browser and go to your app.</p>
-
-<p>In this case, <a href="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/">I&#8217;m using Chrome</a>. Go to JavaScript console and hit the Network tab.</p>
-
-<p><img class="center" src="http://thediscoblog.com/images/mine/cloudfront_6.png"></p>
-
-<p>Surf around and you&#8217;ll note a few things &#8211; one, that the assets like images and JavaScript files are being severed up from your CDN (just look at the URL) and that the size will often say &#8220;(from cache)&#8221; &#8211; that means the CDN is handling the load rather than <a href="http://www.ibm.com/developerworks/podcast/glover-heroku-110811/">Heroku</a>. You should also note that your web app is probably a bit more snappy!</p>
-
-<p><img class="center" src="http://thediscoblog.com/images/mine/cloudfront_7.png"></p>
-
-<p>Check out your Heroku logs and you&#8217;ll note fewer hits in this case &#8211; dynamic pages are still being loaded, however, static assets are not anymore &#8211; that&#8217;s the job of your CDN!</p>
-
-<p>CloudFront isn&#8217;t free; nevertheless, I think you&#8217;ll find the corresponding cost quite reasonable. Pricing will vary depending on how much content you&#8217;ll be serving up with CloudFront &#8211; this is a function of how many visitors you have <em>along with</em> how many static assets that are ultimately downloaded to a user&#8217;s browser. For instance, 500GB of average content will cost you less than $75/month.</p>
-
-<p>CloudFront&#8217;s pay-as-you-go model makes it extremely affordable to add a nice bit of pep to your app&#8217;s performance along with using gzip compression and HTTP caching. And hopefully as I&#8217;ve shown you, it&#8217;s rather easy to do with a Rails app running on Heroku.</p>
 ]]></content>
   </entry>
   

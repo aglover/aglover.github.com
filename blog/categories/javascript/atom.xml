@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-08-11T12:07:20-04:00</updated>
+  <updated>2013-08-13T21:39:36-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,9 +14,93 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Whiskered Node views]]></title>
+    <link href="http://thediscoblog.com/blog/2013/08/13/whiskered-node-views/"/>
+    <updated>2013-08-13T12:00:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2013/08/13/whiskered-node-views</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mustache_template.png">As we draw closer to the glorious month of <a href="http://us.movember.com/">Movember</a>, I find myself pondering the <a href="http://paularmstrong.github.io/node-templates/">myriad template engines</a> available for Node apps. The most popular is still probably <a href="http://jade-lang.com/">Jade</a> as its syntax is <a href="http://haml.info/">Haml</a>-like and results in quite clean views, lacking in HTMLish clutter.</p>
+
+<p>While Jade is handy, it takes some time to get used to. Plus, if you find yourself working with a UI person who prefers to speak in HTML, you'll find yourself translating between HTML and Jade (which isn't that hard with web apps like <a href="http://html2jade.aaron-powell.com/">HTML2Jade</a>, but nevertheless involves an extra <em>translation</em> step).</p>
+
+<!-- more -->
+
+
+<p>There are other template engines that map more closely to pure HTML. <a href="http://mustache.github.io/">Mustache</a>, for instance, forgoes reducing HTML entirely and introduces <code>{}</code>'s (i.e. mustaches) as a substitution delimiter. Thus, you can take normal HTML files and add some <code>{}</code>'s to make pages dynamic.</p>
+
+<p>In the world of Node, there are <a href="https://github.com/raycmorgan/Mu">a few</a> Mustache implementations. One of the more interesting ones that I've used is <a href="https://github.com/gsf/whiskers.js/">Whiskers</a>. Whiskers is fairly lightweight and doesn't offer a lot of bells and whistles. As the project's README states</p>
+
+<p><blockquote><p>Whiskers is focused on template readability. By limiting template logic, careful preparation of the context is encouraged, and the processing and formatting of data is kept separate from the design of the display.</p><footer><strong>https://github.com/gsf/whiskers.js/</strong> <cite><a href='https://github.com/gsf/whiskers.js/'>About Whiskers.js</a></cite></footer></blockquote></p>
+
+<p>Accordingly, you can do variable substitution, conditional logic, and looping out-of-the-box easily. But that's about all.</p>
+
+<p>To get started with Whiskers, you'll need to add it as a dependency to your project's NPM file like so:</p>
+
+<p><code>json package.json NPM file
+"whiskers" : "latest"
+</code></p>
+
+<p>In this case, I'll always be grabbing the latest version.</p>
+
+<p>I prefer <a href="http://localhost:4000/blog/categories/coffeescript/">CoffeeScript</a> when writing Node apps; consequently, the code examples I show you will be in <a href="/blog/2012/12/10/sinatra-coffeescript-and-haml-swinging-in-4-steps/">CoffeeScript</a>. Accordingly, in my <code>App.coffee</code> file, I need to then require Whiskers:</p>
+
+<p><code>coffeescript Requiring whiskers in your Node app
+whiskers = require 'whiskers'
+</code></p>
+
+<p>You'll need to configure Express to leverage Whiskers; luckily, Express makes plugging in alternate template engines quite easy.</p>
+
+<p><code>coffeescript Configuring a template engine with Express
+app.set 'view engine', 'html'
+app.engine 'html', whiskers.__express
+</code></p>
+
+<p>This indicates that your template files will end in <code>.html</code> and that for those file types, use the Whiskers framework.</p>
+
+<p>You can then render a Whiskers template like normal. For example, if I want to pass an <code>allWords</code> collection as the variable <code>words</code> to a template file dubbed <code>index.html</code>, I can do it like so:</p>
+
+<p><code>coffeescript Rending a view
+res.render 'index', {words: allWords}
+</code></p>
+
+<p>In this case, <code>allWords</code> is an array full of <code>Word</code> classes.</p>
+
+<p>Inside my <code>index.html</code> file, I can access the <code>words</code> variable inside a bracketed <code>for</code> loop like so:</p>
+
+<p>``` html Mustached HTML
+<body>
+  {for word in words}</p>
+
+<pre><code>&lt;div data-role="page" id="page_{word.id}" data-theme='c'&gt;
+  &lt;div data-theme="g" data-role="header"&gt;
+    &lt;h3&gt;
+        Overheard Word
+    &lt;/h3&gt;
+  &lt;/div&gt;
+
+  &lt;div data-role="content"&gt;
+    &lt;div class="center-wrapper"&gt;
+       &lt;h2&gt;{word.spelling} &lt;/h2&gt;
+       &lt;p&gt;&lt;em&gt;{word.partOfSpeech}&lt;/em&gt; - {word.definition}&lt;/p&gt;
+       &lt;p&gt;"{word.exampleSentence}"&lt;/p&gt;
+     &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p>  {/for}
+</body>
+```</p>
+
+<p>Note inside the <code>for</code> loop, I have access to a <code>word</code> instance. I can call properties on it as well. Note, with Whiskers, you can't invoke methods on passed in objects. Only properties (i.e. <code>word.definition</code> isn't a function).</p>
+
+<p>Jade certainly produces more elegant, less verbose view code. But Jade's whitespace delimiting coupled with the fact that basic HTML knowledge is near universal, make template frameworks like Whiskers, which permit normal HTML with <code>{}</code> delimiters appealing from time to time.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Why Amazon Appstore's support of HTML5 matters]]></title>
     <link href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/"/>
-    <updated>2013-08-07T21:09:00-04:00</updated>
+    <updated>2013-08-07T21:09:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters</id>
     <content type="html"><![CDATA[<p><img class="right" src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114.<em>V379662584</em>.png">Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
 
@@ -44,7 +128,7 @@
   <entry>
     <title type="html"><![CDATA[Swipe gestures in jQuery Mobile apps]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
-    <updated>2013-07-30T12:52:00-04:00</updated>
+    <updated>2013-07-30T12:52:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
     <content type="html"><![CDATA[<p><img class="left" src="/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
 
@@ -107,7 +191,7 @@ if (prevpage.length &gt; 0) {
   <entry>
     <title type="html"><![CDATA[Callbacks in Appcelerator Titanium modules]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules/"/>
-    <updated>2013-05-29T13:42:00-04:00</updated>
+    <updated>2013-05-29T13:42:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/appc_stacked.png">I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>'s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47's <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
 
@@ -222,7 +306,7 @@ NSArray* array = [NSArray arrayWithObjects: dict, nil];
   <entry>
     <title type="html"><![CDATA[Chrome's console commands]]></title>
     <link href="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/"/>
-    <updated>2013-04-15T10:05:00-04:00</updated>
+    <updated>2013-04-15T10:05:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/04/15/chromes-console-commands</id>
     <content type="html"><![CDATA[<p>As if the JavaScript console in Chrome couldn't be any more awesome. Check it out: <a href="https://developers.google.com/chrome-developer-tools/docs/commandline-api">Command Line API Reference</a>. Yep, it's legit. I've been using Firebug and the like for years and only just ran across this feature of Chrome's JavaScript console.</p>
 
@@ -231,45 +315,6 @@ NSArray* array = [NSArray arrayWithObjects: dict, nil];
 <p>My favorite: <code>getEventListeners</code>. Understanding how the DOM is augmented with listeners is amazingly helpful!</p>
 
 <p>All you have to do is fire up the JavaScript Console in Chrome and in the actual console window, you have a host a commands you can execute now just like you have in any other terminal app. Very helpful!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Node.js in 3 commands]]></title>
-    <link href="http://thediscoblog.com/blog/2013/03/12/node-in-3-commands/"/>
-    <updated>2013-03-12T11:55:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/03/12/node-in-3-commands</id>
-    <content type="html"><![CDATA[<p>A few <a href="http://www.javaworld.com/community/node/8140">short years ago</a> when I started to explore <a href="http://nodejs.org/">Node.js</a>, I remember the installation on my MacBook Pro required downloading the source, compiling and installing it, and then updating paths. <em>And then</em> you had to install <a href="https://npmjs.org/">NPM</a>.</p>
-
-<p>Since then, <a href="http://www.ibm.com/developerworks/library/j-nodejs/">Node</a>'s installation has been come tremendously easy and NPM is even <em>bundled</em> with <a href="http://www.ibm.com/developerworks/offers/lp/demos/summary/j-jnodejs.html?ca=drs-">Node</a>. And yet, installing Node (and keeping up w/its rapid release schedule) is even easier with a nifty tool: <a href="https://github.com/creationix/nvm">Node Version Manager</a>.</p>
-
-<p>With Node Version Manager (or <a href="https://twitter.com/aglover/status/105824835149627392">nvm</a>) you can be up and running with Node in 3 easy commands.</p>
-
-<p>Step 1: Download and install nvm.</p>
-
-<p><code>bash downloading nvm
-curl https://raw.github.com/creationix/nvm/master/install.sh | sh
-</code></p>
-
-<p>Step 2: Reload your shell.</p>
-
-<p><code>bash reloading .bash_profile
-source .bash_profile
-</code></p>
-
-<p>Step 2.5: Obtain a list of available node versions to install.</p>
-
-<p><code>bash listing available node versions
-nvm ls-remote
-</code></p>
-
-<p>Step 3: Install your desired version of node.</p>
-
-<p><code>bash installing node version 0.10.0
-nvm install v0.10.0
-</code></p>
-
-<p>After that's done, execute a <code>node -v</code> to verify. Now wasn't that easy? You bet!</p>
 ]]></content>
   </entry>
   
