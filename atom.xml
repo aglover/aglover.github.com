@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-08-13T21:39:36-07:00</updated>
+  <updated>2013-09-03T09:10:11-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,9 +14,190 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Effortless ElasticSearch clustering]]></title>
+    <link href="http://thediscoblog.com/blog/2013/09/03/effortless-elasticsearch-clustering/"/>
+    <updated>2013-09-03T07:50:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/09/03/effortless-elasticsearch-clustering</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/cluster.jpg"><a href="http://thediscoblog.com/blog/categories/elasticsearch/">ElasticSearch</a> supports <a href="http://www.elasticsearch.org/guide/reference/modules/cluster/">clustering</a>; that is, you can have a series of distinct <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">ElasticSearch</a> instances work in a coordinated manner without much administrative intervention at all. Clustering ElasticSearch instances (or nodes) provides data redundancy as well as data availability.</p>
+
+<p>Best of all, clustering in ElasticSearch, by default, doesn&#8217;t require <em>any</em> configuration &#8211; nodes discover each other. You can set up a cluster in about 60 seconds. Let me show you how!</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p>First, download and unzip or untar the <a href="http://thediscoblog.com/blog/2013/01/02/scalable-searching-with-elasticsearch/">latest version of ElasticSearch</a>. Next, copy the resultant ElasticSearch install directory (for example, mine is dubbed <code>elasticsearch-0.90.3</code>) into 3 different directories; for example, I&#8217;ve called my directories <code>node-1</code>, <code>node-2</code>, and <code>node-3</code>.</p>
+
+<p>Next, open up three terminal windows and in each, change directories to a sequential node. Start the instance in the <code>node-1</code> directory like so:</p>
+
+<figure class='code'><figcaption><span>Starting up ElasticSearch</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>./bin/elasticsearch -f
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>-f</code> forces the process to run in the foreground.</p>
+
+<p>By default, ElasticSearch nodes will name themselves if you don&#8217;t provide a name (via the <code>elasticsearch.yml</code> configuration file). Thus, after you start the first instance, you should see something along the lines of:</p>
+
+<figure class='code'><figcaption><span>A master node is created!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>cluster.service<span class="o">]</span> <span class="o">[</span>Dionysus<span class="o">]</span> new_master <span class="o">[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]</span>, reason: zen-disco-join <span class="o">(</span>elected_as_master<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the above log output, &#8220;Dionysus&#8221; is the automatic name chosen by ElasticSearch. Note the part about &#8220;new_master&#8221; for the <code>cluster.service</code>.</p>
+
+<p>Next, go into the next terminal window, say <code>node-2</code>, and start that instance the same way (via the <code>-f</code> flag). You should see the 2nd instance (in my case, named <code>Caiera</code>) discover the master:</p>
+
+<figure class='code'><figcaption><span>Node #2 discovers the master node</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>cluster.service<span class="o">]</span> <span class="o">[</span>Caiera<span class="o">]</span> detected_master <span class="o">[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]</span>, added <span class="o">{[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]</span>,<span class="o">}</span>, reason: zen-disco-receive<span class="o">(</span>from master <span class="o">[[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>See the <code>detected_master</code> statement above?  And you should see the master, &#8220;Dionysus&#8221;, add the 2nd instance, &#8220;Caiera&#8221;, too (via the first terminal window):</p>
+
+<figure class='code'><figcaption><span>The master node adds node #2</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>cluster.service<span class="o">]</span> <span class="o">[</span>Dionysus<span class="o">]</span> added <span class="o">{[</span>Caiera<span class="o">][</span>Eh3DHlcRQhGxatGnUG8smA<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9301<span class="o">]]</span>,<span class="o">}</span>, reason: zen-disco-receive<span class="o">(</span>join from node<span class="o">[[</span>Caiera<span class="o">][</span>Eh3DHlcRQhGxatGnUG8smA<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9301<span class="o">]]])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Lastly, start the 3rd instance in the 3rd window.</p>
+
+<p>In this case, my 3rd node is dubbed &#8220;Phantom Rider&#8221; and it&#8217;ll discover the master:</p>
+
+<figure class='code'><figcaption><span>Node #3 discovers the master</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>cluster.service<span class="o">]</span> <span class="o">[</span>Phantom Rider<span class="o">]</span> detected_master <span class="o">[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]</span>, added <span class="o">{[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]</span>,<span class="o">[</span>Caiera<span class="o">][</span>Eh3DHlcRQhGxatGnUG8smA<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9301<span class="o">]]</span>,<span class="o">}</span>, reason: zen-disco-receive<span class="o">(</span>from master <span class="o">[[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the master, will in turn, add &#8220;Phantom Rider&#8221; into the cluster:</p>
+
+<figure class='code'><figcaption><span>The master node adds node #3</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>cluster.service<span class="o">]</span> <span class="o">[</span>Dionysus<span class="o">]</span> added <span class="o">{[</span>Phantom Rider<span class="o">][</span>Sw1bDSbFQqeTq4M45qbNpg<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9302<span class="o">]]</span>,<span class="o">}</span>, reason: zen-disco-receive<span class="o">(</span>join from node<span class="o">[[</span>Phantom Rider<span class="o">][</span>Sw1bDSbFQqeTq4M45qbNpg<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9302<span class="o">]]])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that you have 3 ElasticSearch instances running, you can run a few RESTful commands to verify your cluster is operational.</p>
+
+<p>First, in a new terminal window, run this command:</p>
+
+<figure class='code'><figcaption><span>cURL to ascertain cluster nodes</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -XGET <span class="s1">&#39;http://localhost:9200/_cluster/nodes?pretty=true&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You should see a nicely formatting JSON response. It&#8217;ll look something like:</p>
+
+<figure class='code'><figcaption><span>ElasticSearch nodes</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;cluster_name&quot;</span> <span class="p">:</span> <span class="s2">&quot;elasticsearch&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;nodes&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;Eh3DHlcRQhGxatGnUG8smA&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;hostname&quot;</span> <span class="p">:</span> <span class="s2">&quot;new-host-5.home&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;http_address&quot;</span> <span class="p">:</span> <span class="s2">&quot;inet[/192.168.1.12:9201]&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;Caiera&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;transport_address&quot;</span> <span class="p">:</span> <span class="s2">&quot;inet[/192.168.1.12:9301]&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;version&quot;</span> <span class="p">:</span> <span class="s2">&quot;0.90.3&quot;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>      <span class="nt">&quot;Sw1bDSbFQqeTq4M45qbNpg&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;hostname&quot;</span> <span class="p">:</span> <span class="s2">&quot;new-host-5.home&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;http_address&quot;</span> <span class="p">:</span> <span class="s2">&quot;inet[/192.168.1.12:9202]&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;Phantom Rider&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;transport_address&quot;</span> <span class="p">:</span> <span class="s2">&quot;inet[/192.168.1.12:9302]&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;version&quot;</span> <span class="p">:</span> <span class="s2">&quot;0.90.3&quot;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>      <span class="nt">&quot;r7gbosdKSWGfTCgRPrS6vw&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;hostname&quot;</span> <span class="p">:</span> <span class="s2">&quot;new-host-5.home&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;http_address&quot;</span> <span class="p">:</span> <span class="s2">&quot;inet[/192.168.1.12:9200]&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;Dionysus&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;transport_address&quot;</span> <span class="p">:</span> <span class="s2">&quot;inet[/192.168.1.12:9300]&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="nt">&quot;version&quot;</span> <span class="p">:</span> <span class="s2">&quot;0.90.3&quot;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>  <span class="nt">&quot;ok&quot;</span> <span class="p">:</span> <span class="kc">true</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note the <code>cluster_name</code> is by default elasticsearch &#8211; you can change this name as well. Also, by default, the master node will claim the 9200 port, however, you can run that same command against any node (for example, <code>http://localhost:9201/_cluster/nodes?pretty=true</code> will respond with the same exact response).</p>
+
+<p>You can check the health of a cluster, as well, by running this command:</p>
+
+<figure class='code'><figcaption><span>cURL to ascertain cluster health</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -XGET <span class="s1">&#39;http://localhost:9200/_cluster/health?pretty=true&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And you should see another JSON response like:</p>
+
+<figure class='code'><figcaption><span>ElasticSearch cluster health</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;active_primary_shards&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;active_shards&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;cluster_name&quot;</span> <span class="p">:</span> <span class="s2">&quot;elasticsearch&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;initializing_shards&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;number_of_data_nodes&quot;</span> <span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;number_of_nodes&quot;</span> <span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;relocating_shards&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;status&quot;</span> <span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;timed_out&quot;</span> <span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;unassigned_shards&quot;</span> <span class="p">:</span> <span class="mi">0</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Nodes a cluster will elect a new master if your master node goes down. For example, if you go into the master node terminal window and control-c the process, you should see the two other nodes quickly recognize the master&#8217;s failure and consequently elect one of themselves as the new master:</p>
+
+<figure class='code'><figcaption><span>A new master is elected</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>discovery.zen<span class="o">]</span> <span class="o">[</span>Caiera<span class="o">]</span> master_left <span class="o">[[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]]</span>, reason <span class="o">[</span>shut_down<span class="o">]</span>
+</span><span class='line'><span class="o">[</span>cluster.service<span class="o">]</span> <span class="o">[</span>Caiera<span class="o">]</span> master <span class="o">{</span>new <span class="o">[</span>Caiera<span class="o">][</span>Eh3DHlcRQhGxatGnUG8smA<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9301<span class="o">]]</span>, previous <span class="o">[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]}</span>, removed <span class="o">{[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]</span>,<span class="o">}</span>, reason: zen-disco-master_failed <span class="o">([</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Remember, ElasticSearch will make intelligent defaults for you, however, you should most likely look closely at the various aspects you can configure when it comes to clustering. For example, cluster name and node names are something you should consider implementing.</p>
+
+<p>What&#8217;s more, the process of discovery can be configured. For instance, multicast is used for auto-discovery, however, there are other options available, such as unicast, which allows you to specify which nodes can be a part of a cluster (that is, unknown nodes cannot join).</p>
+
+<p>Finally, you can control how nodes operate in a cluster. You can explicitly forbid a node from being a master, for example, and you can also configure nodes to not hold data (thus, those nodes become veritable routers for searches). These options allow you to create an interesting topology that has some intelligent routing built in.</p>
+
+<p>Regardless of how you configure an ElasticSearch cluster, I hope you&#8217;ve seen that it couldn&#8217;t be any easier. Can you dig it, man?</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Whiskered Node views]]></title>
     <link href="http://thediscoblog.com/blog/2013/08/13/whiskered-node-views/"/>
-    <updated>2013-08-13T12:00:00-07:00</updated>
+    <updated>2013-08-13T12:00:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/13/whiskered-node-views</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/mustache_template.png">As we draw closer to the glorious month of <a href="http://us.movember.com/">Movember</a>, I find myself pondering the <a href="http://paularmstrong.github.io/node-templates/">myriad template engines</a> available for Node apps. The most popular is still probably <a href="http://jade-lang.com/">Jade</a> as its syntax is <a href="http://haml.info/">Haml</a>-like and results in quite clean views, lacking in HTMLish clutter.</p>
 
@@ -122,7 +303,7 @@
   <entry>
     <title type="html"><![CDATA[Why Amazon Appstore's support of HTML5 matters]]></title>
     <link href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/"/>
-    <updated>2013-08-07T21:09:00-07:00</updated>
+    <updated>2013-08-07T21:09:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters</id>
     <content type="html"><![CDATA[<p><img class="right" src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114._V379662584_.png">Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
 
@@ -152,7 +333,7 @@
   <entry>
     <title type="html"><![CDATA[Sometimes TDD requires a hammer]]></title>
     <link href="http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer/"/>
-    <updated>2013-08-04T11:08:00-07:00</updated>
+    <updated>2013-08-04T11:08:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer</id>
     <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/hammerj.jpg">While there are myriad mocking libraries available for the Java platform, only a select few of these nifty frameworks is capable of mocking the non-mock-friendly modifiers of <code>static</code> and <code>final</code>. Static (or class) methods, while handy for factories, become a nuisance for a framework like <a href="https://code.google.com/p/mockito/">Mockito</a>, however, with the inclusion of <a href="https://code.google.com/p/powermock/">PowerMock</a>, you&#8217;ve got yourself a proverbial hammer.</p>
 
@@ -252,7 +433,7 @@
   <entry>
     <title type="html"><![CDATA[Imbibing the fluency of Mockito]]></title>
     <link href="http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito/"/>
-    <updated>2013-08-01T15:37:00-07:00</updated>
+    <updated>2013-08-01T15:37:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/Mockito.jpg">I recently found myself writing some code to integrate two disparate platforms. One of these systems is Java based and the other, while not written in Java, offers a Java API. I&#8217;ll call these systems Foo and Bar, respectively.</p>
 
@@ -385,7 +566,7 @@
   <entry>
     <title type="html"><![CDATA[Swipe gestures in jQuery Mobile apps]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
-    <updated>2013-07-30T12:52:00-07:00</updated>
+    <updated>2013-07-30T12:52:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
     <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
 
@@ -453,7 +634,7 @@
   <entry>
     <title type="html"><![CDATA[Introducing Android migrations]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/24/introducing-android-migrations/"/>
-    <updated>2013-07-24T09:46:00-07:00</updated>
+    <updated>2013-07-24T09:46:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/24/introducing-android-migrations</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/android_platform.png">Have you ever worked with <a href="http://guides.rubyonrails.org/migrations.html">Rails&#8217; migrations</a>? They make <a href="http://www.tutorialspoint.com/ruby-on-rails/rails-migrations.htm">database changes a breeze</a>, don&#8217;t they?  While every software release doesn&#8217;t necessarily involve a migration, when one does happen to make use of one, <a href="http://thediscoblog.com/blog/2013/02/18/testing-rails-migrations/">I&#8217;m always pleased</a> on how easily things work out. Whether it&#8217;s to add new data or alter existing data structures, Rails migrations make evolving a datastore (be it an RDMBS or NoSQL one like MongoDB) painless.</p>
 
@@ -792,7 +973,7 @@
   <entry>
     <title type="html"><![CDATA[MongoDB pro tip: field projections]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections/"/>
-    <updated>2013-07-15T15:07:00-07:00</updated>
+    <updated>2013-07-15T15:07:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/mongodb_icon.png">Did you ever learn that <code>select * from table</code> in RDBMS-land is bad? Of course, you did! If you&#8217;re only looking for the email address of a user and not the other 15 columns worth of data, then why ask for that data and incur a penalty? The query <code>select email from user where user_id = 1;</code> is far more efficient for the database and the corresponding application that issued it, because there is <em>less data to fetch and consume</em>.</p>
 
@@ -831,7 +1012,7 @@
   <entry>
     <title type="html"><![CDATA[Sampling Redis keys for memory consumption]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys/"/>
-    <updated>2013-07-03T14:05:00-07:00</updated>
+    <updated>2013-07-03T14:05:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/redis_logo.png"><a href="http://www.app47.com">We</a> run a farm of <a href="http://redis.io/">Redis</a> instances for storing real time analytics. Because Redis stores objects in memory, it happens to be an extremely fast way to retrieve data; thus, most of our charts and graphs pull data from various Redis instances that contain desired data.</p>
 
@@ -903,7 +1084,7 @@
   <entry>
     <title type="html"><![CDATA[Mobile for the masses: Words and gestures with Overheard Word]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/"/>
-    <updated>2013-07-01T12:10:00-07:00</updated>
+    <updated>2013-07-01T12:10:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word</id>
     <content type="html"><![CDATA[<p>The fourth article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>&#8217; series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> has been published! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">This copasetic article</a> shows you how to take the Overheard Word demo app up a level with a JSON-based word engine and some prebaked, swipe-gesture functionality.</p>
 
@@ -924,7 +1105,7 @@
   <entry>
     <title type="html"><![CDATA[Android tip: ListView becomes black when scrolling]]></title>
     <link href="http://thediscoblog.com/blog/2013/06/27/android-tip-listview-becomes-black-when-scrolling/"/>
-    <updated>2013-06-27T13:15:00-07:00</updated>
+    <updated>2013-06-27T13:15:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/27/android-tip-listview-becomes-black-when-scrolling</id>
     <content type="html"><![CDATA[<p>One of <a href="https://play.google.com/store/apps/details?id=com.b50.hoproll">my Android apps</a> recently suffered from a nefariously ugly UI glitch that, embarrassingly, a user reported to me.  Strangely, this phenomenon did not surface itself in local testing on either emulators or devices when I first wrote the app; nevertheless, I was able to reproduce the error after the bug report came in. I suspect that recent updates in the Android platform might have exacerbated the issue for my app as I&#8217;m fairly certain I never saw it before.</p>
 
@@ -959,7 +1140,7 @@
   <entry>
     <title type="html"><![CDATA[MongoDB primary keys are your friend]]></title>
     <link href="http://thediscoblog.com/blog/2013/06/22/mongodb-primary-keys-are-your-friend/"/>
-    <updated>2013-06-22T15:00:00-07:00</updated>
+    <updated>2013-06-22T15:00:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/22/mongodb-primary-keys-are-your-friend</id>
     <content type="html"><![CDATA[<p>All documents in a <a href="http://www.mongodb.org/">MongoDB</a> collection have a primary key dubbed <code>_id</code>. This field is automatically assigned to a document upon insert, so there&#8217;s rarely a need to provide it. What&#8217;s interesting about the <code>_id</code> field is that it is <em>time based</em>. That is, the underlying type of <code>_id</code>, which is <code>ObjectId</code>, is a <a href="http://docs.mongodb.org/manual/reference/object-id/">12-byte BSON type</a>, and 4 of those bytes represent the seconds since Unix epoch.</p>
 
@@ -1101,7 +1282,7 @@
   <entry>
     <title type="html"><![CDATA[Lickety-split custom validations in Rails]]></title>
     <link href="http://thediscoblog.com/blog/2013/06/12/lickety-split-custom-validations-in-rails/"/>
-    <updated>2013-06-12T13:19:00-07:00</updated>
+    <updated>2013-06-12T13:19:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/12/lickety-split-custom-validations-in-rails</id>
     <content type="html"><![CDATA[<p>Have a highly specific, yet custom validation for a particular field on one of your <a href="http://thediscoblog.com/blog/categories/rails/">Rails</a> model objects? Don&#8217;t want to create a <code>ActiveModel::Validator</code> type? Not a problem!</p>
 
@@ -1134,7 +1315,7 @@
   <entry>
     <title type="html"><![CDATA[Backgrounding tasks in Heroku with Delayed Job]]></title>
     <link href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
-    <updated>2013-06-10T12:56:00-07:00</updated>
+    <updated>2013-06-10T12:56:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what&#8217;s more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn&#8217;t be any easier</a>.</p>
 
@@ -1206,7 +1387,7 @@
   <entry>
     <title type="html"><![CDATA[MongoDB to CSV]]></title>
     <link href="http://thediscoblog.com/blog/2013/06/07/mongodb-to-csv/"/>
-    <updated>2013-06-07T20:01:00-07:00</updated>
+    <updated>2013-06-07T20:01:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/07/mongodb-to-csv</id>
     <content type="html"><![CDATA[<p>Every once in a while, I need to give a non-technical user (like a business analyst) data residing in <a href="http://www.mongodb.org/">MongoDB</a>; consequently, I export the target data as a <a href="http://en.wikipedia.org/wiki/Comma-separated_values">CSV file</a> (which they can presumably slice and dice once they import it into Excel or some similar tool). Mongo has a handy <a href="http://docs.mongodb.org/manual/reference/program/mongoexport/">export utility</a> that takes a bevy of options, however, there is an <a href="https://jira.mongodb.org/browse/SERVER-4224">outstanding bug</a> and some <a href="http://stackoverflow.com/questions/6814151/how-to-export-collection-to-csv-in-mongodb">general confusion</a> as to how to properly export data in CSV format.</p>
 
@@ -1258,7 +1439,7 @@
   <entry>
     <title type="html"><![CDATA[Callbacks in Appcelerator Titanium modules]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules/"/>
-    <updated>2013-05-29T13:42:00-07:00</updated>
+    <updated>2013-05-29T13:42:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/appc_stacked.png">I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>&#8217;s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47&#8217;s <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
 
@@ -1415,7 +1596,7 @@
   <entry>
     <title type="html"><![CDATA[Mobile for the Masses: Activities and icons in your Android application lifecycle]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle/"/>
-    <updated>2013-05-28T15:28:00-07:00</updated>
+    <updated>2013-05-28T15:28:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle</id>
     <content type="html"><![CDATA[<p>My third article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>&#8217; series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> is now out! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">This hip article</a> covers the lifecycle events associated with <code>Activity</code> classes and then shows you how to implement menus and/or activity bars (for newer devices) along with associating icons for an app itself and its corresponding activity items.</p>
 
@@ -1433,7 +1614,7 @@
   <entry>
     <title type="html"><![CDATA[ElasticSearch on EC2 in less than 60 seconds]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/"/>
-    <updated>2013-05-17T17:24:00-07:00</updated>
+    <updated>2013-05-17T17:24:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds</id>
     <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/es-bonzai.jpg">Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend &#8211; in less than 60 seconds, I&#8217;ll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
 
@@ -1490,7 +1671,7 @@
   <entry>
     <title type="html"><![CDATA[Mobile-isticly optimized in 10 seconds]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/"/>
-    <updated>2013-05-15T13:20:00-07:00</updated>
+    <updated>2013-05-15T13:20:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/unoptmobile.png">Anyone ever told you that your website isn&#8217;t mobile optimized? Or have you ever seen a lilliputian-looking website on your device? You know, one that renders so small you are forced to squint as you enlarge various parts of the site with your fingers just to read it?</p>
 
@@ -1517,7 +1698,7 @@
   <entry>
     <title type="html"><![CDATA[The democratization of search]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/"/>
-    <updated>2013-05-14T11:33:00-07:00</updated>
+    <updated>2013-05-14T11:33:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search</id>
     <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/democracy.jpg">Over the past year and a half, I&#8217;ve watched <a href="http://www.elasticsearch.org/">ElasticSearch</a> grow from a seemingly part-time code experiment into a thriving ecosystem. Not only has the number of <a href="http://www.elasticsearch.org/guide/clients/">client libraries</a> grown from 1 to over 25 (and counting!); it&#8217;s now a <a href="http://www.elasticsearch.com/">commercially sponsored project</a> to the tune of <a href="http://www.whiteboardmag.com/youre-hot-or-not-why-elasticsearch-raised-24-million-just-3-months-after-a-10-million-round/">$34 million</a> (a <a href="http://www.zdnet.com/elasticsearch-raises-24-million-big-data-analytics-7000011496/">$10M series A</a> and a <a href="http://gigaom.com/2013/02/19/open-source-search-tool-elasticsearch-gets-24m/">$24M series B</a>) with 200,000 downloads a month.</p>
 
@@ -1533,43 +1714,6 @@
 <p><a href="http://www.elasticsearch.org/overview/">ElasticSearch sits on top of Lucene</a> and adds not only a simple API for adding and searching content, but does it in a distributed manner. With infinitesimal arm grease, you can set up a search cluster that smears your data and resultant queries across a series of nodes. Not only is this resultant architecture fast, but it&#8217;s easy to set up and extremely affordable as search nodes can run on commodity hardware. In essence, ElasticSearch brings search to the masses.</p>
 
 <p>Google and its resultant ease of search has changed the mindset of application users. Searching content is a <em>presumed feature</em> and if you don&#8217;t provide it, you&#8217;re already a few steps behind your competition. ElasticSearch is clearly a path to constructing a viable, easy to install, affordable, distributed search infrastructure for any application. If you don&#8217;t believe me, take a look at some of the innovative companies with substantial amounts of users using it: <a href="https://github.com/">Github</a>, <a href="https://foursquare.com/">foursquare</a>, and <a href="http://stackoverflow.com/">Stack Overflow</a> are just a few.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hold your horses! It's still only a two horse race.]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/"/>
-    <updated>2013-05-09T12:49:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/2horsesracesm.jpg">There has been a lot of excitement in recent months regarding a few new entrants to the mobile operating systems arena including <a href="http://www.mozilla.org/en-US/firefox/partners/">Firefox OS</a>, <a href="https://www.tizen.org/">Tizen</a>, and <a href="https://wiki.ubuntu.com/Touch">Ubuntu Touch</a>. These relatively nascent projects, which are all built on top of a Linux kernel, appear to have fully embraced HTML 5 apps; indeed, HTML 5 apps on these operating systems are first class citizens that can run without a browser. Moreover, the ubiquity of HTML 5 means the same app can run on all 3 of these operating systems plus Android and iOS!</p>
-
-<p>What&#8217;s also exciting is that there are some major players behind these projects &#8211; Mozilla is, of course behind Firefox OS, Canonical is behind Ubuntu Touch, and quite a few large players are behind Tizen, including Samsung. <a href="http://www.forbes.com/sites/haydnshaughnessy/2013/04/13/how-mozillas-firefox-os-will-open-up-the-smartphone-market/">Firefox OS even appears to be courting carriers with an opportunity to run their own app stores</a>. This app store opportunity naturally has carriers foaming at the mouth to re-assert some semblance of control: behold the Verizon app store! All apps are $0.99 and we&#8217;ll just bill you at the end of the month (like we used to do for all those ringtones you were accustomed to download back when we were in control of all things device-related before Apple destroyed that cash cow).</p>
-
-<!--more-->
-
-
-<p>Naturally, we&#8217;re all eager to see how these new entrants fair. It reminds me of how interested I was in learning more about <a href="http://www.windowsphone.com/en-us/how-to/wp8/start/whats-new-in-windows-phone">Windows Phone 8</a> and even <a href="http://global.blackberry.com/blackberry-10.html">Blackberry&#8217;s latest and greatest attempt</a> at regaining some composure.</p>
-
-<p>But then I remember this stunning fact: Apple and Google</p>
-
-<blockquote><p>together control nearly 9 out of 10 smartphones sold globally.</p><footer><strong>Tomi Ahonen</strong> <cite><a href='http://www.forbes.com/sites/haydnshaughnessy/2013/04/09/ios-vs-android-can-competitors-break-apple-and-googles-stranglehold/'>Can These Competitors Break Apple and Google&#8217;s Stranglehold on the Mobile OS?</a></cite></footer></blockquote>
-
-
-<p>Even with industry heavyweight contenders (who are not new to mobile!) like <a href="http://www.windowsphone.com/en-us">Microsoft</a> and <a href="http://us.blackberry.com/">Blackberry</a> (who, we all should remember, <em>owned</em> the smartphone market before Apple got involved) haven&#8217;t really made a dent. Granted, it&#8217;s early to rush to conclusions, however, preliminary signs don&#8217;t bode well for either company.</p>
-
-<p>The co-CEO of Samsung had some stinging criticism for Microsoft:</p>
-
-<blockquote><p>Smartphones and tablets based on Microsoft&#8217;s Windows operating system aren&#8217;t selling very well. There is a preference in the market for Android. In Europe, we&#8217;re also seeing lackluster demand for Windows-based products.</p><footer><strong>JK Shin</strong> <cite><a href='http://www.theverge.com/2013/3/15/4106980/samsung-ceo-jk-shin-says-windows-isnt-selling-very-well'>New Samsung CEO Says There Is &#8216;Lackluster Demand&#8217; for Windows Tablets and Phones</a></cite></footer></blockquote>
-
-
-<p>Blackberry appears to have some demand in the UK and Canada, a recently analyst T. Michael Walkley had this to say:</p>
-
-<blockquote><p>While we anticipate stronger near-term results for BlackBerry as higher margin BB10 smartphones sell into the channel, we do not believe BlackBerry can achieve sell-through market share levels to return to sustained profit levels</p><footer><strong>T. Michael Walkley</strong> <cite><a href='http://business.financialpost.com/2013/05/06/blackberry-estimates-cut-despite-q10-strength-likely-offsetting-z10-weakness/'>BlackBerry Sales Forecast Cut Despite Strong Demand for Q10</a></cite></footer></blockquote>
-
-
-<p>The salient point, nevertheless, is that neither Microsoft or Blackberry have yet to make a dent into the Google-Apple duopoly. And so while it&#8217;s easy to get excited about new entrants like Ubuntu Touch, the reality, at least for the time being, is that these operating systems will have little impact in the smartphone market.</p>
-
-<p>After all, when your competition essentially owns 9 out of every 10 smartphones, evolutionary enhancements aren&#8217;t enough to break that stranglehold: you have to do something <em>revolutionary</em>. Besides, we&#8217;ve already seen this before: the iPhone was not an evolutionary offshoot of the Blackberry. It was revolutionary. Sadly, neither Ubuntu Touch, Tizen, nor Firefox OS appear revolutionary.</p>
 ]]></content>
   </entry>
   

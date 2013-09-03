@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OSX | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/osx/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-08-13T21:39:36-07:00</updated>
+  <updated>2013-09-03T09:10:11-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[cURLing for Wget]]></title>
     <link href="http://thediscoblog.com/blog/2013/04/18/curling-for-wget/"/>
-    <updated>2013-04-18T09:33:00-07:00</updated>
+    <updated>2013-04-18T09:33:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/04/18/curling-for-wget</id>
     <content type="html"><![CDATA[<p><a href="http://en.wikipedia.org/wiki/Wget">Wget</a> is an extremely handy utility I use all the time when I find myself on a Linux box. It's quite helpful, for example, for downloading files. Need to <a href="https://github.com/aglover/ubuntu-equip/blob/master/equip_ruby.sh">install Ruby</a>? No problem, just download the binary like so:</p>
 

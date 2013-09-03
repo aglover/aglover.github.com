@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Redis | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/redis/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-08-13T21:39:36-07:00</updated>
+  <updated>2013-09-03T09:10:11-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Sampling Redis keys for memory consumption]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys/"/>
-    <updated>2013-07-03T14:05:00-07:00</updated>
+    <updated>2013-07-03T14:05:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/redis_logo.png"><a href="http://www.app47.com">We</a> run a farm of <a href="http://redis.io/">Redis</a> instances for storing real time analytics. Because Redis stores objects in memory, it happens to be an extremely fast way to retrieve data; thus, most of our charts and graphs pull data from various Redis instances that contain desired data.</p>
 
@@ -68,7 +68,7 @@ Average last accessed time: 69 days, 19 hours, 14 minutes, 15 seconds - (Max: 95
   <entry>
     <title type="html"><![CDATA[Redis replication: couldn't be any easier]]></title>
     <link href="http://thediscoblog.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier/"/>
-    <updated>2012-08-29T13:23:00-07:00</updated>
+    <updated>2012-08-29T13:23:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2012/08/29/redis-replication-couldnt-be-any-easier</id>
     <content type="html"><![CDATA[<p><a href="http://redis.io">Redis</a> supports <a href="http://redis.io/topics/replication">master-slave replication</a> and it's extremely easy to setup.  And the beauty of setting up replication is that all you have to do is fire up a slave instance and have it point to some other Redis instance (which then becomes the master node).</p>
 
