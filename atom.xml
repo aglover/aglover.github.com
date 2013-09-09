@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-09-03T09:10:11-04:00</updated>
+  <updated>2013-09-09T18:40:26-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[8% is itty-bitty, but it matters]]></title>
+    <link href="http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters/"/>
+    <updated>2013-09-09T15:49:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters</id>
+    <content type="html"><![CDATA[<p>I saw some news related to <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">Microsoft Windows Phone</a> that gave me pause for thought. Specifically, <a href="http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/">I read an article</a> that stated:</p>
+
+<blockquote><p>Microsoft&#8217;s mobile platform reached new heights in the three months to July 2013 in Europe, making up 8.2 percent of sales across UK, France, Germany, Italy and Spain</p><footer><strong>Liam Tung</strong> <cite><a href='http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/'>iOS Up, Android Down in the US as Windows Phone Hits Eight Percent in Europe</a></cite></footer></blockquote>
+
+
+
+
+<!-- more -->
+
+
+<p>While <a href="http://www.expertreviews.co.uk/smartphones/1301902/windows-phone-market-share-growing-in-europe">8.2% market share</a> might seem insignificant, what&#8217;s interesting is that</p>
+
+<blockquote><p>At the same time last year, Windows Phone accounted for 4.9 percent of sales</p><footer><strong>Liam Tung</strong> <cite><a href='http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/'>iOS Up, Android Down in the US as Windows Phone Hits Eight Percent in Europe</a></cite></footer></blockquote>
+
+
+<p>That is, <a href="http://wmpoweruser.com/kantar-windows-phone-hits-record-high-of-8-2-market-share-in-europe/">Windows Phone market share</a> for the same five markets has increased by a little more than 3% over the last year. Accordingly, Windows Phone is a <a href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/">growing platform (in some markets)</a>, which means developers will eventually need to start considering it as a <a href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/">third platform</a>. And throwing a third platform into the mix does change the variables in a native versus <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">non-native</a> argument <em>in favor of an HTML5 approach</em>.</p>
+
+<p>Microsoft has deep pockets and has <a href="http://www.latimes.com/business/technology/la-fi-tn-microsoft-ceo-steve-ballmers-failures-20130823,0,5988522,full.story">shown before</a> that it will fight (and hang on) to create a market for itself (i.e. Xbox and Bing). I suspect that Windows Phone will continue to gain market share, albeit slowly, mostly at the expense of nominal platforms like Blackberry.</p>
+
+<p>Consequently, HTML5 will continue on its path as an advantageous development platform; moreover, HTML5&#8217;s rise will <em>most likely be at the expense of hybrid frameworks</em> as there&#8217;s a point of diminishing returns for <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">frameworks</a> to support 100% of all native features across multiple native platforms. Plus, Amazon&#8217;s recent announcement that their <a href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">Appstore for Android supports the submission of HTML5 apps</a> only adds to the pro-HTML5 argument.</p>
+
+<p>8% is an itty-bitty number, but I&#8217;ll be keeping an eye on Microsoft&#8217;s Windows Phone market share. And I&#8217;ll be watching the world of HTML5 closely. How about you?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Effortless ElasticSearch clustering]]></title>
@@ -1692,28 +1722,6 @@
 <p>Thus, the viewport tag essentially zooms in the display of a webpage. In the case of the example tag above, the width of the website is set to the device&#8217;s width and the scale is set to 100% &#8211; this&#8217;ll allow the website to be displayed normally on a mobile device. Website visitors won&#8217;t have to squint or pinch and expand to just to read the site&#8217;s relevant text.</p>
 
 <p><a href="http://www.paulund.co.uk">Paulund.co.uk</a> has a really <a href="http://www.paulund.co.uk/understanding-the-viewport-meta-tag">good write up</a> regarding the usage of the viewport <code>meta</code> tag as well as CSS media queries; what&#8217;s more, the good folks who created <a href="http://html5boilerplate.com/mobile/">HTML5boilerplate.com</a> have a <a href="http://t.co/dKP3o1e">nifty presentation</a> that&#8217;s worth a read too.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The democratization of search]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/"/>
-    <updated>2013-05-14T11:33:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/democracy.jpg">Over the past year and a half, I&#8217;ve watched <a href="http://www.elasticsearch.org/">ElasticSearch</a> grow from a seemingly part-time code experiment into a thriving ecosystem. Not only has the number of <a href="http://www.elasticsearch.org/guide/clients/">client libraries</a> grown from 1 to over 25 (and counting!); it&#8217;s now a <a href="http://www.elasticsearch.com/">commercially sponsored project</a> to the tune of <a href="http://www.whiteboardmag.com/youre-hot-or-not-why-elasticsearch-raised-24-million-just-3-months-after-a-10-million-round/">$34 million</a> (a <a href="http://www.zdnet.com/elasticsearch-raises-24-million-big-data-analytics-7000011496/">$10M series A</a> and a <a href="http://gigaom.com/2013/02/19/open-source-search-tool-elasticsearch-gets-24m/">$24M series B</a>) with 200,000 downloads a month.</p>
-
-<p>Search is the touchstone of the Internet; without search the Internet wouldn&#8217;t be all that useful. Google&#8217;s meteoric rise and its resultant eponymous name for search is clear evidence as to the importance of search. Search, however, hasn&#8217;t always been that easy nor affordable to implement.</p>
-
-<!--more-->
-
-
-<p>Before the likes of open source projects like <a href="http://lucene.apache.org/">Lucene</a>, implementing search in an application involved an expensive commercial product or a series of SQL <code>like</code> statements that were never really good enough. Lucene, however, isn&#8217;t a simple hobbyist&#8217;s pursuit. Lucene requires a lot of expertise; what&#8217;s more, successful projects within the Lucene ecosystem, like <a href="http://lucene.apache.org/solr/">Solr</a> lack a key feature that is defining modern architectures: <a href="http://www.searchblox.com/solr-vs-elasticsearch">distributed</a>.</p>
-
-<p>The continued low cost of storage combined with cheap rent-able infrastructures like <a href="http://www.drdobbs.com/web-development/getting-started-with-the-cloud-amazon-we/231601598">AWS</a> has made it convenient to store a plethora of data, thus bringing to bear the importance that applications must support searching vast amounts of data, do it quickly, and affordably. This is where <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch shines</a>.</p>
-
-<p><a href="http://www.elasticsearch.org/overview/">ElasticSearch sits on top of Lucene</a> and adds not only a simple API for adding and searching content, but does it in a distributed manner. With infinitesimal arm grease, you can set up a search cluster that smears your data and resultant queries across a series of nodes. Not only is this resultant architecture fast, but it&#8217;s easy to set up and extremely affordable as search nodes can run on commodity hardware. In essence, ElasticSearch brings search to the masses.</p>
-
-<p>Google and its resultant ease of search has changed the mindset of application users. Searching content is a <em>presumed feature</em> and if you don&#8217;t provide it, you&#8217;re already a few steps behind your competition. ElasticSearch is clearly a path to constructing a viable, easy to install, affordable, distributed search infrastructure for any application. If you don&#8217;t believe me, take a look at some of the innovative companies with substantial amounts of users using it: <a href="https://github.com/">Github</a>, <a href="https://foursquare.com/">foursquare</a>, and <a href="http://stackoverflow.com/">Stack Overflow</a> are just a few.</p>
 ]]></content>
   </entry>
   
