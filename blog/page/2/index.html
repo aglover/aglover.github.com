@@ -88,6 +88,51 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/07/03/sampling-redis-keys/">Sampling Redis Keys for Memory Consumption</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-03T14:05:00-04:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/mine/redis_logo.png"><a href="http://www.app47.com">We</a> run a farm of <a href="http://redis.io/">Redis</a> instances for storing real time analytics. Because Redis stores objects in memory, it happens to be an extremely fast way to retrieve data; thus, most of our charts and graphs pull data from various Redis instances that contain desired data.</p>
+
+<p>Our Redis boxes are running in <a href="http://thediscoblog.com/blog/categories/aws/">AWS</a> on <a href="http://aws.amazon.com/ec2/instance-types/instance-details/">m2.2xlarge instances</a>, which contain a bit over 30GB of memory. Every once in awhile, it&#8217;s helpful to get an idea of how much memory various key <em>patterns</em> are consuming because we hold over 20GB across several hundred thousand keys in some cases. There&#8217;s a nifty gem dubbed <a href="https://github.com/snmaynard/redis-audit">redis-audit</a> (<a href="https://github.com/aglover/redis-audit">my fork</a> of it adds <a href="http://bundler.io/">Bundler</a>) that is quite helpful in painting a broad picture of memory usage across a sampling of key patterns.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/03/sampling-redis-keys/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">Mobile for the Masses: Words and Gestures With Overheard Word</a></h1>
       
     
@@ -496,51 +541,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/">Mobile-isticly Optimized in 10 Seconds</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-15T13:20:00-04:00" pubdate data-updated="true">May 15<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img class="right" src="/images/mine/unoptmobile.png">Anyone ever told you that your website isn&#8217;t mobile optimized? Or have you ever seen a lilliputian-looking website on your device? You know, one that renders so small you are forced to squint as you enlarge various parts of the site with your fingers just to read it?</p>
-
-<p>Websites render this way on mobile devices because they lack a simple <code>meta</code> tag. While the subject of mobile website optimization can be rather involved (especially when dealing with <a href="http://css-tricks.com/css-media-queries/">CSS media queries</a>, which take longer than 10 seconds to understand), there is a simple trick that can at least can make your website render normally on a mobile device. And it can be done in 10 seconds.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -561,6 +561,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/14/understanding-elasticsearch-analyzers/">Understanding ElasticSearch analyzers</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters/">8% is itty-bitty, but it matters</a>
       </li>
     
@@ -574,10 +578,6 @@
     
       <li class="post">
         <a href="/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">Why Amazon Appstore&#8217;s support of HTML5 matters</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/04/sometimes-tdd-requires-a-hammer/">Sometimes TDD requires a hammer</a>
       </li>
     
   </ul>

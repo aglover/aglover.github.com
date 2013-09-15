@@ -88,6 +88,51 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/">Mobile-isticly Optimized in 10 Seconds</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-15T13:20:00-04:00" pubdate data-updated="true">May 15<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/mine/unoptmobile.png">Anyone ever told you that your website isn&#8217;t mobile optimized? Or have you ever seen a lilliputian-looking website on your device? You know, one that renders so small you are forced to squint as you enlarge various parts of the site with your fingers just to read it?</p>
+
+<p>Websites render this way on mobile devices because they lack a simple <code>meta</code> tag. While the subject of mobile website optimization can be rather involved (especially when dealing with <a href="http://css-tricks.com/css-media-queries/">CSS media queries</a>, which take longer than 10 seconds to understand), there is a simple trick that can at least can make your website render normally on a mobile device. And it can be done in 10 seconds.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2013/05/14/the-democratization-of-search/">The Democratization of Search</a></h1>
       
     
@@ -494,61 +539,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/03/27/mongoid-batch-inserts/">Mongoid Batch Inserts</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-27T11:34:00-04:00" pubdate data-updated="true">Mar 27<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In SQL land, all databases support batch inserts. Batch inserts are an effective and efficient mechanism to insert a lot of similar data. That is, instead of issuing x insert statements, you execute 1 insert with x records. This is much more efficient because the insert statement doesn&#8217;t need to be re-parsed x times, there is only 1 network trip as opposed to x, and in the case of transactions, there is only 1 transaction instead of x. When compared to x inserts, batch inserts are always faster.</p>
-
-<p>As it turns out, <a href="http://www.mongodb.org/">MongoDB</a> supports <a href="http://docs.mongodb.org/manual/applications/create/#bulk-insert-multiple-documents">batch inserts</a>! And just like in SQL land, Mongo&#8217;s batching feature is much faster at inserting a lot of data in one insert rather than x inserts.</p>
-
-<p>For example, the <a href="https://github.com/mongodb/mongo-ruby-driver">Mongo Ruby driver</a>&#8217;s <a href="https://github.com/mongodb/mongo-ruby-driver/blob/master/lib/mongo/collection.rb#L371">insert method takes a collection</a>; thus, you can insert an array of hashes quite efficiently. Even if you are using a <a href="http://mongoid.org/en/mongoid/index.html">ODM like Mongoid</a>, you can still perform batch inserts as all you need to do is get a reference to the model object&#8217;s underlying collection and then issue an <code>insert</code> with an array of hashes matching the collection&#8217;s intended document structure.</p>
-
-<p>For instance, to insert a collection of <code>Tag</code> models (each having 3 fields: <code>name</code>, <code>system_tag</code>, and <code>account_id</code>) in one fell swoop I can do the following:</p>
-
-<figure class='code'><figcaption><span>Batch inserts with Mongoid model example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">tags</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;bunch&#39;</span><span class="p">,</span> <span class="s1">&#39;of&#39;</span><span class="p">,</span> <span class="s1">&#39;tags&#39;</span><span class="o">].</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">tag</span><span class="o">|</span> <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="n">tag</span><span class="p">,</span> <span class="n">system_tag</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="n">account_id</span><span class="p">:</span> <span class="nb">id</span><span class="p">}</span> <span class="p">}</span>
-</span><span class='line'><span class="no">Tag</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">insert</span> <span class="n">tags</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In the code above, the <code>insert</code> takes a collection of hashes; what&#8217;s more, the <code>insert</code> is tied to the <code>tags</code> collection via the <code>Tag.collection</code> call.</p>
-
-<p>Batch inserts are always faster if you have a lot of similar documents &#8211; in our case, we saw a <em>tremendous</em> performance increase when employing batching.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -569,6 +559,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/14/understanding-elasticsearch-analyzers/">Understanding ElasticSearch analyzers</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters/">8% is itty-bitty, but it matters</a>
       </li>
     
@@ -582,10 +576,6 @@
     
       <li class="post">
         <a href="/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">Why Amazon Appstore&#8217;s support of HTML5 matters</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/04/sometimes-tdd-requires-a-hammer/">Sometimes TDD requires a hammer</a>
       </li>
     
   </ul>
