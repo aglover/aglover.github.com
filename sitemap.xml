@@ -279,8 +279,14 @@
         <lastmod>2013-09-14T21:49:32-04:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://thediscoblog.com/blog/2013/09/17/mobile-for-the-masses-sign-seal-and-deliver-your-android-app/
+        </loc>
+        <lastmod>2013-09-17T15:30:17-04:00</lastmod>
+    </url>
+    <url>
         <loc>http://thediscoblog.com/blog/archives/</loc>
-        <lastmod>2013-09-14T21:49:32-04:00</lastmod>
+        <lastmod>2013-09-17T15:30:17-04:00</lastmod>
     </url>
     <url>
         <loc>http://thediscoblog.com/blog/categories/</loc>
@@ -288,6 +294,6 @@
     </url>
     <url>
         <loc>http://thediscoblog.com/</loc>
-        <lastmod>2013-09-14T21:49:32-04:00</lastmod>
+        <lastmod>2013-09-17T15:30:17-04:00</lastmod>
     </url>
 </urlset>

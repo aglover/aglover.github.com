@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-09-14T21:49:33-04:00</updated>
+  <updated>2013-09-17T15:30:49-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,26 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mobile for the masses: Sign, seal, and deliver your Android app]]></title>
+    <link href="http://thediscoblog.com/blog/2013/09/17/mobile-for-the-masses-sign-seal-and-deliver-your-android-app/"/>
+    <updated>2013-09-17T15:20:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/09/17/mobile-for-the-masses-sign-seal-and-deliver-your-android-app</id>
+    <content type="html"><![CDATA[<p>The fifth article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>' series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> has been published! <a href="http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html">This hip article</a> shows you how to add a multiple-choice quiz to your Android mobile app, then sign it with a secure digital certificate.</p>
+
+<!-- more -->
+
+
+<p>As the article summary states:</p>
+
+<p><blockquote><p>By web logic, content is king; but for mobile users, interaction rules. Static information design is out for mobile apps, and gamification is in. This month Andrew Glover concludes his introduction to Android mobile development by adding a multiple-choice quiz feature to the example app, Overheard Word, introduced in a previous article. Then he shows you how to generate a digital signature and publish and promote your signed app on Google Play or Amazon Appstore for Android.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html'>Mobile for the Masses: Sign, Seal, and Deliver Your Android App</a></cite></footer></blockquote></p>
+
+<p>Check out "<a href="http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html">Mobile for the masses: Sign, seal, and deliver your Android app</a>" and learn how to sign your app in preparation for submitting it to an app store! If you missed the first article, check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>"; what's more, don't forget to read my second article, entitled "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>" and the third article "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>". Finally, don't forget to read article number four: "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">Mobile for the masses: Mobile for the masses: Words and gestures with Overheard Word</a>" and programmatically integrate third-party code into your Android UI!</p>
+
+<p>Stay tuned for more articles in this series and don't forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[8% is itty-bitty, but it matters]]></title>
@@ -331,23 +351,6 @@ android:cacheColorHint="@android:color/transparent"
 <p>With that line in place, scrolling, once again, becomes clean and smooth.</p>
 
 <p>You can find my app, Hop Roll, which is your go-to home brew resource for all hop related information on <a href="https://play.google.com/store/apps/details?id=com.b50.hoproll">Google Play</a> and <a href="http://www.amazon.com/Beacon50-Hop-Roll/dp/B00A9Z5P42/ref=sr_1_1?ie=UTF8&amp;qid=1370959609&amp;sr=8-1&amp;keywords=hoproll">Amazon's Android App Store</a> -- keep on trucking, baby!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mobile for the Masses: Activities and icons in your Android application lifecycle]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle/"/>
-    <updated>2013-05-28T15:28:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle</id>
-    <content type="html"><![CDATA[<p>My third article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>' series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> is now out! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">This hip article</a> covers the lifecycle events associated with <code>Activity</code> classes and then shows you how to implement menus and/or activity bars (for newer devices) along with associating icons for an app itself and its corresponding activity items.</p>
-
-<p>As the article summary states:</p>
-
-<p><blockquote><p>The Activity class is the workhorse of an Android mobile app, and it's also where you can fine-tune your app's interactions with both the user and the mobile device. Get things working exactly the way you want them in your app's lifecycle, then use icons and action bars to guide users through UI navigation and other app features.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html'>Mobile for the Masses: Activities and Icons in Your Android Application Lifecycle</a></cite></footer></blockquote></p>
-
-<p>Check out "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>" and add navigation with style to your Android mobile apps! If you missed the first article, check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>"; what's more, don't forget to read my second article, entitled "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>".</p>
-
-<p>Stay tuned for more articles in this series and don't forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
 ]]></content>
   </entry>
   
