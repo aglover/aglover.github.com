@@ -88,6 +88,48 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/04/07/painless-android-swipe-detection/">Painless Android Swipe Detection</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-07T10:37:00-04:00" pubdate data-updated="true">Apr 7<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="left" src="/images/mine/gesticulate.png">Why bother building navigation buttons in an Android app when you can easily capture finger swipes? But, if you&#8217;ve ever implemented gesture section in Android there&#8217;s the drudgery of implementing listeners and you also need to do some elementary Cartesian math. Save yourself the boilerplate bother mathematics and use a <a href="https://github.com/aglover/gesticulate">library</a>!</p>
+
+<p><a href="https://github.com/aglover/gesticulate">Gesticulate</a> makes it painless to detect straightforward swiping motions like up, down, left, and right. It&#8217;s a simple jar file you include in your Android <code>libs</code> directory. Throw Gesticulate&#8217;s <code>SwipeDetector</code> inside an instance of Android&#8217;s <code>SimpleOnGestureListener</code>, for example, and you&#8217;re detecting swipes with ease!</p>
+
+<p>Gesticulate is used in Savvy Words, a flash card vocabulary app found on <a href="https://play.google.com/store/apps/details?id=com.b50.savvywords">Google Play</a> and <a href="http://www.amazon.com/Beacon50-Savvy-Words/dp/B00C535D20/ref=sr_1_1?s=mobile-apps&amp;ie=UTF8&amp;qid=1365339189&amp;sr=1-1">Amazon&#8217;s Appstore for Android</a>. See the <a href="https://github.com/aglover/gesticulate">Github project</a> for more details such as code examples for how to use Gesticulate, how to build it, and to see Gesticulate&#8217;s tests. Swipe on, baby!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2013/04/05/crowd-think-often-lacks-clarity/">Crowd Think Often Lacks Clarity</a></h1>
       
     
@@ -565,58 +607,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/02/17/circumventing-mobile-ux-expectations/">Circumventing Mobile UX Expectations</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-17T12:10:00-05:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Recently, a <a href="https://twitter.com/trianglechoke">buddy of mine</a> pointed me to an interesting tweet:</p>
-
-<blockquote><p>New tool converts your Apple #iOS apps to #HTML5 http://dld.bz/cejxz  #appdev</p><footer><strong>@effectiveui</strong> <cite><a href='https://twitter.com/effectiveui/status/299626694149537792'>twitter.com/effectiveui/status/&hellip;</a></cite></footer></blockquote>
-
-
-<p>The article about this new tool, dubbed the &#8221;<a href="http://software.intel.com/en-us/articles/technical-reference-intel-html5-app-porter-tool-beta">Intel HTML5 App Porter Tool</a>&#8221; suggests that because iOS apps are limited to one platform, HTML5:</p>
-
-<blockquote><p>represents an opportunity because it’s supported across a wide range of different devices and operating systems, so it enables the same code base to be reused across different app deployments.</p><footer><strong>Softtalkblog</strong> <cite><a href='http://www.develop-online.net/news/43193/New-tool-converts-your-Apple-apps-to-HTML5'>New Tool Converts Your Apple Apps to HTML5</a></cite></footer></blockquote>
-
-
-<p><img class="right" src="http://www.carinsurance.com/imagesvr_ce/6464/152631.jpg"> While technically this statement is true &#8211; HTML5 <em>is ubiquitous</em> and you do end up with a single code base &#8211; HTML5 is the lowest common app development denominator and thus produces an underwhelming experience when compared to its native brethren.</p>
-
-<p>Taking a native iOS (or Android) app and recasting it into an HTML5 app is like taking your beautiful Ferrari and trading it for a station wagon. The experience will never be quite the same.</p>
-
-<p>Don&#8217;t get caught up in the HTML5 hype-cycle. It&#8217;s a great platform for mobile web sites, but if you&#8217;re building a mobile app, the UX bar has been set quite high. You cannot yet meet that bar with HTML5.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -637,6 +627,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/21/i-like-my-elasticsearch-a-la-node-dot-js/">I like my ElasticSearch a la Node.js</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/17/mobile-for-the-masses-sign-seal-and-deliver-your-android-app/">Mobile for the masses: Sign, seal, and deliver your Android app</a>
       </li>
     
@@ -650,10 +644,6 @@
     
       <li class="post">
         <a href="/blog/2013/09/03/effortless-elasticsearch-clustering/">Effortless ElasticSearch clustering</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/13/whiskered-node-views/">Whiskered Node views</a>
       </li>
     
   </ul>

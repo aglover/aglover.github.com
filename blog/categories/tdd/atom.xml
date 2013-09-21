@@ -4,7 +4,7 @@
   <title><![CDATA[Category: TDD | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/tdd/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-09-17T15:30:49-04:00</updated>
+  <updated>2013-09-21T09:42:15-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer/"/>
     <updated>2013-08-04T11:08:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/hammerj.jpg">While there are myriad mocking libraries available for the Java platform, only a select few of these nifty frameworks is capable of mocking the non-mock-friendly modifiers of <code>static</code> and <code>final</code>. Static (or class) methods, while handy for factories, become a nuisance for a framework like <a href="https://code.google.com/p/mockito/">Mockito</a>, however, with the inclusion of <a href="https://code.google.com/p/powermock/">PowerMock</a>, you've got yourself a proverbial hammer.</p>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/hammerj.jpg %}While there are myriad mocking libraries available for the Java platform, only a select few of these nifty frameworks is capable of mocking the non-mock-friendly modifiers of <code>static</code> and <code>final</code>. Static (or class) methods, while handy for factories, become a nuisance for a framework like <a href="https://code.google.com/p/mockito/">Mockito</a>, however, with the inclusion of <a href="https://code.google.com/p/powermock/">PowerMock</a>, you've got yourself a proverbial hammer.</p>
 
 <p><a href="http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito/">As I wrote about previously</a>, I had to deal with a 3rd party library that is used to integrate with a networked service. This library is essentially hardwired to interact with homebase, which naturally provides some challenges when trying to test ones code that relies on this library. Moreover, the said library contained a <code>static</code> method for creating instances of a specialized class, which, naturally, my code depended on.</p>
 

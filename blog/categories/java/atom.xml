@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-09-17T15:30:49-04:00</updated>
+  <updated>2013-09-21T09:42:15-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -25,7 +25,9 @@
 
 <p>As the article summary states:</p>
 
-<p><blockquote><p>By web logic, content is king; but for mobile users, interaction rules. Static information design is out for mobile apps, and gamification is in. This month Andrew Glover concludes his introduction to Android mobile development by adding a multiple-choice quiz feature to the example app, Overheard Word, introduced in a previous article. Then he shows you how to generate a digital signature and publish and promote your signed app on Google Play or Amazon Appstore for Android.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html'>Mobile for the Masses: Sign, Seal, and Deliver Your Android App</a></cite></footer></blockquote></p>
+<p>{% blockquote IBM DeveloperWorks http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html Mobile for the masses: Sign, seal, and deliver your Android app%}
+By web logic, content is king; but for mobile users, interaction rules. Static information design is out for mobile apps, and gamification is in. This month Andrew Glover concludes his introduction to Android mobile development by adding a multiple-choice quiz feature to the example app, Overheard Word, introduced in a previous article. Then he shows you how to generate a digital signature and publish and promote your signed app on Google Play or Amazon Appstore for Android.
+{% endblockquote %}</p>
 
 <p>Check out "<a href="http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html">Mobile for the masses: Sign, seal, and deliver your Android app</a>" and learn how to sign your app in preparation for submitting it to an app store! If you missed the first article, check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>"; what's more, don't forget to read my second article, entitled "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>" and the third article "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>". Finally, don't forget to read article number four: "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">Mobile for the masses: Mobile for the masses: Words and gestures with Overheard Word</a>" and programmatically integrate third-party code into your Android UI!</p>
 
@@ -38,7 +40,7 @@
     <link href="http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer/"/>
     <updated>2013-08-04T11:08:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/hammerj.jpg">While there are myriad mocking libraries available for the Java platform, only a select few of these nifty frameworks is capable of mocking the non-mock-friendly modifiers of <code>static</code> and <code>final</code>. Static (or class) methods, while handy for factories, become a nuisance for a framework like <a href="https://code.google.com/p/mockito/">Mockito</a>, however, with the inclusion of <a href="https://code.google.com/p/powermock/">PowerMock</a>, you've got yourself a proverbial hammer.</p>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/hammerj.jpg %}While there are myriad mocking libraries available for the Java platform, only a select few of these nifty frameworks is capable of mocking the non-mock-friendly modifiers of <code>static</code> and <code>final</code>. Static (or class) methods, while handy for factories, become a nuisance for a framework like <a href="https://code.google.com/p/mockito/">Mockito</a>, however, with the inclusion of <a href="https://code.google.com/p/powermock/">PowerMock</a>, you've got yourself a proverbial hammer.</p>
 
 <p><a href="http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito/">As I wrote about previously</a>, I had to deal with a 3rd party library that is used to integrate with a networked service. This library is essentially hardwired to interact with homebase, which naturally provides some challenges when trying to test ones code that relies on this library. Moreover, the said library contained a <code>static</code> method for creating instances of a specialized class, which, naturally, my code depended on.</p>
 
@@ -110,7 +112,7 @@ public void testCreateRequest() throws Exception {
     <link href="http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito/"/>
     <updated>2013-08-01T15:37:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/Mockito.jpg">I recently found myself writing some code to integrate two disparate platforms. One of these systems is Java based and the other, while not written in Java, offers a Java API. I'll call these systems Foo and Bar, respectively.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/Mockito.jpg %}I recently found myself writing some code to integrate two disparate platforms. One of these systems is Java based and the other, while not written in Java, offers a Java API. I'll call these systems Foo and Bar, respectively.</p>
 
 <p>It became obvious before I had written a line of code, however, that testing the eventual adapter would require I explicitly mock the later system's API (i.e. Foo's) as all I had to go with was a jar file whose classes and methods made it clear they communicated with a live instance.</p>
 
@@ -121,7 +123,9 @@ public void testCreateRequest() throws Exception {
 
 <p>I spent a few cycles to see what's new in the world of Java mocking and I was pleased to see that my old friend <a href="https://code.google.com/p/mockito/">Mockito</a> is still active and is indeed, still an <a href="http://www.javaworld.com/community/node/3772">excellent tool</a> for general purpose mocking. For the uninitiated, <a href="http://refcardz.dzone.com/refcardz/mockito">Mockito</a> is Java based mocking framework that:</p>
 
-<p><blockquote><p>...tastes really good. It lets you write beautiful tests with [a] clean &amp; simple API. Mockito doesn't give you hangover because the tests are very readable and they produce clean verification errors.</p><footer><strong>Google code mockito project page</strong> <cite><a href='https://code.google.com/p/mockito/'>Why Drink It?</a></cite></footer></blockquote></p>
+<p>{% blockquote Google code mockito project page https://code.google.com/p/mockito/  Why Drink it? %}
+...tastes really good. It lets you write beautiful tests with [a] clean &amp; simple API. Mockito doesn't give you hangover because the tests are very readable and they produce clean verification errors.
+{% endblockquote %}</p>
 
 <p>Indeed, Mockito offers a <a href="https://code.google.com/p/easyb/wiki/UsingMockito">simple, fluent API</a> that allows you to precisely mock behaviors without a lot of fuss. For instance, the main facade to interface with Bar is via a <code>QTP</code> class that has methods like <code>logIn</code>, <code>logOut</code>, etc. Rather than relying on classes under test to actually invoke these methods, I can easily create mock instances of <code>QTP</code> with Mockito like so:</p>
 
@@ -213,7 +217,7 @@ public void testFailureLoginRequest() throws Exception {
     <link href="http://thediscoblog.com/blog/2013/07/24/introducing-android-migrations/"/>
     <updated>2013-07-24T09:46:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/24/introducing-android-migrations</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/android_platform.png">Have you ever worked with <a href="http://guides.rubyonrails.org/migrations.html">Rails' migrations</a>? They make <a href="http://www.tutorialspoint.com/ruby-on-rails/rails-migrations.htm">database changes a breeze</a>, don't they?  While every software release doesn't necessarily involve a migration, when one does happen to make use of one, <a href="http://thediscoblog.com/blog/2013/02/18/testing-rails-migrations/">I'm always pleased</a> on how easily things work out. Whether it's to add new data or alter existing data structures, Rails migrations make evolving a datastore (be it an RDMBS or NoSQL one like MongoDB) painless.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/android_platform.png %}Have you ever worked with <a href="http://guides.rubyonrails.org/migrations.html">Rails' migrations</a>? They make <a href="http://www.tutorialspoint.com/ruby-on-rails/rails-migrations.htm">database changes a breeze</a>, don't they?  While every software release doesn't necessarily involve a migration, when one does happen to make use of one, <a href="http://thediscoblog.com/blog/2013/02/18/testing-rails-migrations/">I'm always pleased</a> on how easily things work out. Whether it's to add new data or alter existing data structures, Rails migrations make evolving a datastore (be it an RDMBS or NoSQL one like MongoDB) painless.</p>
 
 <p>When I recently found myself altering the data structure of a SQLite database for <a href="https://play.google.com/store/apps/details?id=com.b50.hoproll&amp;hl=en">one of my Android apps</a>, I found myself wishing there was some similar migration mechanism for Android as there is in Rails. Alas, I could fine none, so I did what any other developer would do: <a href="https://github.com/aglover/droid-migrate">I wrote one</a>.</p>
 
@@ -423,7 +427,7 @@ public void down() {
 
 <p>Now if I fire up my app, the <code>ListView</code> will have 2 items in it!</p>
 
-<p><img class="center" src="/images/mine/migrate_2.png"></p>
+<p>{% img center /images/mine/migrate_2.png %}</p>
 
 <p>What about if you need to rollback? That's just as easy. Imagine that the addition of that second row of data was a gigantic mistake and instead I really only want one row (i.e. I only want the data originally created in <code>DBVersion1</code>). All I have to do is type within the root of my project:</p>
 
@@ -461,7 +465,9 @@ Done!
 
 <p>As the article summary states:</p>
 
-<p><blockquote><p>You might feel like a kid in a candy store grabbing third-party code from GitHub or another repository, but there are still some tricks to integrating it with your Android UI. This month, Andrew Glover shows you how to take the Overheard Word demo app up a level with a JSON-based word engine and some prebaked, swipe-gesture functionality. As it turns out, Android easily accommodates third-party code, but you still have to do some careful logic if you want your app's UI to run it smoothly.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html'>Mobile for the Masses: Words and Gestures With Overheard Word</a></cite></footer></blockquote></p>
+<p>{% blockquote IBM DeveloperWorks http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html Mobile for the masses: Words and gestures with Overheard Word %}
+You might feel like a kid in a candy store grabbing third-party code from GitHub or another repository, but there are still some tricks to integrating it with your Android UI. This month, Andrew Glover shows you how to take the Overheard Word demo app up a level with a JSON-based word engine and some prebaked, swipe-gesture functionality. As it turns out, Android easily accommodates third-party code, but you still have to do some careful logic if you want your app's UI to run it smoothly.
+{% endblockquote %}</p>
 
 <p>Check out "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">Mobile for the masses: Mobile for the masses: Words and gestures with Overheard Word</a>" and programmatically integrate third-party code into your Android UI! If you missed the first article, check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>"; what's more, don't forget to read my second article, entitled "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>" and the third article "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>".</p>
 

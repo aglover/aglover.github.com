@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-09-17T15:30:49-04:00</updated>
+  <updated>2013-09-21T09:41:53-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,166 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[I like my ElasticSearch a la Node.js]]></title>
+    <link href="http://thediscoblog.com/blog/2013/09/21/i-like-my-elasticsearch-a-la-node-dot-js/"/>
+    <updated>2013-09-21T08:57:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/09/21/i-like-my-elasticsearch-a-la-node-dot-js</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/320px-Pie_A_La_Mode.jpg">While <a href="http://thediscoblog.com/blog/categories/elasticsearch/">ElasticSearch</a> is easy enough to work with via its RESTful HTTP API, there are <a href="http://www.elasticsearch.org/guide/clients/">myriad client libraries</a> available in almost every conceivable programming language. If <a href="http://thediscoblog.com/blog/categories/node/">Node.js</a> is your language of choice, then there&#8217;s at least two actively supported libraries available.</p>
+
+<p>My favorite is dubbed, albeit rather dully, &#8221;<a href="https://github.com/phillro/node-elasticsearch-client">Elastic Search Client</a>&#8221;, but don&#8217;t let the library&#8217;s unimaginative name fool you: this is a handy library that allows you to do everything you could do via cURL with the added benefit of JavaScript callbacks. Best of all, you can use the Node Elastic Search Client in <a href="http://thediscoblog.com/blog/categories/coffeescript/">Coffeescript</a>, which is a handy language that makes JavaScript less verbose and that ultimately compiles into JavaScript.</p>
+
+<!-- more -->
+
+
+<p>Accordingly, if you&#8217;re familiar with the typical RESTful API calls for creating and mapping indexes, plus indexing and searching documents, then you&#8217;ll find Elastic Search Client easy enough to pick up.</p>
+
+<p>To get started, add the library as a dependency in your NPM <code>package.json</code> file like so:</p>
+
+<figure class='code'><figcaption><span>My package.json file that lists the latest version of elasticsearchclient.</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="s2">&quot;dependencies&quot;</span><span class="err">:</span><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;elasticsearchclient&quot;</span> <span class="p">:</span> <span class="s2">&quot;latest&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;mocha&quot;</span> <span class="p">:</span> <span class="s2">&quot;latest&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;should&quot;</span> <span class="p">:</span> <span class="s2">&quot;latest&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;coffee-script&quot;</span> <span class="p">:</span> <span class="s2">&quot;latest&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Since I happen to prefer <a href="http://coffeescript.org/">CoffeeScript</a> over JavaScript, I&#8217;ve also included CoffeeScript as a dependency.</p>
+
+<p>Like any Node library, you&#8217;ll need to include a library it via a <code>require</code> statement to make use of it. In this case, I&#8217;ll require <code>'elasticsearchclient'</code> and then connect to a local instance like so:</p>
+
+<figure class='code'><figcaption><span>Initalizing a new client</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">ElasticSearchClient</span> <span class="o">=</span> <span class="nx">require</span> <span class="s1">&#39;elasticsearchclient&#39;</span>
+</span><span class='line'><span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ElasticSearchClient</span> <span class="p">{</span> <span class="nx">host</span><span class="o">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="nx">port</span><span class="o">:</span> <span class="mi">9200</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Going forward, I&#8217;m going to reference a few variables, namely <code>indexName</code>, which is &#8220;beer_recipes&#8221; and <code>objName</code>, which is &#8220;beer&#8221;. What&#8217;s more, this code is using <a href="http://visionmedia.github.io/mocha/">Mocha</a> and <a href="https://github.com/visionmedia/should.js/">should</a>, so that&#8217;ll explain the various specification related statements in the examples below.</p>
+
+<p>With a connection to an Elasticsearch server, I can consequently create an index like so:</p>
+
+<figure class='code'><figcaption><span>Creating an index in a before clause</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">describe</span> <span class="s1">&#39;Create and update an index&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="nx">before</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>      <span class="nx">client</span><span class="p">.</span><span class="nx">createIndex</span><span class="p">(</span><span class="nx">indexName</span><span class="p">).</span><span class="nx">on</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>          <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">data</span>
+</span><span class='line'>          <span class="nx">data</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">ok</span>
+</span><span class='line'>          <span class="nx">done</span><span class="p">()</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">exec</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And I can update the index&#8217;s mapping too. Just use the <code>putMapping</code> call:</p>
+
+<figure class='code'><figcaption><span>Updating an Index mapping</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">it</span> <span class="s1">&#39;should support a mapping put which changes the analyzer&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="nx">snowball</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;mappings&quot;</span> <span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;beer&quot;</span> <span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;properties&quot;</span> <span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;ingredients&quot;</span> <span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;type&quot;</span> <span class="o">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;analyzer&quot;</span> <span class="o">:</span> <span class="s2">&quot;snowball&quot;</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}}</span>
+</span><span class='line'>  <span class="nx">client</span><span class="p">.</span><span class="nx">putMapping</span><span class="p">(</span><span class="nx">indexName</span><span class="p">,</span> <span class="nx">objName</span><span class="p">,</span> <span class="nx">snowball</span><span class="p">).</span><span class="nx">on</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>      <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">data</span>
+</span><span class='line'>      <span class="nx">data</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">ok</span>
+</span><span class='line'>      <span class="nx">done</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">exec</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, the actual mapping JSON document is identical to what I&#8217;d have to pass via cURL, for instance.</p>
+
+<p>You should start to notice a pattern with respect to how the Elastic Search Client deals with callbacks &#8211; using an <code>on</code> method, you can register a callback for <code>'data'</code>, which essentially entails the response from the server; moreover, you can also register a listener for <code>'error'</code>, which as you can imagine, gets invoked if there is a problem.</p>
+
+<p>Deleting an index is just as easy as creating one too:</p>
+
+<figure class='code'><figcaption><span>Deleting an index</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">after</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="nx">client</span><span class="p">.</span><span class="nx">deleteIndex</span><span class="p">(</span><span class="nx">indexName</span><span class="p">).</span><span class="nx">on</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>      <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">data</span>
+</span><span class='line'>      <span class="nx">data</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">ok</span>
+</span><span class='line'>      <span class="nx">done</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">exec</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To index a document, you simply use the <code>index</code> function like so:</p>
+
+<figure class='code'><figcaption><span>Indexing a document</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">beer</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;Todd Enders&#39; Witbier&quot;</span><span class="p">,</span> <span class="s2">&quot;style&quot;</span><span class="o">:</span> <span class="s2">&quot;wit, Belgian ale, wheat beer&quot;</span><span class="p">,</span> <span class="s2">&quot;ingredients&quot;</span><span class="o">:</span> <span class="s2">&quot;4.0 ...&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="nx">client</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="nx">indexName</span><span class="p">,</span> <span class="nx">objName</span><span class="p">,</span> <span class="nx">beer</span><span class="p">).</span><span class="nx">on</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">data</span>
+</span><span class='line'>  <span class="nx">data</span><span class="p">.</span><span class="nx">ok</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span> <span class="kc">true</span>
+</span><span class='line'><span class="p">.</span><span class="nx">exec</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>Note in this case, I pass along an index name, and object name, and a JSON document to index. Because JSON marries so nicely with JavaScript, this library is quite nice, don&#8217;t you think?</p>
+
+<p>Searching is just as easy (as I&#8217;m sure you already guessed). You create a query JSON document and pass it along to the <code>search</code> method like so:</p>
+
+<figure class='code'><figcaption><span>Searching is just as easy!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">iquery</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;query&quot;</span> <span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;term&quot;</span> <span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;ingredients&quot;</span> <span class="o">:</span> <span class="s2">&quot;lemons&quot;</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class='line'><span class="nx">client</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="nx">indexName</span><span class="p">,</span> <span class="nx">objName</span><span class="p">,</span> <span class="nx">iquery</span><span class="p">).</span><span class="nx">on</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">idata</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="nx">result</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">idata</span>
+</span><span class='line'>  <span class="nx">result</span><span class="p">.</span><span class="nx">hits</span><span class="p">.</span><span class="nx">total</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="nx">done</span><span class="p">()</span>
+</span><span class='line'><span class="p">.</span><span class="nx">exec</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The resultant response from the server is a JSON document that must be parsed and dealt with accordingly.</p>
+
+<p>Of course, you can grab an individual document via its id just as easily:</p>
+
+<figure class='code'><figcaption><span>Getting an individual document via its document id</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">client</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">indexName</span><span class="p">,</span> <span class="nx">objName</span><span class="p">,</span> <span class="nx">doc_id</span><span class="p">).</span><span class="nx">on</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">getData</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="nx">doc</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">getData</span>
+</span><span class='line'>  <span class="nx">doc</span><span class="p">.</span><span class="nx">_source</span><span class="p">.</span><span class="nx">name</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span> <span class="s2">&quot;Todd Enders&#39; Witbier&quot;</span>
+</span><span class='line'>  <span class="nx">done</span><span class="p">()</span>
+</span><span class='line'><span class="p">.</span><span class="nx">exec</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Node&#8217;s Elastic Search Client is a breeze to pick up; plus, the natural union of JSON and JavaScript make Node a perfect language for interfacing with ElasticSearch.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mobile for the masses: Sign, seal, and deliver your Android app]]></title>
@@ -1811,24 +1971,6 @@
 <p>As you can see in the above code, a callback instance takes as a parameter an <code>NSArray</code>, thus, I have to covert my <code>NSDictionary</code> into an array via Objective-C&#8217;s handy <code>arrayWithObjects</code> function.</p>
 
 <p>The default module examples <a href="http://docs.appcelerator.com/titanium/latest/#!/guide/Titanium_Mobile_Module_API">provided by Appcelerator naturally work</a>, but alas, the non-callback style of invocation was less than appealing, especially if you are going to be coding an <a href="http://en.wikipedia.org/wiki/Appcelerator_Titanium">Appcelerator</a> app in JavaScript. Nevertheless, you can do it easily enough provided you are willing to dig through myriad repositories&#8230;or you could save yourself the headache and read this blog post.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mobile for the Masses: Activities and icons in your Android application lifecycle]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle/"/>
-    <updated>2013-05-28T15:28:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/28/mobile-for-the-masses-activities-and-icons-in-your-android-application-lifecycle</id>
-    <content type="html"><![CDATA[<p>My third article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>&#8217; series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> is now out! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">This hip article</a> covers the lifecycle events associated with <code>Activity</code> classes and then shows you how to implement menus and/or activity bars (for newer devices) along with associating icons for an app itself and its corresponding activity items.</p>
-
-<p>As the article summary states:</p>
-
-<blockquote><p>The Activity class is the workhorse of an Android mobile app, and it&#8217;s also where you can fine-tune your app&#8217;s interactions with both the user and the mobile device. Get things working exactly the way you want them in your app&#8217;s lifecycle, then use icons and action bars to guide users through UI navigation and other app features.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html'>Mobile for the Masses: Activities and Icons in Your Android Application Lifecycle</a></cite></footer></blockquote>
-
-
-<p>Check out &#8221;<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>&#8221; and add navigation with style to your Android mobile apps! If you missed the first article, check out &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>&#8221;; what&#8217;s more, don&#8217;t forget to read my second article, entitled &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>&#8221;.</p>
-
-<p>Stay tuned for more articles in this series and don&#8217;t forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
 ]]></content>
   </entry>
   

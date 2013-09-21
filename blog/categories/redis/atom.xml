@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Redis | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/redis/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-09-17T15:30:49-04:00</updated>
+  <updated>2013-09-21T09:42:15-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys/"/>
     <updated>2013-07-03T14:05:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/03/sampling-redis-keys</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/redis_logo.png"><a href="http://www.app47.com">We</a> run a farm of <a href="http://redis.io/">Redis</a> instances for storing real time analytics. Because Redis stores objects in memory, it happens to be an extremely fast way to retrieve data; thus, most of our charts and graphs pull data from various Redis instances that contain desired data.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/redis_logo.png %}<a href="http://www.app47.com">We</a> run a farm of <a href="http://redis.io/">Redis</a> instances for storing real time analytics. Because Redis stores objects in memory, it happens to be an extremely fast way to retrieve data; thus, most of our charts and graphs pull data from various Redis instances that contain desired data.</p>
 
 <p>Our Redis boxes are running in <a href="http://thediscoblog.com/blog/categories/aws/">AWS</a> on <a href="http://aws.amazon.com/ec2/instance-types/instance-details/">m2.2xlarge instances</a>, which contain a bit over 30GB of memory. Every once in awhile, it's helpful to get an idea of how much memory various key <em>patterns</em> are consuming because we hold over 20GB across several hundred thousand keys in some cases. There's a nifty gem dubbed <a href="https://github.com/snmaynard/redis-audit">redis-audit</a> (<a href="https://github.com/aglover/redis-audit">my fork</a> of it adds <a href="http://bundler.io/">Bundler</a>) that is quite helpful in painting a broad picture of memory usage across a sampling of key patterns.</p>
 
