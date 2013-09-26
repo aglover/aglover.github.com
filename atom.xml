@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-09-21T09:41:53-04:00</updated>
+  <updated>2013-09-26T10:26:17-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,24 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[App signing: iOS versus Android]]></title>
+    <link href="http://thediscoblog.com/blog/2013/09/26/app-signing-ios-versus-android/"/>
+    <updated>2013-09-26T10:16:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/09/26/app-signing-ios-versus-android</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/sealed.jpg">Apple&#8217;s app signing process can be a real pain-in-the-neck; nevertheless, it works to keep apps trusted. You know when you download a Bank of America app from iTunes that it&#8217;s the real thing. You know that the app comes from <em>the</em> Bank of America.</p>
+
+<p>On the other hand, Android allows apps to be self-signed. This has a fundamental flaw: an Android developer can claim to be anyone they want, <em>including Bank of America</em>. Thus, when you download an app from an Android App store, there&#8217;s a real possibility that the app was submitted by a charlatan. What&#8217;s more, those charlatan apps can actually be malicious!</p>
+
+<!-- more -->
+
+
+<p><a href="http://twitter.com/danieleran">Daniel Eran Dilger</a> has written an excellent article that features the differences between Apple&#8217;s signing process and Google&#8217;s. I highly recommend you read his article entitled &#8221;<a href="http://appleinsider.com/articles/13/07/14/editorial-googles-android-haunted-by-steve-jobs-warnings-on-app-signing-security">Google&#8217;s Android haunted by Steve Jobs&#8217; warnings on app signing security</a>&#8221; as it sheds a bright light on the differences between the two mobile platforms; moreover, the article does a great job of outlining the evolution of iOS and its app security policies.</p>
+
+<p>And while you are at it, check out my article entitled &#8221;<a href="http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html">Mobile for the masses: Sign, seal, and deliver your Android app</a>&#8221; and learn how to sign your Android app in preparation for submitting it to an app store!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[I like my ElasticSearch a la Node.js]]></title>
@@ -169,7 +187,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Node&#8217;s Elastic Search Client is a breeze to pick up; plus, the natural union of JSON and JavaScript make Node a perfect language for interfacing with ElasticSearch.</p>
+<p>Node&#8217;s Elastic Search Client is a breeze to pick up; plus, the natural union of JSON and JavaScript make Node a perfect language for interfacing with ElasticSearch. Dig it?</p>
 ]]></content>
   </entry>
   
@@ -1814,163 +1832,6 @@
 <p>Of course, you can throw this into a bash script and parameterize the <code>collection</code>, <code>fields</code>, output file, and query with bash&#8217;s handy <code>$1</code>, <code>$2</code>, etc variables.</p>
 
 <p>Got it?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Callbacks in Appcelerator Titanium modules]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules/"/>
-    <updated>2013-05-29T13:42:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/appc_stacked.png">I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>&#8217;s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47&#8217;s <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
-
-<p>In the end, what I wanted to implement was a <a href="http://recurial.com/programming/understanding-callback-functions-in-javascript/">JavaScript-ish callback</a> associated with a native App47 Agent call. Alas, it took me a lot of digging to achieve this goal.</p>
-
-<!-- more -->
-
-
-<p>For example, for a timed event (which, as you&#8217;ve probably guessed, captures how long an event took), rather than the more traditional call which is inline:</p>
-
-<figure class='code'><figcaption><span>Straightforward method invocation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">agent</span><span class="p">.</span><span class="nx">startTimedEvent</span><span class="p">(</span><span class="s2">&quot;openCrust 2.0.27&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="nx">openCrust</span><span class="p">({});</span>
-</span><span class='line'><span class="nx">agent</span><span class="p">.</span><span class="nx">endTimedEvent</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I wanted a more JavaScript friendly call that wraps the timed code like so:</p>
-
-<figure class='code'><figcaption><span>Callback invocation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">agent</span><span class="p">.</span><span class="nx">timedEvent</span><span class="p">(</span><span class="s2">&quot;openCrust 2.0.27&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">openCrust</span><span class="p">({});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This has the benefit of wrapping a desired event &#8211; there is no explicit need for anyone to code the ending &#8211; it is automatically done via the <code>timedEvent</code> call after invoking the passed in function.</p>
-
-<p>The Titanium module documentation is a bit hard to find (that is, finding up-to-date valid documentation is challenging); your best bet to see how to do something interesting is to look at the <a href="https://github.com/appcelerator/titanium_mobile/tree/master/android/modules">various code</a> repositories <a href="https://github.com/appcelerator/titanium_modules">on Github</a> followed by studying the API docs (i.e. JavaDocs and <a href="https://github.com/appcelerator/titanium_mobile/blob/master/iphone/Classes/KrollCallback.m">.h/.m files for iOS</a>).</p>
-
-<p>It turns out, invoking a JavaScript callback in either Android or iOS is fairly straightforward. In the case of Android, you need to use the <code>KrollFunction</code> type like so:</p>
-
-<figure class='code'><figcaption><span>Wrapped Timed Event</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Kroll.method</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">timedEvent</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">KrollFunction</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>  <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">EmbeddedAgent</span><span class="o">.</span><span class="na">startTimedEvent</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
-</span><span class='line'>  <span class="n">callback</span><span class="o">.</span><span class="na">call</span><span class="o">(</span><span class="n">getKrollObject</span><span class="o">(),</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;());</span>
-</span><span class='line'>  <span class="n">EmbeddedAgent</span><span class="o">.</span><span class="na">endTimedEvent</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see in the above code, I&#8217;m not doing anything special like passing in any arguments to the <code>KrollFunction</code> instance. If you want to do that, say in the case of passing in some special value that the corresponding callback will use, then you can either pass in a <code>Map</code> or an <code>Object[]</code>.</p>
-
-<p>For example, you can implement this style of callback where a custom value is passed in for a timed event like so:</p>
-
-<figure class='code'><figcaption><span>Callback with Java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Kroll.method</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">startTimedEvent</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">KrollFunction</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>  <span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="n">EmbeddedAgent</span><span class="o">.</span><span class="na">startTimedEvent</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
-</span><span class='line'>  <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;();</span>
-</span><span class='line'>  <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">,</span> <span class="n">id</span><span class="o">);</span>
-</span><span class='line'>  <span class="n">callback</span><span class="o">.</span><span class="na">call</span><span class="o">(</span><span class="n">getKrollObject</span><span class="o">(),</span> <span class="n">map</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This results in a JavaScript call like so:</p>
-
-<figure class='code'><figcaption><span>Using a callback but not wrapping the event</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">agent</span><span class="p">.</span><span class="nx">startTimedEvent</span><span class="p">(</span><span class="s2">&quot;openCrust 2.0.27&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">result</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">];</span>
-</span><span class='line'>  <span class="nx">openCrust</span><span class="p">({});</span>
-</span><span class='line'>  <span class="nx">agent</span><span class="p">.</span><span class="nx">endTimedEvent</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In iOS land, invoking a callback is a bit different, but certainly as easy. The same <code>timedEvent</code> JavaScript method that takes a callback to be wrapped by the timed event can be implemented as follows:</p>
-
-<figure class='code'><figcaption><span>Wrapped event by callback</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">timedEvent:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">args</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="n">NSString</span><span class="o">*</span> <span class="n">eventName</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
-</span><span class='line'>  <span class="n">NSString</span><span class="o">*</span> <span class="n">eventID</span> <span class="o">=</span> <span class="p">[</span><span class="n">EmbeddedAgent</span> <span class="nl">startTimedEvent:</span><span class="n">eventName</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">KrollCallback</span><span class="o">*</span> <span class="n">callback</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span> <span class="nl">objectAtIndex:</span><span class="mi">1</span><span class="p">];</span>
-</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">callback</span><span class="p">){</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">callback</span> <span class="nl">call:</span><span class="nb">nil</span> <span class="nl">thisObject:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="p">[</span><span class="n">EmbeddedAgent</span> <span class="nl">endTimedEvent:</span><span class="n">eventID</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In this case, I&#8217;m using the <code>KrollCallback</code> type, which appears to be analogous to Appcelerator&#8217;s Android <code>KrollFunction</code>.</p>
-
-<p>If you need to pass values to a corresponding JavaScript function, they need to be in <code>NSArray</code> form, thus, you can do something like this to pass in parameters to the underlying JavaScript function:</p>
-
-<figure class='code'><figcaption><span>With callback parameter</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">startTimedEvent:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">args</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="n">NSString</span><span class="o">*</span> <span class="n">eventName</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
-</span><span class='line'>  <span class="n">NSString</span><span class="o">*</span> <span class="n">eventID</span> <span class="o">=</span> <span class="p">[</span><span class="n">EmbeddedAgent</span> <span class="nl">startTimedEvent:</span><span class="n">eventName</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">KrollCallback</span><span class="o">*</span> <span class="n">callback</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span> <span class="nl">objectAtIndex:</span><span class="mi">1</span><span class="p">];</span>
-</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">callback</span><span class="p">){</span>
-</span><span class='line'>    <span class="n">NSDictionary</span><span class="o">*</span> <span class="n">dict</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">NSDictionary</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithObjectsAndKeys:</span><span class="s">@&quot;id&quot;</span><span class="p">,</span> <span class="n">eventID</span><span class="p">,</span> <span class="nb">nil</span><span class="p">]</span> <span class="n">autorelease</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">NSArray</span><span class="o">*</span> <span class="n">array</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSArray</span> <span class="nl">arrayWithObjects:</span> <span class="n">dict</span><span class="p">,</span> <span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">callback</span> <span class="nl">call:</span><span class="n">array</span> <span class="nl">thisObject:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see in the above code, a callback instance takes as a parameter an <code>NSArray</code>, thus, I have to covert my <code>NSDictionary</code> into an array via Objective-C&#8217;s handy <code>arrayWithObjects</code> function.</p>
-
-<p>The default module examples <a href="http://docs.appcelerator.com/titanium/latest/#!/guide/Titanium_Mobile_Module_API">provided by Appcelerator naturally work</a>, but alas, the non-callback style of invocation was less than appealing, especially if you are going to be coding an <a href="http://en.wikipedia.org/wiki/Appcelerator_Titanium">Appcelerator</a> app in JavaScript. Nevertheless, you can do it easily enough provided you are willing to dig through myriad repositories&#8230;or you could save yourself the headache and read this blog post.</p>
 ]]></content>
   </entry>
   

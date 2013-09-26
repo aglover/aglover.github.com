@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Mongoid | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/mongoid/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-09-21T09:42:15-04:00</updated>
+  <updated>2013-09-26T10:26:17-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections/"/>
     <updated>2013-07-15T15:07:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/mongodb_icon.png %}Did you ever learn that <code>select * from table</code> in RDBMS-land is bad? Of course, you did! If you're only looking for the email address of a user and not the other 15 columns worth of data, then why ask for that data and incur a penalty? The query <code>select email from user where user_id = 1;</code> is far more efficient for the database and the corresponding application that issued it, because there is <em>less data to fetch and consume</em>.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mongodb_icon.png">Did you ever learn that <code>select * from table</code> in RDBMS-land is bad? Of course, you did! If you're only looking for the email address of a user and not the other 15 columns worth of data, then why ask for that data and incur a penalty? The query <code>select email from user where user_id = 1;</code> is far more efficient for the database and the corresponding application that issued it, because there is <em>less data to fetch and consume</em>.</p>
 
 <!-- more -->
 

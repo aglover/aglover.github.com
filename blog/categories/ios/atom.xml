@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-09-21T09:42:15-04:00</updated>
+  <updated>2013-09-26T10:26:17-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,24 +14,38 @@
 
   
   <entry>
+    <title type="html"><![CDATA[App signing: iOS versus Android]]></title>
+    <link href="http://thediscoblog.com/blog/2013/09/26/app-signing-ios-versus-android/"/>
+    <updated>2013-09-26T10:16:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/09/26/app-signing-ios-versus-android</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/sealed.jpg">Apple's app signing process can be a real pain-in-the-neck; nevertheless, it works to keep apps trusted. You know when you download a Bank of America app from iTunes that it's the real thing. You know that the app comes from <em>the</em> Bank of America.</p>
+
+<p>On the other hand, Android allows apps to be self-signed. This has a fundamental flaw: an Android developer can claim to be anyone they want, <em>including Bank of America</em>. Thus, when you download an app from an Android App store, there's a real possibility that the app was submitted by a charlatan. What's more, those charlatan apps can actually be malicious!</p>
+
+<!-- more -->
+
+
+<p><a href="http://twitter.com/danieleran">Daniel Eran Dilger</a> has written an excellent article that features the differences between Apple's signing process and Google's. I highly recommend you read his article entitled "<a href="http://appleinsider.com/articles/13/07/14/editorial-googles-android-haunted-by-steve-jobs-warnings-on-app-signing-security">Google's Android haunted by Steve Jobs' warnings on app signing security</a>" as it sheds a bright light on the differences between the two mobile platforms; moreover, the article does a great job of outlining the evolution of iOS and its app security policies.</p>
+
+<p>And while you are at it, check out my article entitled "<a href="http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html">Mobile for the masses: Sign, seal, and deliver your Android app</a>" and learn how to sign your Android app in preparation for submitting it to an app store!</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[8% is itty-bitty, but it matters]]></title>
     <link href="http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters/"/>
     <updated>2013-09-09T15:49:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters</id>
     <content type="html"><![CDATA[<p>I saw some news related to <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">Microsoft Windows Phone</a> that gave me pause for thought. Specifically, <a href="http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/">I read an article</a> that stated:</p>
 
-<p>{% blockquote Liam Tung http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/ iOS up, Android down in the US as Windows Phone hits eight percent in Europe  %}
-Microsoft's mobile platform reached new heights in the three months to July 2013 in Europe, making up 8.2 percent of sales across UK, France, Germany, Italy and Spain
-{% endblockquote %}</p>
+<p><blockquote><p>Microsoft's mobile platform reached new heights in the three months to July 2013 in Europe, making up 8.2 percent of sales across UK, France, Germany, Italy and Spain</p><footer><strong>Liam Tung</strong> <cite><a href='http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/'>iOS Up, Android Down in the US as Windows Phone Hits Eight Percent in Europe</a></cite></footer></blockquote></p>
 
 <!-- more -->
 
 
 <p>While <a href="http://www.expertreviews.co.uk/smartphones/1301902/windows-phone-market-share-growing-in-europe">8.2% market share</a> might seem insignificant, what's interesting is that</p>
 
-<p>{% blockquote Liam Tung http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/ iOS up, Android down in the US as Windows Phone hits eight percent in Europe %}
-At the same time last year, Windows Phone accounted for 4.9 percent of sales
-{% endblockquote %}</p>
+<p><blockquote><p>At the same time last year, Windows Phone accounted for 4.9 percent of sales</p><footer><strong>Liam Tung</strong> <cite><a href='http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/'>iOS Up, Android Down in the US as Windows Phone Hits Eight Percent in Europe</a></cite></footer></blockquote></p>
 
 <p>That is, <a href="http://wmpoweruser.com/kantar-windows-phone-hits-record-high-of-8-2-market-share-in-europe/">Windows Phone market share</a> for the same five markets has increased by a little more than 3% over the last year. Accordingly, Windows Phone is a <a href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/">growing platform (in some markets)</a>, which means developers will eventually need to start considering it as a <a href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/">third platform</a>. And throwing a third platform into the mix does change the variables in a native versus <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">non-native</a> argument <em>in favor of an HTML5 approach</em>.</p>
 
@@ -48,7 +62,7 @@ At the same time last year, Windows Phone accounted for 4.9 percent of sales
     <link href="http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules/"/>
     <updated>2013-05-29T13:42:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/appc_stacked.png %}I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>'s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47's <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/appc_stacked.png">I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>'s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47's <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
 
 <p>In the end, what I wanted to implement was a <a href="http://recurial.com/programming/understanding-callback-functions-in-javascript/">JavaScript-ish callback</a> associated with a native App47 Agent call. Alas, it took me a lot of digging to achieve this goal.</p>
 

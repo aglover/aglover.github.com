@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mobile | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-09-21T09:42:15-04:00</updated>
+  <updated>2013-09-26T10:26:17-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,24 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[App signing: iOS versus Android]]></title>
+    <link href="http://thediscoblog.com/blog/2013/09/26/app-signing-ios-versus-android/"/>
+    <updated>2013-09-26T10:16:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/09/26/app-signing-ios-versus-android</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/sealed.jpg">Apple's app signing process can be a real pain-in-the-neck; nevertheless, it works to keep apps trusted. You know when you download a Bank of America app from iTunes that it's the real thing. You know that the app comes from <em>the</em> Bank of America.</p>
+
+<p>On the other hand, Android allows apps to be self-signed. This has a fundamental flaw: an Android developer can claim to be anyone they want, <em>including Bank of America</em>. Thus, when you download an app from an Android App store, there's a real possibility that the app was submitted by a charlatan. What's more, those charlatan apps can actually be malicious!</p>
+
+<!-- more -->
+
+
+<p><a href="http://twitter.com/danieleran">Daniel Eran Dilger</a> has written an excellent article that features the differences between Apple's signing process and Google's. I highly recommend you read his article entitled "<a href="http://appleinsider.com/articles/13/07/14/editorial-googles-android-haunted-by-steve-jobs-warnings-on-app-signing-security">Google's Android haunted by Steve Jobs' warnings on app signing security</a>" as it sheds a bright light on the differences between the two mobile platforms; moreover, the article does a great job of outlining the evolution of iOS and its app security policies.</p>
+
+<p>And while you are at it, check out my article entitled "<a href="http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html">Mobile for the masses: Sign, seal, and deliver your Android app</a>" and learn how to sign your Android app in preparation for submitting it to an app store!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mobile for the masses: Sign, seal, and deliver your Android app]]></title>
@@ -25,9 +43,7 @@
 
 <p>As the article summary states:</p>
 
-<p>{% blockquote IBM DeveloperWorks http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html Mobile for the masses: Sign, seal, and deliver your Android app%}
-By web logic, content is king; but for mobile users, interaction rules. Static information design is out for mobile apps, and gamification is in. This month Andrew Glover concludes his introduction to Android mobile development by adding a multiple-choice quiz feature to the example app, Overheard Word, introduced in a previous article. Then he shows you how to generate a digital signature and publish and promote your signed app on Google Play or Amazon Appstore for Android.
-{% endblockquote %}</p>
+<p><blockquote><p>By web logic, content is king; but for mobile users, interaction rules. Static information design is out for mobile apps, and gamification is in. This month Andrew Glover concludes his introduction to Android mobile development by adding a multiple-choice quiz feature to the example app, Overheard Word, introduced in a previous article. Then he shows you how to generate a digital signature and publish and promote your signed app on Google Play or Amazon Appstore for Android.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html'>Mobile for the Masses: Sign, Seal, and Deliver Your Android App</a></cite></footer></blockquote></p>
 
 <p>Check out "<a href="http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html">Mobile for the masses: Sign, seal, and deliver your Android app</a>" and learn how to sign your app in preparation for submitting it to an app store! If you missed the first article, check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>"; what's more, don't forget to read my second article, entitled "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>" and the third article "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>". Finally, don't forget to read article number four: "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">Mobile for the masses: Mobile for the masses: Words and gestures with Overheard Word</a>" and programmatically integrate third-party code into your Android UI!</p>
 
@@ -42,18 +58,14 @@ By web logic, content is king; but for mobile users, interaction rules. Static i
     <id>http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters</id>
     <content type="html"><![CDATA[<p>I saw some news related to <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">Microsoft Windows Phone</a> that gave me pause for thought. Specifically, <a href="http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/">I read an article</a> that stated:</p>
 
-<p>{% blockquote Liam Tung http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/ iOS up, Android down in the US as Windows Phone hits eight percent in Europe  %}
-Microsoft's mobile platform reached new heights in the three months to July 2013 in Europe, making up 8.2 percent of sales across UK, France, Germany, Italy and Spain
-{% endblockquote %}</p>
+<p><blockquote><p>Microsoft's mobile platform reached new heights in the three months to July 2013 in Europe, making up 8.2 percent of sales across UK, France, Germany, Italy and Spain</p><footer><strong>Liam Tung</strong> <cite><a href='http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/'>iOS Up, Android Down in the US as Windows Phone Hits Eight Percent in Europe</a></cite></footer></blockquote></p>
 
 <!-- more -->
 
 
 <p>While <a href="http://www.expertreviews.co.uk/smartphones/1301902/windows-phone-market-share-growing-in-europe">8.2% market share</a> might seem insignificant, what's interesting is that</p>
 
-<p>{% blockquote Liam Tung http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/ iOS up, Android down in the US as Windows Phone hits eight percent in Europe %}
-At the same time last year, Windows Phone accounted for 4.9 percent of sales
-{% endblockquote %}</p>
+<p><blockquote><p>At the same time last year, Windows Phone accounted for 4.9 percent of sales</p><footer><strong>Liam Tung</strong> <cite><a href='http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/'>iOS Up, Android Down in the US as Windows Phone Hits Eight Percent in Europe</a></cite></footer></blockquote></p>
 
 <p>That is, <a href="http://wmpoweruser.com/kantar-windows-phone-hits-record-high-of-8-2-market-share-in-europe/">Windows Phone market share</a> for the same five markets has increased by a little more than 3% over the last year. Accordingly, Windows Phone is a <a href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/">growing platform (in some markets)</a>, which means developers will eventually need to start considering it as a <a href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/">third platform</a>. And throwing a third platform into the mix does change the variables in a native versus <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">non-native</a> argument <em>in favor of an HTML5 approach</em>.</p>
 
@@ -70,13 +82,11 @@ At the same time last year, Windows Phone accounted for 4.9 percent of sales
     <link href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/"/>
     <updated>2013-08-07T21:09:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters</id>
-    <content type="html"><![CDATA[<p>{% img right https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114.<em>V379662584</em>.png %}Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114.<em>V379662584</em>.png">Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
 
 <p>As I wrote almost a year ago:</p>
 
-<p>{% blockquote thediscoblog.com http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/ Past Performance Is No Guarantee of Future Results %}
-software delivery on the mobile platform is, at least for the foreseeable future, firmly established via app stores. And app stores cater to native apps (100% native and/or hybrid) only. The average person will not look for useful apps via their device’s browser: that route is still a jungle. And, at this point, there is no viable pure play mobile web app delivery channel.
-{% endblockquote %}</p>
+<p><blockquote><p>software delivery on the mobile platform is, at least for the foreseeable future, firmly established via app stores. And app stores cater to native apps (100% native and/or hybrid) only. The average person will not look for useful apps via their device’s browser: that route is still a jungle. And, at this point, there is no viable pure play mobile web app delivery channel.</p><footer><strong>thediscoblog.com</strong> <cite><a href='http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/'>Past Performance Is No Guarantee of Future Results</a></cite></footer></blockquote></p>
 
 <p>Today, it's still true that the most convenient mechanism  for app delivery on mobile devices (and increasingly desktops) is via various app stores. And until today, HTML5 apps were not included in these app stores (unless they were wrapped by some hybrid-web container like <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">PhoneGap</a>).</p>
 
@@ -89,9 +99,7 @@ software delivery on the mobile platform is, at least for the foreseeable future
 
 <p>As <a href="https://developer.amazon.com/blog/author/Mike+Hines.html">Mike Hines</a> of Amazon puts it:</p>
 
-<p>{% blockquote https://developer.amazon.com/blog/ https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html Amazon is Now Accepting HTML5 Web Apps—Making it Easy for You to Reach Millions of Kindle Fire and Android Customers Worldwide %}
-Starting today, you can submit your web apps and mobile optimized web sites and have them merchandised alongside native apps on Amazon and Kindle Fire in nearly 200 countries worldwide, without any third-party software or doing any native app development.
-{% endblockquote %}</p>
+<p><blockquote><p>Starting today, you can submit your web apps and mobile optimized web sites and have them merchandised alongside native apps on Amazon and Kindle Fire in nearly 200 countries worldwide, without any third-party software or doing any native app development.</p><footer><strong>https://developer.amazon.com/blog/</strong> <cite><a href='https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html'>Amazon Is Now Accepting HTML5 Web Apps—Making It Easy for You to Reach Millions of Kindle Fire and Android Customers Worldwide</a></cite></footer></blockquote></p>
 
 <p>This is big news for HTML5 developers. A direct channel to the masses and monetization APIs to boot -- what more could you ask for? Standby folks because it's about to get even more interesting, as I'm willing to bet that Google and Apple will follow suit in the near future.</p>
 ]]></content>
@@ -102,7 +110,7 @@ Starting today, you can submit your web apps and mobile optimized web sites and 
     <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
     <updated>2013-07-30T12:52:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
-    <content type="html"><![CDATA[<p>{% img left /images/mine/swipe-right.png %}I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
 
 <p>Implementing right and left swipes in an <a href="http://jquerymobile.com/">jQuery Mobile</a> app is fairly straightforward, but there are a few gotchas that I was able to piece together via multiple <a href="http://stackoverflow.com/questions/7533772/how-to-swipe-between-several-jquery-mobile-pages">stackoverflow threads</a>, blogs, and finally <a href="http://api.jquerymobile.com/">jQuery Mobile's own documentation</a>.</p>
 
@@ -157,247 +165,6 @@ if (prevpage.length &gt; 0) {
 <p>```</p>
 
 <p>Once you've done that, you'll be able to swipe between page <code>div</code>s.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Introducing Android migrations]]></title>
-    <link href="http://thediscoblog.com/blog/2013/07/24/introducing-android-migrations/"/>
-    <updated>2013-07-24T09:46:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/07/24/introducing-android-migrations</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/android_platform.png %}Have you ever worked with <a href="http://guides.rubyonrails.org/migrations.html">Rails' migrations</a>? They make <a href="http://www.tutorialspoint.com/ruby-on-rails/rails-migrations.htm">database changes a breeze</a>, don't they?  While every software release doesn't necessarily involve a migration, when one does happen to make use of one, <a href="http://thediscoblog.com/blog/2013/02/18/testing-rails-migrations/">I'm always pleased</a> on how easily things work out. Whether it's to add new data or alter existing data structures, Rails migrations make evolving a datastore (be it an RDMBS or NoSQL one like MongoDB) painless.</p>
-
-<p>When I recently found myself altering the data structure of a SQLite database for <a href="https://play.google.com/store/apps/details?id=com.b50.hoproll&amp;hl=en">one of my Android apps</a>, I found myself wishing there was some similar migration mechanism for Android as there is in Rails. Alas, I could fine none, so I did what any other developer would do: <a href="https://github.com/aglover/droid-migrate">I wrote one</a>.</p>
-
-<!-- more -->
-
-
-<p><a href="https://github.com/aglover/droid-migrate">Droid Migrate</a> is a simple command line framework that generates and runs database migrations for your Android apps that use <a href="http://www.sqlite.org/">SQLite</a>. A migration is encapsulated by a <code>DBVersion</code> class that contains an <code>up</code> and <code>down</code> method. The <code>up</code> method is called for an upgrade and <code>down</code> for a rollback. What those methods do is entirely up to you.</p>
-
-<p>In addition, Droid Migrate generates a <code>DatabaseHelper</code> class through which you obtain underlying connections to a SQLite instance -- this is <a href="http://developer.android.com/reference/android/database/sqlite/SQLiteOpenHelper.html">the canonical way</a> to <a href="http://www.stevenmcmillan.co.uk/blog/2012/java-sqlite-database-helper-class-for-android/">interact with SQLite</a> in <a href="http://www.androidhive.info/2011/11/android-sqlite-database-tutorial/">an Android app</a> anyway, but with Droid Migrate, you get a specially enhanced <code>DatabaseHelper</code> that determines which version of a target database instance is the most current and runs the appropriate migrations to bring the database to that version.</p>
-
-<p>Thus, with your newly minted <code>DatabaseHelper</code> class, you can still interact with your app's database like you would normally, however, by using this class, all migrations are handled for you. Allow me to demonstrate.</p>
-
-<p><a href="https://github.com/aglover/tidbit">I've created a simple app</a> that doesn't interact with any database at this point -- it simply creates a <code>ListView</code> that is intended to hold a list of records for viewing. You can find this app on <a href="https://github.com/aglover/tidbit">Github</a> if you'd like to follow along. Nevertheless, the app's main Activity is shown below.</p>
-
-<p>``` java Simple Android app w/o any SQLite logic
-package com.b50.db.ex;</p>
-
-<p>import android.app.Activity;
-import android.os.Bundle;
-import android.widget.TextView;</p>
-
-<p>public class MainActivity extends Activity {</p>
-
-<p>  protected void onCreate(Bundle savedInstanceState) {</p>
-
-<pre><code>super.onCreate(savedInstanceState);
-setContentView(R.layout.activity_main);
-TextView textView = (TextView) findViewById(R.id.textView1);
-textView.setText("This would be a list from a DB if there was a DB");
-</code></pre>
-
-<p>  }
-}
-```</p>
-
-<p>What I'd like to do is add the ability to interact with a SQLite database; plus, I'd like to be able to evolve the data model on subsequent releases. This is where Droid Migrate shines.</p>
-
-<p>After I've installed Droid Migrate (simply clone or download the code, build it, and put it into your <code>PATH</code> and create new environment variable dubbed <code>DROID_MIGRATE_HOME</code>), I can initialize my app to use Droid Migrate by opening up a terminal in the root of my app and typing:</p>
-
-<p><code>bash Initializing Droid Migrate
-$&gt; droid-migrate init -d a_catalog
-</code></p>
-
-<p>The <code>-d</code> flag specifies the name of my desired database. I can optionally provide a package name via the <code>-p</code> flag if I'd like my newly generated classes in a separate package from my main app.</p>
-
-<p>If you take a look at your app's code, you should notice a number of new things. First, you'll see two new classes and a new jar file. The classes are the aforementioned <code>DatabaseHelper</code> and a class dubbed <code>DBVersion1</code>. The newly added jar file in your app's <code>libs</code> folder contains a few classes that correspond to Droid Migrate's runtime dependencies -- this jar is extremely compact at 4KB.</p>
-
-<p>The <code>DatabaseHelper</code> class is brutally simple:</p>
-
-<p>```java DatabaseHelper couldn't be any easier
-package com.b50.db.ex;</p>
-
-<p>import com.b50.db.ex.R;
-import android.content.Context;
-import com.b50.migrations.MigrationsDatabaseHelper;</p>
-
-<p>public class DatabaseHelper extends MigrationsDatabaseHelper {</p>
-
-<p>  public DatabaseHelper(Context context) {</p>
-
-<pre><code>super(context, context.getString(R.string.database_name), null, 
-  context.getResources().getInteger(R.integer.database_version), 
-  context.getString(R.string.package_name));
-</code></pre>
-
-<p>  }
-}
-```</p>
-
-<p>This class extends Droid Migrate's <code>MigrationsDatabaseHelper</code>, which ultimately extends Android's <code>SQLiteOpenHelper</code> so as I mentioned earlier, you've got everything you need to interact with SQLite at your fingertips via <code>DatabaseHelper</code>. If you look closely, you'll see that this class makes use of a specialized XML file (that is ultimately generated into your <code>R</code> class).</p>
-
-<p>Take a look in the <code>res/values</code> folder and open up the newly created <code>migrations.xml</code> file. It should look something like this:</p>
-
-<p>```xml migrations.xml contains database version, package name and database name
-&lt;?xml version="1.0" encoding="utf-8"?>
-<resources></p>
-
-<pre><code>&lt;integer name="database_version"&gt;1&lt;/integer&gt;
-&lt;string name="database_name"&gt;a_catalog&lt;/string&gt;
-&lt;string name="package_name"&gt;com.b50.db.ex&lt;/string&gt;
-</code></pre>
-
-<p></resources>
-```</p>
-
-<p>Note the value of <code>database_version</code> -- it's 1. This corresponds to the <code>DBVersion1</code> class that was generated. Take a look at that class:</p>
-
-<p>```java DBVersion1 is your initial migration class
-package com.b50.db.ex;</p>
-
-<p>import com.b50.migrations.AbstractMigration;</p>
-
-<p>public class DBVersion1 extends AbstractMigration {</p>
-
-<pre><code>public void up() {
-    //execSQL("some sql create stmts");
-}
-
-public void down() {
-    //execSQL("some delete sql stmts");
-}
-</code></pre>
-
-<p>}
-```</p>
-
-<p>This class is where you implement your initial migration, which would create various tables and populate them. Use the <code>execSQL</code> method to pass in a valid SQL <code>String</code>. For example, I'll create an initial migration like so:</p>
-
-<p>```java DBVersion1 is now implemented
-package com.b50.db.ex;</p>
-
-<p>import com.b50.migrations.AbstractMigration;</p>
-
-<p>public class DBVersion1 extends AbstractMigration {</p>
-
-<pre><code>public void up() {
-    String create = "CREATE TABLE hops (_id integer  PRIMARY KEY AUTOINCREMENT DEFAULT NULL, name TEXT, description TEXT, substitutions TEXT DEFAULT '', alpha_acid TEXT DEFAULT '', beer_styles TEXT DEFAULT '', type TEXT DEFAULT '', user_notes TEXT DEFAULT '');";
-    execSQL(create);
-    String oneThing = "INSERT INTO 'hops' VALUES(1,'Amarillo','Spicy hop with mild bitterness and a noble aroma.  Good all around hop.','Cascade, Centennial','7 to 10','Ale, IPA','Aroma', '');";
-    execSQL(oneThing);
-}
-
-public void down() {
-    execSQL("DROP TABLE hops;");
-}
-</code></pre>
-
-<p>}
-```</p>
-
-<p>As you can see, my <code>up</code> method creates a table and inserts one record. My <code>down</code> method rolls things back, which in this case means dropping the created table.</p>
-
-<p>Now all I have to do is make use of my app's <code>DatabaseHelper</code> instance and Droid Migrate will ensure things are properly initialized. Therefore, I'll update the original Activity to display a list of what's in the database, which I know only to be one record based upon my initial migration.</p>
-
-<p>```java Updated Activity to interact with SQLite
-package com.b50.db.ex;</p>
-
-<p>import android.app.Activity;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;</p>
-
-<p>public class MainActivity extends Activity {</p>
-
-<p>  protected SQLiteDatabase db;</p>
-
-<p>  protected void onCreate(Bundle savedInstanceState) {</p>
-
-<pre><code>super.onCreate(savedInstanceState);
-setContentView(R.layout.activity_main);
-
-this.db = (new DatabaseHelper(this)).getWritableDatabase();
-ListView list = (ListView) findViewById(R.id.list);
-
-ListAdapter adapter = getAdaptorForQuery("SELECT _id, name, description FROM hops ORDER BY name ASC", null);
-list.setAdapter(adapter);
-</code></pre>
-
-<p>  }</p>
-
-<p>  private ListAdapter getAdaptorForQuery(String queryString, String[] parameters) {</p>
-
-<pre><code>Cursor cursor = this.db.rawQuery(queryString, parameters);
-return new SimpleCursorAdapter(this, R.layout.list_item, cursor,
-            new String[] { "name", "description" }, new int[] { R.id.hopName, R.id.description }, 0);
-</code></pre>
-
-<p>  }
-}
-```</p>
-
-<p>As you can see from the code above, the app now makes a query to the underlying SQLite instance and builds a <code>ListView</code> from the result set of the query.</p>
-
-<p>The key line is how the <code>SQLiteDatabase</code> instance is obtained: <code>this.db = (new DatabaseHelper(this)).getWritableDatabase();</code> -- that is where all the magic takes place. Droid Migrate passes along the version number to the Android platform and if there is a change, the Android platform will call a series of life-cycle methods, which Droid Migrate wires up with your migrations.</p>
-
-<p>For instance, let's imagine that a subsequent release of this app adds more data to the <code>hops</code> table. Therefore, I'll generate a new migration. This is done by typing the following command within the root directory of your project like so:</p>
-
-<p><code>bash Generating a new migration
-$&gt; droid-migrate generate up
-</code></p>
-
-<p>The <code>up</code> flag signifies an increase in the database version (i.e. version++) and <code>down</code> indicates a rollback (i.e. version--). If you take a look at your app's code, you'll notice a new class: <code>DBVersion2</code> and your <code>migrations.xml</code> file has been updated: the <code>database_version</code> value is now 2.</p>
-
-<p>I'll implement my <code>DBVersion2</code> class like so:</p>
-
-<p>```java Implementing DBVersion2 to add one more row of data
-package com.b50.db.ex;</p>
-
-<p>import com.b50.migrations.AbstractMigration;</p>
-
-<p>public class DBVersion2 extends AbstractMigration {</p>
-
-<pre><code>public void up() {
-    execSQL("INSERT INTO 'hops' VALUES(100,'Zythos','New IPA style hop blend created to optimize and exceed the aroma characteristics of the traditional, and sometimes hard to get, IPA hops.','Amarillo, Columbus, Cascade','9.5 to 12','IPAs','Bittering and Aroma', '');");
-}
-
-public void down() {
-    execSQL("DELETE from 'hops' where _id = 100");
-}
-</code></pre>
-
-<p>}
-```</p>
-
-<p>Now if I fire up my app, the <code>ListView</code> will have 2 items in it!</p>
-
-<p>{% img center /images/mine/migrate_2.png %}</p>
-
-<p>What about if you need to rollback? That's just as easy. Imagine that the addition of that second row of data was a gigantic mistake and instead I really only want one row (i.e. I only want the data originally created in <code>DBVersion1</code>). All I have to do is type within the root of my project:</p>
-
-<p><code>bash Rollbacks in Droid Migrate are just as easy
-$&gt; droid-migrate generate down
-</code></p>
-
-<p>After typing the above command, you should see the following output:</p>
-
-<p><code>bash Rollback to version 1!
-Generating a rollback migration...
-Rolling back your migrations.xml file to indicate database version 1
-Done!
-</code></p>
-
-<p>The only thing that'll change in your project is the <code>migrations.xml</code> file -- the <code>database_version</code> value will be rolled back to 1 (or what ever 1 minus the current version is).</p>
-
-<p>Fire the app back up, and behold: one value is displayed because <code>DBVersion2</code>'s <code>down</code> method was executed!</p>
-
-<p>Droid Migrate makes upgrades and rollbacks to your underlying SQLite database a breeze; what's more, it can handle upgrades or rollbacks beyond just one version. That is, if an app instance is upgraded from version 2 to version 6, each migration will be run in order (3, 4, 5, and 6). The same is true of a rollback.</p>
-
-<p>If you are working with SQLite in an Android app, I highly recommend you take a look at <a href="https://github.com/aglover/droid-migrate">Droid Migrate</a>!</p>
 ]]></content>
   </entry>
   
