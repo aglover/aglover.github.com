@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AWS | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-09-26T10:26:17-04:00</updated>
+  <updated>2013-09-29T17:28:22-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,11 +14,114 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Ahoy there callbacks!]]></title>
+    <link href="http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks/"/>
+    <updated>2013-09-29T16:30:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks</id>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/callback.jpg %}Because it's my bag, I like <a href="http://thediscoblog.com/blog/categories/javascript/">JavaScript</a>. In fact, I've grown to love JavaScritp's asynchronous <a href="http://en.wikipedia.org/wiki/Callback_(computer_programming">callback oriented style of programming</a>. Consequently, when I find myself in a non-JavaScript environment, say, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, I tend to miss using callbacks.</p>
+
+<p>The good news is that you can <em>emulate</em> asynchronous callbacks in Java. In fact, I did just that recently with a library I've dubbed <a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">SQS adapter</a> for AWS's Java <a href="http://aws.amazon.com/sqs/">SQS</a> library.</p>
+
+<!-- more -->
+
+
+<p>For the uninitiated, <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">SQS is a cloud based messaging platform</a> -- with SQS you can create queues and put messages onto those queues, which can then be read -- later or immediately by some other process or the same exact process. All of this leverages Amazon’s massively redundant architecture to offer extremely high availability in the face of concurrent access.</p>
+
+<p>Asynchronous callbacks in Java can be achieved with two features: anonymous classes (containing one method) and Java's <code>java.util.concurrent</code> package.</p>
+
+<p>Because Java doesn't allow you to pass functions (or methods) <em>easily</em> as a parameter, to simulate a callback, you can create an interface that contains one method, which basically mimics a function. In the case of Ahoy, there are two interfaces: <code>MessageSendCallback</code> and <code>MessageReceivedCallback</code> -- both have one method: <code>onSend</code> and <code>onReceive</code> respectively. Accordingly, Ahoy!''s primary class, dubbed <code>SQSAdapter</code> exposes two simple methods: <code>send</code> and <code>receive</code> and both take their related callback interface.</p>
+
+<p>The most straightforward callback to understand is the <code>receive</code> method. As you can imagine, <code>receive</code> is intended to handle behavior when a message is received off of a particular queue. Thus, the <code>receive</code> method is defined as follows:</p>
+
+<p><code>java SQSAdapter's receive method
+public void receive(final MessageReceivedCallback callback) {}
+</code></p>
+
+<p>The <code>MessageReceivedCallback</code> interface looks like this:</p>
+
+<p>``` java The MessageReceivedCallback interface
+public interface MessageReceivedCallback {</p>
+
+<pre><code>public void onReceive(String messageId, String message);
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Note, the <code>onReceive</code> method takes a message id (which is particular to SQS) and the message itself -- which in the case of SQS is always a <code>String</code> (that <code>String</code> can hold anything you want, keep in mind: JSON, XML, byte sequence, etc).</p>
+
+<p>Thus, clients of Ahoy! provide the intended behavior for a message when it is received. This behavior could be to write something to a database, generate another message and send it on another queue, you name it.</p>
+
+<p>Now the interesting part is the implementation of Ahoy!'s <code>receive</code> method. To achieve asynchronocity, I employed Java's <code>java.util.concurrent</code> package, which sadly, seems to be under appreciated.</p>
+
+<p>``` java The receive method's implementation with callback being invoked
+private void receive(final AmazonSQS sqs, final String queueURL, final MessageReceivedCallback callback) {
+  pool.execute(new Runnable() {</p>
+
+<pre><code>public void run() {
+  final List&lt;Message&gt; messages = sqs.receiveMessage(
+          new ReceiveMessageRequest(queueURL).withMaxNumberOfMessages(10).withWaitTimeSeconds(20)).getMessages();
+  if (messages.size() &gt; 0) {
+      for (final Message message : messages) {
+        callback.onReceive(message.getMessageId(), message.getBody());
+        sqs.deleteMessage(new DeleteMessageRequest(queueURL, message.getReceiptHandle()));
+      }
+  }
+}
+</code></pre>
+
+<p>  });
+}
+```</p>
+
+<p>With a fixed Thread pool, a thread is created, which waits for messages to arrive on a particular queue; when one shows up, the passed in <code>MessageReceivedCalledback</code> is invoked for each message.</p>
+
+<p>For an example of how this works for clients of Ahoy!, here's a test case that verifies the execution of the callback:</p>
+
+<p>``` java The receive method implemented
+final boolean[] wasReceived = {false};
+ahoy.receive(new MessageReceivedCallback() {
+  public void onReceive(String messageId, String message) {</p>
+
+<pre><code>wasReceived[0] = true;
+assertNotNull("message id was null", messageId);
+assertEquals("message wasn't " + origMessage, origMessage, message);
+</code></pre>
+
+<p>  }
+});
+```</p>
+
+<p>Likewise, sending a message is similar -- a new <code>Runnable</code> instance is created, which sends a particular message and invokes the passed in <code>MessageSentCallback</code>'s <code>onSend</code> method, passing in the newly sent messages's id.</p>
+
+<p>``` java The send method is also asynchronous
+private void send(final AmazonSQS sqs, final String queueURL, final String message, final MessageSentCallback callback) {
+  pool.execute(new Runnable() {</p>
+
+<pre><code>  public void run() {
+  SendMessageResult res = sqs.sendMessage(new SendMessageRequest(queueURL, message));
+  if (callback != null) {
+    callback.onSend(res.getMessageId());
+  }
+  }
+</code></pre>
+
+<p>  });
+}
+```</p>
+
+<p>Incidentally, the AWS Java SDK <em>does provide an asynchronous client</em>; however, this client's implementation leverages Java's <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html">Futures</a>. While <a href="http://nurkiewicz.blogspot.com/2013/02/javautilconcurrentfuture-basics.html">Futures are a neat concept</a>, Ahoy!'s implementation is more convenient (<em>at least for me and in the patterns of how I employ SQS</em>) than Futures as there isn't any polling involved once a message is sent or received.</p>
+
+<p>While callbacks aren't <a href="http://en.wikipedia.org/wiki/Function_object#In_Java">necessarily supported</a> natively in Java, you can emulate them quite nicely and achieve the same level of code conciseness as what's common in JavaScript. And if you need a handy way to interface with AWS SQS, <a href="https://github.com/aglover/ahoy">then give Ahoy! a try</a>! Can you dig it, man?</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[ElasticSearch on EC2 in less than 60 seconds]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/"/>
     <updated>2013-05-17T17:24:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/es-bonzai.jpg">Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend -- in less than 60 seconds, I'll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/es-bonzai.jpg %}Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend -- in less than 60 seconds, I'll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
 
 <p>You'll first <a href="http://www.drdobbs.com/web-development/getting-started-with-the-cloud-amazon-we/231601598">need an AWS account</a> along with an SSH key pair. If you don't already have those two steps done, go ahead and do that. The steps that follow suggest a particular AMI; however, you are free to select the <a href="http://aws.amazon.com/ec2/instance-types/">instance type</a>. <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Micro instance types</a> are free to use; consequently, you can get <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">up and running with ElasticSearch</a> in less than a minute <em>for free</em>.</p>
 
@@ -72,7 +175,7 @@ wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/e
     <link href="http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
     <updated>2013-05-01T09:10:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/hat-trick.png %}<a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
 
 <p>It's easy to configure a <a href="http://rubyonrails.org/">Rails</a> app to take advantage of CloudFront; what's more, if your Rails app is hosted on <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-21/">Heroku</a>, there's <a href="https://github.com/romanbsd/heroku-deflater">a nifty gem</a>, dubbed heroku-deflater, that'll enable <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP compression</a> of static assets (<a href="http://stackoverflow.com/questions/12326191/any-way-to-serve-gzip-assets-from-heroku">other than images</a>).</p>
 
@@ -99,19 +202,19 @@ Content-Encoding: gzip
 
 <p>Next, sign into the AWS Management Console and enable CloudFront if you haven't already. From the CloudFront admin page, create a new distribution via the Create Distribution button on the top left.</p>
 
-<p><img class="center" src="/images/mine/cloudfront_1.png"></p>
+<p>{% img center /images/mine/cloudfront_1.png %}</p>
 
 <p>Once the create distribution wizard begins, be sure to select Download as your delivery method.</p>
 
-<p><img class="center" src="/images/mine/cloudfront_2.png"></p>
+<p>{% img center /images/mine/cloudfront_2.png %}</p>
 
 <p>In the next screen, there are some important fields you'll need to fill out, namely: the Origin Source Name and the Viewer Protocol Policy. For the Origin Source Name, you will need to put in your app's URL or the Heroku URL (if you do not map a custom domain name to it). If you web site supports HTTPS, then be sure to set the Viewer Protocol Policy to HTTP and HTTPS.</p>
 
-<p><img class="center" src="/images/mine/cloudfront_3.png"></p>
+<p>{% img center /images/mine/cloudfront_3.png %}</p>
 
 <p>The only other important setting after these two is the Price Class. It's here where you can set where CloudFront will essentially serve up your content -- the default setting of Use All Edge Locations is most likely what you need.</p>
 
-<p><img class="center" src="/images/mine/cloudfront_5.png"></p>
+<p>{% img center /images/mine/cloudfront_5.png %}</p>
 
 <p>Finally, click the Create Distribution button -- once you do that, it'll take a bit for things to initialize (basically, the CDN needs to get built and this may take up to 30 minutes).</p>
 
@@ -134,11 +237,11 @@ config.action_controller.asset_host = 'the domain name from AWS Dashboard'
 
 <p>In this case, <a href="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/">I'm using Chrome</a>. Go to JavaScript console and hit the Network tab.</p>
 
-<p><img class="center" src="/images/mine/cloudfront_6.png"></p>
+<p>{% img center /images/mine/cloudfront_6.png %}</p>
 
 <p>Surf around and you'll note a few things -- one, that the assets like images and JavaScript files are being severed up from your CDN (just look at the URL) and that the size will often say "(from cache)" -- that means the CDN is handling the load rather than <a href="http://www.ibm.com/developerworks/podcast/glover-heroku-110811/">Heroku</a>. You should also note that your web app is probably a bit more snappy!</p>
 
-<p><img class="center" src="/images/mine/cloudfront_7.png"></p>
+<p>{% img center /images/mine/cloudfront_7.png %}</p>
 
 <p>Check out your Heroku logs and you'll note fewer hits in this case -- dynamic pages are still being loaded, however, static assets are not anymore -- that's the job of your CDN!</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-09-26T10:26:17-04:00</updated>
+  <updated>2013-09-29T17:27:58-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,133 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ahoy there callbacks!]]></title>
+    <link href="http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks/"/>
+    <updated>2013-09-29T16:30:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/callback.jpg">Because it&#8217;s my bag, I like <a href="http://thediscoblog.com/blog/categories/javascript/">JavaScript</a>. In fact, I&#8217;ve grown to love JavaScritp&#8217;s asynchronous <a href="http://en.wikipedia.org/wiki/Callback_(computer_programming">callback oriented style of programming</a>. Consequently, when I find myself in a non-JavaScript environment, say, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, I tend to miss using callbacks.</p>
+
+<p>The good news is that you can <em>emulate</em> asynchronous callbacks in Java. In fact, I did just that recently with a library I&#8217;ve dubbed <a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">SQS adapter</a> for AWS&#8217;s Java <a href="http://aws.amazon.com/sqs/">SQS</a> library.</p>
+
+<!-- more -->
+
+
+<p>For the uninitiated, <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">SQS is a cloud based messaging platform</a> &#8211; with SQS you can create queues and put messages onto those queues, which can then be read &#8211; later or immediately by some other process or the same exact process. All of this leverages Amazon’s massively redundant architecture to offer extremely high availability in the face of concurrent access.</p>
+
+<p>Asynchronous callbacks in Java can be achieved with two features: anonymous classes (containing one method) and Java&#8217;s <code>java.util.concurrent</code> package.</p>
+
+<p>Because Java doesn&#8217;t allow you to pass functions (or methods) <em>easily</em> as a parameter, to simulate a callback, you can create an interface that contains one method, which basically mimics a function. In the case of Ahoy, there are two interfaces: <code>MessageSendCallback</code> and <code>MessageReceivedCallback</code> &#8211; both have one method: <code>onSend</code> and <code>onReceive</code> respectively. Accordingly, Ahoy!&#8221;s primary class, dubbed <code>SQSAdapter</code> exposes two simple methods: <code>send</code> and <code>receive</code> and both take their related callback interface.</p>
+
+<p>The most straightforward callback to understand is the <code>receive</code> method. As you can imagine, <code>receive</code> is intended to handle behavior when a message is received off of a particular queue. Thus, the <code>receive</code> method is defined as follows:</p>
+
+<figure class='code'><figcaption><span>SQSAdapter&#8217;s receive method</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">receive</span><span class="o">(</span><span class="kd">final</span> <span class="n">MessageReceivedCallback</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>MessageReceivedCallback</code> interface looks like this:</p>
+
+<figure class='code'><figcaption><span>The MessageReceivedCallback interface</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MessageReceivedCallback</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onReceive</span><span class="o">(</span><span class="n">String</span> <span class="n">messageId</span><span class="o">,</span> <span class="n">String</span> <span class="n">message</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note, the <code>onReceive</code> method takes a message id (which is particular to SQS) and the message itself &#8211; which in the case of SQS is always a <code>String</code> (that <code>String</code> can hold anything you want, keep in mind: JSON, XML, byte sequence, etc).</p>
+
+<p>Thus, clients of Ahoy! provide the intended behavior for a message when it is received. This behavior could be to write something to a database, generate another message and send it on another queue, you name it.</p>
+
+<p>Now the interesting part is the implementation of Ahoy!&#8217;s <code>receive</code> method. To achieve asynchronocity, I employed Java&#8217;s <code>java.util.concurrent</code> package, which sadly, seems to be under appreciated.</p>
+
+<figure class='code'><figcaption><span>The receive method&#8217;s implementation with callback being invoked</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kt">void</span> <span class="nf">receive</span><span class="o">(</span><span class="kd">final</span> <span class="n">AmazonSQS</span> <span class="n">sqs</span><span class="o">,</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">queueURL</span><span class="o">,</span> <span class="kd">final</span> <span class="n">MessageReceivedCallback</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">pool</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Message</span><span class="o">&gt;</span> <span class="n">messages</span> <span class="o">=</span> <span class="n">sqs</span><span class="o">.</span><span class="na">receiveMessage</span><span class="o">(</span>
+</span><span class='line'>              <span class="k">new</span> <span class="nf">ReceiveMessageRequest</span><span class="o">(</span><span class="n">queueURL</span><span class="o">).</span><span class="na">withMaxNumberOfMessages</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">withWaitTimeSeconds</span><span class="o">(</span><span class="mi">20</span><span class="o">)).</span><span class="na">getMessages</span><span class="o">();</span>
+</span><span class='line'>      <span class="k">if</span> <span class="o">(</span><span class="n">messages</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="k">for</span> <span class="o">(</span><span class="kd">final</span> <span class="n">Message</span> <span class="n">message</span> <span class="o">:</span> <span class="n">messages</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">callback</span><span class="o">.</span><span class="na">onReceive</span><span class="o">(</span><span class="n">message</span><span class="o">.</span><span class="na">getMessageId</span><span class="o">(),</span> <span class="n">message</span><span class="o">.</span><span class="na">getBody</span><span class="o">());</span>
+</span><span class='line'>            <span class="n">sqs</span><span class="o">.</span><span class="na">deleteMessage</span><span class="o">(</span><span class="k">new</span> <span class="n">DeleteMessageRequest</span><span class="o">(</span><span class="n">queueURL</span><span class="o">,</span> <span class="n">message</span><span class="o">.</span><span class="na">getReceiptHandle</span><span class="o">()));</span>
+</span><span class='line'>          <span class="o">}</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">});</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>With a fixed Thread pool, a thread is created, which waits for messages to arrive on a particular queue; when one shows up, the passed in <code>MessageReceivedCalledback</code> is invoked for each message.</p>
+
+<p>For an example of how this works for clients of Ahoy!, here&#8217;s a test case that verifies the execution of the callback:</p>
+
+<figure class='code'><figcaption><span>The receive method implemented</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">final</span> <span class="kt">boolean</span><span class="o">[]</span> <span class="n">wasReceived</span> <span class="o">=</span> <span class="o">{</span><span class="kc">false</span><span class="o">};</span>
+</span><span class='line'><span class="n">ahoy</span><span class="o">.</span><span class="na">receive</span><span class="o">(</span><span class="k">new</span> <span class="n">MessageReceivedCallback</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onReceive</span><span class="o">(</span><span class="n">String</span> <span class="n">messageId</span><span class="o">,</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">wasReceived</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>    <span class="n">assertNotNull</span><span class="o">(</span><span class="s">&quot;message id was null&quot;</span><span class="o">,</span> <span class="n">messageId</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">assertEquals</span><span class="o">(</span><span class="s">&quot;message wasn&#39;t &quot;</span> <span class="o">+</span> <span class="n">origMessage</span><span class="o">,</span> <span class="n">origMessage</span><span class="o">,</span> <span class="n">message</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Likewise, sending a message is similar &#8211; a new <code>Runnable</code> instance is created, which sends a particular message and invokes the passed in <code>MessageSentCallback</code>&#8217;s <code>onSend</code> method, passing in the newly sent messages&#8217;s id.</p>
+
+<figure class='code'><figcaption><span>The send method is also asynchronous</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kt">void</span> <span class="nf">send</span><span class="o">(</span><span class="kd">final</span> <span class="n">AmazonSQS</span> <span class="n">sqs</span><span class="o">,</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">queueURL</span><span class="o">,</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">message</span><span class="o">,</span> <span class="kd">final</span> <span class="n">MessageSentCallback</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">pool</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">SendMessageResult</span> <span class="n">res</span> <span class="o">=</span> <span class="n">sqs</span><span class="o">.</span><span class="na">sendMessage</span><span class="o">(</span><span class="k">new</span> <span class="n">SendMessageRequest</span><span class="o">(</span><span class="n">queueURL</span><span class="o">,</span> <span class="n">message</span><span class="o">));</span>
+</span><span class='line'>      <span class="k">if</span> <span class="o">(</span><span class="n">callback</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">callback</span><span class="o">.</span><span class="na">onSend</span><span class="o">(</span><span class="n">res</span><span class="o">.</span><span class="na">getMessageId</span><span class="o">());</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">});</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Incidentally, the AWS Java SDK <em>does provide an asynchronous client</em>; however, this client&#8217;s implementation leverages Java&#8217;s <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html">Futures</a>. While <a href="http://nurkiewicz.blogspot.com/2013/02/javautilconcurrentfuture-basics.html">Futures are a neat concept</a>, Ahoy!&#8217;s implementation is more convenient (<em>at least for me and in the patterns of how I employ SQS</em>) than Futures as there isn&#8217;t any polling involved once a message is sent or received.</p>
+
+<p>While callbacks aren&#8217;t <a href="http://en.wikipedia.org/wiki/Function_object#In_Java">necessarily supported</a> natively in Java, you can emulate them quite nicely and achieve the same level of code conciseness as what&#8217;s common in JavaScript. And if you need a handy way to interface with AWS SQS, <a href="https://github.com/aglover/ahoy">then give Ahoy! a try</a>! Can you dig it, man?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[App signing: iOS versus Android]]></title>
@@ -1780,58 +1907,6 @@
 
 
 <p>Was that easy or what?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MongoDB to CSV]]></title>
-    <link href="http://thediscoblog.com/blog/2013/06/07/mongodb-to-csv/"/>
-    <updated>2013-06-07T20:01:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/06/07/mongodb-to-csv</id>
-    <content type="html"><![CDATA[<p>Every once in a while, I need to give a non-technical user (like a business analyst) data residing in <a href="http://www.mongodb.org/">MongoDB</a>; consequently, I export the target data as a <a href="http://en.wikipedia.org/wiki/Comma-separated_values">CSV file</a> (which they can presumably slice and dice once they import it into Excel or some similar tool). Mongo has a handy <a href="http://docs.mongodb.org/manual/reference/program/mongoexport/">export utility</a> that takes a bevy of options, however, there is an <a href="https://jira.mongodb.org/browse/SERVER-4224">outstanding bug</a> and some <a href="http://stackoverflow.com/questions/6814151/how-to-export-collection-to-csv-in-mongodb">general confusion</a> as to how to properly export data in CSV format.</p>
-
-<!-- more -->
-
-
-<p>Accordingly, if you need to export some specific data from MongoDB into CSV format, here&#8217;s how you do it. The key parameters are connection information to include authentication, an output file, and most important, a list of fields to export. What&#8217;s more, you can provide a query in escaped JSON format.</p>
-
-<p>You can find the <code>mongoexport</code> utility in your Mongo installation <code>bin</code> directory. I tend to favor verbose parameter names and explicit connection information (i.e. rather than a URL syntax, I prefer to spell out the host, port, db, etc directly).  As I&#8217;m targeting specific data, I&#8217;m going to specify the collection; what&#8217;s more, I&#8217;m going to further filter the data via a query.</p>
-
-<p><code>ObjectId</code>&#8217;s can be referenced via the <code>$oid</code> format; furthermore, you&#8217;ll need to escape all JSON quotes. For example, if my query is against a <code>users</code> collection and filtered by <code>account_id</code> (which is an <code>ObjectId</code>), the query via the <code>mongo</code> shell would be:</p>
-
-<figure class='code'><figcaption><span>Mongo Shell Query</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">db</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">account_id</span><span class="o">:</span><span class="nx">ObjectId</span><span class="p">(</span><span class="s1">&#39;5058ca07b7628c0002099006&#39;</span><span class="p">)})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Via the command line &agrave; la <code>monogexport</code>, this translates to:</p>
-
-<figure class='code'><figcaption><span>Collections and queries</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'> --collection users --query <span class="s2">&quot;{\&quot;account_id\&quot;: {\&quot;\$oid\&quot;: \&quot;5058ca07b7628c0002000006\&quot;}}&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Finally, if you want to only export a portion of the fields in a <code>user</code> document, for example, <code>name</code>, <code>email</code>, and <code>created_at</code>, you need to provide them via the <code>fields</code> parameter like so:</p>
-
-<figure class='code'><figcaption><span>Fields declaration</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>--fields name,email,created_at
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Putting it all together yields the following command:</p>
-
-<figure class='code'><figcaption><span>Puttin&#8217; it all together</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>mongoexport --host mgo.acme.com --port 10332 --username acmeman --password 12345  <span class="se">\</span>
-</span><span class='line'>--collection users --csv --fields name,email,created_at --out all_users.csv --db my_db <span class="se">\</span>
-</span><span class='line'>--query <span class="s2">&quot;{\&quot;account_id\&quot;: {\&quot;\$oid\&quot;: \&quot;5058ca07b7628c0999000006\&quot;}}&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Of course, you can throw this into a bash script and parameterize the <code>collection</code>, <code>fields</code>, output file, and query with bash&#8217;s handy <code>$1</code>, <code>$2</code>, etc variables.</p>
-
-<p>Got it?</p>
 ]]></content>
   </entry>
   

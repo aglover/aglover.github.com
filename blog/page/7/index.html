@@ -88,6 +88,60 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/08/28/leaner-jquery-with-zepto/">Leaner JQuery With Zepto</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-28T13:04:00-04:00" pubdate data-updated="true">Aug 28<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In a recent conversation with my friend <a href="http://jonathanstark.com/">Jonathan Stark</a> we talked about how much has changed in mobile web development since <a href="http://www.ibm.com/developerworks/podcast/glover-stark-112911/index.html">he and I chatted about cross-platform mobile development</a> in November of 2011. Of particular interest was how much adoption mobile web sites have achieved in less than a year &#8211; yet, the adoption hasn&#8217;t always been smooth. In fact, he pointed out a decidedly humorous site dubbed <a href="http://wtfmobileweb.com/">WTF Mobile Web</a>, which aims to educate the mobile web community via examples.</p>
+
+<p>One of the entries you can find on wtfmobileweb.com is an interesting Tweet, which I happened to see on <a href="https://twitter.com/jonathanstark">Jonthan</a>&#8217;s timeline. <a href="https://twitter.com/@philhawksworth">@philhawksworth</a> notes that <a href="http://grolsch.com/">grolsch.com</a> isn&#8217;t particularly mobile-savvy:</p>
+
+<blockquote><p>Dear web developers of the world. Can we stop this silliness before somebody gets hurt?!</p><footer><strong>@philhawksworth</strong> <cite><a href='https://twitter.com/philhawksworth/status/223805766161797121'>twitter.com/philhawksworth/&hellip;</a></cite></footer></blockquote>
+
+
+<p>If you look closely in the image referenced by the tweet (or on wtfmobileweb.com), you&#8217;ll see that slightly over 24MB of content is downloaded over the course of 388 requests. And that, presumably, a lot of that content is coming from everyone&#8217;s friend <a href="http://jquery.com/">JQuery</a>.</p>
+
+<p>JQuery is an excellent library; however, it just <em>might</em> contain a lot of unneeded code. And in the case of the mobile web, that translates into longer download times, which ultimately might yield a subpar user experience. Accordingly, if you still need a majority of JQuery&#8217;s features but not its weight, you might want to give <a href="http://zeptojs.com/">Zepto</a> a look.</p>
+
+<p>As Zepto&#8217;s website puts it:</p>
+
+<blockquote><p>Zepto is a minimalist JavaScript library for modern browsers with a largely jQuery-compatible API. If you use jQuery, you already know how to use Zepto.</p></blockquote>
+
+
+<p>Indeed, JQuery&#8217;s <code>$</code> is there in all its glory &#8211; only just <em>slimmer</em>. I was able to substitute in Zepto for JQuery in a <a href="https://github.com/aglover/caprice">PhoneGap</a> project without any issues. Give it a shot &#8211; unless you like having your website end up on wtfmobileweb.com!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2012/08/27/scala-and-typesafe-exciting-not-disruptive/">Scala &amp; Typesafe: Exciting. Not Disruptive</a></h1>
       
     
@@ -153,6 +207,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/29/ahoy-there-callbacks/">Ahoy there callbacks!</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/26/app-signing-ios-versus-android/">App signing: iOS versus Android</a>
       </li>
     
@@ -166,10 +224,6 @@
     
       <li class="post">
         <a href="/blog/2013/09/14/understanding-elasticsearch-analyzers/">Understanding ElasticSearch analyzers</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters/">8% is itty-bitty, but it matters</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-09-26T10:26:17-04:00</updated>
+  <updated>2013-09-29T17:28:22-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,11 +14,114 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Ahoy there callbacks!]]></title>
+    <link href="http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks/"/>
+    <updated>2013-09-29T16:30:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks</id>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/callback.jpg %}Because it's my bag, I like <a href="http://thediscoblog.com/blog/categories/javascript/">JavaScript</a>. In fact, I've grown to love JavaScritp's asynchronous <a href="http://en.wikipedia.org/wiki/Callback_(computer_programming">callback oriented style of programming</a>. Consequently, when I find myself in a non-JavaScript environment, say, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, I tend to miss using callbacks.</p>
+
+<p>The good news is that you can <em>emulate</em> asynchronous callbacks in Java. In fact, I did just that recently with a library I've dubbed <a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">SQS adapter</a> for AWS's Java <a href="http://aws.amazon.com/sqs/">SQS</a> library.</p>
+
+<!-- more -->
+
+
+<p>For the uninitiated, <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">SQS is a cloud based messaging platform</a> -- with SQS you can create queues and put messages onto those queues, which can then be read -- later or immediately by some other process or the same exact process. All of this leverages Amazon’s massively redundant architecture to offer extremely high availability in the face of concurrent access.</p>
+
+<p>Asynchronous callbacks in Java can be achieved with two features: anonymous classes (containing one method) and Java's <code>java.util.concurrent</code> package.</p>
+
+<p>Because Java doesn't allow you to pass functions (or methods) <em>easily</em> as a parameter, to simulate a callback, you can create an interface that contains one method, which basically mimics a function. In the case of Ahoy, there are two interfaces: <code>MessageSendCallback</code> and <code>MessageReceivedCallback</code> -- both have one method: <code>onSend</code> and <code>onReceive</code> respectively. Accordingly, Ahoy!''s primary class, dubbed <code>SQSAdapter</code> exposes two simple methods: <code>send</code> and <code>receive</code> and both take their related callback interface.</p>
+
+<p>The most straightforward callback to understand is the <code>receive</code> method. As you can imagine, <code>receive</code> is intended to handle behavior when a message is received off of a particular queue. Thus, the <code>receive</code> method is defined as follows:</p>
+
+<p><code>java SQSAdapter's receive method
+public void receive(final MessageReceivedCallback callback) {}
+</code></p>
+
+<p>The <code>MessageReceivedCallback</code> interface looks like this:</p>
+
+<p>``` java The MessageReceivedCallback interface
+public interface MessageReceivedCallback {</p>
+
+<pre><code>public void onReceive(String messageId, String message);
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Note, the <code>onReceive</code> method takes a message id (which is particular to SQS) and the message itself -- which in the case of SQS is always a <code>String</code> (that <code>String</code> can hold anything you want, keep in mind: JSON, XML, byte sequence, etc).</p>
+
+<p>Thus, clients of Ahoy! provide the intended behavior for a message when it is received. This behavior could be to write something to a database, generate another message and send it on another queue, you name it.</p>
+
+<p>Now the interesting part is the implementation of Ahoy!'s <code>receive</code> method. To achieve asynchronocity, I employed Java's <code>java.util.concurrent</code> package, which sadly, seems to be under appreciated.</p>
+
+<p>``` java The receive method's implementation with callback being invoked
+private void receive(final AmazonSQS sqs, final String queueURL, final MessageReceivedCallback callback) {
+  pool.execute(new Runnable() {</p>
+
+<pre><code>public void run() {
+  final List&lt;Message&gt; messages = sqs.receiveMessage(
+          new ReceiveMessageRequest(queueURL).withMaxNumberOfMessages(10).withWaitTimeSeconds(20)).getMessages();
+  if (messages.size() &gt; 0) {
+      for (final Message message : messages) {
+        callback.onReceive(message.getMessageId(), message.getBody());
+        sqs.deleteMessage(new DeleteMessageRequest(queueURL, message.getReceiptHandle()));
+      }
+  }
+}
+</code></pre>
+
+<p>  });
+}
+```</p>
+
+<p>With a fixed Thread pool, a thread is created, which waits for messages to arrive on a particular queue; when one shows up, the passed in <code>MessageReceivedCalledback</code> is invoked for each message.</p>
+
+<p>For an example of how this works for clients of Ahoy!, here's a test case that verifies the execution of the callback:</p>
+
+<p>``` java The receive method implemented
+final boolean[] wasReceived = {false};
+ahoy.receive(new MessageReceivedCallback() {
+  public void onReceive(String messageId, String message) {</p>
+
+<pre><code>wasReceived[0] = true;
+assertNotNull("message id was null", messageId);
+assertEquals("message wasn't " + origMessage, origMessage, message);
+</code></pre>
+
+<p>  }
+});
+```</p>
+
+<p>Likewise, sending a message is similar -- a new <code>Runnable</code> instance is created, which sends a particular message and invokes the passed in <code>MessageSentCallback</code>'s <code>onSend</code> method, passing in the newly sent messages's id.</p>
+
+<p>``` java The send method is also asynchronous
+private void send(final AmazonSQS sqs, final String queueURL, final String message, final MessageSentCallback callback) {
+  pool.execute(new Runnable() {</p>
+
+<pre><code>  public void run() {
+  SendMessageResult res = sqs.sendMessage(new SendMessageRequest(queueURL, message));
+  if (callback != null) {
+    callback.onSend(res.getMessageId());
+  }
+  }
+</code></pre>
+
+<p>  });
+}
+```</p>
+
+<p>Incidentally, the AWS Java SDK <em>does provide an asynchronous client</em>; however, this client's implementation leverages Java's <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html">Futures</a>. While <a href="http://nurkiewicz.blogspot.com/2013/02/javautilconcurrentfuture-basics.html">Futures are a neat concept</a>, Ahoy!'s implementation is more convenient (<em>at least for me and in the patterns of how I employ SQS</em>) than Futures as there isn't any polling involved once a message is sent or received.</p>
+
+<p>While callbacks aren't <a href="http://en.wikipedia.org/wiki/Function_object#In_Java">necessarily supported</a> natively in Java, you can emulate them quite nicely and achieve the same level of code conciseness as what's common in JavaScript. And if you need a handy way to interface with AWS SQS, <a href="https://github.com/aglover/ahoy">then give Ahoy! a try</a>! Can you dig it, man?</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Understanding ElasticSearch analyzers]]></title>
     <link href="http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers/"/>
     <updated>2013-09-14T08:37:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/old-beer.jpg">Sadly, lots of early Internet beer recipes aren't necessarily in an easily digestible format; that is, these recipes are <em>unstructured</em> intermixed lists of directions and ingredients often originally composed in an email or forum post.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/old-beer.jpg %}Sadly, lots of early Internet beer recipes aren't necessarily in an easily digestible format; that is, these recipes are <em>unstructured</em> intermixed lists of directions and ingredients often originally composed in an email or forum post.</p>
 
 <p>So while it's hard to easily put these recipes into traditional data stores (ostensibly for easier searching), they're perfect for <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">ElasticSearch</a> in their current form.</p>
 
@@ -159,7 +262,7 @@ for doc in data.hits.hits
     <link href="http://thediscoblog.com/blog/2013/08/13/whiskered-node-views/"/>
     <updated>2013-08-13T12:00:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/13/whiskered-node-views</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mustache_template.png">As we draw closer to the glorious month of <a href="http://us.movember.com/">Movember</a>, I find myself pondering the <a href="http://paularmstrong.github.io/node-templates/">myriad template engines</a> available for Node apps. The most popular is still probably <a href="http://jade-lang.com/">Jade</a> as its syntax is <a href="http://haml.info/">Haml</a>-like and results in quite clean views, lacking in HTMLish clutter.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/mustache_template.png %}As we draw closer to the glorious month of <a href="http://us.movember.com/">Movember</a>, I find myself pondering the <a href="http://paularmstrong.github.io/node-templates/">myriad template engines</a> available for Node apps. The most popular is still probably <a href="http://jade-lang.com/">Jade</a> as its syntax is <a href="http://haml.info/">Haml</a>-like and results in quite clean views, lacking in HTMLish clutter.</p>
 
 <p>While Jade is handy, it takes some time to get used to. Plus, if you find yourself working with a UI person who prefers to speak in HTML, you'll find yourself translating between HTML and Jade (which isn't that hard with web apps like <a href="http://html2jade.aaron-powell.com/">HTML2Jade</a>, but nevertheless involves an extra <em>translation</em> step).</p>
 
@@ -170,7 +273,9 @@ for doc in data.hits.hits
 
 <p>In the world of Node, there are <a href="https://github.com/raycmorgan/Mu">a few</a> Mustache implementations. One of the more interesting ones that I've used is <a href="https://github.com/gsf/whiskers.js/">Whiskers</a>. Whiskers is fairly lightweight and doesn't offer a lot of bells and whistles. As the project's README states</p>
 
-<p><blockquote><p>Whiskers is focused on template readability. By limiting template logic, careful preparation of the context is encouraged, and the processing and formatting of data is kept separate from the design of the display.</p><footer><strong>https://github.com/gsf/whiskers.js/</strong> <cite><a href='https://github.com/gsf/whiskers.js/'>About Whiskers.js</a></cite></footer></blockquote></p>
+<p>{% blockquote https://github.com/gsf/whiskers.js/ https://github.com/gsf/whiskers.js/ About Whiskers.js %}
+Whiskers is focused on template readability. By limiting template logic, careful preparation of the context is encouraged, and the processing and formatting of data is kept separate from the design of the display.
+{% endblockquote %}</p>
 
 <p>Accordingly, you can do variable substitution, conditional logic, and looping out-of-the-box easily. But that's about all.</p>
 
@@ -243,11 +348,13 @@ res.render 'index', {words: allWords}
     <link href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/"/>
     <updated>2013-08-07T21:09:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters</id>
-    <content type="html"><![CDATA[<p><img class="right" src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114.<em>V379662584</em>.png">Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
+    <content type="html"><![CDATA[<p>{% img right https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114.<em>V379662584</em>.png %}Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
 
 <p>As I wrote almost a year ago:</p>
 
-<p><blockquote><p>software delivery on the mobile platform is, at least for the foreseeable future, firmly established via app stores. And app stores cater to native apps (100% native and/or hybrid) only. The average person will not look for useful apps via their device’s browser: that route is still a jungle. And, at this point, there is no viable pure play mobile web app delivery channel.</p><footer><strong>thediscoblog.com</strong> <cite><a href='http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/'>Past Performance Is No Guarantee of Future Results</a></cite></footer></blockquote></p>
+<p>{% blockquote thediscoblog.com http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/ Past Performance Is No Guarantee of Future Results %}
+software delivery on the mobile platform is, at least for the foreseeable future, firmly established via app stores. And app stores cater to native apps (100% native and/or hybrid) only. The average person will not look for useful apps via their device’s browser: that route is still a jungle. And, at this point, there is no viable pure play mobile web app delivery channel.
+{% endblockquote %}</p>
 
 <p>Today, it's still true that the most convenient mechanism  for app delivery on mobile devices (and increasingly desktops) is via various app stores. And until today, HTML5 apps were not included in these app stores (unless they were wrapped by some hybrid-web container like <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">PhoneGap</a>).</p>
 
@@ -260,7 +367,9 @@ res.render 'index', {words: allWords}
 
 <p>As <a href="https://developer.amazon.com/blog/author/Mike+Hines.html">Mike Hines</a> of Amazon puts it:</p>
 
-<p><blockquote><p>Starting today, you can submit your web apps and mobile optimized web sites and have them merchandised alongside native apps on Amazon and Kindle Fire in nearly 200 countries worldwide, without any third-party software or doing any native app development.</p><footer><strong>https://developer.amazon.com/blog/</strong> <cite><a href='https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html'>Amazon Is Now Accepting HTML5 Web Apps—Making It Easy for You to Reach Millions of Kindle Fire and Android Customers Worldwide</a></cite></footer></blockquote></p>
+<p>{% blockquote https://developer.amazon.com/blog/ https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html Amazon is Now Accepting HTML5 Web Apps—Making it Easy for You to Reach Millions of Kindle Fire and Android Customers Worldwide %}
+Starting today, you can submit your web apps and mobile optimized web sites and have them merchandised alongside native apps on Amazon and Kindle Fire in nearly 200 countries worldwide, without any third-party software or doing any native app development.
+{% endblockquote %}</p>
 
 <p>This is big news for HTML5 developers. A direct channel to the masses and monetization APIs to boot -- what more could you ask for? Standby folks because it's about to get even more interesting, as I'm willing to bet that Google and Apple will follow suit in the near future.</p>
 ]]></content>
@@ -271,7 +380,7 @@ res.render 'index', {words: allWords}
     <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
     <updated>2013-07-30T12:52:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/swipe-right.png %}I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
 
 <p>Implementing right and left swipes in an <a href="http://jquerymobile.com/">jQuery Mobile</a> app is fairly straightforward, but there are a few gotchas that I was able to piece together via multiple <a href="http://stackoverflow.com/questions/7533772/how-to-swipe-between-several-jquery-mobile-pages">stackoverflow threads</a>, blogs, and finally <a href="http://api.jquerymobile.com/">jQuery Mobile's own documentation</a>.</p>
 
@@ -326,121 +435,6 @@ if (prevpage.length &gt; 0) {
 <p>```</p>
 
 <p>Once you've done that, you'll be able to swipe between page <code>div</code>s.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Callbacks in Appcelerator Titanium modules]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules/"/>
-    <updated>2013-05-29T13:42:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/appc_stacked.png">I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>'s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47's <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
-
-<p>In the end, what I wanted to implement was a <a href="http://recurial.com/programming/understanding-callback-functions-in-javascript/">JavaScript-ish callback</a> associated with a native App47 Agent call. Alas, it took me a lot of digging to achieve this goal.</p>
-
-<!-- more -->
-
-
-<p>For example, for a timed event (which, as you've probably guessed, captures how long an event took), rather than the more traditional call which is inline:</p>
-
-<p><code>javascript Straightforward method invocation
-var id = agent.startTimedEvent("openCrust 2.0.27");
-openCrust({});
-agent.endTimedEvent(id);
-</code></p>
-
-<p>I wanted a more JavaScript friendly call that wraps the timed code like so:</p>
-
-<p><code>javascript Callback invocation
-agent.timedEvent("openCrust 2.0.27", function() {
-  openCrust({});
-});
-</code></p>
-
-<p>This has the benefit of wrapping a desired event -- there is no explicit need for anyone to code the ending -- it is automatically done via the <code>timedEvent</code> call after invoking the passed in function.</p>
-
-<p>The Titanium module documentation is a bit hard to find (that is, finding up-to-date valid documentation is challenging); your best bet to see how to do something interesting is to look at the <a href="https://github.com/appcelerator/titanium_mobile/tree/master/android/modules">various code</a> repositories <a href="https://github.com/appcelerator/titanium_modules">on Github</a> followed by studying the API docs (i.e. JavaDocs and <a href="https://github.com/appcelerator/titanium_mobile/blob/master/iphone/Classes/KrollCallback.m">.h/.m files for iOS</a>).</p>
-
-<p>It turns out, invoking a JavaScript callback in either Android or iOS is fairly straightforward. In the case of Android, you need to use the <code>KrollFunction</code> type like so:</p>
-
-<p><code>java Wrapped Timed Event
-@Kroll.method
-public void timedEvent(String name, KrollFunction callback) {
-  String id = EmbeddedAgent.startTimedEvent(name);
-  callback.call(getKrollObject(), new HashMap&lt;String, String&gt;());
-  EmbeddedAgent.endTimedEvent(id);
-}
-</code></p>
-
-<p>As you can see in the above code, I'm not doing anything special like passing in any arguments to the <code>KrollFunction</code> instance. If you want to do that, say in the case of passing in some special value that the corresponding callback will use, then you can either pass in a <code>Map</code> or an <code>Object[]</code>.</p>
-
-<p>For example, you can implement this style of callback where a custom value is passed in for a timed event like so:</p>
-
-<p><code>java Callback with Java
-@Kroll.method
-public void startTimedEvent(String name, KrollFunction callback) {
-  String id = EmbeddedAgent.startTimedEvent(name);
-  HashMap&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();
-  map.put("id", id);
-  callback.call(getKrollObject(), map);
-}
-</code></p>
-
-<p>This results in a JavaScript call like so:</p>
-
-<p><code>javascript Using a callback but not wrapping the event
-agent.startTimedEvent("openCrust 2.0.27", function(result) {
-  var id = result['id'];
-  openCrust({});
-  agent.endTimedEvent(id);
-});
-</code></p>
-
-<p>In iOS land, invoking a callback is a bit different, but certainly as easy. The same <code>timedEvent</code> JavaScript method that takes a callback to be wrapped by the timed event can be implemented as follows:</p>
-
-<p>``` objective-c Wrapped event by callback
-- (void)timedEvent:(id)args
-{
-  NSString<em> eventName = [args objectAtIndex:0];
-  NSString</em> eventID = [EmbeddedAgent startTimedEvent:eventName];</p>
-
-<p>  KrollCallback* callback = [args objectAtIndex:1];
-  if(callback){</p>
-
-<pre><code>[callback call:nil thisObject:nil];
-</code></pre>
-
-<p>  }</p>
-
-<p>  [EmbeddedAgent endTimedEvent:eventID];
-}
-```</p>
-
-<p>In this case, I'm using the <code>KrollCallback</code> type, which appears to be analogous to Appcelerator's Android <code>KrollFunction</code>.</p>
-
-<p>If you need to pass values to a corresponding JavaScript function, they need to be in <code>NSArray</code> form, thus, you can do something like this to pass in parameters to the underlying JavaScript function:</p>
-
-<p>``` objective-c With callback parameter
-- (void)startTimedEvent:(id)args
-{
-  NSString<em> eventName = [args objectAtIndex:0];
-  NSString</em> eventID = [EmbeddedAgent startTimedEvent:eventName];</p>
-
-<p>  KrollCallback* callback = [args objectAtIndex:1];
-  if(callback){</p>
-
-<pre><code>NSDictionary* dict = [[[NSDictionary alloc] initWithObjectsAndKeys:@"id", eventID, nil] autorelease];
-NSArray* array = [NSArray arrayWithObjects: dict, nil];
-[callback call:array thisObject:nil];
-</code></pre>
-
-<p>  }
-}
-```</p>
-
-<p>As you can see in the above code, a callback instance takes as a parameter an <code>NSArray</code>, thus, I have to covert my <code>NSDictionary</code> into an array via Objective-C's handy <code>arrayWithObjects</code> function.</p>
-
-<p>The default module examples <a href="http://docs.appcelerator.com/titanium/latest/#!/guide/Titanium_Mobile_Module_API">provided by Appcelerator naturally work</a>, but alas, the non-callback style of invocation was less than appealing, especially if you are going to be coding an <a href="http://en.wikipedia.org/wiki/Appcelerator_Titanium">Appcelerator</a> app in JavaScript. Nevertheless, you can do it easily enough provided you are willing to dig through myriad repositories...or you could save yourself the headache and read this blog post.</p>
 ]]></content>
   </entry>
   
