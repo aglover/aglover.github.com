@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-09-29T17:27:58-04:00</updated>
+  <updated>2013-10-05T16:15:45-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The significance of HTML5]]></title>
+    <link href="http://thediscoblog.com/blog/2013/10/05/the-significance-of-html5/"/>
+    <updated>2013-10-05T21:18:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/10/05/the-significance-of-html5</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/no-flash.jpg"><a href="http://thediscoblog.com/blog/categories/html5/">HTML5</a> is important for three reasons. And its importance starts with the end of browser plugins. That&#8217;s right. With HTML5, rich media aspects that were formally handled by plugins (think Flash), are now built-in. That&#8217;s why there are <a href="http://www.w3schools.com/html/html5_new_elements.asp">new media tags</a> like <code>&lt;audio&gt;</code> and <code>&lt;video&gt;</code>.</p>
+
+<p>Think about it for a second &#8211; when&#8217;s the last time you visited a site on your tablet that asked you to install a plugin? Never.</p>
+
+<p>That&#8217;s also why some older plugin laden sites do not work on your mobile device. Remember the whole &#8221;<a href="http://www.apple.com/hotnews/thoughts-on-flash/">Steve Jobs no flash</a>&#8221; kerfuffle years ago? Yep, Mr. Jobs was adamant that the iPhone would support HTML5 and not fall into the plugin trap. Incidentally, Google and other major vendors have since followed suit. <a href="http://en.wikipedia.org/wiki/HTML5">HTML5 has the support of all major browser vendors now</a> &#8211; Apple, Google, Firefox, Opera, and yes, even Microsoft.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p><img class="left" src="http://thediscoblog.com/images/mine/alotofdevices.jpg">HTML5 is important because now that <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">all major vendors support it</a> &#8211; including those in the mobile space &#8211; you get a universal experience across a wide spectrum of devices. While particular features of HTML5 might <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">vary by device platform</a>, there are enough common ground features to build a compelling web app that looks and feels similar across the gamut of devices.</p>
+
+<p>And as HTML5 <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">continues to evolve</a>, the differences between various implementations should narrow. Accordingly, with HTML5, you get device ubiquity. You get a chance to build something once and have it work across a wide spectrum of browsers.</p>
+
+<p>What&#8217;s more, while the mobile market is still dominated by Apple and Google, as other players, <a href="http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters/">like Microsoft</a>, begin to establish a beachhead, app developers will have to contend with more than two platforms. For a variety of apps, like those being built for the enterprise, the promise of HTML5&#8217;s device ubiquity starts to become quite appealing &#8211; after all, building an app once, as <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">opposed to three or more times</a>, is less expensive.</p>
+
+<p><img class="right" src="http://thediscoblog.com/images/mine/amazonappstore.jpg">Finally, HTML5 is important because <a href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">Amazon recently announced support for HTML5</a> apps in their App Store for Android. Previous to this announcement, pure HTML5 apps had no real mass distribution model. HTML5 app developers relied on a search engine, while native app developers have a direct channel to consumers that cuts through a lot of noise and makes it easy to find specific apps.</p>
+
+<p>Consequently, a lot of HTML5 apps ended up being <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">wrapped in native code</a> so as to get a chance to compete in the app stores. Amazon&#8217;s support of HTML5 is a much needed <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">shot-in-the-arm for HTML5</a> because it means a direct channel to mass consumers; what&#8217;s more, Amazon also is offering a chance to monetize HTML5 apps <a href="https://developer.amazon.com/sdk/webapps/iap/understanding.html">via a JavaScript In-App purchase API</a>. While Amazon isn&#8217;t the first In-App purchase API for HTML5, it&#8217;s the first one linked to a major e-commerce platform and mass consumer channel.</p>
+
+<p>HTML5 is by no means a silver bullet for mobile app development. There&#8217;s a time and a place for HTML5 apps, just as there&#8217;s still a need to create native apps. Nevertheless, HTML5 continues to gain favor as app stores (like Amazon&#8217;s App store for Android) begin to distribute HTML5 apps and other platforms begin to capture market share.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ahoy there callbacks!]]></title>
@@ -1835,78 +1865,6 @@
 
 
 <p>Now if the <code>uri</code> field doesn&#8217;t contain http or https, <code>model.save</code> will return <code>false</code>. Done!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Backgrounding tasks in Heroku with Delayed Job]]></title>
-    <link href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
-    <updated>2013-06-10T12:56:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what&#8217;s more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn&#8217;t be any easier</a>.</p>
-
-<!-- more -->
-
-
-<p>To leverage Delayed Job in Heroku, you&#8217;ll need for follow a few steps. In my case, since I&#8217;m using <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a>, I&#8217;m going to use an <a href="https://github.com/collectiveidea/delayed_job_mongoid">alternate Active Record Delayed Job tie-in</a> dubbed <code>delayed_job_mongoid</code>. The reason for this <a href="http://guides.rubyonrails.org/">Active Record</a> integration will become obvious once I show you how to actually force a long running task to be asynchronous. Regardless if you are using Mongoid or not, the Active Record integration is identical.</p>
-
-<p>First and foremost, you&#8217;ll need to add <code>delayed_job_mongoid</code> to your <code>Gemfile</code> (or if you aren&#8217;t using Mongoid, add <code>delayed_job_active_record</code>).  Delayed Job stores jobs in your database; consequently, after you run <code>bundle install</code>, proceed to update your underlying MongoDB instance with a new index by running:</p>
-
-<figure class='code'><figcaption><span>Adding an index and new collection to MongoDB</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$&gt;</span> script/rails runner <span class="s1">&#39;Delayed::Backend::Mongoid::Job.create_indexes&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Obviously, if you&#8217;re using a normal RDMBS, your command will be slightly different (i.e. <code>rake db:migrate</code>).</p>
-
-<p>After that step is complete, you&#8217;ll need to generate a <code>delayed_job</code> script via:</p>
-
-<figure class='code'><figcaption><span>Generating the Delayed Job script</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$&gt;</span> rails generate delayed_job
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This script allows to you execute the Delayed Job framework with a number of options. As it turns out, you don&#8217;t really need this script as Delayed Job hooks into Rake as well; it is via the Rake integration that Heroku will work with Delayed Job.</p>
-
-<p>Now that you&#8217;ve set up 80% of the infrastructure required to support Delayed Job, you next need to background some long running task. This is the fun part and like everything else so far, it couldn&#8217;t be any easier.</p>
-
-<p>Delayed Job hooks directly into Active Record and thus, you can background some unit of work on a model object by inserting a <code>delay</code> call. For example, in my case, I had a <code>Group</code> model object that when updated under certain circumstances required that <em>all associated</em> users also be updated (wouldn&#8217;t it be nice if <a href="https://jira.mongodb.org/browse/SERVER-124">MongoDB supported triggers</a>?). As you can imagine, updating hundreds of users is rather time intensive.</p>
-
-<p>Thus, the user update logic was thrown into a special method (dubbed <code>aysnc_update_users</code>) and was then invoked like so:</p>
-
-<figure class='code'><figcaption><span>Adding in a delay backgrounds the async_update_users call</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span><span class="o">.</span><span class="n">delay</span><span class="o">.</span><span class="n">async_update_users</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This call essentially serializes the logic here into a collection called <code>delayed_backend_mongoid_jobs</code> which can then be invoked asynchronously by another process. And therein lies your last few steps.</p>
-
-<p>Heroku has the notion of <a href="https://devcenter.heroku.com/articles/background-jobs-queueing">worker dynos</a>, which are background processors &#8211; think of worker dynos as engines capable of doing what ever you want them to do. In the case of Delayed Job, you want those worker dynos to invoke jobs residing in the <code>delayed_backend_mongoid_jobs</code> collection (which is conceptually a queue).</p>
-
-<p>To configure a worker dyno, you&#8217;ll need to do 2 things. First, provision one like so:</p>
-
-<figure class='code'><figcaption><span>Using Heroku CLI to fire up a worker dyno</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$&gt;</span> heroku ps:scale <span class="nv">worker</span><span class="o">=</span>1
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You&#8217;ll then need to update your <code>Procfile</code> to include the command the worker dyno should invoke:</p>
-
-<figure class='code'><figcaption><span>Updated Procfile command</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">worker</span><span class="p">:</span>  <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">rake</span> <span class="n">jobs</span><span class="ss">:work</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see, the worker dyno in this case is invoking a <a href="http://rake.rubyforge.org/">Rake task</a> (<code>jobs:work</code>) which is asynchronously polling for new jobs in your conceptual queue and invoking them as they are found.</p>
-
-<p>Finally, deploy to Heroku and keep an eye on the queue for jobs &#8211; you can isolate the dyno workers logs via</p>
-
-<figure class='code'><figcaption><span>Updated Procfile command</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vg">$&gt;</span> <span class="n">heroku</span> <span class="n">logs</span> <span class="o">-</span><span class="nb">p</span> <span class="n">worker</span> <span class="o">-</span><span class="n">t</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Was that easy or what?</p>
 ]]></content>
   </entry>
   
