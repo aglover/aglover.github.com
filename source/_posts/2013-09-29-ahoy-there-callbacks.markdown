@@ -3,7 +3,7 @@ layout: post
 title: "Ahoy there callbacks!"
 date: 2013-09-29 16:30
 comments: true
-categories: [Java, JavaScript, AWS]
+categories: [Java, JavaScript, AWS, SQS]
 ---
 
 {% img right /images/mine/callback.jpg %}Because it's my bag, I like [JavaScript](http://thediscoblog.com/blog/categories/javascript/). In fact, I've grown to love JavaScritp's asynchronous [callback oriented style of programming](http://en.wikipedia.org/wiki/Callback_(computer_programming). Consequently, when I find myself in a non-JavaScript environment, say, like [Java](http://thediscoblog.com/blog/categories/java/), I tend to miss using callbacks. 
