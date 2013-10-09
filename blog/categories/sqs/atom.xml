@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: AWS | The Disco Blog]]></title>
-  <link href="http://thediscoblog.com/blog/categories/aws/atom.xml" rel="self"/>
+  <title><![CDATA[Category: SQS | The Disco Blog]]></title>
+  <link href="http://thediscoblog.com/blog/categories/sqs/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
   <updated>2013-10-09T19:00:17-04:00</updated>
   <id>http://thediscoblog.com/</id>
@@ -228,141 +228,6 @@ private void send(final AmazonSQS sqs, final String queueURL, final String messa
 <p>Incidentally, the AWS Java SDK <em>does provide an asynchronous client</em>; however, this client's implementation leverages Java's <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html">Futures</a>. While <a href="http://nurkiewicz.blogspot.com/2013/02/javautilconcurrentfuture-basics.html">Futures are a neat concept</a>, Ahoy!'s implementation is more convenient (<em>at least for me and in the patterns of how I employ SQS</em>) than Futures as there isn't any polling involved once a message is sent or received.</p>
 
 <p>While callbacks aren't <a href="http://en.wikipedia.org/wiki/Function_object#In_Java">necessarily supported</a> natively in Java, you can emulate them quite nicely and achieve the same level of code conciseness as what's common in JavaScript. And if you need a handy way to interface with AWS SQS, <a href="https://github.com/aglover/ahoy">then give Ahoy! a try</a>! Can you dig it, man?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ElasticSearch on EC2 in less than 60 seconds]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/"/>
-    <updated>2013-05-17T17:24:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/es-bonzai.jpg">Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend -- in less than 60 seconds, I'll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
-
-<p>You'll first <a href="http://www.drdobbs.com/web-development/getting-started-with-the-cloud-amazon-we/231601598">need an AWS account</a> along with an SSH key pair. If you don't already have those two steps done, go ahead and do that. The steps that follow suggest a particular AMI; however, you are free to select the <a href="http://aws.amazon.com/ec2/instance-types/">instance type</a>. <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Micro instance types</a> are free to use; consequently, you can get <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">up and running with ElasticSearch</a> in less than a minute <em>for free</em>.</p>
-
-<!-- more -->
-
-
-<p>Now that you've got an <a href="http://www.ibm.com/developerworks/web/library/j-s3/">AWS</a> account and an SSH key pair, go ahead and create a new security group (or edit an existing one). It's important that the <a href="http://www.elasticsearch.org/tutorials/elasticsearch-on-ec2/">following ports</a> are open:</p>
-
-<ul>
-<li>22 (required for SSH)</li>
-<li>80 (ElasticSearch uses HTTP for standard API calls)</li>
-<li>9200 (required for ElasticSearch)</li>
-<li>9300 (required for ElasticSearch)</li>
-</ul>
-
-
-<p>Next, fire up a Linux AMI. I, for example, prefer <a href="http://cloud-images.ubuntu.com/locator/ec2/">ami-c30360aa</a> (this is Ubuntu Server version 13.04) and I configure the AMI to use the security group that I just covered.</p>
-
-<p>Now, SSH to your newly instantiated AMI.  Once on the AMI, you'll need to install Java. Never fear though, I've got you covered. All you need to do is run a handy script via the <a href="https://github.com/aglover/ubuntu-equip">Ubuntu-Equip project</a>, that I use frequently just for this sorta thing:</p>
-
-<p><code>bash installing Java
-wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_java.sh &amp;&amp; bash equip_java.sh
-</code></p>
-
-<p>You'll need to accept the license from Oracle. Once that script completes, go ahead and type  <code>java -version</code> and you should see Oracle's JDK (i.e Java version "1.7.0_21").</p>
-
-<p>Next, download and install ElasticSearch via another nifty <a href="https://github.com/aglover/ubuntu-equip">Ubuntu-Equip</a> script:</p>
-
-<p><code>bash installing elasticsearch
-wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_elasticsearch.sh &amp;&amp; bash equip_elasticsearch.sh
-</code></p>
-
-<p>This script doesn't start ElasticSearch for you; thus, go ahead and change directories into the <code>elasticsearch</code> directory and fire it up like so:</p>
-
-<p><code>bash starting elasticsearch
-~/elasticsearch$ bin/elasticsearch -f
-</code></p>
-
-<p>Take a deep breath (but not too deep, as I need you to finish in less than 60 seconds) and find the Public DNS of the AMI you've been working on. Go ahead and copy it, then fire up a browser on your local machine and go to http://YOUR_AMI_DNS_NAME.com:9200/_plugin/inquisitor/ (be sure to note the port).</p>
-
-<p>By the way, <a href="https://github.com/polyfractal/elasticsearch-inquisitor">Inquisitor</a> is a handy web application that lets you query your indexes. It was installed via the Ubuntu-Equip script -- this tool is invaluable in figuring out how to properly query your indexes.</p>
-
-<p>And that is it. In less than 60 seconds you've got ElasticSearch running in the cloud for you. Want to create a cluster? No problem, just follow these steps again to fire up another ElasticSearch instance and then <a href="http://www.elasticsearch.org/videos/three-nodes-and-one-cluster/">configure the cluster accordingly</a>.</p>
-
-<p>I've not gone over <a href="http://www.elasticsearch.org/guide/reference/setup/configuration/">configuring ElasticSearch</a> nor have I showed you how to create ElasticSearch as a service on a Linux instance, but for one minute, what do you expect?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The Rails, CloudFront, and Heroku performance hat-trick]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
-    <updated>2013-05-01T09:10:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
-
-<p>It's easy to configure a <a href="http://rubyonrails.org/">Rails</a> app to take advantage of CloudFront; what's more, if your Rails app is hosted on <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-21/">Heroku</a>, there's <a href="https://github.com/romanbsd/heroku-deflater">a nifty gem</a>, dubbed heroku-deflater, that'll enable <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP compression</a> of static assets (<a href="http://stackoverflow.com/questions/12326191/any-way-to-serve-gzip-assets-from-heroku">other than images</a>).</p>
-
-<p>To get these three entities to play nicely together requires a few simple steps. Let me show you how.</p>
-
-<!--more-->
-
-
-<p>First, if you want to enable HTTP gzip compression of static assets other than images from a Heroku app, then add the heroku-deflater gem to your <code>Gemfile</code>. This gem doesn't compress images as in some cases, zipping images creates bigger ones!</p>
-
-<p>Once you've run <code>bundle install</code> and deployed your app to Heroku, fire up a terminal and run <a href="http://thediscoblog.com/blog/2013/04/18/curling-for-wget/">cURL</a> to verify that the HTTP response Content-Encoding is gzip like so:</p>
-
-<p><code>bash cURL testing gzip response
-curl -i -H "Accept-Encoding: gzip,deflate" http://your.awesome.web.app
-</code></p>
-
-<p>You should see in the response this key phrase:</p>
-
-<p><code>bash cURL response
-Content-Encoding: gzip
-</code></p>
-
-<p>If you do see the Content-Encoding set to gzip, then you are good to go. If, for some reason, you don't see it, check your environment's configuration file (which you will have to edit to get CloudFront working anyway) and verify that the property <code>config.serve_static_assets</code> is set to <code>true</code>.</p>
-
-<p>Next, sign into the AWS Management Console and enable CloudFront if you haven't already. From the CloudFront admin page, create a new distribution via the Create Distribution button on the top left.</p>
-
-<p><img class="center" src="/images/mine/cloudfront_1.png"></p>
-
-<p>Once the create distribution wizard begins, be sure to select Download as your delivery method.</p>
-
-<p><img class="center" src="/images/mine/cloudfront_2.png"></p>
-
-<p>In the next screen, there are some important fields you'll need to fill out, namely: the Origin Source Name and the Viewer Protocol Policy. For the Origin Source Name, you will need to put in your app's URL or the Heroku URL (if you do not map a custom domain name to it). If you web site supports HTTPS, then be sure to set the Viewer Protocol Policy to HTTP and HTTPS.</p>
-
-<p><img class="center" src="/images/mine/cloudfront_3.png"></p>
-
-<p>The only other important setting after these two is the Price Class. It's here where you can set where CloudFront will essentially serve up your content -- the default setting of Use All Edge Locations is most likely what you need.</p>
-
-<p><img class="center" src="/images/mine/cloudfront_5.png"></p>
-
-<p>Finally, click the Create Distribution button -- once you do that, it'll take a bit for things to initialize (basically, the CDN needs to get built and this may take up to 30 minutes).</p>
-
-<p>Now to configure your Rails app, you'll need to open up your target environment's configuration file (i.e. <code>production.rb</code>). The <a href="http://bindle.me/blog/index.php/395/caches-cdns-and-heroku-cedar">two fields</a> you'll want to be sure are properly set are <code>serve_static_assets</code> and <code>static_cache_control</code>. In particular, you are setting the cache control variable to one year. This means that once a static asset, like a JavaScript file is downloaded to the browser, it'll be cached for one year. Don't fret, however, if you think that'll inhibit change -- the file that is ultimately downloaded has a hash attached to it (via the magic of <a href="http://guides.rubyonrails.org/asset_pipeline.html">Rail's Asset Pipeline</a>). Consequently, the file that is cached is something like <code>your_js_file-asdf098203820980a980</code> where that last bit is a hash value that'll change if the file itself changes.</p>
-
-<p><code>ruby production.rb edited to support CDN
-config.serve_static_assets = true
-config.static_cache_control = 'public, max-age=31536000'
-</code></p>
-
-<p>The last change you need to make to your environment file is to set the <code>asset_host</code> to the CloudFront domain that you just created. You can find this in your AWS Management Console -- it'll be a cryptic URL like http://asdjlkj2321.cloudfront.net.</p>
-
-<p><code>ruby production.rb edited to support asset host
-config.action_controller.asset_host = 'the domain name from AWS Dashboard'
-</code></p>
-
-<p>Commit your changes and deploy your app.</p>
-
-<p>To verify things are kosher, you'll need to give it some time (check the status of your CloudFront CDN -- if it's status is Enabled then you are good to go!). If things are ready, then fire up a browser and go to your app.</p>
-
-<p>In this case, <a href="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/">I'm using Chrome</a>. Go to JavaScript console and hit the Network tab.</p>
-
-<p><img class="center" src="/images/mine/cloudfront_6.png"></p>
-
-<p>Surf around and you'll note a few things -- one, that the assets like images and JavaScript files are being severed up from your CDN (just look at the URL) and that the size will often say "(from cache)" -- that means the CDN is handling the load rather than <a href="http://www.ibm.com/developerworks/podcast/glover-heroku-110811/">Heroku</a>. You should also note that your web app is probably a bit more snappy!</p>
-
-<p><img class="center" src="/images/mine/cloudfront_7.png"></p>
-
-<p>Check out your Heroku logs and you'll note fewer hits in this case -- dynamic pages are still being loaded, however, static assets are not anymore -- that's the job of your CDN!</p>
-
-<p>CloudFront isn't free; nevertheless, I think you'll find the corresponding cost quite reasonable. Pricing will vary depending on how much content you'll be serving up with CloudFront -- this is a function of how many visitors you have <em>along with</em> how many static assets that are ultimately downloaded to a user's browser. For instance, 500GB of average content will cost you less than $75/month.</p>
-
-<p>CloudFront's pay-as-you-go model makes it extremely affordable to add a nice bit of pep to your app's performance along with using gzip compression and HTTP caching. And hopefully as I've shown you, it's rather easy to do with a Rails app running on Heroku.</p>
 ]]></content>
   </entry>
   

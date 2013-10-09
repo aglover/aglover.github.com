@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-10-05T16:15:45-04:00</updated>
+  <updated>2013-10-09T19:00:17-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,136 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[All other metrics are useless]]></title>
+    <link href="http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless/"/>
+    <updated>2013-10-09T18:04:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/time1.jpg">When it comes to queues, whether they&#8217;re implemented as <a href="http://en.wikipedia.org/wiki/Java_Message_Service">JMS</a>, database tables (i.e. what Ruby&#8217;s <a href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Delayed::Job</a> uses for a queue), or even <a href="http://aws.amazon.com/sqs/">Amazon&#8217;s SQS</a>, the most common metric used to evaluate the state of a queue is its length. In essence, one derives an efficiency metric based upon how many messages are residing in a queue at any given time. If there are just a few messages, the queue is operating efficiently. If there are numerous messages, things are inefficient and alarms must be sounded.</p>
+
+<!-- more -->
+
+
+<p>But what if you&#8217;re in a consistently busy environment with extreme bursts where queues have the tendency to rapidly fill up? If you have sufficient workers <em>already running</em> to handle that burst, do you need to fire up more?</p>
+
+<p>You can fire up more workers, but doing so might cost you. That is, you might have to provision new worker instances, such as <a href="https://devcenter.heroku.com/articles/dynos">Heroku worker dynos</a> or AWS AMIs, which will end up costing you tangible money. And sometimes those worker instances take a few moments to fire up and when they&#8217;re operational, the burst of activity is over and the queue is back to normal &#8211; the initially available workers handled the load adequately.</p>
+
+<p>It turns out that the queue&#8217;s length was a lagging indicator. You spun up unneeded resources. False alarm!</p>
+
+<p>If you already have sufficient capacity to handle the influx of messages on a queue, then monitoring a queue&#8217;s length isn&#8217;t too helpful. In fact, it&#8217;s a misleading metric and can cause you to take unneeded actions.</p>
+
+<p>Consequently, a queue&#8217;s length <em>is not indicative of a system&#8217;s efficiency</em> when there&#8217;s already sufficient workers present. Rather, the metric that means something in a high capacity environment is <em>how long a message resides in a queue</em>. That is an actionable metric: if messages are stuck in a queue waiting to be processed then you need more processors!</p>
+
+<h2>Moo over queue length and let queue wait time in</h2>
+
+<p>By default, <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">Amazon&#8217;s SQS</a> doesn&#8217;t provide the ability to query how long a message has been residing in a queue. Therefore, <a href="https://github.com/aglover/moo">I wrote Moo</a>.</p>
+
+<p>Moo provides an interface for clients to obtain and take action on the message time in queue metric. This is done by augmenting an SQS message with a time stamp. That time stamp is then checked when a message is popped off of an SQS queue. If a threshold difference is exceed, then a callback is invoked.</p>
+
+<p>Users of Moo will find its usage similar to <a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous callback oriented facade on top of <a href="http://aws.amazon.com/sdkforjava/">AWS&#8217;s Java SDK</a>. In fact, Moo uses Ahoy! underneath, with the added feature of attaching a &#8220;maximum time in queue&#8221; asynchronous callback.</p>
+
+<p>Moo supports multiple time in queue thresholds and setting a maximum time in queue threshold is done like so:</p>
+
+<figure class='code'><figcaption><span>Adding a maximum threshold for time in queue</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">//adds a 1 second max threshold</span>
+</span><span class='line'><span class="n">sqs</span><span class="o">.</span><span class="na">addQueueWaitTimeCallback</span><span class="o">(</span><span class="mi">1000</span><span class="o">,</span> <span class="k">new</span> <span class="n">QueueWaitTimeCallback</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onThresholdExceeded</span><span class="o">(</span><span class="kt">long</span> <span class="n">waitTime</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">//waitTime is the actual time in queue</span>
+</span><span class='line'>    <span class="c1">//do something... like fire off a web hook, etc</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note the <code>addQueueWaitTimeCallback</code> method takes a millisecond maximum time in queue value and an accompanying <code>QueueWaitTimeCallback</code> callback implementation. The <code>onThresholdExceeded</code> method will be invoked asynchronously during a message receive if the maximum threshold value is exceeded; what&#8217;s more, the <code>onThresholdExceeded</code> will receive as a parameter the actual queue wait time.</p>
+
+<h4>Show me the Moo</h4>
+
+<p>To fire up an instance of Moo, you have a number of options, including configuring an instance of AWS&#8217;s <code>AmazonSQS</code> or just passing along a key, secret, and queue name like so:</p>
+
+<figure class='code'><figcaption><span>Adding a maximum threshold for time in queue</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">SQS</span> <span class="n">sqs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SQS</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">),</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&quot;secret&quot;</span><span class="o">),</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&quot;queue&quot;</span><span class="o">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>Next, you can attach zero to many <code>QueueWaitTimeCallback</code> instances like so:</p>
+
+<figure class='code'><figcaption><span>Adding a maximum threshold for time in queue</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">sqs</span><span class="o">.</span><span class="na">addQueueWaitTimeCallback</span><span class="o">(</span><span class="mi">600000</span><span class="o">,</span> <span class="k">new</span> <span class="n">QueueWaitTimeCallback</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onThresholdExceeded</span><span class="o">(</span><span class="kt">long</span> <span class="n">actualWaitTime</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">//do something -- fire off SNS message?</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, I&#8217;ve added a callback to be invoked if messages are in a queue longer than 10 minutes. Note, these <code>QueueWaitTimeCallback</code> callbacks are fired by the <em>queue reader</em> instance; accordingly, a <code>QueueWaitTimeCallback</code> can certainly fire up more instances of itself, for example.</p>
+
+<p>Here&#8217;s a sample JSON document that you might want to throw onto an SQS queue:</p>
+
+<figure class='code'><figcaption><span>Adding a maximum threshold for time in queue</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">{</span> <span class="s">&quot;employees&quot;</span><span class="o">:[</span>
+</span><span class='line'>      <span class="o">{</span> <span class="s">&quot;firstName&quot;</span><span class="o">:</span><span class="s">&quot;John&quot;</span><span class="o">,</span> <span class="s">&quot;lastName&quot;</span><span class="o">:</span><span class="s">&quot;Doe&quot;</span> <span class="o">},</span>
+</span><span class='line'>      <span class="o">{</span> <span class="s">&quot;firstName&quot;</span><span class="o">:</span><span class="s">&quot;Anna&quot;</span><span class="o">,</span> <span class="s">&quot;lastName&quot;</span><span class="o">:</span><span class="s">&quot;Smith&quot;</span> <span class="o">},</span>
+</span><span class='line'>      <span class="o">{</span> <span class="s">&quot;firstName&quot;</span><span class="o">:</span><span class="s">&quot;Peter&quot;</span><span class="o">,</span> <span class="s">&quot;lastName&quot;</span><span class="o">:</span><span class="s">&quot;Jones&quot;</span> <span class="o">}</span>
+</span><span class='line'><span class="o">]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sending and receiving this message are exactly like you&#8217;d do if you were using Ahoy!. For example, to send a message, just pass along a <code>String</code> to the <code>send</code> method:</p>
+
+<figure class='code'><figcaption><span>Adding a maximum threshold for time in queue</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">sqs</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">json</span><span class="o">,</span> <span class="k">new</span> <span class="n">SendCallback</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSend</span><span class="o">(</span><span class="n">String</span> <span class="n">messageId</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">//messageId is from SQS</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note, the <code>send</code> method takes an optional <code>SendCallback</code>.</p>
+
+<p>Receiving a message is via the <code>receive</code> method, which takes a mandatory <code>ReceiveCallback</code> &#8211; this callback will be invoked asynchronously <em>for each</em> message received off of a queue. Each instance will receive the message placed upon the queue and the message&#8217;s SQS id.</p>
+
+<figure class='code'><figcaption><span>Adding a maximum threshold for time in queue</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">sqs</span><span class="o">.</span><span class="na">receive</span><span class="o">(</span><span class="k">new</span> <span class="n">ReceiveCallback</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onReceive</span><span class="o">(</span><span class="n">String</span> <span class="n">messageId</span><span class="o">,</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">//do something w/the message -- in this case it&#39;s JSON</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note, if upon the receive of a message, Moo notices that a message has been waiting in a queue for more than the max queue wait time threshold configured for an associated <code>QueueWaitTimeCallback</code>, Moo will invoke it. Note, Moo can invoke more than one instance; thus, you can set up a chain to take various actions as times increase.</p>
+
+<p>Remember, a queue&#8217;s length is usually a lagging indicator.  The metric that actually means something is how long a message resides in a queue. That&#8217;s an actionable metric and <a href="https://github.com/aglover/moo">Moo</a> gives you the ability to do something about it! Can you dig it?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The significance of HTML5]]></title>
@@ -1832,39 +1962,6 @@
 <p>If you see <code>BtreeCusor</code>, then you know you&#8217;re using an index; if you see <code>BasicCursor</code>, you know you&#8217;re not.</p>
 
 <p>Thus, if you find yourself executing queries and creating indexes for some time or date field like <code>created_at</code>, you might be better off just using Mongo&#8217;s <code>_id</code> field as it already embeds the notion of <em>created at</em> and is indexed by default. Dig it?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Lickety-split custom validations in Rails]]></title>
-    <link href="http://thediscoblog.com/blog/2013/06/12/lickety-split-custom-validations-in-rails/"/>
-    <updated>2013-06-12T13:19:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/06/12/lickety-split-custom-validations-in-rails</id>
-    <content type="html"><![CDATA[<p>Have a highly specific, yet custom validation for a particular field on one of your <a href="http://thediscoblog.com/blog/categories/rails/">Rails</a> model objects? Don&#8217;t want to create a <code>ActiveModel::Validator</code> type? Not a problem!</p>
-
-<p>You can just as easily <a href="http://guides.rubyonrails.org/active_record_validations_callbacks.html">create a method</a> that can be invoked as part of the validation process. For example, imagine a field dubbed <code>uri</code> in some model object; this field must begin with a protocol (i.e. http or https). You can create a validation method like so:</p>
-
-<figure class='code'><figcaption><span>Custom validator</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">uri_should_start_with_protocol</span>
-</span><span class='line'>  <span class="k">if</span> <span class="o">!</span><span class="n">uri</span><span class="o">.</span><span class="n">start_with?</span><span class="p">(</span><span class="s1">&#39;http://&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">uri</span><span class="o">.</span><span class="n">start_with?</span><span class="p">(</span><span class="s1">&#39;https://&#39;</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:uri</span><span class="p">,</span> <span class="s1">&#39;Web Address should start with http:// or https://&#39;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This method resides in your model. You can then register this method as a validation for your model like so:</p>
-
-<figure class='code'><figcaption><span>Wiring the validation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">validate</span> <span class="ss">:uri_should_start_with_protocol</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now if the <code>uri</code> field doesn&#8217;t contain http or https, <code>model.save</code> will return <code>false</code>. Done!</p>
 ]]></content>
   </entry>
   

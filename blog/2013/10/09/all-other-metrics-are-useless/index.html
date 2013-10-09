@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>All other metrics are useless - The Disco Blog</title>
+  <meta name="author" content="Andrew Glover">
+
+  
+  <meta name="description" content="Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code.">
+  
+  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, "/>
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="The Disco Blog" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-3500051-4']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Disco Blog</a></h1>
+  
+    <h2>Can you dig it?</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:thediscoblog.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/categories">Categories</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">All Other Metrics Are Useless</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-09T18:04:00-04:00" pubdate data-updated="true">Oct 9<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img class="left" src="/images/mine/time1.jpg">When it comes to queues, whether they&#8217;re implemented as <a href="http://en.wikipedia.org/wiki/Java_Message_Service">JMS</a>, database tables (i.e. what Ruby&#8217;s <a href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Delayed::Job</a> uses for a queue), or even <a href="http://aws.amazon.com/sqs/">Amazon&#8217;s SQS</a>, the most common metric used to evaluate the state of a queue is its length. In essence, one derives an efficiency metric based upon how many messages are residing in a queue at any given time. If there are just a few messages, the queue is operating efficiently. If there are numerous messages, things are inefficient and alarms must be sounded.</p>
+
+<!-- more -->
+
+
+<p>But what if you&#8217;re in a consistently busy environment with extreme bursts where queues have the tendency to rapidly fill up? If you have sufficient workers <em>already running</em> to handle that burst, do you need to fire up more?</p>
+
+<p>You can fire up more workers, but doing so might cost you. That is, you might have to provision new worker instances, such as <a href="https://devcenter.heroku.com/articles/dynos">Heroku worker dynos</a> or AWS AMIs, which will end up costing you tangible money. And sometimes those worker instances take a few moments to fire up and when they&#8217;re operational, the burst of activity is over and the queue is back to normal &#8211; the initially available workers handled the load adequately.</p>
+
+<p>It turns out that the queue&#8217;s length was a lagging indicator. You spun up unneeded resources. False alarm!</p>
+
+<p>If you already have sufficient capacity to handle the influx of messages on a queue, then monitoring a queue&#8217;s length isn&#8217;t too helpful. In fact, it&#8217;s a misleading metric and can cause you to take unneeded actions.</p>
+
+<p>Consequently, a queue&#8217;s length <em>is not indicative of a system&#8217;s efficiency</em> when there&#8217;s already sufficient workers present. Rather, the metric that means something in a high capacity environment is <em>how long a message resides in a queue</em>. That is an actionable metric: if messages are stuck in a queue waiting to be processed then you need more processors!</p>
+
+<h2>Moo over queue length and let queue wait time in</h2>
+
+<p>By default, <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">Amazon&#8217;s SQS</a> doesn&#8217;t provide the ability to query how long a message has been residing in a queue. Therefore, <a href="https://github.com/aglover/moo">I wrote Moo</a>.</p>
+
+<p>Moo provides an interface for clients to obtain and take action on the message time in queue metric. This is done by augmenting an SQS message with a time stamp. That time stamp is then checked when a message is popped off of an SQS queue. If a threshold difference is exceed, then a callback is invoked.</p>
+
+<p>Users of Moo will find its usage similar to <a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous callback oriented facade on top of <a href="http://aws.amazon.com/sdkforjava/">AWS&#8217;s Java SDK</a>. In fact, Moo uses Ahoy! underneath, with the added feature of attaching a &#8220;maximum time in queue&#8221; asynchronous callback.</p>
+
+<p>Moo supports multiple time in queue thresholds and setting a maximum time in queue threshold is done like so:</p>
+
+<figure class='code'><figcaption><span>Adding a maximum threshold for time in queue</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">//adds a 1 second max threshold</span>
+</span><span class='line'><span class="n">sqs</span><span class="o">.</span><span class="na">addQueueWaitTimeCallback</span><span class="o">(</span><span class="mi">1000</span><span class="o">,</span> <span class="k">new</span> <span class="n">QueueWaitTimeCallback</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onThresholdExceeded</span><span class="o">(</span><span class="kt">long</span> <span class="n">waitTime</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">//waitTime is the actual time in queue</span>
+</span><span class='line'>    <span class="c1">//do something... like fire off a web hook, etc</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note the <code>addQueueWaitTimeCallback</code> method takes a millisecond maximum time in queue value and an accompanying <code>QueueWaitTimeCallback</code> callback implementation. The <code>onThresholdExceeded</code> method will be invoked asynchronously during a message receive if the maximum threshold value is exceeded; what&#8217;s more, the <code>onThresholdExceeded</code> will receive as a parameter the actual queue wait time.</p>
+
+<h4>Show me the Moo</h4>
+
+<p>To fire up an instance of Moo, you have a number of options, including configuring an instance of AWS&#8217;s <code>AmazonSQS</code> or just passing along a key, secret, and queue name like so:</p>
+
+<figure class='code'><figcaption><span>Adding a maximum threshold for time in queue</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">SQS</span> <span class="n">sqs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SQS</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">),</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&quot;secret&quot;</span><span class="o">),</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&quot;queue&quot;</span><span class="o">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>Next, you can attach zero to many <code>QueueWaitTimeCallback</code> instances like so:</p>
+
+<figure class='code'><figcaption><span>Adding a maximum threshold for time in queue</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">sqs</span><span class="o">.</span><span class="na">addQueueWaitTimeCallback</span><span class="o">(</span><span class="mi">600000</span><span class="o">,</span> <span class="k">new</span> <span class="n">QueueWaitTimeCallback</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onThresholdExceeded</span><span class="o">(</span><span class="kt">long</span> <span class="n">actualWaitTime</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">//do something -- fire off SNS message?</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, I&#8217;ve added a callback to be invoked if messages are in a queue longer than 10 minutes. Note, these <code>QueueWaitTimeCallback</code> callbacks are fired by the <em>queue reader</em> instance; accordingly, a <code>QueueWaitTimeCallback</code> can certainly fire up more instances of itself, for example.</p>
+
+<p>Here&#8217;s a sample JSON document that you might want to throw onto an SQS queue:</p>
+
+<figure class='code'><figcaption><span>Adding a maximum threshold for time in queue</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">{</span> <span class="s">&quot;employees&quot;</span><span class="o">:[</span>
+</span><span class='line'>      <span class="o">{</span> <span class="s">&quot;firstName&quot;</span><span class="o">:</span><span class="s">&quot;John&quot;</span><span class="o">,</span> <span class="s">&quot;lastName&quot;</span><span class="o">:</span><span class="s">&quot;Doe&quot;</span> <span class="o">},</span>
+</span><span class='line'>      <span class="o">{</span> <span class="s">&quot;firstName&quot;</span><span class="o">:</span><span class="s">&quot;Anna&quot;</span><span class="o">,</span> <span class="s">&quot;lastName&quot;</span><span class="o">:</span><span class="s">&quot;Smith&quot;</span> <span class="o">},</span>
+</span><span class='line'>      <span class="o">{</span> <span class="s">&quot;firstName&quot;</span><span class="o">:</span><span class="s">&quot;Peter&quot;</span><span class="o">,</span> <span class="s">&quot;lastName&quot;</span><span class="o">:</span><span class="s">&quot;Jones&quot;</span> <span class="o">}</span>
+</span><span class='line'><span class="o">]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sending and receiving this message are exactly like you&#8217;d do if you were using Ahoy!. For example, to send a message, just pass along a <code>String</code> to the <code>send</code> method:</p>
+
+<figure class='code'><figcaption><span>Adding a maximum threshold for time in queue</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">sqs</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">json</span><span class="o">,</span> <span class="k">new</span> <span class="n">SendCallback</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSend</span><span class="o">(</span><span class="n">String</span> <span class="n">messageId</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">//messageId is from SQS</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note, the <code>send</code> method takes an optional <code>SendCallback</code>.</p>
+
+<p>Receiving a message is via the <code>receive</code> method, which takes a mandatory <code>ReceiveCallback</code> &#8211; this callback will be invoked asynchronously <em>for each</em> message received off of a queue. Each instance will receive the message placed upon the queue and the message&#8217;s SQS id.</p>
+
+<figure class='code'><figcaption><span>Adding a maximum threshold for time in queue</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">sqs</span><span class="o">.</span><span class="na">receive</span><span class="o">(</span><span class="k">new</span> <span class="n">ReceiveCallback</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onReceive</span><span class="o">(</span><span class="n">String</span> <span class="n">messageId</span><span class="o">,</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">//do something w/the message -- in this case it&#39;s JSON</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note, if upon the receive of a message, Moo notices that a message has been waiting in a queue for more than the max queue wait time threshold configured for an associated <code>QueueWaitTimeCallback</code>, Moo will invoke it. Note, Moo can invoke more than one instance; thus, you can set up a chain to take various actions as times increase.</p>
+
+<p>Remember, a queue&#8217;s length is usually a lagging indicator.  The metric that actually means something is how long a message resides in a queue. That&#8217;s an actionable metric and <a href="https://github.com/aglover/moo">Moo</a> gives you the ability to do something about it! Can you dig it?</p>
+</div>
+<!-- related posts -->
+<div id='related_posts'>
+  <h4>Related Posts</h4>
+      <ul class="posts">
+      
+          
+          <!-- nothing, skip it as its the same as the post itself -->
+          
+      
+          
+            <li class="related"><a href="/blog/2013/07/24/introducing-android-migrations/">Introducing Android migrations</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry/">JVM fork modes and metaclass wizardry</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku performance hat-trick</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Backgrounding tasks in Heroku with Delayed Job</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/08/01/imbibing-the-fluency-of-mockito/">Imbibing the fluency of Mockito</a></li>
+          
+      
+      </ul>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-09T18:04:00-04:00" pubdate data-updated="true">Oct 9<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/aws/'>AWS</a>, <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/sqs/'>SQS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2013/10/05/the-significance-of-html5/" title="Previous Post: The significance of HTML5">&laquo; The significance of HTML5</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <div id='influads_block' class='influads_block'></div><script type='text/javascript'>(function(){var acc='acc_1097d812_pub';var st='css';var or='130';var e=document.getElementsByTagName('script')[0];var d=document.createElement('script');d.src=('https:' == document.location.protocol ?'https://' : 'http://') +'engine.influads.com/show/'+or+'/'+st+'/'+acc;d.type='text/javascript';d.async=true;d.defer=true; e.parentNode.insertBefore(d,e);})();</script>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/09/all-other-metrics-are-useless/">All other metrics are useless</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/05/the-significance-of-html5/">The significance of HTML5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/29/ahoy-there-callbacks/">Ahoy there callbacks!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/26/app-signing-ios-versus-android/">App signing: iOS versus Android</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/21/i-like-my-elasticsearch-a-la-node-dot-js/">I like my ElasticSearch a la Node.js</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/aglover">@aglover</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'aglover',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+ <h1>Latest Tweets</h1>
+ <a class="twitter-timeline" href="https://twitter.com/aglover" data-widget-id="345533522750099456">Tweets by @aglover</a>
+ <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Andrew Glover -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'thediscoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless/';
+        var disqus_url = 'http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
