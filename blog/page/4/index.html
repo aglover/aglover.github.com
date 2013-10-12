@@ -88,6 +88,53 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku Performance Hat-trick</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-01T09:10:00-04:00" pubdate data-updated="true">May 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
+
+<p>It&#8217;s easy to configure a <a href="http://rubyonrails.org/">Rails</a> app to take advantage of CloudFront; what&#8217;s more, if your Rails app is hosted on <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-21/">Heroku</a>, there&#8217;s <a href="https://github.com/romanbsd/heroku-deflater">a nifty gem</a>, dubbed heroku-deflater, that&#8217;ll enable <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP compression</a> of static assets (<a href="http://stackoverflow.com/questions/12326191/any-way-to-serve-gzip-assets-from-heroku">other than images</a>).</p>
+
+<p>To get these three entities to play nicely together requires a few simple steps. Let me show you how.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2013/04/24/mobile-for-the-masses-gestures-and-test-deployments/">Mobile for the Masses: Gestures and Test Deployments</a></h1>
       
     
@@ -498,78 +545,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/03/12/node-in-3-commands/">Node.js in 3 Commands</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-12T11:55:00-04:00" pubdate data-updated="true">Mar 12<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A few <a href="http://www.javaworld.com/community/node/8140">short years ago</a> when I started to explore <a href="http://nodejs.org/">Node.js</a>, I remember the installation on my MacBook Pro required downloading the source, compiling and installing it, and then updating paths. <em>And then</em> you had to install <a href="https://npmjs.org/">NPM</a>.</p>
-
-<p>Since then, <a href="http://www.ibm.com/developerworks/library/j-nodejs/">Node</a>&#8217;s installation has been come tremendously easy and NPM is even <em>bundled</em> with <a href="http://www.ibm.com/developerworks/offers/lp/demos/summary/j-jnodejs.html?ca=drs-">Node</a>. And yet, installing Node (and keeping up w/its rapid release schedule) is even easier with a nifty tool: <a href="https://github.com/creationix/nvm">Node Version Manager</a>.</p>
-
-<p>With Node Version Manager (or <a href="https://twitter.com/aglover/status/105824835149627392">nvm</a>) you can be up and running with Node in 3 easy commands.</p>
-
-<p>Step 1: Download and install nvm.</p>
-
-<figure class='code'><figcaption><span>downloading nvm</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl https://raw.github.com/creationix/nvm/master/install.sh | sh
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Step 2: Reload your shell.</p>
-
-<figure class='code'><figcaption><span>reloading .bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">source</span> .bash_profile
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Step 2.5: Obtain a list of available node versions to install.</p>
-
-<figure class='code'><figcaption><span>listing available node versions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>nvm ls-remote
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Step 3: Install your desired version of node.</p>
-
-<figure class='code'><figcaption><span>installing node version 0.10.0</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>nvm install v0.10.0
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After that&#8217;s done, execute a <code>node -v</code> to verify. Now wasn&#8217;t that easy? You bet!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -590,6 +565,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/12/aws-ebs-in-4-steps/">AWS EBS in 4 steps</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/09/all-other-metrics-are-useless/">All other metrics are useless</a>
       </li>
     
@@ -603,10 +582,6 @@
     
       <li class="post">
         <a href="/blog/2013/09/26/app-signing-ios-versus-android/">App signing: iOS versus Android</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/21/i-like-my-elasticsearch-a-la-node-dot-js/">I like my ElasticSearch a la Node.js</a>
       </li>
     
   </ul>

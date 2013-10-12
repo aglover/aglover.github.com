@@ -88,6 +88,78 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/03/12/node-in-3-commands/">Node.js in 3 Commands</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-12T11:55:00-04:00" pubdate data-updated="true">Mar 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A few <a href="http://www.javaworld.com/community/node/8140">short years ago</a> when I started to explore <a href="http://nodejs.org/">Node.js</a>, I remember the installation on my MacBook Pro required downloading the source, compiling and installing it, and then updating paths. <em>And then</em> you had to install <a href="https://npmjs.org/">NPM</a>.</p>
+
+<p>Since then, <a href="http://www.ibm.com/developerworks/library/j-nodejs/">Node</a>&#8217;s installation has been come tremendously easy and NPM is even <em>bundled</em> with <a href="http://www.ibm.com/developerworks/offers/lp/demos/summary/j-jnodejs.html?ca=drs-">Node</a>. And yet, installing Node (and keeping up w/its rapid release schedule) is even easier with a nifty tool: <a href="https://github.com/creationix/nvm">Node Version Manager</a>.</p>
+
+<p>With Node Version Manager (or <a href="https://twitter.com/aglover/status/105824835149627392">nvm</a>) you can be up and running with Node in 3 easy commands.</p>
+
+<p>Step 1: Download and install nvm.</p>
+
+<figure class='code'><figcaption><span>downloading nvm</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl https://raw.github.com/creationix/nvm/master/install.sh | sh
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Step 2: Reload your shell.</p>
+
+<figure class='code'><figcaption><span>reloading .bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">source</span> .bash_profile
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Step 2.5: Obtain a list of available node versions to install.</p>
+
+<figure class='code'><figcaption><span>listing available node versions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>nvm ls-remote
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Step 3: Install your desired version of node.</p>
+
+<figure class='code'><figcaption><span>installing node version 0.10.0</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>nvm install v0.10.0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After that&#8217;s done, execute a <code>node -v</code> to verify. Now wasn&#8217;t that easy? You bet!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2013/03/06/the-bulls-eye-on-mobility-mobile-for-the-masses/">The Bull&#8217;s Eye on Mobility: Mobile for the Masses</a></h1>
       
     
@@ -579,47 +651,6 @@ As you can see, it&#8217;s all quite easy &#8211; GridFS is simply a facade for 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2012/12/12/the-cloud-files-are-out/">The Cloud Files Are Out!</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-12T17:22:00-05:00" pubdate data-updated="true">Dec 12<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img class="left" src="http://www.ibm.com/developerworks/i/t-j-f-cloudpodcast_ffffff.jpg">The good folks over at <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a> have recently published <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">season 5 of the Java technical podcast series</a>. This season
-focuses on the technologies, companies, and people influencing cloud computing. I had the pleasure to chat with a cadre of super interesting people, including <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#labourey">Sacha Labourey</a> of CloudBees, <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#engineyard">Bill Platt and Mark Gaydos</a> of Engine Yard, and <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#proudman">Jesse Proudman</a> of BlueBox, just to name a few!</p>
-
-<p><a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">In these podcasts</a>, you&#8217;ll hear from people who not only influence, but directly impact cloud computing, regardless of the underlying language or platform. There&#8217;s a lot to learn here, so put on your headphones and get ready for some interesting conversations! So what are you waiting for? <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">Go listen right this instant</a>!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -640,6 +671,10 @@ focuses on the technologies, companies, and people influencing cloud computing. 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/12/aws-ebs-in-4-steps/">AWS EBS in 4 steps</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/09/all-other-metrics-are-useless/">All other metrics are useless</a>
       </li>
     
@@ -653,10 +688,6 @@ focuses on the technologies, companies, and people influencing cloud computing. 
     
       <li class="post">
         <a href="/blog/2013/09/26/app-signing-ios-versus-android/">App signing: iOS versus Android</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/21/i-like-my-elasticsearch-a-la-node-dot-js/">I like my ElasticSearch a la Node.js</a>
       </li>
     
   </ul>

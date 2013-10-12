@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Past performance is no guarantee of future results - The Disco Blog</title>
+  <title>AWS EBS in 4 steps - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
@@ -20,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/">
+  <link rel="canonical" href="http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -85,7 +85,7 @@
   <header>
     
       
-        <h1 class="entry-title">Past Performance Is No Guarantee of Future Results</h1>
+        <h1 class="entry-title">AWS EBS in 4 Steps</h1>
       
     
     
@@ -102,32 +102,80 @@
   
 
 
-<time datetime="2012-09-07T11:25:00-04:00" pubdate data-updated="true">Sep 7<span>th</span>, 2012</time>
+<time datetime="2013-10-12T17:47:00-04:00" pubdate data-updated="true">Oct 12<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>In the early days of the desktop computing, software delivery was a matter of going to a store <em>and buying a box</em>. Subsequently, you then went home and manually inserted install disks into a computer. It was, in retrospect, a real pain in the neck. Accordingly, for most people, the software that was loaded on the PC they bought was basically what they only used for the life of the machine. Adding new software to your home PC was an event.</p>
+<div class="entry-content"><p><img class="right" src="/images/mine/4fingers.jpg">When you fire up an AWS AMI, you are given a small partition of disk space that survives reboots. For example, the base <a href="https://github.com/aglover/ubuntu-equip">Ubuntu AMI</a> I tend to favor comes with an 8GB primary partition; however, 8GB is often not enough, especially if you&#8217;re running a database or something that requires a lot of disk space.</p>
 
-<p><img class="right" src="/images/mine/4047547668_f46315f196_m.jpg">What&#8217;s more, finding out what to buy and where to buy it was tedious &#8211; if you were lucky and knew someone really into computers, you&#8217;d get the scoop on some super useful software worth the effort to jump in a car, drive to the store, purchase, jump back into your car, get home and install it. A few hours later (assuming the store had the box you were looking for), you&#8217;d be up and running.</p>
+<p>If you poke around on an AMI instance, you&#8217;ll notice some AMI instances will have additional partitions and in many cases, these partitions will be huge; nevertheless, they&#8217;re transient and any data on those disks will disappear after a reboot.</p>
 
-<p>The Web changed this state of software stagnancy for the typical computer user &#8211; now interesting and useful things could be rapidly done on a computer in an on-demand fashion <em>without</em> the need to go somewhere and pick up a box! Need to look up the definition of a word? No problem, go to <a href="http://dictionary.reference.com/">dictionary.com</a>. Need to write a document and share it with various people? <a href="http://www.google.com/enterprise/apps/business">Google Apps</a> to the rescue! Need to a way to manage your complex sales process? Look no further than <a href="http://www.salesforce.com/">Salesforce.com</a>. In essence, in the last decade, the web has become an <em>effective software delivery channel for consumers</em>. And in the process that channel has virtually wiped out desktop applications. I can&#8217;t remember the last time I bought a software product box from a store. Can you?</p>
+<p>Accordingly, if you need to gain some more permanent space on an AMI instance, you&#8217;ll need to leverage an <a href="http://aws.amazon.com/ebs/">Elastic Block Store (or EBS)</a>, which is basically a permanent hard disk that you can attach to a running AMI instance. The data on an EBS will survive a reboot.</p>
 
-<p>Finding out what to use on the web can be daunting though. We all discover something useful on a daily basis; in many respects, the means for learning about new and useful websites is facilitated via social media, but finding web apps is like wading through a jungle for the average consumer. Google, for the most part, is the web&#8217;s product catalog, yet, you the consumer are left to determine a particular product&#8217;s efficacy if someone in your social network hasn&#8217;t already vouched for it.  Consequently, the breadth of web applications the average consumer uses regularly is probably as narrow as it was before the advent of the web.</p>
+<!-- more -->
 
-<p>It&#8217;s easy then to look at the rapidly evolving mobile landscape and the ever growing popularity of HTML5 and predict a similar result: native mobile apps will go the route of the web because <em>that&#8217;s what has happened already</em>. Web apps will destroy native apps just like they destroyed desktop ones! Yet, there is one thing missing in this equation: <em>software delivery via curated app stores</em>. You see, what was absent in the early days of the desktop was an accessible online app store.</p>
 
-<p><img class="left" src="/images/mine/AppStore_icon.png">All major mobile platforms offer app stores: Apple has its <a href="http://www.apple.com/apps">App Store</a>, Google as <a href="https://play.google.com/store">Play</a>, Amazon has its <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a>, and the list goes on. These app stores make it extremely easy to distribute software and, what&#8217;s more, make it straightforward for consumers to find relevant apps. Need an app to calculate tips? No problem, search it out in your app store of device, read the reviews, download the most highly reviewed one, and within minutes you&#8217;re calculating the appropriate tip before you finish your dinner. That&#8217;s revolutionary!</p>
+<p>Attaching an <a href="http://aws.amazon.com/articles/1667">EBS is super simple</a> and can be done in 4 steps. These steps assume you&#8217;ve got a running AMI; accordingly, if you don&#8217;t have one up and running, go ahead and do that first. Finally, these instructions are for Linix/Unix systems.</p>
 
-<p>This app store trend, by the way, is starting to appear on desktops and the web because of their success on mobile devices. It should come as no surprise that my most recent desktop software purchases were from the <a href="http://www.apple.com/osx/apps/app-store.html">Mac App Store</a>; what&#8217;s more, you can browse the <a href="https://chrome.google.com/webstore">Chrome web store</a> from your desktop as easily as you can browse the iOS App Store on your iPad.</p>
+<p>First, you&#8217;ll need to create an EBS volume in the same zone as the AMI instance. In my case, the instance I&#8217;d like to augment with a beefy hard drive resides in us-east-1b. What&#8217;s more, you&#8217;ll need to configure how much space you&#8217;ll want &#8211; you can also select if you&#8217;d like to have <a href="http://aws.amazon.com/about-aws/whats-new/2012/07/31/announcing-provisioned-iops-for-amazon-ebs/">provisioned IOPS</a> &#8211; this is a high performance I/O feature of AWS and is intended for databases.</p>
 
-<p>Thus, software delivery on the mobile platform is, at least for the foreseeable future, firmly established via app stores. And app stores cater to native apps (100% native and/or hybrid) only. The average person will not look for useful apps via their device&#8217;s browser: that route is still a jungle. And, at this point, there is no viable pure play mobile web app delivery channel.</p>
+<p><img class="center" src="/images/mine/ebs1.png"></p>
 
-<p>If you are betting against native apps, you had better consider how consumers find and consume apps. Just because the web made it easier for consumers to use apps (and thus crushed desktop applications in the process) before the mobile revolution, it doesn&#8217;t necessarily mean native apps on mobile devices will be crushed by web apps <em>again</em>. The software delivery channel is firmly established on mobile devices and until those app stores support icon-ifying URLs, native is the only means for mass consumer discovery.</p>
+<p>Once the EBS is created, you&#8217;ll need to <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html">attach it</a> to your running AMI &#8211; you can do this by right clicking on the EBS in the AWS Management Console and selecting Attach Volume. You&#8217;ll need to pick your instance from a drop down. Once you&#8217;ve picked your instance, AWS will suggest a Device &#8211; I suggest you keep it. Click the &#8220;Yes, Attach&#8221; button.</p>
 
-<p><em>Thanks to <a href="http://www.vectorportal.com/stockvectors">Software Box Vector Blue</a> for the image of a software box.</em></p>
+<p><img class="center" src="/images/mine/ebs2.png"></p>
+
+<p>SSH onto your running instance and take a peek at the <code>/proc/partitions</code> file &#8211; you should see at least 2 partitions with your newly attached one on the bottom.  The blocks are listed in kilobytes and pay special attention to the name &#8211; you&#8217;ll need it for the next few steps.</p>
+
+<figure class='code'><figcaption><span>The contents of /proc/partitions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ubuntu@ip-10-194-97-73:~<span class="nv">$ </span>cat /proc/partitions
+</span><span class='line'>major minor  <span class="c">#blocks  name</span>
+</span><span class='line'>
+</span><span class='line'> 202        1    8388608 xvda1
+</span><span class='line'> 202       80    8388608 xvdf
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see above, there is an 8GB EBS volume named <code>xvdf</code> in the <code>partitions</code> file.</p>
+
+<p>Next, you&#8217;ll want to format the volume &#8211; I&#8217;m going to format the EBS volume as ext4. The command to do this is:</p>
+
+<figure class='code'><figcaption><span>Foratting an EBS volume</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mke2fs -F -t ext4 /dev/xvdf
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that the volume is formatted, I can mount it &#8211; I&#8217;m going to mount it to a directory called <code>/ebs</code>; accordingly, I need to create the <code>/ebs</code> directory and then mount the <code>xvdf</code> device like so:</p>
+
+<figure class='code'><figcaption><span>Creating and mounting the device to the ebs directory</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mkdir /ebs
+</span><span class='line'>sudo mount /dev/xvdf /ebs
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>At this point, you are 98% done; however, the volume will not be reattached if this instance is rebooted.</p>
+
+<p>To make this EBS volume automatically reattach after a reboot, you&#8217;ll need to add it to the <code>fstab</code> file (it&#8217;s in the <code>/etc</code> directory). When you edit that file, the file system will be
+what ever you mounted (i.e <code>/dev/xvdf</code>), the mount point will be the directory you mounted it to &#8211; in my case, it&#8217;s <code>/ebs</code>. The type will be ext4 (if you formatted it that way) and for options, put default. The last two values can be 0 as well.</p>
+
+<p>If you need to remove your EBS volume, on the attached instance, run</p>
+
+<figure class='code'><figcaption><span>Unmounting a device</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo umount -d /dev/xvdf
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And then go into the AWS Management Console, find your EBS volume, right click on it and select detach volume.</p>
+
+<p>That&#8217;s it &#8211; you&#8217;re done! You&#8217;ve got a permanent store. In 4 steps, you&#8217;ve created an EBS volume, attached it to a running AMI, formatted and mounted it. And you&#8217;ve made it attach automatically after a reboot.  Can you dig it?</p>
 </div>
 <!-- related posts -->
 <div id='related_posts'>
@@ -139,23 +187,23 @@
           
       
           
-            <li class="related"><a href="/blog/2012/12/02/comprehending-the-mobile-development-landscape/">Comprehending the mobile development landscape</a></li>
-          
-      
-          
-            <li class="related"><a href="/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">Why Amazon Appstore's support of HTML5 matters</a></li>
-          
-      
-          
-            <li class="related"><a href="/blog/2013/10/05/the-significance-of-html5/">The significance of HTML5</a></li>
-          
-      
-          
             <li class="related"><a href="/blog/2013/07/24/introducing-android-migrations/">Introducing Android migrations</a></li>
           
       
           
-            <li class="related"><a href="/blog/2012/11/28/the-essence-of-mobile-app-performance/">The essence of mobile app performance</a></li>
+            <li class="related"><a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku performance hat-trick</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/09/03/effortless-elasticsearch-clustering/">Effortless ElasticSearch clustering</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">ElasticSearch on EC2 in less than 60 seconds</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/10/09/all-other-metrics-are-useless/">All other metrics are useless</a></li>
           
       
       </ul>
@@ -181,12 +229,12 @@
   
 
 
-<time datetime="2012-09-07T11:25:00-04:00" pubdate data-updated="true">Sep 7<span>th</span>, 2012</time>
+<time datetime="2013-10-12T17:47:00-04:00" pubdate data-updated="true">Oct 12<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/mobile/'>mobile</a>
+    <a class='category' href='/blog/categories/aws/'>AWS</a>, <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/cloud/'>cloud</a>
   
 </span>
 
@@ -195,7 +243,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -208,10 +256,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left articlenav" href="/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/" title="Previous Post: MongoDB from the trenches: masochistic embedded collections">&laquo; MongoDB from the trenches: masochistic embedded collections</a>
+        <a class="basic-alignment left articlenav" href="/blog/2013/10/09/all-other-metrics-are-useless/" title="Previous Post: All other metrics are useless">&laquo; All other metrics are useless</a>
       
-      
-        <a class="basic-alignment right articlenav" href="/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/" title="Next Post: MongoDB from the trenches: prudent production planning">MongoDB from the trenches: prudent production planning &raquo;</a>
       
     </p>
   </footer>
@@ -310,8 +356,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/';
-        var disqus_url = 'http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/';
+        var disqus_identifier = 'http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps/';
+        var disqus_url = 'http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps/';
         var disqus_script = 'embed.js';
       
     (function () {

@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-10-09T19:00:17-04:00</updated>
+  <updated>2013-10-12T18:09:06-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,81 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[AWS EBS in 4 steps]]></title>
+    <link href="http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps/"/>
+    <updated>2013-10-12T17:47:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/4fingers.jpg">When you fire up an AWS AMI, you are given a small partition of disk space that survives reboots. For example, the base <a href="https://github.com/aglover/ubuntu-equip">Ubuntu AMI</a> I tend to favor comes with an 8GB primary partition; however, 8GB is often not enough, especially if you&#8217;re running a database or something that requires a lot of disk space.</p>
+
+<p>If you poke around on an AMI instance, you&#8217;ll notice some AMI instances will have additional partitions and in many cases, these partitions will be huge; nevertheless, they&#8217;re transient and any data on those disks will disappear after a reboot.</p>
+
+<p>Accordingly, if you need to gain some more permanent space on an AMI instance, you&#8217;ll need to leverage an <a href="http://aws.amazon.com/ebs/">Elastic Block Store (or EBS)</a>, which is basically a permanent hard disk that you can attach to a running AMI instance. The data on an EBS will survive a reboot.</p>
+
+<!-- more -->
+
+
+<p>Attaching an <a href="http://aws.amazon.com/articles/1667">EBS is super simple</a> and can be done in 4 steps. These steps assume you&#8217;ve got a running AMI; accordingly, if you don&#8217;t have one up and running, go ahead and do that first. Finally, these instructions are for Linix/Unix systems.</p>
+
+<p>First, you&#8217;ll need to create an EBS volume in the same zone as the AMI instance. In my case, the instance I&#8217;d like to augment with a beefy hard drive resides in us-east-1b. What&#8217;s more, you&#8217;ll need to configure how much space you&#8217;ll want &#8211; you can also select if you&#8217;d like to have <a href="http://aws.amazon.com/about-aws/whats-new/2012/07/31/announcing-provisioned-iops-for-amazon-ebs/">provisioned IOPS</a> &#8211; this is a high performance I/O feature of AWS and is intended for databases.</p>
+
+<p><img class="center" src="http://thediscoblog.com/images/mine/ebs1.png"></p>
+
+<p>Once the EBS is created, you&#8217;ll need to <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html">attach it</a> to your running AMI &#8211; you can do this by right clicking on the EBS in the AWS Management Console and selecting Attach Volume. You&#8217;ll need to pick your instance from a drop down. Once you&#8217;ve picked your instance, AWS will suggest a Device &#8211; I suggest you keep it. Click the &#8220;Yes, Attach&#8221; button.</p>
+
+<p><img class="center" src="http://thediscoblog.com/images/mine/ebs2.png"></p>
+
+<p>SSH onto your running instance and take a peek at the <code>/proc/partitions</code> file &#8211; you should see at least 2 partitions with your newly attached one on the bottom.  The blocks are listed in kilobytes and pay special attention to the name &#8211; you&#8217;ll need it for the next few steps.</p>
+
+<figure class='code'><figcaption><span>The contents of /proc/partitions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ubuntu@ip-10-194-97-73:~<span class="nv">$ </span>cat /proc/partitions
+</span><span class='line'>major minor  <span class="c">#blocks  name</span>
+</span><span class='line'>
+</span><span class='line'> 202        1    8388608 xvda1
+</span><span class='line'> 202       80    8388608 xvdf
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see above, there is an 8GB EBS volume named <code>xvdf</code> in the <code>partitions</code> file.</p>
+
+<p>Next, you&#8217;ll want to format the volume &#8211; I&#8217;m going to format the EBS volume as ext4. The command to do this is:</p>
+
+<figure class='code'><figcaption><span>Foratting an EBS volume</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mke2fs -F -t ext4 /dev/xvdf
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that the volume is formatted, I can mount it &#8211; I&#8217;m going to mount it to a directory called <code>/ebs</code>; accordingly, I need to create the <code>/ebs</code> directory and then mount the <code>xvdf</code> device like so:</p>
+
+<figure class='code'><figcaption><span>Creating and mounting the device to the ebs directory</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mkdir /ebs
+</span><span class='line'>sudo mount /dev/xvdf /ebs
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>At this point, you are 98% done; however, the volume will not be reattached if this instance is rebooted.</p>
+
+<p>To make this EBS volume automatically reattach after a reboot, you&#8217;ll need to add it to the <code>fstab</code> file (it&#8217;s in the <code>/etc</code> directory). When you edit that file, the file system will be
+what ever you mounted (i.e <code>/dev/xvdf</code>), the mount point will be the directory you mounted it to &#8211; in my case, it&#8217;s <code>/ebs</code>. The type will be ext4 (if you formatted it that way) and for options, put default. The last two values can be 0 as well.</p>
+
+<p>If you need to remove your EBS volume, on the attached instance, run</p>
+
+<figure class='code'><figcaption><span>Unmounting a device</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo umount -d /dev/xvdf
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And then go into the AWS Management Console, find your EBS volume, right click on it and select detach volume.</p>
+
+<p>That&#8217;s it &#8211; you&#8217;re done! You&#8217;ve got a permanent store. In 4 steps, you&#8217;ve created an EBS volume, attached it to a running AMI, formatted and mounted it. And you&#8217;ve made it attach automatically after a reboot.  Can you dig it?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[All other metrics are useless]]></title>
@@ -1820,148 +1895,6 @@
 <p>With that line in place, scrolling, once again, becomes clean and smooth.</p>
 
 <p>You can find my app, Hop Roll, which is your go-to home brew resource for all hop related information on <a href="https://play.google.com/store/apps/details?id=com.b50.hoproll">Google Play</a> and <a href="http://www.amazon.com/Beacon50-Hop-Roll/dp/B00A9Z5P42/ref=sr_1_1?ie=UTF8&amp;qid=1370959609&amp;sr=8-1&amp;keywords=hoproll">Amazon&#8217;s Android App Store</a> &#8211; keep on trucking, baby!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MongoDB primary keys are your friend]]></title>
-    <link href="http://thediscoblog.com/blog/2013/06/22/mongodb-primary-keys-are-your-friend/"/>
-    <updated>2013-06-22T15:00:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/06/22/mongodb-primary-keys-are-your-friend</id>
-    <content type="html"><![CDATA[<p>All documents in a <a href="http://www.mongodb.org/">MongoDB</a> collection have a primary key dubbed <code>_id</code>. This field is automatically assigned to a document upon insert, so there&#8217;s rarely a need to provide it. What&#8217;s interesting about the <code>_id</code> field is that it is <em>time based</em>. That is, the underlying type of <code>_id</code>, which is <code>ObjectId</code>, is a <a href="http://docs.mongodb.org/manual/reference/object-id/">12-byte BSON type</a>, and 4 of those bytes represent the seconds since Unix epoch.</p>
-
-<!-- more -->
-
-
-<p></p>
-
-<p>What&#8217;s also special about the <code>_id</code> field is that it is automatically indexed as you can see below by calling <code>getIndexes</code> on any collection.</p>
-
-<figure class='code'><figcaption><span>All MongoDB collections have an _id field as an index</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">db</span><span class="p">.</span><span class="nx">things</span><span class="p">.</span><span class="nx">getIndexes</span><span class="p">()</span>
-</span><span class='line'><span class="p">[</span>
-</span><span class='line'>     <span class="p">{</span>
-</span><span class='line'>          <span class="s2">&quot;v&quot;</span> <span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
-</span><span class='line'>          <span class="s2">&quot;key&quot;</span> <span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>               <span class="s2">&quot;_id&quot;</span> <span class="o">:</span> <span class="mi">1</span>
-</span><span class='line'>          <span class="p">},</span>
-</span><span class='line'>          <span class="s2">&quot;ns&quot;</span> <span class="o">:</span> <span class="s2">&quot;test.things&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="s2">&quot;name&quot;</span> <span class="o">:</span> <span class="s2">&quot;_id_&quot;</span>
-</span><span class='line'>     <span class="p">}</span>
-</span><span class='line'><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And as everyone remembers from traditional RDBMSs, <a href="http://en.wikipedia.org/wiki/Database_index">indexes are important</a> because they can make document retrieval faster; nevertheless, indexes do consume memory and there is a slight performance penalty when inserting documents as all corresponding indexes must be updated. Thus, while you should seriously consider using indexes, you need to be economical in their usage.</p>
-
-<p>Naturally, searching by a document&#8217;s <code>_id</code> is only convenient when you <em>know</em> it. More often than not, documents are searched via other fields and if you find yourself searching <a href="http://cookbook.mongodb.org/patterns/date_range/">via a time series</a>, such as <code>created_at</code> then you are in for a treat.</p>
-
-<p>Imagine a collection dubbed <code>logs</code> that contains simple documents capturing various log messages. A sample document could look like so:</p>
-
-<figure class='code'><figcaption><span>A simple document in a logs collection</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">{</span>
-</span><span class='line'>     <span class="s2">&quot;_id&quot;</span> <span class="o">:</span> <span class="nx">ObjectId</span><span class="p">(</span><span class="s2">&quot;51c4ab6d4d6906d494460728&quot;</span><span class="p">),</span>
-</span><span class='line'>     <span class="s2">&quot;message&quot;</span> <span class="o">:</span> <span class="s2">&quot;crashed, no such method exception&quot;</span><span class="p">,</span>
-</span><span class='line'>     <span class="s2">&quot;type&quot;</span> <span class="o">:</span> <span class="s2">&quot;crash&quot;</span><span class="p">,</span>
-</span><span class='line'>     <span class="s2">&quot;created_at&quot;</span> <span class="o">:</span> <span class="nx">ISODate</span><span class="p">(</span><span class="s2">&quot;2013-06-21T19:37:17.992Z&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>What if I wanted to find all log messages for some date, like today? I could write my query like so:</p>
-
-<figure class='code'><figcaption><span>finding all logs created since June 20th, 2013</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">db</span><span class="p">.</span><span class="nx">logs</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">created_at</span><span class="o">:</span><span class="p">{</span><span class="s1">&#39;$gt&#39;</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">)}})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If I throw an explain to that query, I can see that because I do not have an index on <code>created_at</code>, a basic cursor is leveraged and all documents in the collection were scanned in order to retrieve my result.</p>
-
-<figure class='code'><figcaption><span>An explain plan attached to my find</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">db</span><span class="p">.</span><span class="nx">logs</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">created_at</span><span class="o">:</span><span class="p">{</span><span class="s1">&#39;$gt&#39;</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">)}}).</span><span class="nx">explain</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>     <span class="s2">&quot;cursor&quot;</span> <span class="o">:</span> <span class="s2">&quot;BasicCursor&quot;</span><span class="p">,</span>
-</span><span class='line'>     <span class="s2">&quot;isMultiKey&quot;</span> <span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-</span><span class='line'>     <span class="s2">&quot;n&quot;</span> <span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
-</span><span class='line'>     <span class="s2">&quot;nscannedObjects&quot;</span> <span class="o">:</span> <span class="mi">4</span><span class="p">,</span>
-</span><span class='line'>     <span class="s2">&quot;nscanned&quot;</span> <span class="o">:</span> <span class="mi">4</span><span class="p">,</span>
-</span><span class='line'>     <span class="s2">&quot;nscannedObjectsAllPlans&quot;</span> <span class="o">:</span> <span class="mi">4</span><span class="p">,</span>
-</span><span class='line'>     <span class="s2">&quot;nscannedAllPlans&quot;</span> <span class="o">:</span> <span class="mi">4</span><span class="p">,</span>
-</span><span class='line'>     <span class="s2">&quot;scanAndOrder&quot;</span> <span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-</span><span class='line'>     <span class="s2">&quot;indexOnly&quot;</span> <span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-</span><span class='line'>     <span class="s2">&quot;nYields&quot;</span> <span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-</span><span class='line'>     <span class="s2">&quot;nChunkSkips&quot;</span> <span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-</span><span class='line'>     <span class="s2">&quot;millis&quot;</span> <span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-</span><span class='line'>     <span class="s2">&quot;indexBounds&quot;</span> <span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="p">},</span>
-</span><span class='line'>     <span class="s2">&quot;server&quot;</span> <span class="o">:</span> <span class="s2">&quot;ghome-computer.home:27017&quot;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see, searching via the <code>created_at</code> field can be inefficient; thus, you might be tempted to throw an index on that field. This would naturally make that particular query more efficient, however, you would incur the cost of a new index which is more memory consumed and inserts would be slightly slower due to an update to that newly created index.</p>
-
-<p>As it turns out, because the <code>_id</code> field embeds Unix epoch in it, you can just as easily craft a find expression <em>without</em> including the <code>created_at</code> field. For example, the <a href="https://github.com/mongodb/mongo-ruby-driver">MongoDB Ruby driver</a> allows you to create <code>ObjectId</code>&#8217;s from a <code>Time</code> like so:</p>
-
-<figure class='code'><figcaption><span>Creating a new ObjectId via the from_time factory method</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">yesterday</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">-</span> <span class="p">(</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="p">(</span><span class="mi">24</span><span class="o">*</span><span class="mi">1</span><span class="p">))</span>
-</span><span class='line'><span class="n">custom_id</span> <span class="o">=</span> <span class="no">BSON</span><span class="o">::</span><span class="no">ObjectId</span><span class="o">.</span><span class="n">from_time</span><span class="p">(</span><span class="n">yesterday</span><span class="p">)</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="no">BSON</span><span class="o">::</span><span class="no">ObjectId</span><span class="p">(</span><span class="s1">&#39;51c397800000000000000000&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see, I&#8217;ve created a new <code>ObjectId</code> via the <code>from_time</code> factory method.  51c397800000000000000000 is a hexadecimal representation and the first 8 digits represent the time with everything else zeroed out. Note, you can create <code>ObjectId</code> types via some notion of time in other language drivers as well.</p>
-
-<p>Now I can leverage my <code>custom_id</code> in any <code>find</code> expression. Via the Ruby driver, I can also attach an <code>explain</code>, which&#8217;ll demonstrate the usage of the free <code>_id</code> index.</p>
-
-<figure class='code'><figcaption><span>Using a date derived ObjectId forces a find to use the _id index</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">mongodb</span><span class="o">[</span><span class="ss">:logs</span><span class="o">].</span><span class="n">find</span><span class="p">({</span><span class="n">_id</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$gt&#39;</span> <span class="o">=&gt;</span> <span class="n">custom_id</span><span class="p">}})</span><span class="o">.</span><span class="n">explain</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">=&gt;</span> <span class="p">{</span><span class="s2">&quot;cursor&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;BtreeCursor _id_&quot;</span><span class="p">,</span> <span class="s2">&quot;isMultiKey&quot;</span><span class="o">=&gt;</span><span class="kp">false</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="o">=&gt;</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;nscannedObjects&quot;</span><span class="o">=&gt;</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;nscanned&quot;</span><span class="o">=&gt;</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="n">.</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you see <code>BtreeCusor</code>, then you know you&#8217;re using an index; if you see <code>BasicCursor</code>, you know you&#8217;re not.</p>
-
-<p>Thus, if you find yourself executing queries and creating indexes for some time or date field like <code>created_at</code>, you might be better off just using Mongo&#8217;s <code>_id</code> field as it already embeds the notion of <em>created at</em> and is indexed by default. Dig it?</p>
 ]]></content>
   </entry>
   
