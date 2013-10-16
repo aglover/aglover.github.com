@@ -88,6 +88,44 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2012/12/17/running-individual-tests-in-rails/">Running Individual Tests in Rails</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-17T09:38:00-05:00" pubdate data-updated="true">Dec 17<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Every now and again, I find myself struggling to remember how to execute a single test in <a href="http://rubyonrails.org/">Rails</a>. While I have <a href="https://github.com/guard/guard">Guard</a> running the entire test suite <em>anytime</em> a change is detected, there are times when I want to focus solely on one test. Accordingly, <a href="http://flavio.castelli.name/2010/05/28/rails_execute_single_test/">Flavio Castelli has a great blog entry</a> detailing the manifold ways one can execute a single test using <a href="http://rake.rubyforge.org/">Rake</a> and/or Ruby.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2012/12/12/the-cloud-files-are-out/">The Cloud Files Are Out!</a></h1>
       
     
@@ -659,117 +697,6 @@ focuses on the technologies, companies, and people influencing cloud computing. 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">MongoDB From the Trenches: Masochistic Embedded Collections</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-03T21:47:00-04:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.mongodb.org/">MongoDB</a> supports rich documents that can include, among other things, embedded documents. This feature embodies a <em>has-a</em> relationship quite nicely and can, if modeled properly, reduce the number of finds required to ascertain certain data as there are no joins in Mongo.</p>
-
-<p>As classic example of embedding a collection of documents inside a parent document is contact addresses (i.e. mailing, email, twitter, etc) associated with a person. Think business cards. You can, of course, model this in any number of ways &#8211; in the traditional relational world, this would be a one-to-many relationship between at least two tables. Nevertheless, with a document-oriented database, you can model a parent <code>person</code> document with an embedded collection of <code>contacts</code> that are each themselves documents containing, say, <em>type</em> (i.e. phone, twitter, email) and <em>value</em> (which could be 555-555-555, @jon_doe, etc).</p>
-
-<p>This relationship with Mongo works nicely <em>if the child embedded document never needs to exist outside of its parent</em>. In the case of a business card, the contact document representing a phone number, for example, doesn&#8217;t necessarily make sense outside the context of the person who it belongs to. With this relationship, you can easily find a particular person via his/her phone number (that is, via Mongo&#8217;s query language, you can reach inside arrays via its <a href="http://www.mongodb.org/display/DOCS/Dot+Notation+(Reaching+into+Objects">dot notion</a>) effortlessly). And, once you have a handle to a person, you don&#8217;t need to execute a series of finds to ascertain contact information &#8211; it&#8217;s all right there.</p>
-
-<p>Nevertheless, things start to get painful quickly if you&#8217;d like to operate solely on a singular embedded document. That is, if you execute finds that are intended to deal with the expected resultant embedded document, you&#8217;re in for some work: as of Mongo 2.2, you can&#8217;t select a singular document from within a collection residing in a parent via a query. A find in this case will pull <em>everything</em> &#8211; it&#8217;s up to you (i.e your application) to filter things.</p>
-
-<p>An example will probably help: imagine the business card example from earlier &#8211; a <code>person</code> document containing an embedded collection of <code>contacts</code>:</p>
-
-<figure class='code'><figcaption><span>person document</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="nx">first_name</span><span class="o">:</span> <span class="s1">&#39;Andrew&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">last_name</span><span class="o">:</span> <span class="s1">&#39;Glover&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">contacts</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>    <span class="nx">type</span><span class="o">:</span>  <span class="s1">&#39;cell&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">value</span><span class="o">:</span> <span class="s1">&#39;555-555-5555&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">last_updated</span><span class="o">:</span> <span class="mi">2012</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">01</span> <span class="mi">23</span><span class="o">:</span><span class="mi">41</span><span class="o">:</span><span class="mi">51</span> <span class="nx">UTC</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>    <span class="nx">type</span><span class="o">:</span>  <span class="s1">&#39;home&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">value</span><span class="o">:</span> <span class="s1">&#39;555-555-5551&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">last_updated</span><span class="o">:</span> <span class="mi">2012</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">11</span> <span class="mi">12</span><span class="o">:</span><span class="mi">21</span><span class="o">:</span><span class="mi">11</span> <span class="nx">UTC</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="p">]</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To find this document by a phone number is easy:</p>
-
-<figure class='code'><figcaption><span>finding a person by phone number</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'> <span class="nx">db</span><span class="p">.</span><span class="nx">persons</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="s1">&#39;contacts.value&#39;</span><span class="o">:</span><span class="s1">&#39;555-555-5555&#39;</span><span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>But what if you wanted to find the <code>contact</code> that was recently updated, say since the beginning of the month, and change its value or add some additional meta-data? The query <em>you&#8217;d like</em> would look something like:</p>
-
-<figure class='code'><figcaption><span>finding via last_updated</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">db</span><span class="p">.</span><span class="nx">persons</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="s1">&#39;contacts.last_updated&#39;</span><span class="o">:</span> <span class="p">{</span><span class="nx">$gte</span><span class="o">:</span> <span class="nx">datetime</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This query works and will match the person &#8216;Andrew Glover&#8217; &#8211; but the catch here is that what is returned is the entire document. You can add query limiters if you&#8217;d like (i.e. <code>{contacts:1}</code>), however, that will merely return a <code>person</code> document with only a collection of <code>contacts</code>. Thus, you are left to iterate over the resultant collection of <code>contacts</code> and work your magic that way. That is, you still have to find the contact document that was edited this month! In your code!</p>
-
-<p>No big deal, you say? This particular example is, indeed, a bit contrived; however, imagine if the overall document is quite large (maybe it&#8217;s not a <code>person</code> but an <code>organization</code>!) and that the embedded collection is also lengthly (how many employees does Google have?). Now this simple update is pulling a lot of bytes across the wire (and taxing Mongo in the process) and then your app is working with a lot of bytes in memory (now the document is taxing your app!). Did you want this operation to happen quickly, under load too?</p>
-
-<p>Thus, with embedded document collections, if you envision having to work with a particular embedded document <em>in isolation</em>, it is better, at this point, to model has-a relationships with distinct collections (i.e. in this example, life would be much easier if there is a <code>person</code> collection and a <code>contacts</code> one). Indeed, the flexibility of document-oriented, schema-less data stores is a boon to rapid evolutionary development. But you still have to do some thinking up front. Unless, of course, you&#8217;re a masochist.</p>
-
-<p>I&#8217;m a huge fan of Mongo. Check out some of the articles, videos, and podcasts that I&#8217;ve done, which focus on Mongo, including:</p>
-
-<ul>
-<li><a href="http://www.ibm.com/developerworks/java/library/j-javadev2-12/">Java development 2.0: MongoDB: A NoSQL datastore with (all the right) RDBMS moves</a></li>
-<li><a href="http://public.dhe.ibm.com/software/dw/demos/jmongodb/index.html">Video demo: An introduction to MongoDB</a></li>
-<li><a href="http://www.ibm.com/developerworks/java/library/j-gloverpodcast/#Horowitz">Eliot Horowitz on MongoDB</a></li>
-<li><a href="http://www.ibm.com/developerworks/java/library/j-gloverpodcast4/index.html#francia">10gen&#8217;s Steve Francia talks MongoDB</a></li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -790,6 +717,10 @@ focuses on the technologies, companies, and people influencing cloud computing. 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/16/ssh-and-vagrant/">SSH &amp; Vagrant</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/12/aws-ebs-in-4-steps/">AWS EBS in 4 steps</a>
       </li>
     
@@ -803,10 +734,6 @@ focuses on the technologies, companies, and people influencing cloud computing. 
     
       <li class="post">
         <a href="/blog/2013/09/29/ahoy-there-callbacks/">Ahoy there callbacks!</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/26/app-signing-ios-versus-android/">App signing: iOS versus Android</a>
       </li>
     
   </ul>

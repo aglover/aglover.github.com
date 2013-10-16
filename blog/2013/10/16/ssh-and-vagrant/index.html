@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Mongoid batch inserts - The Disco Blog</title>
+  <title>SSH &amp; Vagrant - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
@@ -20,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts/">
+  <link rel="canonical" href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -85,7 +85,7 @@
   <header>
     
       
-        <h1 class="entry-title">Mongoid Batch Inserts</h1>
+        <h1 class="entry-title">SSH &amp; Vagrant</h1>
       
     
     
@@ -102,31 +102,82 @@
   
 
 
-<time datetime="2013-03-27T11:34:00-04:00" pubdate data-updated="true">Mar 27<span>th</span>, 2013</time>
+<time datetime="2013-10-16T15:55:00-04:00" pubdate data-updated="true">Oct 16<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>In SQL land, all databases support batch inserts. Batch inserts are an effective and efficient mechanism to insert a lot of similar data. That is, instead of issuing x insert statements, you execute 1 insert with x records. This is much more efficient because the insert statement doesn&#8217;t need to be re-parsed x times, there is only 1 network trip as opposed to x, and in the case of transactions, there is only 1 transaction instead of x. When compared to x inserts, batch inserts are always faster.</p>
+<div class="entry-content"><p><a href="http://www.vagrantup.com/">Vagrant</a> is a handy tool for creating VMs. It&#8217;s a lot like firing up an <a href="http://thediscoblog.com/blog/categories/aws/">EC2</a> instance, but in Vagrant&#8217;s case, everything is localized. And best of all, it&#8217;s free.</p>
 
-<p>As it turns out, <a href="http://www.mongodb.org/">MongoDB</a> supports <a href="http://docs.mongodb.org/manual/applications/create/#bulk-insert-multiple-documents">batch inserts</a>! And just like in SQL land, Mongo&#8217;s batching feature is much faster at inserting a lot of data in one insert rather than x inserts.</p>
+<p>I tend to favor <a href="https://github.com/aglover/ubuntu-equip">Ubuntu</a> as my preferred flavor of linux; consequently, all production EC2 instances use a customized Ubuntu AMI. Testing various aspects of this system with various software libraries, however, is initially tested locally using Vagrant VMs. What&#8217;s more, you can install localized VMs of <a href="http://www.vagrantbox.es/">other operating systems</a> ranging from Debian to OpenSuse to <a href="https://devcenter.heroku.com/articles/stack">Heroku&#8217;s Cedalon</a>.</p>
 
-<p>For example, the <a href="https://github.com/mongodb/mongo-ruby-driver">Mongo Ruby driver</a>&#8217;s <a href="https://github.com/mongodb/mongo-ruby-driver/blob/master/lib/mongo/collection.rb#L371">insert method takes a collection</a>; thus, you can insert an array of hashes quite efficiently. Even if you are using a <a href="http://mongoid.org/en/mongoid/index.html">ODM like Mongoid</a>, you can still perform batch inserts as all you need to do is get a reference to the model object&#8217;s underlying collection and then issue an <code>insert</code> with an array of hashes matching the collection&#8217;s intended document structure.</p>
+<!-- more -->
 
-<p>For instance, to insert a collection of <code>Tag</code> models (each having 3 fields: <code>name</code>, <code>system_tag</code>, and <code>account_id</code>) in one fell swoop I can do the following:</p>
 
-<figure class='code'><figcaption><span>Batch inserts with Mongoid model example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p>Firing up a local instance of <a href="http://thediscoblog.com/blog/categories/heroku/">Heroku</a>&#8217;s Cedalon (which is a version of Ubuntu 10.04 with Ruby and Node.js installed) is as easy as typing:</p>
+
+<figure class='code'><figcaption><span>Firing up Heroku&#8217;s Cedalon locally</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">tags</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;bunch&#39;</span><span class="p">,</span> <span class="s1">&#39;of&#39;</span><span class="p">,</span> <span class="s1">&#39;tags&#39;</span><span class="o">].</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">tag</span><span class="o">|</span> <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="n">tag</span><span class="p">,</span> <span class="n">system_tag</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="n">account_id</span><span class="p">:</span> <span class="nb">id</span><span class="p">}</span> <span class="p">}</span>
-</span><span class='line'><span class="no">Tag</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">insert</span> <span class="n">tags</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vagrant init heroku http://dl.dropbox.com/u/1906634/heroku.box
+</span><span class='line'>vagrant up
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In the code above, the <code>insert</code> takes a collection of hashes; what&#8217;s more, the <code>insert</code> is tied to the <code>tags</code> collection via the <code>Tag.collection</code> call.</p>
+<p>Then you can SSH to that running VM like so:</p>
 
-<p>Batch inserts are always faster if you have a lot of similar documents &#8211; in our case, we saw a <em>tremendous</em> performance increase when employing batching.</p>
+<figure class='code'><figcaption><span>SSHing to a local VM</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vagrant ssh
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The command <code>vagrant ssh</code> can be problematic, though, especially if you are automating some aspect of SSH &#8211; for example, you are using some library on top of SSH. In that case, you need to use SSH <em>directly</em> rather than through Vagrant.</p>
+
+<p>Luckily, you can SSH normally to local Vagrant instances easily enough. You&#8217;ll need to tell SSH which key to use (Vagrant creates one for you), which user to connect as (usually vagrant), and what port to connect to (usually 2222).  All of this information can be found via the command <code>vagrant ssh-config</code>.</p>
+
+<p>To use plain Jane SSH when working with Vagrant instances, you&#8217;ll first need to execute this command:</p>
+
+<figure class='code'><figcaption><span>Printing out the location of Vagrant&#8217;s key</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vagrant ssh-config | grep IdentityFile  | awk <span class="s1">&#39;{print $2}&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This <a href="https://groups.google.com/forum/#!topic/vagrant-up/B5WIfDcIRtE">3 pronged command</a> ultimately tells you where Vagrant has created a key file. The command <a href="http://www.thegeekstuff.com/2010/01/awk-introduction-tutorial-7-awk-print-examples/"><code>awk '{print $2}'</code></a> prints the second column of the line in the <code>ssh-config</code> string that starts with <code>IdentityFile</code> (which points to its location).</p>
+
+<p>Now that you know where the key file is, you can ssh (assuming the default port hasn&#8217;t changed from 2222 &#8211; double check your <code>ssh-config</code> to make sure) like so:</p>
+
+<figure class='code'><figcaption><span>Using normal SSH</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ssh -i /some/dir/.vagrant.d/insecure_private_key -l vagrant -p 2222 127.0.0.1
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you happen to fire up different VMs &#8211; for example, I have both Heroku Cedalon and normal Ubuntu instances, SSH will probably complain that the remote host identification has changed. This is a valid warning as the RSA fingerprint associated with the local host has indeed changed.</p>
+
+<p>You can suggest that <a href="http://linuxcommando.blogspot.com/2008/10/how-to-disable-ssh-host-key-checking.html">SSH ignore this warning</a> by adding two additional flags. I highly recommend you only do this via the command line and <em>not with some SSH config file</em> as the warning SSH throws is completely legitimate and could be saving you from a man-in-the-middle attack.</p>
+
+<p>Nevertheless, if you are working with localized VMs and need to bypass that warning, use these two flags:</p>
+
+<figure class='code'><figcaption><span>Two additional flags to SSH</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>-o <span class="nv">UserKnownHostsFile</span><span class="o">=</span>/dev/null -o <span class="nv">StrictHostKeyChecking</span><span class="o">=</span>no
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Consequently, when I SSH to a local Vagrant instance, I type something along the lines of:</p>
+
+<figure class='code'><figcaption><span>SSHing to Vagrant instances</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ssh -i /some/dir/.vagrant.d/insecure_private_key -l vagrant -p 2222 -o <span class="nv">UserKnownHostsFile</span><span class="o">=</span>/dev/null -o <span class="nv">StrictHostKeyChecking</span><span class="o">=</span>no 127.0.0.1
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, to shut down a Vagrant instance, just issue the command:</p>
+
+<figure class='code'><figcaption><span>SSHing to Vagrant instances</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vagrant destroy
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Vagrant makes it super easy to fire up localized development environments &#8211; Vagrant instances boot up faster than EC2 instances and they&#8217;re free. And now you know how to use normal SSH to connect to them. Can you dig it?</p>
 </div>
 <!-- related posts -->
 <div id='related_posts'>
@@ -138,19 +189,19 @@
           
       
           
-            <li class="related"><a href="/blog/2013/06/22/mongodb-primary-keys-are-your-friend/">MongoDB primary keys are your friend</a></li>
+            <li class="related"><a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku performance hat-trick</a></li>
           
       
           
-            <li class="related"><a href="/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra/">Pushing Mongo GridFS files with Sinatra</a></li>
+            <li class="related"><a href="/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">ElasticSearch on EC2 in less than 60 seconds</a></li>
           
       
           
-            <li class="related"><a href="/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">MongoDB from the trenches: masochistic embedded collections</a></li>
+            <li class="related"><a href="/blog/2013/10/12/aws-ebs-in-4-steps/">AWS EBS in 4 steps</a></li>
           
       
           
-            <li class="related"><a href="/blog/2013/02/18/testing-rails-migrations/">Testing Rails migrations</a></li>
+            <li class="related"><a href="/blog/2013/09/03/effortless-elasticsearch-clustering/">Effortless ElasticSearch clustering</a></li>
           
       
           
@@ -180,12 +231,12 @@
   
 
 
-<time datetime="2013-03-27T11:34:00-04:00" pubdate data-updated="true">Mar 27<span>th</span>, 2013</time>
+<time datetime="2013-10-16T15:55:00-04:00" pubdate data-updated="true">Oct 16<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/mongodb/'>MongoDB</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+    <a class='category' href='/blog/categories/heroku/'>Heroku</a>, <a class='category' href='/blog/categories/linux/'>Linux</a>
   
 </span>
 
@@ -194,7 +245,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -207,10 +258,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left articlenav" href="/blog/2013/03/25/modeveast-2012-panel-discussion/" title="Previous Post: MoDevEast 2012 panel discussion">&laquo; MoDevEast 2012 panel discussion</a>
+        <a class="basic-alignment left articlenav" href="/blog/2013/10/12/aws-ebs-in-4-steps/" title="Previous Post: AWS EBS in 4 steps">&laquo; AWS EBS in 4 steps</a>
       
-      
-        <a class="basic-alignment right articlenav" href="/blog/2013/04/05/crowd-think-often-lacks-clarity/" title="Next Post: Crowd think often lacks clarity">Crowd think often lacks clarity &raquo;</a>
       
     </p>
   </footer>
@@ -309,8 +358,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts/';
-        var disqus_url = 'http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts/';
+        var disqus_identifier = 'http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/';
+        var disqus_url = 'http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/';
         var disqus_script = 'embed.js';
       
     (function () {

@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-10-12T18:09:06-04:00</updated>
+  <updated>2013-10-16T16:12:57-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,83 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SSH &amp; Vagrant]]></title>
+    <link href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/"/>
+    <updated>2013-10-16T15:55:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant</id>
+    <content type="html"><![CDATA[<p><a href="http://www.vagrantup.com/">Vagrant</a> is a handy tool for creating VMs. It&#8217;s a lot like firing up an <a href="http://thediscoblog.com/blog/categories/aws/">EC2</a> instance, but in Vagrant&#8217;s case, everything is localized. And best of all, it&#8217;s free.</p>
+
+<p>I tend to favor <a href="https://github.com/aglover/ubuntu-equip">Ubuntu</a> as my preferred flavor of linux; consequently, all production EC2 instances use a customized Ubuntu AMI. Testing various aspects of this system with various software libraries, however, is initially tested locally using Vagrant VMs. What&#8217;s more, you can install localized VMs of <a href="http://www.vagrantbox.es/">other operating systems</a> ranging from Debian to OpenSuse to <a href="https://devcenter.heroku.com/articles/stack">Heroku&#8217;s Cedalon</a>.</p>
+
+<!-- more -->
+
+
+<p>Firing up a local instance of <a href="http://thediscoblog.com/blog/categories/heroku/">Heroku</a>&#8217;s Cedalon (which is a version of Ubuntu 10.04 with Ruby and Node.js installed) is as easy as typing:</p>
+
+<figure class='code'><figcaption><span>Firing up Heroku&#8217;s Cedalon locally</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vagrant init heroku http://dl.dropbox.com/u/1906634/heroku.box
+</span><span class='line'>vagrant up
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you can SSH to that running VM like so:</p>
+
+<figure class='code'><figcaption><span>SSHing to a local VM</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vagrant ssh
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The command <code>vagrant ssh</code> can be problematic, though, especially if you are automating some aspect of SSH &#8211; for example, you are using some library on top of SSH. In that case, you need to use SSH <em>directly</em> rather than through Vagrant.</p>
+
+<p>Luckily, you can SSH normally to local Vagrant instances easily enough. You&#8217;ll need to tell SSH which key to use (Vagrant creates one for you), which user to connect as (usually vagrant), and what port to connect to (usually 2222).  All of this information can be found via the command <code>vagrant ssh-config</code>.</p>
+
+<p>To use plain Jane SSH when working with Vagrant instances, you&#8217;ll first need to execute this command:</p>
+
+<figure class='code'><figcaption><span>Printing out the location of Vagrant&#8217;s key</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vagrant ssh-config | grep IdentityFile  | awk <span class="s1">&#39;{print $2}&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This <a href="https://groups.google.com/forum/#!topic/vagrant-up/B5WIfDcIRtE">3 pronged command</a> ultimately tells you where Vagrant has created a key file. The command <a href="http://www.thegeekstuff.com/2010/01/awk-introduction-tutorial-7-awk-print-examples/"><code>awk '{print $2}'</code></a> prints the second column of the line in the <code>ssh-config</code> string that starts with <code>IdentityFile</code> (which points to its location).</p>
+
+<p>Now that you know where the key file is, you can ssh (assuming the default port hasn&#8217;t changed from 2222 &#8211; double check your <code>ssh-config</code> to make sure) like so:</p>
+
+<figure class='code'><figcaption><span>Using normal SSH</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ssh -i /some/dir/.vagrant.d/insecure_private_key -l vagrant -p 2222 127.0.0.1
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you happen to fire up different VMs &#8211; for example, I have both Heroku Cedalon and normal Ubuntu instances, SSH will probably complain that the remote host identification has changed. This is a valid warning as the RSA fingerprint associated with the local host has indeed changed.</p>
+
+<p>You can suggest that <a href="http://linuxcommando.blogspot.com/2008/10/how-to-disable-ssh-host-key-checking.html">SSH ignore this warning</a> by adding two additional flags. I highly recommend you only do this via the command line and <em>not with some SSH config file</em> as the warning SSH throws is completely legitimate and could be saving you from a man-in-the-middle attack.</p>
+
+<p>Nevertheless, if you are working with localized VMs and need to bypass that warning, use these two flags:</p>
+
+<figure class='code'><figcaption><span>Two additional flags to SSH</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>-o <span class="nv">UserKnownHostsFile</span><span class="o">=</span>/dev/null -o <span class="nv">StrictHostKeyChecking</span><span class="o">=</span>no
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Consequently, when I SSH to a local Vagrant instance, I type something along the lines of:</p>
+
+<figure class='code'><figcaption><span>SSHing to Vagrant instances</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ssh -i /some/dir/.vagrant.d/insecure_private_key -l vagrant -p 2222 -o <span class="nv">UserKnownHostsFile</span><span class="o">=</span>/dev/null -o <span class="nv">StrictHostKeyChecking</span><span class="o">=</span>no 127.0.0.1
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, to shut down a Vagrant instance, just issue the command:</p>
+
+<figure class='code'><figcaption><span>SSHing to Vagrant instances</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vagrant destroy
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Vagrant makes it super easy to fire up localized development environments &#8211; Vagrant instances boot up faster than EC2 instances and they&#8217;re free. And now you know how to use normal SSH to connect to them. Can you dig it?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[AWS EBS in 4 steps]]></title>
@@ -1860,41 +1937,6 @@ what ever you mounted (i.e <code>/dev/xvdf</code>), the mount point will be the 
 <p>Check out &#8221;<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">Mobile for the masses: Mobile for the masses: Words and gestures with Overheard Word</a>&#8221; and programmatically integrate third-party code into your Android UI! If you missed the first article, check out &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>&#8221;; what&#8217;s more, don&#8217;t forget to read my second article, entitled &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>&#8221; and the third article &#8221;<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>&#8221;.</p>
 
 <p>Stay tuned for more articles in this series and don&#8217;t forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Android tip: ListView becomes black when scrolling]]></title>
-    <link href="http://thediscoblog.com/blog/2013/06/27/android-tip-listview-becomes-black-when-scrolling/"/>
-    <updated>2013-06-27T13:15:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/06/27/android-tip-listview-becomes-black-when-scrolling</id>
-    <content type="html"><![CDATA[<p>One of <a href="https://play.google.com/store/apps/details?id=com.b50.hoproll">my Android apps</a> recently suffered from a nefariously ugly UI glitch that, embarrassingly, a user reported to me.  Strangely, this phenomenon did not surface itself in local testing on either emulators or devices when I first wrote the app; nevertheless, I was able to reproduce the error after the bug report came in. I suspect that recent updates in the Android platform might have exacerbated the issue for my app as I&#8217;m fairly certain I never saw it before.</p>
-
-<!-- more -->
-
-
-<p></p>
-
-<p><a href="http://www.amazon.com/Beacon50-Hop-Roll/dp/B00A9Z5P42/ref=sr_1_1?ie=UTF8&amp;qid=1370959609&amp;sr=8-1&amp;keywords=hoproll">HopRoll</a> displays a ListView of hops and has a custom background like so:</p>
-
-<p><img class="center" src="http://thediscoblog.com/images/mine/hop_roll_2.png"></p>
-
-<p>When people scrolled through that list, however, they would see a nasty black partially rendered screen that made the app completely unusable as you can see below:</p>
-
-<p><img class="center" src="http://thediscoblog.com/images/mine/hop_roll_1.png"></p>
-
-<p>If you start to notice that your <a href="http://developer.android.com/reference/android/widget/ListView.html">ListView</a> containing custom backgrounds become <a href="http://android-developers.blogspot.com/2009/01/why-is-my-list-black-android.html">horribly black</a> when scrolling then you&#8217;ve got the same issue.</p>
-
-<p>Luckily, it&#8217;s quite easy to rectify. It turns out that when scrolling, there is some rendering magic going on that can obstruct the background in an ungainly way; you <a href="http://stackoverflow.com/questions/2833057/background-listview-becomes-black-when-scrolling">can fix it</a> by adding one line to the ListView&#8217;s layout definition:</p>
-
-<figure class='code'><figcaption><span>Adding this to your ListView Layout definition will fix the issue</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'>android:cacheColorHint=&quot;@android:color/transparent&quot;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>With that line in place, scrolling, once again, becomes clean and smooth.</p>
-
-<p>You can find my app, Hop Roll, which is your go-to home brew resource for all hop related information on <a href="https://play.google.com/store/apps/details?id=com.b50.hoproll">Google Play</a> and <a href="http://www.amazon.com/Beacon50-Hop-Roll/dp/B00A9Z5P42/ref=sr_1_1?ie=UTF8&amp;qid=1370959609&amp;sr=8-1&amp;keywords=hoproll">Amazon&#8217;s Android App Store</a> &#8211; keep on trucking, baby!</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-10-12T18:09:06-04:00</updated>
+  <updated>2013-10-16T16:12:57-04:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,75 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SSH &amp; Vagrant]]></title>
+    <link href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/"/>
+    <updated>2013-10-16T15:55:00-04:00</updated>
+    <id>http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant</id>
+    <content type="html"><![CDATA[<p><a href="http://www.vagrantup.com/">Vagrant</a> is a handy tool for creating VMs. It's a lot like firing up an <a href="http://thediscoblog.com/blog/categories/aws/">EC2</a> instance, but in Vagrant's case, everything is localized. And best of all, it's free.</p>
+
+<p>I tend to favor <a href="https://github.com/aglover/ubuntu-equip">Ubuntu</a> as my preferred flavor of linux; consequently, all production EC2 instances use a customized Ubuntu AMI. Testing various aspects of this system with various software libraries, however, is initially tested locally using Vagrant VMs. What's more, you can install localized VMs of <a href="http://www.vagrantbox.es/">other operating systems</a> ranging from Debian to OpenSuse to <a href="https://devcenter.heroku.com/articles/stack">Heroku's Cedalon</a>.</p>
+
+<!-- more -->
+
+
+<p>Firing up a local instance of <a href="http://thediscoblog.com/blog/categories/heroku/">Heroku</a>'s Cedalon (which is a version of Ubuntu 10.04 with Ruby and Node.js installed) is as easy as typing:</p>
+
+<p><code>bash Firing up Heroku's Cedalon locally
+vagrant init heroku http://dl.dropbox.com/u/1906634/heroku.box
+vagrant up
+</code></p>
+
+<p>Then you can SSH to that running VM like so:</p>
+
+<p><code>bash SSHing to a local VM
+vagrant ssh
+</code></p>
+
+<p>The command <code>vagrant ssh</code> can be problematic, though, especially if you are automating some aspect of SSH -- for example, you are using some library on top of SSH. In that case, you need to use SSH <em>directly</em> rather than through Vagrant.</p>
+
+<p>Luckily, you can SSH normally to local Vagrant instances easily enough. You'll need to tell SSH which key to use (Vagrant creates one for you), which user to connect as (usually vagrant), and what port to connect to (usually 2222).  All of this information can be found via the command <code>vagrant ssh-config</code>.</p>
+
+<p>To use plain Jane SSH when working with Vagrant instances, you'll first need to execute this command:</p>
+
+<p><code>bash Printing out the location of Vagrant's key
+vagrant ssh-config | grep IdentityFile  | awk '{print $2}'
+</code></p>
+
+<p>This <a href="https://groups.google.com/forum/#!topic/vagrant-up/B5WIfDcIRtE">3 pronged command</a> ultimately tells you where Vagrant has created a key file. The command <a href="http://www.thegeekstuff.com/2010/01/awk-introduction-tutorial-7-awk-print-examples/"><code>awk '{print $2}'</code></a> prints the second column of the line in the <code>ssh-config</code> string that starts with <code>IdentityFile</code> (which points to its location).</p>
+
+<p>Now that you know where the key file is, you can ssh (assuming the default port hasn't changed from 2222 -- double check your <code>ssh-config</code> to make sure) like so:</p>
+
+<p><code>bash Using normal SSH
+ssh -i /some/dir/.vagrant.d/insecure_private_key -l vagrant -p 2222 127.0.0.1
+</code></p>
+
+<p>If you happen to fire up different VMs -- for example, I have both Heroku Cedalon and normal Ubuntu instances, SSH will probably complain that the remote host identification has changed. This is a valid warning as the RSA fingerprint associated with the local host has indeed changed.</p>
+
+<p>You can suggest that <a href="http://linuxcommando.blogspot.com/2008/10/how-to-disable-ssh-host-key-checking.html">SSH ignore this warning</a> by adding two additional flags. I highly recommend you only do this via the command line and <em>not with some SSH config file</em> as the warning SSH throws is completely legitimate and could be saving you from a man-in-the-middle attack.</p>
+
+<p>Nevertheless, if you are working with localized VMs and need to bypass that warning, use these two flags:</p>
+
+<p><code>bash Two additional flags to SSH
+-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+</code></p>
+
+<p>Consequently, when I SSH to a local Vagrant instance, I type something along the lines of:</p>
+
+<p><code>bash SSHing to Vagrant instances
+ssh -i /some/dir/.vagrant.d/insecure_private_key -l vagrant -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 127.0.0.1
+</code></p>
+
+<p>Finally, to shut down a Vagrant instance, just issue the command:</p>
+
+<p><code>
+vagrant destroy
+</code></p>
+
+<p>Vagrant makes it super easy to fire up localized development environments -- Vagrant instances boot up faster than EC2 instances and they're free. And now you know how to use normal SSH to connect to them. Can you dig it?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[AWS EBS in 4 steps]]></title>
