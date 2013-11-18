@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-10-16T16:12:57-04:00</updated>
+  <updated>2013-11-18T18:41:24-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,75 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Provisioning Ubuntu with Java in 3 steps]]></title>
+    <link href="http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/"/>
+    <updated>2013-11-18T17:34:00-05:00</updated>
+    <id>http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/ubuntu.png"> <a href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">As I&#8217;ve written about before</a>, <a href="http://www.vagrantup.com/">Vagrant</a> is handy tool for creating <a href="http://www.vagrantbox.es/">localized VMs</a>. It&#8217;s a lot like firing up <a href="http://thediscoblog.com/blog/categories/aws/">EC2</a> images, but, for the most part, things are localized (you can, by the way, use Vagrant to <a href="https://github.com/mitchellh/vagrant-aws">fire up EC2 images</a>). If you&#8217;ve ever used VMWare before, its the same thing, except Vagrant is free. You can create VMs of various operating systems, fire them up, and tear them down all with ease.</p>
+
+<p>Vagrant plays nicely with hip DevOps frameworks like <a href="http://www.opscode.com/chef/">Chef</a> and <a href="http://puppetlabs.com/">Puppet</a> and if your installations require a number of components, then these tools are defiantly the way to go. Sometimes, however, a simple Bash script is good enough as in the case for auto-installing some base component, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, <a href="http://thediscoblog.com/blog/categories/node/">Node.js</a> or <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a>.</p>
+
+<p>Using Vagrant&#8217;s configuration file, aptly dubbed <code>Vagrantfile</code>, you can instruct a VM instance to run a series of steps &#8211; these steps can be simple shell scripts, Chef cookbooks, or the analogous Puppet equivalent.</p>
+
+<!-- more -->
+
+
+<p>Accordingly, the first step to provision an Ubuntu box with Java is to initialize a 64-bit <a href="http://thediscoblog.com/blog/categories/linux/">Ubuntu</a> 12.04 LTS (<a href="https://wiki.ubuntu.com/PrecisePangolin">Precise Pangolin</a>) instance. You can do this via the <code>vagrant init</code> command like so:</p>
+
+<figure class='code'><figcaption><span>Initializing a Vagrant box</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$&gt;</span> vagrant init ubuntu.lts.64 http://files.vagrantup.com/precise64.box
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This creates a <code>Vagrantfile</code> in the directory where you ran the command and creates a named VM (i.e. &#8220;ubuntu.lts.64&#8221;) that is based off of Ubuntu 12.04 LTS.</p>
+
+<p>Base Ubuntu installations do not come with Java; if you&#8217;d like to install a particular JDK, say Oracle&#8217;s JDK 7, you can leverage <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a>, which is series of Bash scripts that install various components like Java, Node.js, MongoDB, Redis, Ruby, etc.</p>
+
+<p>Thus, for step 2, open up the newly created <code>Vagrantfile</code> and you should see two lines like so:</p>
+
+<figure class='code'><figcaption><span>A basic VagrantFile contains the box and box_url attributes</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s1">&#39;ubuntu.lts.64&#39;</span>
+</span><span class='line'><span class="c1"># a few comments...</span>
+</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box_url</span> <span class="o">=</span> <span class="s1">&#39;http://files.vagrantup.com/precise64.box&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After the <code>vm.box_url</code> declaration, insert the following line:</p>
+
+<figure class='code'><figcaption><span>Installing Java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="ss">:shell</span><span class="p">,</span> <span class="n">inline</span><span class="p">:</span> <span class="s1">&#39;wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_java7_64.sh &amp;&amp; bash equip_java7_64.sh&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command instructs the instance to run an inline Bash command once it is up and running, which in this case auto-installs Oracle&#8217;s Java 7 JDK (see the <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a> project for more information).</p>
+
+<p>Save your <code>VagrantFile</code> and then, for step 3, run the following command in the same directory:</p>
+
+<figure class='code'><figcaption><span>Firing up a new VM</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$&gt;</span> vagrant up
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If this is the first time firing up this particular VM, you should see some text indicating that a particular box is being downloaded. Once the download is complete, the instance will boot up and subsequently invoke the inline provision command that kicks off the installation of Java.</p>
+
+<p>If all goes well, you should see a lot of text scroll by ending with:</p>
+
+<figure class='code'><figcaption><span>Java is installed!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>java version <span class="s2">&quot;1.7.0_25&quot;</span>
+</span><span class='line'>Java<span class="o">(</span>TM<span class="o">)</span> SE Runtime Environment <span class="o">(</span>build 1.7.0_25-b15<span class="o">)</span>
+</span><span class='line'>Java HotSpot<span class="o">(</span>TM<span class="o">)</span> 64-Bit Server VM <span class="o">(</span>build 23.25-b01, mixed mode<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And that&#8217;s it. To use the VM, <a href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">simply SSH to it</a>. Go ahead and type <code>java -version</code> just to convince yourself. Go ahead, I&#8217;ll wait for you&#8230;there, are you happy now?  Wasn&#8217;t that easy? Provisioning Ubuntu VMs with Vagrant couldn&#8217;t be any easier with <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a>, dig it?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[SSH &amp; Vagrant]]></title>
@@ -1916,27 +1985,6 @@ what ever you mounted (i.e <code>/dev/xvdf</code>), the mount point will be the 
 <p>This data is helpful in a number of ways; for instance, we discovered that a significant portion of memory was being consumed by keys containing old time series data that for some reason did not have associated TTLs. Thus, we were able to achieve that particular data (into <a href="http://localhost:4000/blog/categories/mongodb/">MongoDB</a>) and free up memory.</p>
 
 <p>If you want to understand how memory is distributed across key patterns in a Redis instance, then I think you&#8217;ll find <a href="https://github.com/snmaynard/redis-audit">Redis-audit</a> quite helpful!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mobile for the masses: Words and gestures with Overheard Word]]></title>
-    <link href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/"/>
-    <updated>2013-07-01T12:10:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word</id>
-    <content type="html"><![CDATA[<p>The fourth article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>&#8217; series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> has been published! <a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">This copasetic article</a> shows you how to take the Overheard Word demo app up a level with a JSON-based word engine and some prebaked, swipe-gesture functionality.</p>
-
-<!-- more -->
-
-
-<p>As the article summary states:</p>
-
-<blockquote><p>You might feel like a kid in a candy store grabbing third-party code from GitHub or another repository, but there are still some tricks to integrating it with your Android UI. This month, Andrew Glover shows you how to take the Overheard Word demo app up a level with a JSON-based word engine and some prebaked, swipe-gesture functionality. As it turns out, Android easily accommodates third-party code, but you still have to do some careful logic if you want your app&#8217;s UI to run it smoothly.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html'>Mobile for the Masses: Words and Gestures With Overheard Word</a></cite></footer></blockquote>
-
-
-<p>Check out &#8221;<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">Mobile for the masses: Mobile for the masses: Words and gestures with Overheard Word</a>&#8221; and programmatically integrate third-party code into your Android UI! If you missed the first article, check out &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>&#8221;; what&#8217;s more, don&#8217;t forget to read my second article, entitled &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>&#8221; and the third article &#8221;<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>&#8221;.</p>
-
-<p>Stay tuned for more articles in this series and don&#8217;t forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
 ]]></content>
   </entry>
   

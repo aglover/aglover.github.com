@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Provisioning Ubuntu with Java in 3 steps - The Disco Blog</title>
+  <meta name="author" content="Andrew Glover">
+
+  
+  <meta name="description" content="Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code.">
+  
+  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, "/>
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="The Disco Blog" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-3500051-4']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Disco Blog</a></h1>
+  
+    <h2>Can you dig it?</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:thediscoblog.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/categories">Categories</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Provisioning Ubuntu With Java in 3 Steps</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-18T17:34:00-05:00" pubdate data-updated="true">Nov 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img class="right" src="/images/mine/ubuntu.png"> <a href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">As I&#8217;ve written about before</a>, <a href="http://www.vagrantup.com/">Vagrant</a> is handy tool for creating <a href="http://www.vagrantbox.es/">localized VMs</a>. It&#8217;s a lot like firing up <a href="http://thediscoblog.com/blog/categories/aws/">EC2</a> images, but, for the most part, things are localized (you can, by the way, use Vagrant to <a href="https://github.com/mitchellh/vagrant-aws">fire up EC2 images</a>). If you&#8217;ve ever used VMWare before, its the same thing, except Vagrant is free. You can create VMs of various operating systems, fire them up, and tear them down all with ease.</p>
+
+<p>Vagrant plays nicely with hip DevOps frameworks like <a href="http://www.opscode.com/chef/">Chef</a> and <a href="http://puppetlabs.com/">Puppet</a> and if your installations require a number of components, then these tools are defiantly the way to go. Sometimes, however, a simple Bash script is good enough as in the case for auto-installing some base component, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, <a href="http://thediscoblog.com/blog/categories/node/">Node.js</a> or <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a>.</p>
+
+<p>Using Vagrant&#8217;s configuration file, aptly dubbed <code>Vagrantfile</code>, you can instruct a VM instance to run a series of steps &#8211; these steps can be simple shell scripts, Chef cookbooks, or the analogous Puppet equivalent.</p>
+
+<!-- more -->
+
+
+<p>Accordingly, the first step to provision an Ubuntu box with Java is to initialize a 64-bit <a href="http://thediscoblog.com/blog/categories/linux/">Ubuntu</a> 12.04 LTS (<a href="https://wiki.ubuntu.com/PrecisePangolin">Precise Pangolin</a>) instance. You can do this via the <code>vagrant init</code> command like so:</p>
+
+<figure class='code'><figcaption><span>Initializing a Vagrant box</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$&gt;</span> vagrant init ubuntu.lts.64 http://files.vagrantup.com/precise64.box
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This creates a <code>Vagrantfile</code> in the directory where you ran the command and creates a named VM (i.e. &#8220;ubuntu.lts.64&#8221;) that is based off of Ubuntu 12.04 LTS.</p>
+
+<p>Base Ubuntu installations do not come with Java; if you&#8217;d like to install a particular JDK, say Oracle&#8217;s JDK 7, you can leverage <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a>, which is series of Bash scripts that install various components like Java, Node.js, MongoDB, Redis, Ruby, etc.</p>
+
+<p>Thus, for step 2, open up the newly created <code>Vagrantfile</code> and you should see two lines like so:</p>
+
+<figure class='code'><figcaption><span>A basic VagrantFile contains the box and box_url attributes</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s1">&#39;ubuntu.lts.64&#39;</span>
+</span><span class='line'><span class="c1"># a few comments...</span>
+</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box_url</span> <span class="o">=</span> <span class="s1">&#39;http://files.vagrantup.com/precise64.box&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After the <code>vm.box_url</code> declaration, insert the following line:</p>
+
+<figure class='code'><figcaption><span>Installing Java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="ss">:shell</span><span class="p">,</span> <span class="n">inline</span><span class="p">:</span> <span class="s1">&#39;wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_java7_64.sh &amp;&amp; bash equip_java7_64.sh&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command instructs the instance to run an inline Bash command once it is up and running, which in this case auto-installs Oracle&#8217;s Java 7 JDK (see the <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a> project for more information).</p>
+
+<p>Save your <code>VagrantFile</code> and then, for step 3, run the following command in the same directory:</p>
+
+<figure class='code'><figcaption><span>Firing up a new VM</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$&gt;</span> vagrant up
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If this is the first time firing up this particular VM, you should see some text indicating that a particular box is being downloaded. Once the download is complete, the instance will boot up and subsequently invoke the inline provision command that kicks off the installation of Java.</p>
+
+<p>If all goes well, you should see a lot of text scroll by ending with:</p>
+
+<figure class='code'><figcaption><span>Java is installed!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>java version <span class="s2">&quot;1.7.0_25&quot;</span>
+</span><span class='line'>Java<span class="o">(</span>TM<span class="o">)</span> SE Runtime Environment <span class="o">(</span>build 1.7.0_25-b15<span class="o">)</span>
+</span><span class='line'>Java HotSpot<span class="o">(</span>TM<span class="o">)</span> 64-Bit Server VM <span class="o">(</span>build 23.25-b01, mixed mode<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And that&#8217;s it. To use the VM, <a href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">simply SSH to it</a>. Go ahead and type <code>java -version</code> just to convince yourself. Go ahead, I&#8217;ll wait for you&#8230;there, are you happy now?  Wasn&#8217;t that easy? Provisioning Ubuntu VMs with Vagrant couldn&#8217;t be any easier with <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a>, dig it?</p>
+</div>
+<!-- related posts -->
+<div id='related_posts'>
+  <h4>Related Posts</h4>
+      <ul class="posts">
+      
+          
+          <!-- nothing, skip it as its the same as the post itself -->
+          
+      
+          
+            <li class="related"><a href="/blog/2013/07/24/introducing-android-migrations/">Introducing Android migrations</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/10/16/ssh-and-vagrant/">SSH &amp; Vagrant</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">ElasticSearch on EC2 in less than 60 seconds</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/10/12/aws-ebs-in-4-steps/">AWS EBS in 4 steps</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/09/03/effortless-elasticsearch-clustering/">Effortless ElasticSearch clustering</a></li>
+          
+      
+      </ul>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-18T17:34:00-05:00" pubdate data-updated="true">Nov 18<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/devops/'>DevOps</a>, <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/ubuntu/'>Ubuntu</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2013/10/16/ssh-and-vagrant/" title="Previous Post: SSH &amp; Vagrant">&laquo; SSH &amp; Vagrant</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <div id='influads_block' class='influads_block'></div><script type='text/javascript'>(function(){var acc='acc_1097d812_pub';var st='css';var or='130';var e=document.getElementsByTagName('script')[0];var d=document.createElement('script');d.src=('https:' == document.location.protocol ?'https://' : 'http://') +'engine.influads.com/show/'+or+'/'+st+'/'+acc;d.type='text/javascript';d.async=true;d.defer=true; e.parentNode.insertBefore(d,e);})();</script>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/">Provisioning Ubuntu with Java in 3 steps</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/16/ssh-and-vagrant/">SSH &amp; Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/12/aws-ebs-in-4-steps/">AWS EBS in 4 steps</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/09/all-other-metrics-are-useless/">All other metrics are useless</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/05/the-significance-of-html5/">The significance of HTML5</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/aglover">@aglover</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'aglover',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+ <h1>Latest Tweets</h1>
+ <a class="twitter-timeline" href="https://twitter.com/aglover" data-widget-id="345533522750099456">Tweets by @aglover</a>
+ <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Andrew Glover -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'thediscoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/';
+        var disqus_url = 'http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

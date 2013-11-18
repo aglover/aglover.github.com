@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-10-16T16:12:57-04:00</updated>
+  <updated>2013-11-18T18:41:24-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,68 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Provisioning Ubuntu with Java in 3 steps]]></title>
+    <link href="http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/"/>
+    <updated>2013-11-18T17:34:00-05:00</updated>
+    <id>http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/ubuntu.png"> <a href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">As I've written about before</a>, <a href="http://www.vagrantup.com/">Vagrant</a> is handy tool for creating <a href="http://www.vagrantbox.es/">localized VMs</a>. It's a lot like firing up <a href="http://thediscoblog.com/blog/categories/aws/">EC2</a> images, but, for the most part, things are localized (you can, by the way, use Vagrant to <a href="https://github.com/mitchellh/vagrant-aws">fire up EC2 images</a>). If you've ever used VMWare before, its the same thing, except Vagrant is free. You can create VMs of various operating systems, fire them up, and tear them down all with ease.</p>
+
+<p>Vagrant plays nicely with hip DevOps frameworks like <a href="http://www.opscode.com/chef/">Chef</a> and <a href="http://puppetlabs.com/">Puppet</a> and if your installations require a number of components, then these tools are defiantly the way to go. Sometimes, however, a simple Bash script is good enough as in the case for auto-installing some base component, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, <a href="http://thediscoblog.com/blog/categories/node/">Node.js</a> or <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a>.</p>
+
+<p>Using Vagrant's configuration file, aptly dubbed <code>Vagrantfile</code>, you can instruct a VM instance to run a series of steps -- these steps can be simple shell scripts, Chef cookbooks, or the analogous Puppet equivalent.</p>
+
+<!-- more -->
+
+
+<p>Accordingly, the first step to provision an Ubuntu box with Java is to initialize a 64-bit <a href="http://thediscoblog.com/blog/categories/linux/">Ubuntu</a> 12.04 LTS (<a href="https://wiki.ubuntu.com/PrecisePangolin">Precise Pangolin</a>) instance. You can do this via the <code>vagrant init</code> command like so:</p>
+
+<p><code>bash Initializing a Vagrant box
+$&gt; vagrant init ubuntu.lts.64 http://files.vagrantup.com/precise64.box
+</code></p>
+
+<p>This creates a <code>Vagrantfile</code> in the directory where you ran the command and creates a named VM (i.e. "ubuntu.lts.64") that is based off of Ubuntu 12.04 LTS.</p>
+
+<p>Base Ubuntu installations do not come with Java; if you'd like to install a particular JDK, say Oracle's JDK 7, you can leverage <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a>, which is series of Bash scripts that install various components like Java, Node.js, MongoDB, Redis, Ruby, etc.</p>
+
+<p>Thus, for step 2, open up the newly created <code>Vagrantfile</code> and you should see two lines like so:</p>
+
+<p>``` ruby A basic VagrantFile contains the box and box_url attributes
+config.vm.box = 'ubuntu.lts.64'</p>
+
+<h1>a few comments...</h1>
+
+<p>config.vm.box_url = 'http://files.vagrantup.com/precise64.box'
+```</p>
+
+<p>After the <code>vm.box_url</code> declaration, insert the following line:</p>
+
+<p><code>ruby Installing Java
+config.vm.provision :shell, inline: 'wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_java7_64.sh &amp;&amp; bash equip_java7_64.sh'
+</code></p>
+
+<p>This command instructs the instance to run an inline Bash command once it is up and running, which in this case auto-installs Oracle's Java 7 JDK (see the <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a> project for more information).</p>
+
+<p>Save your <code>VagrantFile</code> and then, for step 3, run the following command in the same directory:</p>
+
+<p><code>bash Firing up a new VM
+$&gt; vagrant up
+</code></p>
+
+<p>If this is the first time firing up this particular VM, you should see some text indicating that a particular box is being downloaded. Once the download is complete, the instance will boot up and subsequently invoke the inline provision command that kicks off the installation of Java.</p>
+
+<p>If all goes well, you should see a lot of text scroll by ending with:</p>
+
+<p><code>bash Java is installed!
+java version "1.7.0_25"
+Java(TM) SE Runtime Environment (build 1.7.0_25-b15)
+Java HotSpot(TM) 64-Bit Server VM (build 23.25-b01, mixed mode)
+</code></p>
+
+<p>And that's it. To use the VM, <a href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">simply SSH to it</a>. Go ahead and type <code>java -version</code> just to convince yourself. Go ahead, I'll wait for you...there, are you happy now?  Wasn't that easy? Provisioning Ubuntu VMs with Vagrant couldn't be any easier with <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a>, dig it?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[All other metrics are useless]]></title>
@@ -320,109 +382,6 @@ public void testCreateRequest() throws Exception {
 <p>Nevertheless, as most people in the world of Java figured out long ago, <a href="http://stackoverflow.com/questions/2671496/java-when-to-use-static-methods">static methods</a> are <a href="http://misko.hevery.com/2008/12/15/static-methods-are-death-to-testability/">somewhat difficult</a> when it <a href="http://blog.codecentric.de/en/2011/11/testing-and-mocking-of-static-methods-in-java/">comes to testing</a>. That is, while a method that conceptually has no state, at first glance, seems straightforward enough to test, the <a href="http://stackoverflow.com/questions/2472690/in-java-is-there-any-disadvantage-to-static-methods-on-a-class">issues arise</a> when that static method does something like hit a database or in my case, call a web service to a networked asset. There is no easy way to override such behavior (unless, of course, you pull out a hammer).</p>
 
 <p>Static methods have a place. But when it comes to testing code, whether it be legacy or some 3rd party library, the <code>static</code> modifier requires a hammer and as I hope I've shown you, <a href="https://code.google.com/p/powermock/">PowerMock</a> is that hammer.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Imbibing the fluency of Mockito]]></title>
-    <link href="http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito/"/>
-    <updated>2013-08-01T15:37:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/Mockito.jpg">I recently found myself writing some code to integrate two disparate platforms. One of these systems is Java based and the other, while not written in Java, offers a Java API. I'll call these systems Foo and Bar, respectively.</p>
-
-<p>It became obvious before I had written a line of code, however, that testing the eventual adapter would require I explicitly mock the later system's API (i.e. Foo's) as all I had to go with was a jar file whose classes and methods made it clear they communicated with a live instance.</p>
-
-<!-- more -->
-
-
-<p></p>
-
-<p>I spent a few cycles to see what's new in the world of Java mocking and I was pleased to see that my old friend <a href="https://code.google.com/p/mockito/">Mockito</a> is still active and is indeed, still an <a href="http://www.javaworld.com/community/node/3772">excellent tool</a> for general purpose mocking. For the uninitiated, <a href="http://refcardz.dzone.com/refcardz/mockito">Mockito</a> is Java based mocking framework that:</p>
-
-<p><blockquote><p>...tastes really good. It lets you write beautiful tests with [a] clean &amp; simple API. Mockito doesn't give you hangover because the tests are very readable and they produce clean verification errors.</p><footer><strong>Google code mockito project page</strong> <cite><a href='https://code.google.com/p/mockito/'>Why Drink It?</a></cite></footer></blockquote></p>
-
-<p>Indeed, Mockito offers a <a href="https://code.google.com/p/easyb/wiki/UsingMockito">simple, fluent API</a> that allows you to precisely mock behaviors without a lot of fuss. For instance, the main facade to interface with Bar is via a <code>QTP</code> class that has methods like <code>logIn</code>, <code>logOut</code>, etc. Rather than relying on classes under test to actually invoke these methods, I can easily create mock instances of <code>QTP</code> with Mockito like so:</p>
-
-<p><code>java Mocking an instance of QTP
-QTP qtpThing = mock(QTP.class);
-</code></p>
-
-<p>Where <code>mock</code> is a statically imported method from <code>org.mockito.Mockito</code>. With a mock instance, I can then dictate how I wish certain methods to behave, <em>provided I pass along this mocked instance to my classes under test</em>.</p>
-
-<p>For example, the method <code>logIn</code> doesn't return anything; in fact, one must invoke that method first and then call another method to generate a ticket (or token), which will be used on subsequent method invocations. Thus, the adapter that I'm writing will receive some input values (from Foo in the form of XML) and the adapter will return a ticket (in the form of an XML document as per Foo's required XML schema).</p>
-
-<p>Accordingly, the test this interaction, I need to do two things:</p>
-
-<ul>
-<li>ensure that the <code>logIn</code> method was invoked with specific parameters</li>
-<li>mock the response of a valid ticket, via the <code>getTicket</code> method</li>
-</ul>
-
-
-<p>What's more, I'd also like to verify that a <code>logIn</code> failure results in a particular interaction from within my adapter code. Therefore, I'll need to mock out some exceptional behavior as well.</p>
-
-<p>In the case of mocking out a particular method, you simply chain together a few methods; in my case, <code>when</code> and <code>thenReturn</code> do the trick like so:</p>
-
-<p><code>java Mocking the behavior of getTicket
-when(qtpThing.getTicket()).thenReturn("test-ticket");
-</code></p>
-
-<p>In the code above, when the <code>getTicket</code> method is invoked on my mock instance, the <code>String</code> "test-ticket" will be returned.</p>
-
-<p>Next, to ensure that <code>logIn</code> was invoked with parameters obtained from an incoming XML document, I can use Mockito's <code>verify</code> method.</p>
-
-<p><code>java Using Mockito's verify to ensure proper interaction
-verify(qtpThing, times(1)).logIn("some_value", "some_user_name", "password");
-</code></p>
-
-<p>In this case, the <code>verify</code> method checks that <code>logIn</code> is invoked one time and that three particular <code>String</code> values are passed in. If these expectations are not met, Mockito will throw an exception (and your corresponding test case will fail).</p>
-
-<p>Thus, my test case for verifying my adapter is quite simple, yet highly readable.</p>
-
-<p><code>java JUnit test case for verifying logIn behavior
-@Test
-public void testLoginRequest() throws Exception {
-  QTP qtpThing = mock(QTP.class);
-  when(qtpThing.getTicket()).thenReturn("test-ticket");
-  AdapterRequest request = new AdapterRequest(XML.read("etc/test-login-req.xml"));
-  QbosAdapter adapter = new QbosAdapter();
-  adapter.setQtpInstance(qtpThing);
-  AdapterResponse adapterResponse = adapter.performAction(request);
-  assertNotNull(adapterResponse);
-  verify(qtpThing, times(1)).logIn("some_value", "some_user_name", "password");
-  assertEquals("test-ticket", adapterResponse.getData().getText());
-}
-</code></p>
-
-<p>What if I need to simulate an exception thrown by the <code>QTP</code> object, ostensibly from an invalid parameter or incorrect credentials during a log in? Again, Mockito's fluent API makes this a breeze.</p>
-
-<p>In my case, I'd like the <code>logIn</code> method to throw one of the checked methods in its method signature named <code>UnknownQtpException</code>. You can do this via the <code>doThrow</code> and <code>when</code> methods.</p>
-
-<p><code>java Mocking out exceptions in Mockito
-doThrow(new UnknownQtpException()).when(qtpThing).logIn("", "blah", "blah");
-</code></p>
-
-<p>In the code above, I'm explicitly declaring that if the first parameter to the <code>logIn</code> command is blank, then my mocked <code>QTP</code> instance should throw <code>UnknownQtpException</code>. Putting everything together yields the following test case:</p>
-
-<p><code>java Testing exceptional circumstances with JUnit &amp; Mockito
-@Test
-public void testFailureLoginRequest() throws Exception {
-  QTP qtpThing = mock(QTP.class);
-  doThrow(new UnknownQtpException()).when(qtpThing).logIn("", "blah", "blah");
-  XML xml = XML.read("etc/test-login-req-err.xml");
-  AdapterRequest request = new AdapterRequest(xml);
-  QbosAdapter adapter = new QbosAdapter();
-  adapter.setQtpInstance(qtpThing);
-  AdapterResponse adapterResponse = adapter.performAction(request);
-  assertNotNull(adapterResponse);
-  verify(qtpThing, times(1)).logIn("", "blah", "blah");
-  assertEquals("FAILURE", adapterResponse.getData().getText());
-}
-</code></p>
-
-<p>The beauty, of course, is that my test cases effectively test my adapter code without relying on a third party system (in this case, Bar). This is naturally a time honored testing technique employable in any language with a mocking framework worth its salt!</p>
-
-<p>If you find yourself writing some integration code in Java, then I can't recommend Mockito enough. <a href="http://www.javaworld.com/community/node/3772">Mockito's API</a> is quite straightforward and it makes tests easy to comprehend. I mean, it makes tests easy to imbibe.  Dig it?</p>
 ]]></content>
   </entry>
   

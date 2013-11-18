@@ -304,7 +304,7 @@
     </url>
     <url>
         <loc>http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless/</loc>
-        <lastmod>2013-10-09T18:59:43-04:00</lastmod>
+        <lastmod>2013-11-18T17:49:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps/</loc>
@@ -315,8 +315,14 @@
         <lastmod>2013-10-16T16:12:17-04:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/
+        </loc>
+        <lastmod>2013-11-18T18:41:24-05:00</lastmod>
+    </url>
+    <url>
         <loc>http://thediscoblog.com/blog/archives/</loc>
-        <lastmod>2013-10-16T16:12:17-04:00</lastmod>
+        <lastmod>2013-11-18T18:41:24-05:00</lastmod>
     </url>
     <url>
         <loc>http://thediscoblog.com/blog/categories/</loc>
@@ -324,6 +330,6 @@
     </url>
     <url>
         <loc>http://thediscoblog.com/</loc>
-        <lastmod>2013-10-16T16:12:17-04:00</lastmod>
+        <lastmod>2013-11-18T18:41:24-05:00</lastmod>
     </url>
 </urlset>
