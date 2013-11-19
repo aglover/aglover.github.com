@@ -10,7 +10,7 @@ categories: [Ubuntu, Java, DevOps, Linux]
 
 Vagrant plays nicely with hip DevOps frameworks like [Chef](http://www.opscode.com/chef/) and [Puppet](http://puppetlabs.com/) and if your installations require a number of components, then these tools are defiantly the way to go. Sometimes, however, a simple Bash script is good enough as in the case for auto-installing some base component, like [Java](http://thediscoblog.com/blog/categories/java/), [Node.js](http://thediscoblog.com/blog/categories/node/) or [Ruby](http://thediscoblog.com/blog/categories/ruby/). 
 
-Using Vagrant's configuration file, aptly dubbed `Vagrantfile`, you can instruct a VM instance to run a series of steps -- these steps can be simple shell scripts, Chef cookbooks, or the analogous Puppet equivalent. 
+Using Vagrant's configuration file, aptly dubbed `Vagrantfile`, you can instruct a VM instance to run a series of steps -- these steps can be simple shell scripts, Chef cookbooks, or the Puppet equivalent. 
 
 <!-- more -->
 
