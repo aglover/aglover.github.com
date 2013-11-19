@@ -22,7 +22,7 @@ $> vagrant init ubuntu.lts.64 http://files.vagrantup.com/precise64.box
 
 This creates a `Vagrantfile` in the directory where you ran the command and creates a named VM (i.e. "ubuntu.lts.64") that is based off of Ubuntu 12.04 LTS. 
 
-Base Ubuntu installations do not come with Java; if you'd like to install a particular JDK, say Oracle's JDK 7, you can leverage [ubuntu-equip](https://github.com/aglover/ubuntu-equip), which is series of Bash scripts that install various components like Java, Node.js, MongoDB, Redis, Ruby, etc. 
+Base Ubuntu installations do not come with Java; if you'd like to install a particular JDK, say Oracle's JDK 7, you can leverage [ubuntu-equip](https://github.com/aglover/ubuntu-equip), which is a series of Bash scripts that install various components like Java, Node.js, MongoDB, Redis, Ruby, etc. 
 
 Thus, for step 2, open up the newly created `Vagrantfile` and you should see two lines like so: 
 
