@@ -4,7 +4,7 @@
   <title><![CDATA[Category: DevOps | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-11-18T18:41:24-05:00</updated>
+  <updated>2013-11-19T09:00:17-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -22,7 +22,7 @@
 
 <p>Vagrant plays nicely with hip DevOps frameworks like <a href="http://www.opscode.com/chef/">Chef</a> and <a href="http://puppetlabs.com/">Puppet</a> and if your installations require a number of components, then these tools are defiantly the way to go. Sometimes, however, a simple Bash script is good enough as in the case for auto-installing some base component, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, <a href="http://thediscoblog.com/blog/categories/node/">Node.js</a> or <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a>.</p>
 
-<p>Using Vagrant's configuration file, aptly dubbed <code>Vagrantfile</code>, you can instruct a VM instance to run a series of steps -- these steps can be simple shell scripts, Chef cookbooks, or the analogous Puppet equivalent.</p>
+<p>Using Vagrant's configuration file, aptly dubbed <code>Vagrantfile</code>, you can instruct a VM instance to run a series of steps -- these steps can be simple shell scripts, Chef cookbooks, or the Puppet equivalent.</p>
 
 <!-- more -->
 
@@ -35,7 +35,7 @@ $&gt; vagrant init ubuntu.lts.64 http://files.vagrantup.com/precise64.box
 
 <p>This creates a <code>Vagrantfile</code> in the directory where you ran the command and creates a named VM (i.e. "ubuntu.lts.64") that is based off of Ubuntu 12.04 LTS.</p>
 
-<p>Base Ubuntu installations do not come with Java; if you'd like to install a particular JDK, say Oracle's JDK 7, you can leverage <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a>, which is series of Bash scripts that install various components like Java, Node.js, MongoDB, Redis, Ruby, etc.</p>
+<p>Base Ubuntu installations do not come with Java; if you'd like to install a particular JDK, say Oracle's JDK 7, you can leverage <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a>, which is a series of Bash scripts that install various components like Java, Node.js, MongoDB, Redis, Ruby, etc.</p>
 
 <p>Thus, for step 2, open up the newly created <code>Vagrantfile</code> and you should see two lines like so:</p>
 
