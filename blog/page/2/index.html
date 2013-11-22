@@ -88,6 +88,53 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/09/14/understanding-elasticsearch-analyzers/">Understanding ElasticSearch Analyzers</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-14T08:37:00-04:00" pubdate data-updated="true">Sep 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/mine/old-beer.jpg">Sadly, lots of early Internet beer recipes aren&#8217;t necessarily in an easily digestible format; that is, these recipes are <em>unstructured</em> intermixed lists of directions and ingredients often originally composed in an email or forum post.</p>
+
+<p>So while it&#8217;s hard to easily put these recipes into traditional data stores (ostensibly for easier searching), they&#8217;re perfect for <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">ElasticSearch</a> in their current form.</p>
+
+<p>Accordingly, imagine an <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">ElasticSearch</a> index full of beer recipes, since&#8230;well&#8230;I enjoy making beer (and drinking it too).</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/09/14/understanding-elasticsearch-analyzers/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters/">8% Is Itty-bitty, but It Matters</a></h1>
       
     
@@ -493,51 +540,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/07/03/sampling-redis-keys/">Sampling Redis Keys for Memory Consumption</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-03T14:05:00-04:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img class="right" src="/images/mine/redis_logo.png"><a href="http://www.app47.com">We</a> run a farm of <a href="http://redis.io/">Redis</a> instances for storing real time analytics. Because Redis stores objects in memory, it happens to be an extremely fast way to retrieve data; thus, most of our charts and graphs pull data from various Redis instances that contain desired data.</p>
-
-<p>Our Redis boxes are running in <a href="http://thediscoblog.com/blog/categories/aws/">AWS</a> on <a href="http://aws.amazon.com/ec2/instance-types/instance-details/">m2.2xlarge instances</a>, which contain a bit over 30GB of memory. Every once in awhile, it&#8217;s helpful to get an idea of how much memory various key <em>patterns</em> are consuming because we hold over 20GB across several hundred thousand keys in some cases. There&#8217;s a nifty gem dubbed <a href="https://github.com/snmaynard/redis-audit">redis-audit</a> (<a href="https://github.com/aglover/redis-audit">my fork</a> of it adds <a href="http://bundler.io/">Bundler</a>) that is quite helpful in painting a broad picture of memory usage across a sampling of key patterns.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/03/sampling-redis-keys/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -558,6 +560,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/22/book-review-instant-mockito/">Book review: Instant Mockito</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/">Provisioning Ubuntu with Java in 3 steps</a>
       </li>
     
@@ -571,10 +577,6 @@
     
       <li class="post">
         <a href="/blog/2013/10/09/all-other-metrics-are-useless/">All other metrics are useless</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/05/the-significance-of-html5/">The significance of HTML5</a>
       </li>
     
   </ul>

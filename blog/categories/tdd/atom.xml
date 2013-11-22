@@ -4,7 +4,7 @@
   <title><![CDATA[Category: TDD | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/tdd/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-11-19T09:00:17-05:00</updated>
+  <updated>2013-11-22T14:11:11-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Book review: Instant Mockito]]></title>
+    <link href="http://thediscoblog.com/blog/2013/11/22/book-review-instant-mockito/"/>
+    <updated>2013-11-22T13:33:00-05:00</updated>
+    <id>http://thediscoblog.com/blog/2013/11/22/book-review-instant-mockito</id>
+    <content type="html"><![CDATA[<p>Recently, the good folks over at <a href="http://www.packtpub.com/">Packt Publishing</a> gave me a copy of their newly published <a href="http://www.amazon.com/gp/product/B00ESX15M2/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00ESX15M2&amp;linkCode=as2&amp;tag=thdibl-20"><em>Instant Mockito</em></a>, by <a href="http://toomuchcoding.blogspot.com/">Marcin Grzejszczak</a>. Packt's <a href="http://www.packtpub.com/books/instant">Instant series</a> are really enjoyable. The premise of these books is that they're short and sweet. They're slightly more than a tutorial; they get you up and running quickly while throwing in a few more facets that go beyond the typical tutorial.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<iframe style="float: right; margin-left: 1.5em; height:260px; width:150px;" src="http://rcm-na.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=thdibl-20&o=1&p=8&l=as4&m=amazon&f=ifr&ref=ss_til&asins=B00ESX15M2" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+
+
+<p><a href="http://www.amazon.com/gp/product/B00ESX15M2/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00ESX15M2&amp;linkCode=as2&amp;tag=thdibl-20"><em>Instant Mockito</em></a> is a quick read at 92 pages; what's more, Marcin does a great job of keeping a consistent example domain alive throughout the entire book. The big picture is how to use <a href="http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito/">Mockito</a> with <a href="http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer/">JUnit</a>, testing a fictitious restaurant ordering system.</p>
+
+<p>The format of Packt's Instant books are all similar — the first part is a quick "up and running" that essentially encapsulates the basic tutorial you can find on a project's home page. The meat of an Instant book comes next, where the author dives into a number of features they feel are important to grasp a particular subject.</p>
+
+<p>In the case of Marcin's book, he elaborates on 8 key Mockito subjects:</p>
+
+<ul>
+<li>Performing argument matching</li>
+<li>Stubbing multiple calls</li>
+<li>Working with void methods and thrown exceptions</li>
+<li>Stubbing with a custom answer</li>
+<li>Verifying behavior (including argument capturing, verifying call order, and working with asynchronous code)</li>
+<li>Doing partial mocking (spying)</li>
+<li>Reducing boilerplate code with annotations</li>
+<li>Taking advantage of advanced mocks configuration</li>
+</ul>
+
+
+<p>Again, each subject expands upon a waiter-taking-an-order domain. As this is a book focusing on Mockito, the mocking aspects are straightforward — this isn't a book on how to test poorly written code, for example, so the code under test in this case uses dependency injection. This makes it easy to grasp Mockito subjects without having to delve into the intricacies of terrible code (ironically, I often times find myself employing Mockito when dealing with poorly written code).</p>
+
+<p>Speaking of poorly written code: the only thing I did not particularly enjoy about the book was the formatting of the code. Code formatting has always been problematic in books, however, many publishers have figured out how to properly convey code (in particular, <a href="http://www.oreilly.com/">O'Reilly</a> books do a good job).</p>
+
+<p>In the case of <a href="http://www.amazon.com/gp/product/B00ESX15M2/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00ESX15M2&amp;linkCode=as2&amp;tag=thdibl-20"><em>Instant Mockito</em></a>, the code examples (at least reading the epub version on my iPad) have such narrow margins that each logical line of code is often broken into 3 or more lines (and dashes are used to signify a line break). While it certainly doesn't render the code unreadable, it makes instant code comprehension challenging. I found myself having to read through each code example multiple times just to get the basic idea.</p>
+
+<p>Code formatting aside, Marcin's book was an easy read and the 8 features he feels every Mockito user should know are well explained.  As a user of Mockito, I couldn't agree more with the relevance of these features. If you enjoy quick reads, want to learn the basics of mocking in JUnit with Mockito,  and you can put up with inadequate code formatting, then go ahead and give <a href="http://www.amazon.com/gp/product/B00ESX15M2/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00ESX15M2&amp;linkCode=as2&amp;tag=thdibl-20"><em>Instant Mockito</em></a> a read!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Sometimes TDD requires a hammer]]></title>

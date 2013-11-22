@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-11-19T09:00:17-05:00</updated>
+  <updated>2013-11-22T14:11:11-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Book review: Instant Mockito]]></title>
+    <link href="http://thediscoblog.com/blog/2013/11/22/book-review-instant-mockito/"/>
+    <updated>2013-11-22T13:33:00-05:00</updated>
+    <id>http://thediscoblog.com/blog/2013/11/22/book-review-instant-mockito</id>
+    <content type="html"><![CDATA[<p>Recently, the good folks over at <a href="http://www.packtpub.com/">Packt Publishing</a> gave me a copy of their newly published <a href="http://www.amazon.com/gp/product/B00ESX15M2/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00ESX15M2&amp;linkCode=as2&amp;tag=thdibl-20"><em>Instant Mockito</em></a>, by <a href="http://toomuchcoding.blogspot.com/">Marcin Grzejszczak</a>. Packt's <a href="http://www.packtpub.com/books/instant">Instant series</a> are really enjoyable. The premise of these books is that they're short and sweet. They're slightly more than a tutorial; they get you up and running quickly while throwing in a few more facets that go beyond the typical tutorial.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<iframe style="float: right; margin-left: 1.5em; height:260px; width:150px;" src="http://rcm-na.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=thdibl-20&o=1&p=8&l=as4&m=amazon&f=ifr&ref=ss_til&asins=B00ESX15M2" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+
+
+<p><a href="http://www.amazon.com/gp/product/B00ESX15M2/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00ESX15M2&amp;linkCode=as2&amp;tag=thdibl-20"><em>Instant Mockito</em></a> is a quick read at 92 pages; what's more, Marcin does a great job of keeping a consistent example domain alive throughout the entire book. The big picture is how to use <a href="http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito/">Mockito</a> with <a href="http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer/">JUnit</a>, testing a fictitious restaurant ordering system.</p>
+
+<p>The format of Packt's Instant books are all similar — the first part is a quick "up and running" that essentially encapsulates the basic tutorial you can find on a project's home page. The meat of an Instant book comes next, where the author dives into a number of features they feel are important to grasp a particular subject.</p>
+
+<p>In the case of Marcin's book, he elaborates on 8 key Mockito subjects:</p>
+
+<ul>
+<li>Performing argument matching</li>
+<li>Stubbing multiple calls</li>
+<li>Working with void methods and thrown exceptions</li>
+<li>Stubbing with a custom answer</li>
+<li>Verifying behavior (including argument capturing, verifying call order, and working with asynchronous code)</li>
+<li>Doing partial mocking (spying)</li>
+<li>Reducing boilerplate code with annotations</li>
+<li>Taking advantage of advanced mocks configuration</li>
+</ul>
+
+
+<p>Again, each subject expands upon a waiter-taking-an-order domain. As this is a book focusing on Mockito, the mocking aspects are straightforward — this isn't a book on how to test poorly written code, for example, so the code under test in this case uses dependency injection. This makes it easy to grasp Mockito subjects without having to delve into the intricacies of terrible code (ironically, I often times find myself employing Mockito when dealing with poorly written code).</p>
+
+<p>Speaking of poorly written code: the only thing I did not particularly enjoy about the book was the formatting of the code. Code formatting has always been problematic in books, however, many publishers have figured out how to properly convey code (in particular, <a href="http://www.oreilly.com/">O'Reilly</a> books do a good job).</p>
+
+<p>In the case of <a href="http://www.amazon.com/gp/product/B00ESX15M2/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00ESX15M2&amp;linkCode=as2&amp;tag=thdibl-20"><em>Instant Mockito</em></a>, the code examples (at least reading the epub version on my iPad) have such narrow margins that each logical line of code is often broken into 3 or more lines (and dashes are used to signify a line break). While it certainly doesn't render the code unreadable, it makes instant code comprehension challenging. I found myself having to read through each code example multiple times just to get the basic idea.</p>
+
+<p>Code formatting aside, Marcin's book was an easy read and the 8 features he feels every Mockito user should know are well explained.  As a user of Mockito, I couldn't agree more with the relevance of these features. If you enjoy quick reads, want to learn the basics of mocking in JUnit with Mockito,  and you can put up with inadequate code formatting, then go ahead and give <a href="http://www.amazon.com/gp/product/B00ESX15M2/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00ESX15M2&amp;linkCode=as2&amp;tag=thdibl-20"><em>Instant Mockito</em></a> a read!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Provisioning Ubuntu with Java in 3 steps]]></title>
@@ -310,78 +353,6 @@ private void send(final AmazonSQS sqs, final String queueURL, final String messa
 <p>Check out "<a href="http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html">Mobile for the masses: Sign, seal, and deliver your Android app</a>" and learn how to sign your app in preparation for submitting it to an app store! If you missed the first article, check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>"; what's more, don't forget to read my second article, entitled "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>" and the third article "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>". Finally, don't forget to read article number four: "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">Mobile for the masses: Mobile for the masses: Words and gestures with Overheard Word</a>" and programmatically integrate third-party code into your Android UI!</p>
 
 <p>Stay tuned for more articles in this series and don't forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Sometimes TDD requires a hammer]]></title>
-    <link href="http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer/"/>
-    <updated>2013-08-04T11:08:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/08/04/sometimes-tdd-requires-a-hammer</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/hammerj.jpg">While there are myriad mocking libraries available for the Java platform, only a select few of these nifty frameworks is capable of mocking the non-mock-friendly modifiers of <code>static</code> and <code>final</code>. Static (or class) methods, while handy for factories, become a nuisance for a framework like <a href="https://code.google.com/p/mockito/">Mockito</a>, however, with the inclusion of <a href="https://code.google.com/p/powermock/">PowerMock</a>, you've got yourself a proverbial hammer.</p>
-
-<p><a href="http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito/">As I wrote about previously</a>, I had to deal with a 3rd party library that is used to integrate with a networked service. This library is essentially hardwired to interact with homebase, which naturally provides some challenges when trying to test ones code that relies on this library. Moreover, the said library contained a <code>static</code> method for creating instances of a specialized class, which, naturally, my code depended on.</p>
-
-<!-- more -->
-
-
-<p>PowerMock is made to work in concert with either <a href="http://easymock.org/">EasyMock</a> or <a href="https://code.google.com/p/powermock/wiki/MockitoUsage13">Mockito</a>; what's more, it comes with a custom runner for inclusion in <a href="https://github.com/junit-team/junit">JUnit</a>. I'm going to show you how to use PowerMock with Mockito as I happen to find Mockito's syntax much more fluent than EasyMock's.</p>
-
-<p>For starters, you'll need to use two class level annotations -- <code>@RunWith</code> for specifying the <code>PowerMockRunner</code> class (this is a JUnit annotation) and another dubbed <code>@PrepareForTest</code>, which takes the class with <code>static</code> methods you wish to mock. <code>@PrepareForTest</code> is provided by PowerMock.</p>
-
-<p>In my case, the class containing a <code>static</code> method is named <code>QTP</code>, accordingly; my test class looks like this:</p>
-
-<p><code>java JUnit test class with class level annotations
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(QTP.class)
-public class CreateCommandTest {
-  @Test
-  public void testCreateRequest() throws Exception {}
-}
-</code></p>
-
-<p>Next, in your test method, you use <code>PowerMokito</code>'s <code>mockStatic</code> method, which takes the class (again) with static methods you wish to mock.</p>
-
-<p><code>java JUnit test case using PowerMock &amp; Mockito
-@Test
-public void testCreateRequest() throws Exception {
-  PowerMockito.mockStatic(QTP.class);
-  //....
-}
-</code></p>
-
-<p>You can then mock a static method on the class you've been passing around to <code>mockStatic</code> and the <code>@PrepareForTest</code> annotation like you would normally do with Mockito. For instance, I can use the <code>when</code> method to specify what I want to happen when this static method is invoked.</p>
-
-<p><code>java Using normal Mockito actions for mocking
-@Test
-public void testCreateRequest() throws Exception {
-  PowerMockito.mockStatic(QTP.class);
-  QTP qtpThing = mock(QTP.class); //normal Mockito mocking
-  //QTP.create is static
-  when(QTP.create("dm2q", "0C4F7501UDC8C1EB43B06C988")).thenReturn(qtpThing);
-  //QTP.createRecord isn't static
-  when(qtpThing.createRecord(any(Tckt.class))).thenReturn(new Long(1000000L));
-  //...
-}
-</code></p>
-
-<p>Finally, you can use <a href="http://metlos.wordpress.com/2012/09/14/the-dark-powers-of-powermock/">PowerMock</a> to ensure your mocked static method is actually invoked. The requirements here are a bit funky; that is, it requires you <em>first</em> specify how many times with one line of code and then you <em>actually call the static method</em>.</p>
-
-<p><code>java Verifying your mocked static method was invoked
-@Test
-public void testCreateRequest() throws Exception {  
-  //...
-  PowerMockito.verifyStatic(Mockito.times(1));
-  QTP.create("dm2q", "0C4F7501UDC8C1EB43B06C988");
-  //...
-}
-</code></p>
-
-<p>Yeah, that's sorta confusing, I know.</p>
-
-<p>Nevertheless, as most people in the world of Java figured out long ago, <a href="http://stackoverflow.com/questions/2671496/java-when-to-use-static-methods">static methods</a> are <a href="http://misko.hevery.com/2008/12/15/static-methods-are-death-to-testability/">somewhat difficult</a> when it <a href="http://blog.codecentric.de/en/2011/11/testing-and-mocking-of-static-methods-in-java/">comes to testing</a>. That is, while a method that conceptually has no state, at first glance, seems straightforward enough to test, the <a href="http://stackoverflow.com/questions/2472690/in-java-is-there-any-disadvantage-to-static-methods-on-a-class">issues arise</a> when that static method does something like hit a database or in my case, call a web service to a networked asset. There is no easy way to override such behavior (unless, of course, you pull out a hammer).</p>
-
-<p>Static methods have a place. But when it comes to testing code, whether it be legacy or some 3rd party library, the <code>static</code> modifier requires a hammer and as I hope I've shown you, <a href="https://code.google.com/p/powermock/">PowerMock</a> is that hammer.</p>
 ]]></content>
   </entry>
   
