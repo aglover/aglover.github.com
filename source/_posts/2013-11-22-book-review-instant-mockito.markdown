@@ -17,7 +17,7 @@ Recently, the good folks over at [Packt Publishing](http://www.packtpub.com/) ga
 
 The format of Packt's Instant books are all similar — the first part is a quick "up and running" that essentially encapsulates the basic tutorial you can find on a project's home page. The meat of an Instant book comes next, where the author dives into a number of features they feel are important to grasp a particular subject. 
 
-In the case of Marcin's book, he elaborates on 8 key Mockito subjects: 
+In the case of [Marcin's book](http://www.packtpub.com/how-to-create-stubs-mocks-spies-using-mockito/book), he elaborates on 8 key Mockito subjects: 
 
   * Performing argument matching
   * Stubbing multiple calls
