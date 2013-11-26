@@ -88,6 +88,49 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/07/15/mongodb-pro-tip-field-projections/">MongoDB Pro Tip: Field Projections</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-15T15:07:00-04:00" pubdate data-updated="true">Jul 15<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/mine/mongodb_icon.png">Did you ever learn that <code>select * from table</code> in RDBMS-land is bad? Of course, you did! If you&#8217;re only looking for the email address of a user and not the other 15 columns worth of data, then why ask for that data and incur a penalty? The query <code>select email from user where user_id = 1;</code> is far more efficient for the database and the corresponding application that issued it, because there is <em>less data to fetch and consume</em>.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/15/mongodb-pro-tip-field-projections/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2013/07/03/sampling-redis-keys/">Sampling Redis Keys for Memory Consumption</a></h1>
       
     
@@ -496,51 +539,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">ElasticSearch on EC2 in Less Than 60 Seconds</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-17T17:24:00-04:00" pubdate data-updated="true">May 17<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img class="left" src="/images/mine/es-bonzai.jpg">Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend &#8211; in less than 60 seconds, I&#8217;ll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
-
-<p>You&#8217;ll first <a href="http://www.drdobbs.com/web-development/getting-started-with-the-cloud-amazon-we/231601598">need an AWS account</a> along with an SSH key pair. If you don&#8217;t already have those two steps done, go ahead and do that. The steps that follow suggest a particular AMI; however, you are free to select the <a href="http://aws.amazon.com/ec2/instance-types/">instance type</a>. <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Micro instance types</a> are free to use; consequently, you can get <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">up and running with ElasticSearch</a> in less than a minute <em>for free</em>.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -561,6 +559,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/25/elasticsearch-in-a-box/">Elasticsearch in a box</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/22/book-review-instant-mockito/">Book review: Instant Mockito</a>
       </li>
     
@@ -574,10 +576,6 @@
     
       <li class="post">
         <a href="/blog/2013/10/12/aws-ebs-in-4-steps/">AWS EBS in 4 steps</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/09/all-other-metrics-are-useless/">All other metrics are useless</a>
       </li>
     
   </ul>

@@ -88,6 +88,57 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/01/04/savvy-mongo-query-selector-exists/">Savvy Mongo Query Selector: Exists</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-04T11:57:00-05:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.mongodb.org/">MongoDB</a> supports a <a href="http://docs.mongodb.org/manual/applications/read/">rich query language</a>; in fact, its support of dynamic queries is one of its <a href="http://public.dhe.ibm.com/software/dw/demos/jmongodbdocs/index.html">more distinguishing features</a> compared to other datastores in the <a href="http://www.infoworld.com/d/data-management/flexing-nosql-mongodb-in-review-185922">NoSQL</a> world. Mongo&#8217;s query language has a variety of query selectors that enable you to <a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">fashion some powerful document searches</a>. One particular <a href="http://docs.mongodb.org/manual/reference/operators/#element">query selector that comes in handy</a> from time to time is <code>$exists</code>.</p>
+
+<p>Because <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-12/">Mongo is document oriented</a> and thus lacks a rigid schema, documents (for better or for worse) can have varying structures within a collection. In practice, you probably don&#8217;t see vastly differing documents within a collection; however, from time to time, various document fields might differ (as in, <em>they might not be present</em>). Take for example, the classic example of a business card: some cards (i.e. documents) might list a fax number while others might omit it. As another example, as an application and its corresponding data evolves, new fields might be added (or removed).</p>
+
+<p>The <code>$exists</code> query selector facilitates finding documents that have (or do not have) specific fields. On more than one occasion, I&#8217;ve employed this query selector to find documents in need of a surgical update. For example, in a collection dubbed <code>words</code> with word documents that each contain an embedded <code>definitions</code> document collection, I can find those particular definitions that do not have a <code>part_of_speech</code> element like so:</p>
+
+<figure class='code'><figcaption><span>$exists query selector in action</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">db</span><span class="p">.</span><span class="nx">words</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="s2">&quot;definitions.part_of_speech&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;$exists&quot;</span><span class="o">:</span><span class="kc">false</span><span class="p">}}).</span><span class="nx">sort</span><span class="p">({</span><span class="s2">&quot;spelling&quot;</span><span class="o">:</span><span class="mi">1</span><span class="p">}).</span><span class="nx">limit</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that the <code>$exists</code> query selector takes a boolean &#8211; <code>true</code> or <code>false</code>.</p>
+
+<p>As you can probably ascertain, Mongo&#8217;s <code>$exists</code> is slightly <a href="http://www.techonthenet.com/sql/exists.php">different than SQL&#8217;s</a> <code>exists</code> &#8211; in fact, in SQL there is no way to fashion a query to find a row not containing a column! Can you dig it?</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2013/01/02/scalable-searching-with-elasticsearch/">Scalable Searching With ElasticSearch</a></h1>
       
     
@@ -646,59 +697,6 @@ focuses on the technologies, companies, and people influencing cloud computing. 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2012/09/24/a-tale-of-three-browsers/">A Tale of Three Browsers</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-24T15:39:00-04:00" pubdate data-updated="true">Sep 24<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently spent time evaluating various mobile browsers&#8217; HTML5 compatibility in an effort to understand the state of the mobile web. Along the way, I discovered that the good folks at Facebook, <a href="http://www.zdnet.com/facebooks-mark-zuckerberg-knocks-html5-in-favor-of-native-apps-7000004082/">who happen to have quite a lot of experience with HTML5</a> and <a href="http://gantdaily.com/2012/09/12/facebook-ceo-mark-zuckerberg-promises-better-mobile-strategy/">mobility</a> put together a handy website called <a href="http://www.rng.io/">Ringmark</a>.</p>
-
-<p>As the Facebook development team puts it, Ringmark</p>
-
-<blockquote><p>helps you understand which mobile browsers support the functionality your app needs.</p><footer><strong>Facebook HTML5 Blog</strong> <cite><a href='http://developers.facebook.com/html5/blog/post/2012/02/27/announcing-ringmark--a-mobile-browser-test-suite/'>developers.facebook.com/html5/&hellip;</a></cite></footer></blockquote>
-
-
-<p>Thus, with Ringmark you can ascertain a particular browser&#8217;s compatibility with HTML5 by simply going to <a href="http://www.rng.io/">rng.io</a>.</p>
-
-<p>Needless to say, I had some fun comparing Mobile Safari on my iPad to my Android 2.3.2 device. Interestingly enough, the fun really started when I decided to see what the feature functionality gap was between three browsers <em>on my desktop</em>.</p>
-
-<p><img class="center" src="/images/mine/rng_io_3_browsers.png">For the test, I used Chrome, Safari, and Firefox &#8211; all three browsers are up to date as of the writing of this entry as well. The center browser is Chrome, left is Safari and right is Firefox.</p>
-
-<p>As you can see, all 3 browsers score <em>differently</em> &#8211; Chrome scoring best with only 29 failures in Ring 1 and Safari, the worst with over 40 failures. None even made it to Ring 2.</p>
-
-<p>If you think HTML5 poses some compatibility issues for mobile devices, you need to widen your scope: HTML5 support varies across <em>everything</em>. Indeed, the <a href="http://en.wikipedia.org/wiki/Browser_wars">Browser Wars</a> are still being fought. The big difference now is that the wars are on multiple fronts.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -719,6 +717,10 @@ focuses on the technologies, companies, and people influencing cloud computing. 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/25/elasticsearch-in-a-box/">Elasticsearch in a box</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/22/book-review-instant-mockito/">Book review: Instant Mockito</a>
       </li>
     
@@ -732,10 +734,6 @@ focuses on the technologies, companies, and people influencing cloud computing. 
     
       <li class="post">
         <a href="/blog/2013/10/12/aws-ebs-in-4-steps/">AWS EBS in 4 steps</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/09/all-other-metrics-are-useless/">All other metrics are useless</a>
       </li>
     
   </ul>

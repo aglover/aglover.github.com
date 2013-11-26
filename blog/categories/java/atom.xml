@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-11-22T14:11:11-05:00</updated>
+  <updated>2013-11-25T14:15:21-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,60 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Elasticsearch in a box]]></title>
+    <link href="http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box/"/>
+    <updated>2013-11-25T13:42:00-05:00</updated>
+    <id>http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/esbox.jpg">Are you looking to get going to <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a> as quickly as possible without having to worry about <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">installing Java or Elasticsearch</a> itself? Are you looking for a repeatable and automated mechanism for bringing up Elasticsearch instances for developmental and or testing purposes? While there's certainly a number of <a href="http://www.elasticsearch.org/">Elasticsearch</a>-as-a-platform service providers out there, there's one other option: use <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a>.</p>
+
+<p>Elasticsearch-in-a-box is a freely available <a href="http://www.vagrantbox.es/">Vagrant base box</a>. What that means is that you can quickly fire up and tear down an Elasticsearch environment with <a href="http://docs.vagrantup.com/v2/getting-started/">simple commands</a> like <code>vagrant up</code> and <code>vagrant destroy</code>.</p>
+
+<!-- more -->
+
+
+<p>In order to use Elasticsearch-in-a-box, you first need to have <a href="http://docs.vagrantup.com/v2/installation/">Vagrant</a> and <a href="https://www.virtualbox.org/">VirtualBox</a> installed. These two installations couldn't be any easier. To install <a href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">Vagrant</a>, simply go to the downloads page and pick your target distribution. Vagrant provisions machines on top of virtual machine providers like VMWare, <a href="http://thediscoblog.com/blog/categories/aws/">AWS</a>, and VirtualBox. VirtualBox is free and easy to install -- like Vagrant, simply <a href="https://www.virtualbox.org/wiki/Downloads">go to the downloads section</a> and pick your target platform.</p>
+
+<p>Once you have both Vagrant and VirtualBox installed, you are two steps away from Elasticsearch-ing.</p>
+
+<p>First, you need to add and initialize the Elasticsearch-in-a-box <a href="http://docs.vagrantup.com/v2/boxes.html">template</a>. Go ahead and create a directory, like <code>/projects/esinabox</code>, change directories into it and execute this command:</p>
+
+<p><code>bash This command will create a Vagrant definition named esinabox from the downloaded template
+vagrant box add esinabox https://s3.amazonaws.com/coffers/esinabox.box
+</code></p>
+
+<p>This command will download the Elasticsearch-in-a-box template. Once that completes (it'll take a few moments depending on your connection), execute this command:</p>
+
+<p><code>bash Vagrant init will create a VagrantFile
+vagrant init 'esinabox'
+</code></p>
+
+<p>This command will create a <code>VagrantFile</code>, which you can use to customize the Elasticsearch-in-a-box instance. By default, you shouldn't need to do much, however, you can map network ports, install additional software via <a href="http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/">Bash</a>, Chef, and Puppet at your discretion.</p>
+
+<p>Next, fire up Elasticsearch-in-a-box like so:</p>
+
+<p><code>bash Starting up Elasticsearch-in-a-box
+vagrant up
+</code></p>
+
+<p>Now that Elasticsearch-in-a-box is running locally on your machine, you can open up a new terminal and execute RESTful commands like normal because Elasticsearch is running on same ports: 9200 &amp; 9300. So go ahead and execute some queries, like so:</p>
+
+<p><code>bash Elasticsearch is up an running!
+curl -XGET 'http://localhost:9200/_status?pretty=true'
+</code></p>
+
+<p>And when you are done, go ahead and tear down the instance like so:</p>
+
+<p><code>bash Destroying a VM instance
+vagrant destroy -f
+</code></p>
+
+<p>Wasn't that easy? The Elasticsearch-in-a-box Vagrant template was built using <a href="https://github.com/jedi4ever/veewee">Veewee</a>. The base box is 64-bit <a href="http://www.ubuntu.com/index_asus.html">Ubuntu 12.04</a> with Oracle's <a href="http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/">Java 7</a> and <a href="http://www.elasticsearch.org/download/">Elasticsearch version 0.90.7</a>.</p>
+
+<p>If you're looking for a quick and easy way to automatically provision Elasticsearch, then look no further and give <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a> a try!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Book review: Instant Mockito]]></title>
@@ -333,26 +387,6 @@ private void send(final AmazonSQS sqs, final String queueURL, final String messa
 <p>Incidentally, the AWS Java SDK <em>does provide an asynchronous client</em>; however, this client's implementation leverages Java's <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html">Futures</a>. While <a href="http://nurkiewicz.blogspot.com/2013/02/javautilconcurrentfuture-basics.html">Futures are a neat concept</a>, Ahoy!'s implementation is more convenient (<em>at least for me and in the patterns of how I employ SQS</em>) than Futures as there isn't any polling involved once a message is sent or received.</p>
 
 <p>While callbacks aren't <a href="http://en.wikipedia.org/wiki/Function_object#In_Java">necessarily supported</a> natively in Java, you can emulate them quite nicely and achieve the same level of code conciseness as what's common in JavaScript. And if you need a handy way to interface with AWS SQS, <a href="https://github.com/aglover/ahoy">then give Ahoy! a try</a>! Can you dig it, man?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mobile for the masses: Sign, seal, and deliver your Android app]]></title>
-    <link href="http://thediscoblog.com/blog/2013/09/17/mobile-for-the-masses-sign-seal-and-deliver-your-android-app/"/>
-    <updated>2013-09-17T15:20:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/09/17/mobile-for-the-masses-sign-seal-and-deliver-your-android-app</id>
-    <content type="html"><![CDATA[<p>The fifth article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>' series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> has been published! <a href="http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html">This hip article</a> shows you how to add a multiple-choice quiz to your Android mobile app, then sign it with a secure digital certificate.</p>
-
-<!-- more -->
-
-
-<p>As the article summary states:</p>
-
-<p><blockquote><p>By web logic, content is king; but for mobile users, interaction rules. Static information design is out for mobile apps, and gamification is in. This month Andrew Glover concludes his introduction to Android mobile development by adding a multiple-choice quiz feature to the example app, Overheard Word, introduced in a previous article. Then he shows you how to generate a digital signature and publish and promote your signed app on Google Play or Amazon Appstore for Android.</p><footer><strong>IBM DeveloperWorks</strong> <cite><a href='http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html'>Mobile for the Masses: Sign, Seal, and Deliver Your Android App</a></cite></footer></blockquote></p>
-
-<p>Check out "<a href="http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html">Mobile for the masses: Sign, seal, and deliver your Android app</a>" and learn how to sign your app in preparation for submitting it to an app store! If you missed the first article, check out "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>"; what's more, don't forget to read my second article, entitled "<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>" and the third article "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>". Finally, don't forget to read article number four: "<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">Mobile for the masses: Mobile for the masses: Words and gestures with Overheard Word</a>" and programmatically integrate third-party code into your Android UI!</p>
-
-<p>Stay tuned for more articles in this series and don't forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
 ]]></content>
   </entry>
   

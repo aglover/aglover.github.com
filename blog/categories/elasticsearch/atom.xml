@@ -4,7 +4,7 @@
   <title><![CDATA[Category: elasticsearch | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/elasticsearch/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-11-22T14:11:11-05:00</updated>
+  <updated>2013-11-25T14:15:21-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,60 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Elasticsearch in a box]]></title>
+    <link href="http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box/"/>
+    <updated>2013-11-25T13:42:00-05:00</updated>
+    <id>http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/esbox.jpg">Are you looking to get going to <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a> as quickly as possible without having to worry about <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">installing Java or Elasticsearch</a> itself? Are you looking for a repeatable and automated mechanism for bringing up Elasticsearch instances for developmental and or testing purposes? While there's certainly a number of <a href="http://www.elasticsearch.org/">Elasticsearch</a>-as-a-platform service providers out there, there's one other option: use <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a>.</p>
+
+<p>Elasticsearch-in-a-box is a freely available <a href="http://www.vagrantbox.es/">Vagrant base box</a>. What that means is that you can quickly fire up and tear down an Elasticsearch environment with <a href="http://docs.vagrantup.com/v2/getting-started/">simple commands</a> like <code>vagrant up</code> and <code>vagrant destroy</code>.</p>
+
+<!-- more -->
+
+
+<p>In order to use Elasticsearch-in-a-box, you first need to have <a href="http://docs.vagrantup.com/v2/installation/">Vagrant</a> and <a href="https://www.virtualbox.org/">VirtualBox</a> installed. These two installations couldn't be any easier. To install <a href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">Vagrant</a>, simply go to the downloads page and pick your target distribution. Vagrant provisions machines on top of virtual machine providers like VMWare, <a href="http://thediscoblog.com/blog/categories/aws/">AWS</a>, and VirtualBox. VirtualBox is free and easy to install -- like Vagrant, simply <a href="https://www.virtualbox.org/wiki/Downloads">go to the downloads section</a> and pick your target platform.</p>
+
+<p>Once you have both Vagrant and VirtualBox installed, you are two steps away from Elasticsearch-ing.</p>
+
+<p>First, you need to add and initialize the Elasticsearch-in-a-box <a href="http://docs.vagrantup.com/v2/boxes.html">template</a>. Go ahead and create a directory, like <code>/projects/esinabox</code>, change directories into it and execute this command:</p>
+
+<p><code>bash This command will create a Vagrant definition named esinabox from the downloaded template
+vagrant box add esinabox https://s3.amazonaws.com/coffers/esinabox.box
+</code></p>
+
+<p>This command will download the Elasticsearch-in-a-box template. Once that completes (it'll take a few moments depending on your connection), execute this command:</p>
+
+<p><code>bash Vagrant init will create a VagrantFile
+vagrant init 'esinabox'
+</code></p>
+
+<p>This command will create a <code>VagrantFile</code>, which you can use to customize the Elasticsearch-in-a-box instance. By default, you shouldn't need to do much, however, you can map network ports, install additional software via <a href="http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/">Bash</a>, Chef, and Puppet at your discretion.</p>
+
+<p>Next, fire up Elasticsearch-in-a-box like so:</p>
+
+<p><code>bash Starting up Elasticsearch-in-a-box
+vagrant up
+</code></p>
+
+<p>Now that Elasticsearch-in-a-box is running locally on your machine, you can open up a new terminal and execute RESTful commands like normal because Elasticsearch is running on same ports: 9200 &amp; 9300. So go ahead and execute some queries, like so:</p>
+
+<p><code>bash Elasticsearch is up an running!
+curl -XGET 'http://localhost:9200/_status?pretty=true'
+</code></p>
+
+<p>And when you are done, go ahead and tear down the instance like so:</p>
+
+<p><code>bash Destroying a VM instance
+vagrant destroy -f
+</code></p>
+
+<p>Wasn't that easy? The Elasticsearch-in-a-box Vagrant template was built using <a href="https://github.com/jedi4ever/veewee">Veewee</a>. The base box is 64-bit <a href="http://www.ubuntu.com/index_asus.html">Ubuntu 12.04</a> with Oracle's <a href="http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/">Java 7</a> and <a href="http://www.elasticsearch.org/download/">Elasticsearch version 0.90.7</a>.</p>
+
+<p>If you're looking for a quick and easy way to automatically provision Elasticsearch, then look no further and give <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a> a try!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[I like my ElasticSearch a la Node.js]]></title>
@@ -479,28 +533,6 @@ wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/e
 <p>And that is it. In less than 60 seconds you've got ElasticSearch running in the cloud for you. Want to create a cluster? No problem, just follow these steps again to fire up another ElasticSearch instance and then <a href="http://www.elasticsearch.org/videos/three-nodes-and-one-cluster/">configure the cluster accordingly</a>.</p>
 
 <p>I've not gone over <a href="http://www.elasticsearch.org/guide/reference/setup/configuration/">configuring ElasticSearch</a> nor have I showed you how to create ElasticSearch as a service on a Linux instance, but for one minute, what do you expect?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The democratization of search]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/"/>
-    <updated>2013-05-14T11:33:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/democracy.jpg">Over the past year and a half, I've watched <a href="http://www.elasticsearch.org/">ElasticSearch</a> grow from a seemingly part-time code experiment into a thriving ecosystem. Not only has the number of <a href="http://www.elasticsearch.org/guide/clients/">client libraries</a> grown from 1 to over 25 (and counting!); it's now a <a href="http://www.elasticsearch.com/">commercially sponsored project</a> to the tune of <a href="http://www.whiteboardmag.com/youre-hot-or-not-why-elasticsearch-raised-24-million-just-3-months-after-a-10-million-round/">$34 million</a> (a <a href="http://www.zdnet.com/elasticsearch-raises-24-million-big-data-analytics-7000011496/">$10M series A</a> and a <a href="http://gigaom.com/2013/02/19/open-source-search-tool-elasticsearch-gets-24m/">$24M series B</a>) with 200,000 downloads a month.</p>
-
-<p>Search is the touchstone of the Internet; without search the Internet wouldn't be all that useful. Google's meteoric rise and its resultant eponymous name for search is clear evidence as to the importance of search. Search, however, hasn't always been that easy nor affordable to implement.</p>
-
-<!--more-->
-
-
-<p>Before the likes of open source projects like <a href="http://lucene.apache.org/">Lucene</a>, implementing search in an application involved an expensive commercial product or a series of SQL <code>like</code> statements that were never really good enough. Lucene, however, isn't a simple hobbyist's pursuit. Lucene requires a lot of expertise; what's more, successful projects within the Lucene ecosystem, like <a href="http://lucene.apache.org/solr/">Solr</a> lack a key feature that is defining modern architectures: <a href="http://www.searchblox.com/solr-vs-elasticsearch">distributed</a>.</p>
-
-<p>The continued low cost of storage combined with cheap rent-able infrastructures like <a href="http://www.drdobbs.com/web-development/getting-started-with-the-cloud-amazon-we/231601598">AWS</a> has made it convenient to store a plethora of data, thus bringing to bear the importance that applications must support searching vast amounts of data, do it quickly, and affordably. This is where <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch shines</a>.</p>
-
-<p><a href="http://www.elasticsearch.org/overview/">ElasticSearch sits on top of Lucene</a> and adds not only a simple API for adding and searching content, but does it in a distributed manner. With infinitesimal arm grease, you can set up a search cluster that smears your data and resultant queries across a series of nodes. Not only is this resultant architecture fast, but it's easy to set up and extremely affordable as search nodes can run on commodity hardware. In essence, ElasticSearch brings search to the masses.</p>
-
-<p>Google and its resultant ease of search has changed the mindset of application users. Searching content is a <em>presumed feature</em> and if you don't provide it, you're already a few steps behind your competition. ElasticSearch is clearly a path to constructing a viable, easy to install, affordable, distributed search infrastructure for any application. If you don't believe me, take a look at some of the innovative companies with substantial amounts of users using it: <a href="https://github.com/">Github</a>, <a href="https://foursquare.com/">foursquare</a>, and <a href="http://stackoverflow.com/">Stack Overflow</a> are just a few.</p>
 ]]></content>
   </entry>
   

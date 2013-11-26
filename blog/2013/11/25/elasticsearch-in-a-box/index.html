@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>MoDevTablet 2012 video: Mobile Web Realities - The Disco Blog</title>
+  <title>Elasticsearch in a box - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
@@ -20,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/">
+  <link rel="canonical" href="http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -85,7 +85,7 @@
   <header>
     
       
-        <h1 class="entry-title">MoDevTablet 2012 Video: Mobile Web Realities</h1>
+        <h1 class="entry-title">Elasticsearch in a Box</h1>
       
     
     
@@ -102,24 +102,64 @@
   
 
 
-<time datetime="2012-09-25T12:51:00-04:00" pubdate data-updated="true">Sep 25<span>th</span>, 2012</time>
+<time datetime="2013-11-25T13:42:00-05:00" pubdate data-updated="true">Nov 25<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Recently, I had the distinct pleasure of speaking at <a href="http://modevtablet.com/">MoDevTablet</a> where I gave a presentation entitled &#8220;Mobile Web Realities&#8221; and the <a href="http://www.meetup.com/modevdc/">good folks who put on the conference</a> recorded it.</p>
+<div class="entry-content"><p><img class="left" src="/images/mine/esbox.jpg">Are you looking to get going to <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a> as quickly as possible without having to worry about <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">installing Java or Elasticsearch</a> itself? Are you looking for a repeatable and automated mechanism for bringing up Elasticsearch instances for developmental and or testing purposes? While there&#8217;s certainly a number of <a href="http://www.elasticsearch.org/">Elasticsearch</a>-as-a-platform service providers out there, there&#8217;s one other option: use <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a>.</p>
 
-<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/rqfJS3F_YYk "></iframe></div>
+<p>Elasticsearch-in-a-box is a freely available <a href="http://www.vagrantbox.es/">Vagrant base box</a>. What that means is that you can quickly fire up and tear down an Elasticsearch environment with <a href="http://docs.vagrantup.com/v2/getting-started/">simple commands</a> like <code>vagrant up</code> and <code>vagrant destroy</code>.</p>
 
-
-
-
-<p></p>
+<!-- more -->
 
 
-<p>In summary: a year ago, hybrid development frameworks like <a href="http://phonegap.com/">PhoneGap</a> that leverage HTML5 were poised to radically alter mobile app development, but the potential has failed to live up to the promise: Faster/Easier/Cheaper <em>doesn&#8217;t always mean</em> Better.</p>
+<p>In order to use Elasticsearch-in-a-box, you first need to have <a href="http://docs.vagrantup.com/v2/installation/">Vagrant</a> and <a href="https://www.virtualbox.org/">VirtualBox</a> installed. These two installations couldn&#8217;t be any easier. To install <a href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">Vagrant</a>, simply go to the downloads page and pick your target distribution. Vagrant provisions machines on top of virtual machine providers like VMWare, <a href="http://thediscoblog.com/blog/categories/aws/">AWS</a>, and VirtualBox. VirtualBox is free and easy to install &#8211; like Vagrant, simply <a href="https://www.virtualbox.org/wiki/Downloads">go to the downloads section</a> and pick your target platform.</p>
+
+<p>Once you have both Vagrant and VirtualBox installed, you are two steps away from Elasticsearch-ing.</p>
+
+<p>First, you need to add and initialize the Elasticsearch-in-a-box <a href="http://docs.vagrantup.com/v2/boxes.html">template</a>. Go ahead and create a directory, like <code>/projects/esinabox</code>, change directories into it and execute this command:</p>
+
+<figure class='code'><figcaption><span>This command will create a Vagrant definition named esinabox from the downloaded template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vagrant box add esinabox https://s3.amazonaws.com/coffers/esinabox.box
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command will download the Elasticsearch-in-a-box template. Once that completes (it&#8217;ll take a few moments depending on your connection), execute this command:</p>
+
+<figure class='code'><figcaption><span>Vagrant init will create a VagrantFile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vagrant init <span class="s1">&#39;esinabox&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command will create a <code>VagrantFile</code>, which you can use to customize the Elasticsearch-in-a-box instance. By default, you shouldn&#8217;t need to do much, however, you can map network ports, install additional software via <a href="http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/">Bash</a>, Chef, and Puppet at your discretion.</p>
+
+<p>Next, fire up Elasticsearch-in-a-box like so:</p>
+
+<figure class='code'><figcaption><span>Starting up Elasticsearch-in-a-box</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vagrant up
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that Elasticsearch-in-a-box is running locally on your machine, you can open up a new terminal and execute RESTful commands like normal because Elasticsearch is running on same ports: 9200 &amp; 9300. So go ahead and execute some queries, like so:</p>
+
+<figure class='code'><figcaption><span>Elasticsearch is up an running!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -XGET <span class="s1">&#39;http://localhost:9200/_status?pretty=true&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And when you are done, go ahead and tear down the instance like so:</p>
+
+<figure class='code'><figcaption><span>Destroying a VM instance</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vagrant destroy -f
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Wasn&#8217;t that easy? The Elasticsearch-in-a-box Vagrant template was built using <a href="https://github.com/jedi4ever/veewee">Veewee</a>. The base box is 64-bit <a href="http://www.ubuntu.com/index_asus.html">Ubuntu 12.04</a> with Oracle&#8217;s <a href="http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/">Java 7</a> and <a href="http://www.elasticsearch.org/download/">Elasticsearch version 0.90.7</a>.</p>
+
+<p>If you&#8217;re looking for a quick and easy way to automatically provision Elasticsearch, then look no further and give <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a> a try!</p>
 </div>
 <!-- related posts -->
 <div id='related_posts'>
@@ -131,23 +171,23 @@
           
       
           
-            <li class="related"><a href="/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">Cost and the Great Mobile App Debate</a></li>
+            <li class="related"><a href="/blog/2013/07/24/introducing-android-migrations/">Introducing Android migrations</a></li>
           
       
           
-            <li class="related"><a href="/blog/2013/10/05/the-significance-of-html5/">The significance of HTML5</a></li>
+            <li class="related"><a href="/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/">Provisioning Ubuntu with Java in 3 steps</a></li>
           
       
           
-            <li class="related"><a href="/blog/2013/04/14/hybrid-inappropriateness/">Hybrid inappropriateness</a></li>
+            <li class="related"><a href="/blog/2013/09/03/effortless-elasticsearch-clustering/">Effortless ElasticSearch clustering</a></li>
           
       
           
-            <li class="related"><a href="/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/">Past performance is no guarantee of future results</a></li>
+            <li class="related"><a href="/blog/2013/10/16/ssh-and-vagrant/">SSH &amp; Vagrant</a></li>
           
       
           
-            <li class="related"><a href="/blog/2012/09/24/a-tale-of-three-browsers/">A tale of three browsers</a></li>
+            <li class="related"><a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku performance hat-trick</a></li>
           
       
       </ul>
@@ -173,12 +213,12 @@
   
 
 
-<time datetime="2012-09-25T12:51:00-04:00" pubdate data-updated="true">Sep 25<span>th</span>, 2012</time>
+<time datetime="2013-11-25T13:42:00-05:00" pubdate data-updated="true">Nov 25<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/mobile/'>mobile</a>
+    <a class='category' href='/blog/categories/devops/'>DevOps</a>, <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/ubuntu/'>Ubuntu</a>, <a class='category' href='/blog/categories/elasticsearch/'>elasticsearch</a>
   
 </span>
 
@@ -187,7 +227,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -200,10 +240,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left articlenav" href="/blog/2012/09/24/a-tale-of-three-browsers/" title="Previous Post: A tale of three browsers">&laquo; A tale of three browsers</a>
+        <a class="basic-alignment left articlenav" href="/blog/2013/11/22/book-review-instant-mockito/" title="Previous Post: Book review: Instant Mockito">&laquo; Book review: Instant Mockito</a>
       
-      
-        <a class="basic-alignment right articlenav" href="/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry/" title="Next Post: JVM fork modes and metaclass wizardry">JVM fork modes and metaclass wizardry &raquo;</a>
       
     </p>
   </footer>
@@ -302,8 +340,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/';
-        var disqus_url = 'http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/';
+        var disqus_identifier = 'http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box/';
+        var disqus_url = 'http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box/';
         var disqus_script = 'embed.js';
       
     (function () {
