@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ubuntu | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/ubuntu/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-11-25T14:15:21-05:00</updated>
+  <updated>2013-11-26T11:29:07-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box/"/>
     <updated>2013-11-25T13:42:00-05:00</updated>
     <id>http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/esbox.jpg">Are you looking to get going to <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a> as quickly as possible without having to worry about <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">installing Java or Elasticsearch</a> itself? Are you looking for a repeatable and automated mechanism for bringing up Elasticsearch instances for developmental and or testing purposes? While there's certainly a number of <a href="http://www.elasticsearch.org/">Elasticsearch</a>-as-a-platform service providers out there, there's one other option: use <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a>.</p>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/esbox.jpg">Are you looking to get going with <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a> as quickly as possible without having to worry about <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">installing Java or Elasticsearch</a> itself? Are you looking for a repeatable and automated mechanism for bringing up Elasticsearch instances for developmental and or testing purposes? While there's certainly a number of <a href="http://www.elasticsearch.org/">Elasticsearch</a>-as-a-platform service providers out there, there's one other option: use <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a>.</p>
 
 <p>Elasticsearch-in-a-box is a freely available <a href="http://www.vagrantbox.es/">Vagrant base box</a>. What that means is that you can quickly fire up and tear down an Elasticsearch environment with <a href="http://docs.vagrantup.com/v2/getting-started/">simple commands</a> like <code>vagrant up</code> and <code>vagrant destroy</code>.</p>
 

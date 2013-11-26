@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-11-25T14:15:21-05:00</updated>
+  <updated>2013-11-26T11:29:07-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box/"/>
     <updated>2013-11-25T13:42:00-05:00</updated>
     <id>http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/esbox.jpg">Are you looking to get going to <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a> as quickly as possible without having to worry about <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">installing Java or Elasticsearch</a> itself? Are you looking for a repeatable and automated mechanism for bringing up Elasticsearch instances for developmental and or testing purposes? While there&#8217;s certainly a number of <a href="http://www.elasticsearch.org/">Elasticsearch</a>-as-a-platform service providers out there, there&#8217;s one other option: use <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a>.</p>
+    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/esbox.jpg">Are you looking to get going with <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a> as quickly as possible without having to worry about <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">installing Java or Elasticsearch</a> itself? Are you looking for a repeatable and automated mechanism for bringing up Elasticsearch instances for developmental and or testing purposes? While there&#8217;s certainly a number of <a href="http://www.elasticsearch.org/">Elasticsearch</a>-as-a-platform service providers out there, there&#8217;s one other option: use <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a>.</p>
 
 <p>Elasticsearch-in-a-box is a freely available <a href="http://www.vagrantbox.es/">Vagrant base box</a>. What that means is that you can quickly fire up and tear down an Elasticsearch environment with <a href="http://docs.vagrantup.com/v2/getting-started/">simple commands</a> like <code>vagrant up</code> and <code>vagrant destroy</code>.</p>
 
@@ -91,7 +91,7 @@
 
 <p>The format of Packt&#8217;s Instant books are all similar — the first part is a quick &#8220;up and running&#8221; that essentially encapsulates the basic tutorial you can find on a project&#8217;s home page. The meat of an Instant book comes next, where the author dives into a number of features they feel are important to grasp a particular subject.</p>
 
-<p>In the case of Marcin&#8217;s book, he elaborates on 8 key Mockito subjects:</p>
+<p>In the case of <a href="http://www.packtpub.com/how-to-create-stubs-mocks-spies-using-mockito/book">Marcin&#8217;s book</a>, he elaborates on 8 key Mockito subjects:</p>
 
 <ul>
 <li>Performing argument matching</li>
@@ -111,7 +111,7 @@
 
 <p>In the case of <a href="http://www.amazon.com/gp/product/B00ESX15M2/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00ESX15M2&amp;linkCode=as2&amp;tag=thdibl-20"><em>Instant Mockito</em></a>, the code examples (at least reading the epub version on my iPad) have such narrow margins that each logical line of code is often broken into 3 or more lines (and dashes are used to signify a line break). While it certainly doesn&#8217;t render the code unreadable, it makes instant code comprehension challenging. I found myself having to read through each code example multiple times just to get the basic idea.</p>
 
-<p>Code formatting aside, Marcin&#8217;s book was an easy read and the 8 features he feels every Mockito user should know are well explained.  As a user of Mockito, I couldn&#8217;t agree more with the relevance of these features. If you enjoy quick reads, want to learn the basics of mocking in JUnit with Mockito,  and you can put up with inadequate code formatting, then go ahead and give <a href="http://www.amazon.com/gp/product/B00ESX15M2/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00ESX15M2&amp;linkCode=as2&amp;tag=thdibl-20"><em>Instant Mockito</em></a> a read!</p>
+<p>Code formatting aside, <a href="http://www.packtpub.com/how-to-create-stubs-mocks-spies-using-mockito/book">Marcin&#8217;s book was an easy read</a> and the 8 features he feels every Mockito user should know are well explained.  As a user of Mockito, I couldn&#8217;t agree more with the relevance of these features. If you enjoy quick reads, want to learn the basics of mocking in JUnit with Mockito, and you can put up with inadequate code formatting, then go ahead and give <a href="http://www.amazon.com/gp/product/B00ESX15M2/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00ESX15M2&amp;linkCode=as2&amp;tag=thdibl-20"><em>Instant Mockito</em></a> a read!</p>
 ]]></content>
   </entry>
   
