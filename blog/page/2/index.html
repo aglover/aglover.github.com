@@ -11,7 +11,7 @@
   
   <meta name="description" content="Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code.">
   
-  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, "/>
+  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, "/>
 
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +81,51 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/09/21/i-like-my-elasticsearch-a-la-node-dot-js/">I Like My ElasticSearch a La Node.js</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-21T08:57:00-04:00" pubdate data-updated="true">Sep 21<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/mine/320px-Pie_A_La_Mode.jpg">While <a href="http://thediscoblog.com/blog/categories/elasticsearch/">ElasticSearch</a> is easy enough to work with via its RESTful HTTP API, there are <a href="http://www.elasticsearch.org/guide/clients/">myriad client libraries</a> available in almost every conceivable programming language. If <a href="http://thediscoblog.com/blog/categories/node/">Node.js</a> is your language of choice, then there&#8217;s at least two actively supported libraries available.</p>
+
+<p>My favorite is dubbed, albeit rather dully, &#8221;<a href="https://github.com/phillro/node-elasticsearch-client">Elastic Search Client</a>&#8221;, but don&#8217;t let the library&#8217;s unimaginative name fool you: this is a handy library that allows you to do everything you could do via cURL with the added benefit of JavaScript callbacks. Best of all, you can use the Node Elastic Search Client in <a href="http://thediscoblog.com/blog/categories/coffeescript/">Coffeescript</a>, which is a handy language that makes JavaScript less verbose and that ultimately compiles into JavaScript.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/09/21/i-like-my-elasticsearch-a-la-node-dot-js/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -495,51 +540,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/07/24/introducing-android-migrations/">Introducing Android Migrations</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-24T09:46:00-04:00" pubdate data-updated="true">Jul 24<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img class="right" src="/images/mine/android_platform.png">Have you ever worked with <a href="http://guides.rubyonrails.org/migrations.html">Rails&#8217; migrations</a>? They make <a href="http://www.tutorialspoint.com/ruby-on-rails/rails-migrations.htm">database changes a breeze</a>, don&#8217;t they?  While every software release doesn&#8217;t necessarily involve a migration, when one does happen to make use of one, <a href="http://thediscoblog.com/blog/2013/02/18/testing-rails-migrations/">I&#8217;m always pleased</a> on how easily things work out. Whether it&#8217;s to add new data or alter existing data structures, Rails migrations make evolving a datastore (be it an RDMBS or NoSQL one like MongoDB) painless.</p>
-
-<p>When I recently found myself altering the data structure of a SQLite database for <a href="https://play.google.com/store/apps/details?id=com.b50.hoproll&amp;hl=en">one of my Android apps</a>, I found myself wishing there was some similar migration mechanism for Android as there is in Rails. Alas, I could fine none, so I did what any other developer would do: <a href="https://github.com/aglover/droid-migrate">I wrote one</a>.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/24/introducing-android-migrations/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -560,6 +560,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/12/26/heroku-deployments-with-git-branches/">Heroku deployments with Git branches</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/25/elasticsearch-in-a-box/">Elasticsearch in a box</a>
       </li>
     
@@ -573,10 +577,6 @@
     
       <li class="post">
         <a href="/blog/2013/10/16/ssh-and-vagrant/">SSH &amp; Vagrant</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/12/aws-ebs-in-4-steps/">AWS EBS in 4 steps</a>
       </li>
     
   </ul>

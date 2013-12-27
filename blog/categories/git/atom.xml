@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Git | The Disco Blog]]></title>
+  <link href="http://thediscoblog.com/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://thediscoblog.com/"/>
+  <updated>2013-12-26T22:10:24-05:00</updated>
+  <id>http://thediscoblog.com/</id>
+  <author>
+    <name><![CDATA[Andrew Glover]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Heroku deployments with Git branches]]></title>
+    <link href="http://thediscoblog.com/blog/2013/12/26/heroku-deployments-with-git-branches/"/>
+    <updated>2013-12-26T21:46:00-05:00</updated>
+    <id>http://thediscoblog.com/blog/2013/12/26/heroku-deployments-with-git-branches</id>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/heroku-logo-light.png %}Single branch development is easy. But this strategy's easiness blows up once you release code to the general public.  If you need to hot-fix an instance of deployed code, while in the midst of a development cycle, single branch development gets in your way by requiring you think. On the other hand, having <em>more than one</em> branch at least allows you to jump back in time via an alternate branch to perform a patch, while not disturbing an unfinished developmental branch. And you can do this without having to think much.</p>
+
+<!-- more -->
+
+
+<p>Consequently, if you have multiple <a href="http://git-scm.com/">Git</a> branches (such as those managed via <a href="https://github.com/nvie/gitflow">git-flow</a>)  you can map those branches to different <a href="https://www.heroku.com/">Heroku</a> environments quite easily. First, you'll want to appropriately name your remote <a href="http://thediscoblog.com/blog/categories/heroku/">Heroku</a> environments; for instance, you can name the remote repositories <code>prod</code>, <code>test</code>, <code>staging</code>, etc.</p>
+
+<p>You can add a remote Git repository like so:</p>
+
+<p><code>bash Adding a remote Git repo
+git remote add &lt;name&gt; git@heroku.com:&lt;heroku_app_name&gt;.git
+</code></p>
+
+<p>Where <code>heroku_app_name</code> is the name you gave your app or the one automatically created by Heroku via the <code>heroku create</code> command.</p>
+
+<p>With different Heroku environments, you can easily map each one to a Git branch. For instance, a production environment can map to the <code>master</code> branch and a test environment can map to a branch called <code>release</code>. If you have a development environment, that can map to a branch dubbed <code>develop</code> (note, these branch names correlate nicely with git-flow's defaults).</p>
+
+<p>To deploy the <code>release</code> branch to your Heroku test environment, you can issue this command:</p>
+
+<p><code>bash Deploying a topic branch
+git push test release:master
+</code></p>
+
+<p>If you deploy often (i.e. push a lot!) and you can't seem to remember the <code>release:master</code> portion, you can create a remote alias like so:</p>
+
+<p><code>bash Adding an alias
+git config remote.test.push release:master
+</code></p>
+
+<p>Thus, deployments to the test environment are as simple as:</p>
+
+<p><code>bash Simple deployments!
+git push test
+</code></p>
+
+<p><a href="http://www.ibm.com/developerworks/library/j-javadev2-21/">Heroku's deployment model</a>, which leverages Git, couldn't be any simpler; what's more, setting up a release pipeline with multiple environments mapped to different Git branches is just as easy. Dig it?</p>
+]]></content>
+  </entry>
+  
+</feed>

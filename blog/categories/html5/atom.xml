@@ -4,7 +4,7 @@
   <title><![CDATA[Category: HTML5 | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/html5/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-11-26T11:29:07-05:00</updated>
+  <updated>2013-12-26T22:10:24-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/10/05/the-significance-of-html5/"/>
     <updated>2013-10-05T21:18:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/10/05/the-significance-of-html5</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/no-flash.jpg"><a href="http://thediscoblog.com/blog/categories/html5/">HTML5</a> is important for three reasons. And its importance starts with the end of browser plugins. That's right. With HTML5, rich media aspects that were formally handled by plugins (think Flash), are now built-in. That's why there are <a href="http://www.w3schools.com/html/html5_new_elements.asp">new media tags</a> like <code>&lt;audio&gt;</code> and <code>&lt;video&gt;</code>.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/no-flash.jpg %}<a href="http://thediscoblog.com/blog/categories/html5/">HTML5</a> is important for three reasons. And its importance starts with the end of browser plugins. That's right. With HTML5, rich media aspects that were formally handled by plugins (think Flash), are now built-in. That's why there are <a href="http://www.w3schools.com/html/html5_new_elements.asp">new media tags</a> like <code>&lt;audio&gt;</code> and <code>&lt;video&gt;</code>.</p>
 
 <p>Think about it for a second -- when's the last time you visited a site on your tablet that asked you to install a plugin? Never.</p>
 
@@ -29,13 +29,13 @@
 
 <p></p>
 
-<p><img class="left" src="/images/mine/alotofdevices.jpg">HTML5 is important because now that <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">all major vendors support it</a> -- including those in the mobile space -- you get a universal experience across a wide spectrum of devices. While particular features of HTML5 might <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">vary by device platform</a>, there are enough common ground features to build a compelling web app that looks and feels similar across the gamut of devices.</p>
+<p>{% img left /images/mine/alotofdevices.jpg %}HTML5 is important because now that <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">all major vendors support it</a> -- including those in the mobile space -- you get a universal experience across a wide spectrum of devices. While particular features of HTML5 might <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">vary by device platform</a>, there are enough common ground features to build a compelling web app that looks and feels similar across the gamut of devices.</p>
 
 <p>And as HTML5 <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">continues to evolve</a>, the differences between various implementations should narrow. Accordingly, with HTML5, you get device ubiquity. You get a chance to build something once and have it work across a wide spectrum of browsers.</p>
 
 <p>What's more, while the mobile market is still dominated by Apple and Google, as other players, <a href="http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters/">like Microsoft</a>, begin to establish a beachhead, app developers will have to contend with more than two platforms. For a variety of apps, like those being built for the enterprise, the promise of HTML5's device ubiquity starts to become quite appealing -- after all, building an app once, as <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">opposed to three or more times</a>, is less expensive.</p>
 
-<p><img class="right" src="/images/mine/amazonappstore.jpg">Finally, HTML5 is important because <a href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">Amazon recently announced support for HTML5</a> apps in their App Store for Android. Previous to this announcement, pure HTML5 apps had no real mass distribution model. HTML5 app developers relied on a search engine, while native app developers have a direct channel to consumers that cuts through a lot of noise and makes it easy to find specific apps.</p>
+<p>{% img right /images/mine/amazonappstore.jpg %}Finally, HTML5 is important because <a href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">Amazon recently announced support for HTML5</a> apps in their App Store for Android. Previous to this announcement, pure HTML5 apps had no real mass distribution model. HTML5 app developers relied on a search engine, while native app developers have a direct channel to consumers that cuts through a lot of noise and makes it easy to find specific apps.</p>
 
 <p>Consequently, a lot of HTML5 apps ended up being <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">wrapped in native code</a> so as to get a chance to compete in the app stores. Amazon's support of HTML5 is a much needed <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">shot-in-the-arm for HTML5</a> because it means a direct channel to mass consumers; what's more, Amazon also is offering a chance to monetize HTML5 apps <a href="https://developer.amazon.com/sdk/webapps/iap/understanding.html">via a JavaScript In-App purchase API</a>. While Amazon isn't the first In-App purchase API for HTML5, it's the first one linked to a major e-commerce platform and mass consumer channel.</p>
 
@@ -50,14 +50,18 @@
     <id>http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters</id>
     <content type="html"><![CDATA[<p>I saw some news related to <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">Microsoft Windows Phone</a> that gave me pause for thought. Specifically, <a href="http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/">I read an article</a> that stated:</p>
 
-<p><blockquote><p>Microsoft's mobile platform reached new heights in the three months to July 2013 in Europe, making up 8.2 percent of sales across UK, France, Germany, Italy and Spain</p><footer><strong>Liam Tung</strong> <cite><a href='http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/'>iOS Up, Android Down in the US as Windows Phone Hits Eight Percent in Europe</a></cite></footer></blockquote></p>
+<p>{% blockquote Liam Tung http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/ iOS up, Android down in the US as Windows Phone hits eight percent in Europe  %}
+Microsoft's mobile platform reached new heights in the three months to July 2013 in Europe, making up 8.2 percent of sales across UK, France, Germany, Italy and Spain
+{% endblockquote %}</p>
 
 <!-- more -->
 
 
 <p>While <a href="http://www.expertreviews.co.uk/smartphones/1301902/windows-phone-market-share-growing-in-europe">8.2% market share</a> might seem insignificant, what's interesting is that</p>
 
-<p><blockquote><p>At the same time last year, Windows Phone accounted for 4.9 percent of sales</p><footer><strong>Liam Tung</strong> <cite><a href='http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/'>iOS Up, Android Down in the US as Windows Phone Hits Eight Percent in Europe</a></cite></footer></blockquote></p>
+<p>{% blockquote Liam Tung http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/ iOS up, Android down in the US as Windows Phone hits eight percent in Europe %}
+At the same time last year, Windows Phone accounted for 4.9 percent of sales
+{% endblockquote %}</p>
 
 <p>That is, <a href="http://wmpoweruser.com/kantar-windows-phone-hits-record-high-of-8-2-market-share-in-europe/">Windows Phone market share</a> for the same five markets has increased by a little more than 3% over the last year. Accordingly, Windows Phone is a <a href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/">growing platform (in some markets)</a>, which means developers will eventually need to start considering it as a <a href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/">third platform</a>. And throwing a third platform into the mix does change the variables in a native versus <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">non-native</a> argument <em>in favor of an HTML5 approach</em>.</p>
 
@@ -74,11 +78,13 @@
     <link href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/"/>
     <updated>2013-08-07T21:09:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters</id>
-    <content type="html"><![CDATA[<p><img class="right" src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114.<em>V379662584</em>.png">Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
+    <content type="html"><![CDATA[<p>{% img right https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114.<em>V379662584</em>.png %}Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
 
 <p>As I wrote almost a year ago:</p>
 
-<p><blockquote><p>software delivery on the mobile platform is, at least for the foreseeable future, firmly established via app stores. And app stores cater to native apps (100% native and/or hybrid) only. The average person will not look for useful apps via their device’s browser: that route is still a jungle. And, at this point, there is no viable pure play mobile web app delivery channel.</p><footer><strong>thediscoblog.com</strong> <cite><a href='http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/'>Past Performance Is No Guarantee of Future Results</a></cite></footer></blockquote></p>
+<p>{% blockquote thediscoblog.com http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/ Past Performance Is No Guarantee of Future Results %}
+software delivery on the mobile platform is, at least for the foreseeable future, firmly established via app stores. And app stores cater to native apps (100% native and/or hybrid) only. The average person will not look for useful apps via their device’s browser: that route is still a jungle. And, at this point, there is no viable pure play mobile web app delivery channel.
+{% endblockquote %}</p>
 
 <p>Today, it's still true that the most convenient mechanism  for app delivery on mobile devices (and increasingly desktops) is via various app stores. And until today, HTML5 apps were not included in these app stores (unless they were wrapped by some hybrid-web container like <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">PhoneGap</a>).</p>
 
@@ -91,7 +97,9 @@
 
 <p>As <a href="https://developer.amazon.com/blog/author/Mike+Hines.html">Mike Hines</a> of Amazon puts it:</p>
 
-<p><blockquote><p>Starting today, you can submit your web apps and mobile optimized web sites and have them merchandised alongside native apps on Amazon and Kindle Fire in nearly 200 countries worldwide, without any third-party software or doing any native app development.</p><footer><strong>https://developer.amazon.com/blog/</strong> <cite><a href='https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html'>Amazon Is Now Accepting HTML5 Web Apps—Making It Easy for You to Reach Millions of Kindle Fire and Android Customers Worldwide</a></cite></footer></blockquote></p>
+<p>{% blockquote https://developer.amazon.com/blog/ https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html Amazon is Now Accepting HTML5 Web Apps—Making it Easy for You to Reach Millions of Kindle Fire and Android Customers Worldwide %}
+Starting today, you can submit your web apps and mobile optimized web sites and have them merchandised alongside native apps on Amazon and Kindle Fire in nearly 200 countries worldwide, without any third-party software or doing any native app development.
+{% endblockquote %}</p>
 
 <p>This is big news for HTML5 developers. A direct channel to the masses and monetization APIs to boot -- what more could you ask for? Standby folks because it's about to get even more interesting, as I'm willing to bet that Google and Apple will follow suit in the near future.</p>
 ]]></content>
@@ -102,7 +110,7 @@
     <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
     <updated>2013-07-30T12:52:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/swipe-right.png %}I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
 
 <p>Implementing right and left swipes in an <a href="http://jquerymobile.com/">jQuery Mobile</a> app is fairly straightforward, but there are a few gotchas that I was able to piece together via multiple <a href="http://stackoverflow.com/questions/7533772/how-to-swipe-between-several-jquery-mobile-pages">stackoverflow threads</a>, blogs, and finally <a href="http://api.jquerymobile.com/">jQuery Mobile's own documentation</a>.</p>
 

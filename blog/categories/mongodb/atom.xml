@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MongoDB | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-11-26T11:29:07-05:00</updated>
+  <updated>2013-12-26T22:10:24-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections/"/>
     <updated>2013-07-15T15:07:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/15/mongodb-pro-tip-field-projections</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mongodb_icon.png">Did you ever learn that <code>select * from table</code> in RDBMS-land is bad? Of course, you did! If you're only looking for the email address of a user and not the other 15 columns worth of data, then why ask for that data and incur a penalty? The query <code>select email from user where user_id = 1;</code> is far more efficient for the database and the corresponding application that issued it, because there is <em>less data to fetch and consume</em>.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/mongodb_icon.png %}Did you ever learn that <code>select * from table</code> in RDBMS-land is bad? Of course, you did! If you're only looking for the email address of a user and not the other 15 columns worth of data, then why ask for that data and incur a penalty? The query <code>select email from user where user_id = 1;</code> is far more efficient for the database and the corresponding application that issued it, because there is <em>less data to fetch and consume</em>.</p>
 
 <!-- more -->
 
@@ -165,7 +165,7 @@ custom_id = BSON::ObjectId.from_time(yesterday)
     <link href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
     <updated>2013-06-10T12:56:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what's more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn't be any easier</a>.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/heroku-logo-light.png %}Long running web requests are bad. They create resource contention among other waiting incoming requests; what's more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn't be any easier</a>.</p>
 
 <!-- more -->
 

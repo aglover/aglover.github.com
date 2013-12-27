@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Objective-C | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/objective-c/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-11-26T11:29:07-05:00</updated>
+  <updated>2013-12-26T22:10:24-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules/"/>
     <updated>2013-05-29T13:42:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/appc_stacked.png">I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>'s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47's <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/appc_stacked.png %}I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>'s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47's <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
 
 <p>In the end, what I wanted to implement was a <a href="http://recurial.com/programming/understanding-callback-functions-in-javascript/">JavaScript-ish callback</a> associated with a native App47 Agent call. Alas, it took me a lot of digging to achieve this goal.</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: jQuery Mobile | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/jquery-mobile/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-11-26T11:29:07-05:00</updated>
+  <updated>2013-12-26T22:10:24-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
     <updated>2013-07-30T12:52:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/swipe-right.png %}I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
 
 <p>Implementing right and left swipes in an <a href="http://jquerymobile.com/">jQuery Mobile</a> app is fairly straightforward, but there are a few gotchas that I was able to piece together via multiple <a href="http://stackoverflow.com/questions/7533772/how-to-swipe-between-several-jquery-mobile-pages">stackoverflow threads</a>, blogs, and finally <a href="http://api.jquerymobile.com/">jQuery Mobile's own documentation</a>.</p>
 

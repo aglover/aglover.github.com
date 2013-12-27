@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AWS | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-11-26T11:29:07-05:00</updated>
+  <updated>2013-12-26T22:10:24-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps/"/>
     <updated>2013-10-12T17:47:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/4fingers.jpg">When you fire up an AWS AMI, you are given a small partition of disk space that survives reboots. For example, the base <a href="https://github.com/aglover/ubuntu-equip">Ubuntu AMI</a> I tend to favor comes with an 8GB primary partition; however, 8GB is often not enough, especially if you're running a database or something that requires a lot of disk space.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/4fingers.jpg %}When you fire up an AWS AMI, you are given a small partition of disk space that survives reboots. For example, the base <a href="https://github.com/aglover/ubuntu-equip">Ubuntu AMI</a> I tend to favor comes with an 8GB primary partition; however, 8GB is often not enough, especially if you're running a database or something that requires a lot of disk space.</p>
 
 <p>If you poke around on an AMI instance, you'll notice some AMI instances will have additional partitions and in many cases, these partitions will be huge; nevertheless, they're transient and any data on those disks will disappear after a reboot.</p>
 
@@ -31,11 +31,11 @@
 
 <p>First, you'll need to create an EBS volume in the same zone as the AMI instance. In my case, the instance I'd like to augment with a beefy hard drive resides in us-east-1b. What's more, you'll need to configure how much space you'll want -- you can also select if you'd like to have <a href="http://aws.amazon.com/about-aws/whats-new/2012/07/31/announcing-provisioned-iops-for-amazon-ebs/">provisioned IOPS</a> -- this is a high performance I/O feature of AWS and is intended for databases.</p>
 
-<p><img class="center" src="/images/mine/ebs1.png"></p>
+<p>{% img center /images/mine/ebs1.png %}</p>
 
 <p>Once the EBS is created, you'll need to <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html">attach it</a> to your running AMI -- you can do this by right clicking on the EBS in the AWS Management Console and selecting Attach Volume. You'll need to pick your instance from a drop down. Once you've picked your instance, AWS will suggest a Device -- I suggest you keep it. Click the "Yes, Attach" button.</p>
 
-<p><img class="center" src="/images/mine/ebs2.png"></p>
+<p>{% img center /images/mine/ebs2.png %}</p>
 
 <p>SSH onto your running instance and take a peek at the <code>/proc/partitions</code> file -- you should see at least 2 partitions with your newly attached one on the bottom.  The blocks are listed in kilobytes and pay special attention to the name -- you'll need it for the next few steps.</p>
 
@@ -84,7 +84,7 @@ sudo umount -d /dev/xvdf
     <link href="http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless/"/>
     <updated>2013-10-09T18:04:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/time1.jpg">When it comes to queues, whether they're implemented as <a href="http://en.wikipedia.org/wiki/Java_Message_Service">JMS</a>, database tables (i.e. what Ruby's <a href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Delayed::Job</a> uses for a queue), or even <a href="http://aws.amazon.com/sqs/">Amazon's SQS</a>, the most common metric used to evaluate the state of a queue is its length. In essence, one derives an efficiency metric based upon how many messages are residing in a queue at any given time. If there are just a few messages, the queue is operating efficiently. If there are numerous messages, things are inefficient and alarms must be sounded.</p>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/time1.jpg %}When it comes to queues, whether they're implemented as <a href="http://en.wikipedia.org/wiki/Java_Message_Service">JMS</a>, database tables (i.e. what Ruby's <a href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Delayed::Job</a> uses for a queue), or even <a href="http://aws.amazon.com/sqs/">Amazon's SQS</a>, the most common metric used to evaluate the state of a queue is its length. In essence, one derives an efficiency metric based upon how many messages are residing in a queue at any given time. If there are just a few messages, the queue is operating efficiently. If there are numerous messages, things are inefficient and alarms must be sounded.</p>
 
 <!-- more -->
 
@@ -199,7 +199,7 @@ sqs.receive(new ReceiveCallback() {
     <link href="http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks/"/>
     <updated>2013-09-29T16:30:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/callback.jpg">Because it's my bag, I like <a href="http://thediscoblog.com/blog/categories/javascript/">JavaScript</a>. In fact, I've grown to love JavaScritp's asynchronous <a href="http://en.wikipedia.org/wiki/Callback_(computer_programming">callback oriented style of programming</a>. Consequently, when I find myself in a non-JavaScript environment, say, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, I tend to miss using callbacks.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/callback.jpg %}Because it's my bag, I like <a href="http://thediscoblog.com/blog/categories/javascript/">JavaScript</a>. In fact, I've grown to love JavaScritp's asynchronous <a href="http://en.wikipedia.org/wiki/Callback_(computer_programming">callback oriented style of programming</a>. Consequently, when I find myself in a non-JavaScript environment, say, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, I tend to miss using callbacks.</p>
 
 <p>The good news is that you can <em>emulate</em> asynchronous callbacks in Java. In fact, I did just that recently with a library I've dubbed <a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">SQS adapter</a> for AWS's Java <a href="http://aws.amazon.com/sqs/">SQS</a> library.</p>
 
@@ -302,7 +302,7 @@ private void send(final AmazonSQS sqs, final String queueURL, final String messa
     <link href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/"/>
     <updated>2013-05-17T17:24:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/es-bonzai.jpg">Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend -- in less than 60 seconds, I'll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/es-bonzai.jpg %}Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend -- in less than 60 seconds, I'll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
 
 <p>You'll first <a href="http://www.drdobbs.com/web-development/getting-started-with-the-cloud-amazon-we/231601598">need an AWS account</a> along with an SSH key pair. If you don't already have those two steps done, go ahead and do that. The steps that follow suggest a particular AMI; however, you are free to select the <a href="http://aws.amazon.com/ec2/instance-types/">instance type</a>. <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Micro instance types</a> are free to use; consequently, you can get <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">up and running with ElasticSearch</a> in less than a minute <em>for free</em>.</p>
 
@@ -356,7 +356,7 @@ wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/e
     <link href="http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
     <updated>2013-05-01T09:10:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/hat-trick.png %}<a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
 
 <p>It's easy to configure a <a href="http://rubyonrails.org/">Rails</a> app to take advantage of CloudFront; what's more, if your Rails app is hosted on <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-21/">Heroku</a>, there's <a href="https://github.com/romanbsd/heroku-deflater">a nifty gem</a>, dubbed heroku-deflater, that'll enable <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP compression</a> of static assets (<a href="http://stackoverflow.com/questions/12326191/any-way-to-serve-gzip-assets-from-heroku">other than images</a>).</p>
 
@@ -383,19 +383,19 @@ Content-Encoding: gzip
 
 <p>Next, sign into the AWS Management Console and enable CloudFront if you haven't already. From the CloudFront admin page, create a new distribution via the Create Distribution button on the top left.</p>
 
-<p><img class="center" src="/images/mine/cloudfront_1.png"></p>
+<p>{% img center /images/mine/cloudfront_1.png %}</p>
 
 <p>Once the create distribution wizard begins, be sure to select Download as your delivery method.</p>
 
-<p><img class="center" src="/images/mine/cloudfront_2.png"></p>
+<p>{% img center /images/mine/cloudfront_2.png %}</p>
 
 <p>In the next screen, there are some important fields you'll need to fill out, namely: the Origin Source Name and the Viewer Protocol Policy. For the Origin Source Name, you will need to put in your app's URL or the Heroku URL (if you do not map a custom domain name to it). If you web site supports HTTPS, then be sure to set the Viewer Protocol Policy to HTTP and HTTPS.</p>
 
-<p><img class="center" src="/images/mine/cloudfront_3.png"></p>
+<p>{% img center /images/mine/cloudfront_3.png %}</p>
 
 <p>The only other important setting after these two is the Price Class. It's here where you can set where CloudFront will essentially serve up your content -- the default setting of Use All Edge Locations is most likely what you need.</p>
 
-<p><img class="center" src="/images/mine/cloudfront_5.png"></p>
+<p>{% img center /images/mine/cloudfront_5.png %}</p>
 
 <p>Finally, click the Create Distribution button -- once you do that, it'll take a bit for things to initialize (basically, the CDN needs to get built and this may take up to 30 minutes).</p>
 
@@ -418,11 +418,11 @@ config.action_controller.asset_host = 'the domain name from AWS Dashboard'
 
 <p>In this case, <a href="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/">I'm using Chrome</a>. Go to JavaScript console and hit the Network tab.</p>
 
-<p><img class="center" src="/images/mine/cloudfront_6.png"></p>
+<p>{% img center /images/mine/cloudfront_6.png %}</p>
 
 <p>Surf around and you'll note a few things -- one, that the assets like images and JavaScript files are being severed up from your CDN (just look at the URL) and that the size will often say "(from cache)" -- that means the CDN is handling the load rather than <a href="http://www.ibm.com/developerworks/podcast/glover-heroku-110811/">Heroku</a>. You should also note that your web app is probably a bit more snappy!</p>
 
-<p><img class="center" src="/images/mine/cloudfront_7.png"></p>
+<p>{% img center /images/mine/cloudfront_7.png %}</p>
 
 <p>Check out your Heroku logs and you'll note fewer hits in this case -- dynamic pages are still being loaded, however, static assets are not anymore -- that's the job of your CDN!</p>
 

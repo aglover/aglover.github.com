@@ -4,7 +4,7 @@
   <title><![CDATA[Category: elasticsearch | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/elasticsearch/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-11-26T11:29:07-05:00</updated>
+  <updated>2013-12-26T22:10:24-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box/"/>
     <updated>2013-11-25T13:42:00-05:00</updated>
     <id>http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/esbox.jpg">Are you looking to get going with <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a> as quickly as possible without having to worry about <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">installing Java or Elasticsearch</a> itself? Are you looking for a repeatable and automated mechanism for bringing up Elasticsearch instances for developmental and or testing purposes? While there's certainly a number of <a href="http://www.elasticsearch.org/">Elasticsearch</a>-as-a-platform service providers out there, there's one other option: use <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a>.</p>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/esbox.jpg %}Are you looking to get going with <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a> as quickly as possible without having to worry about <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">installing Java or Elasticsearch</a> itself? Are you looking for a repeatable and automated mechanism for bringing up Elasticsearch instances for developmental and or testing purposes? While there's certainly a number of <a href="http://www.elasticsearch.org/">Elasticsearch</a>-as-a-platform service providers out there, there's one other option: use <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a>.</p>
 
 <p>Elasticsearch-in-a-box is a freely available <a href="http://www.vagrantbox.es/">Vagrant base box</a>. What that means is that you can quickly fire up and tear down an Elasticsearch environment with <a href="http://docs.vagrantup.com/v2/getting-started/">simple commands</a> like <code>vagrant up</code> and <code>vagrant destroy</code>.</p>
 
@@ -72,7 +72,7 @@ vagrant destroy -f
     <link href="http://thediscoblog.com/blog/2013/09/21/i-like-my-elasticsearch-a-la-node-dot-js/"/>
     <updated>2013-09-21T08:57:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/21/i-like-my-elasticsearch-a-la-node-dot-js</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/320px-Pie_A_La_Mode.jpg">While <a href="http://thediscoblog.com/blog/categories/elasticsearch/">ElasticSearch</a> is easy enough to work with via its RESTful HTTP API, there are <a href="http://www.elasticsearch.org/guide/clients/">myriad client libraries</a> available in almost every conceivable programming language. If <a href="http://thediscoblog.com/blog/categories/node/">Node.js</a> is your language of choice, then there's at least two actively supported libraries available.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/320px-Pie_A_La_Mode.jpg %}While <a href="http://thediscoblog.com/blog/categories/elasticsearch/">ElasticSearch</a> is easy enough to work with via its RESTful HTTP API, there are <a href="http://www.elasticsearch.org/guide/clients/">myriad client libraries</a> available in almost every conceivable programming language. If <a href="http://thediscoblog.com/blog/categories/node/">Node.js</a> is your language of choice, then there's at least two actively supported libraries available.</p>
 
 <p>My favorite is dubbed, albeit rather dully, "<a href="https://github.com/phillro/node-elasticsearch-client">Elastic Search Client</a>", but don't let the library's unimaginative name fool you: this is a handy library that allows you to do everything you could do via cURL with the added benefit of JavaScript callbacks. Best of all, you can use the Node Elastic Search Client in <a href="http://thediscoblog.com/blog/categories/coffeescript/">Coffeescript</a>, which is a handy language that makes JavaScript less verbose and that ultimately compiles into JavaScript.</p>
 
@@ -207,7 +207,7 @@ done()
     <link href="http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers/"/>
     <updated>2013-09-14T08:37:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/old-beer.jpg">Sadly, lots of early Internet beer recipes aren't necessarily in an easily digestible format; that is, these recipes are <em>unstructured</em> intermixed lists of directions and ingredients often originally composed in an email or forum post.</p>
+    <content type="html"><![CDATA[<p>{% img right /images/mine/old-beer.jpg %}Sadly, lots of early Internet beer recipes aren't necessarily in an easily digestible format; that is, these recipes are <em>unstructured</em> intermixed lists of directions and ingredients often originally composed in an email or forum post.</p>
 
 <p>So while it's hard to easily put these recipes into traditional data stores (ostensibly for easier searching), they're perfect for <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">ElasticSearch</a> in their current form.</p>
 
@@ -348,7 +348,7 @@ for doc in data.hits.hits
     <link href="http://thediscoblog.com/blog/2013/09/03/effortless-elasticsearch-clustering/"/>
     <updated>2013-09-03T07:50:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/03/effortless-elasticsearch-clustering</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/cluster.jpg"><a href="http://thediscoblog.com/blog/categories/elasticsearch/">ElasticSearch</a> supports <a href="http://www.elasticsearch.org/guide/reference/modules/cluster/">clustering</a>; that is, you can have a series of distinct <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">ElasticSearch</a> instances work in a coordinated manner without much administrative intervention at all. Clustering ElasticSearch instances (or nodes) provides data redundancy as well as data availability.</p>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/cluster.jpg %}<a href="http://thediscoblog.com/blog/categories/elasticsearch/">ElasticSearch</a> supports <a href="http://www.elasticsearch.org/guide/reference/modules/cluster/">clustering</a>; that is, you can have a series of distinct <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">ElasticSearch</a> instances work in a coordinated manner without much administrative intervention at all. Clustering ElasticSearch instances (or nodes) provides data redundancy as well as data availability.</p>
 
 <p>Best of all, clustering in ElasticSearch, by default, doesn't require <em>any</em> configuration -- nodes discover each other. You can set up a cluster in about 60 seconds. Let me show you how!</p>
 
@@ -487,7 +487,7 @@ curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
     <link href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/"/>
     <updated>2013-05-17T17:24:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/es-bonzai.jpg">Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend -- in less than 60 seconds, I'll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
+    <content type="html"><![CDATA[<p>{% img left /images/mine/es-bonzai.jpg %}Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend -- in less than 60 seconds, I'll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
 
 <p>You'll first <a href="http://www.drdobbs.com/web-development/getting-started-with-the-cloud-amazon-we/231601598">need an AWS account</a> along with an SSH key pair. If you don't already have those two steps done, go ahead and do that. The steps that follow suggest a particular AMI; however, you are free to select the <a href="http://aws.amazon.com/ec2/instance-types/">instance type</a>. <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Micro instance types</a> are free to use; consequently, you can get <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">up and running with ElasticSearch</a> in less than a minute <em>for free</em>.</p>
 

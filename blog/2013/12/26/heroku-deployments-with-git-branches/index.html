@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>The democratization of search - The Disco Blog</title>
+  <title>Heroku deployments with Git branches - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
@@ -20,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">
+  <link rel="canonical" href="http://thediscoblog.com/blog/2013/12/26/heroku-deployments-with-git-branches/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -85,7 +85,7 @@
   <header>
     
       
-        <h1 class="entry-title">The Democratization of Search</h1>
+        <h1 class="entry-title">Heroku Deployments With Git Branches</h1>
       
     
     
@@ -102,27 +102,53 @@
   
 
 
-<time datetime="2013-05-14T11:33:00-04:00" pubdate data-updated="true">May 14<span>th</span>, 2013</time>
+<time datetime="2013-12-26T21:46:00-05:00" pubdate data-updated="true">Dec 26<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><img class="right" src="/images/mine/democracy.jpg">Over the past year and a half, I&#8217;ve watched <a href="http://www.elasticsearch.org/">ElasticSearch</a> grow from a seemingly part-time code experiment into a thriving ecosystem. Not only has the number of <a href="http://www.elasticsearch.org/guide/clients/">client libraries</a> grown from 1 to over 25 (and counting!); it&#8217;s now a <a href="http://www.elasticsearch.com/">commercially sponsored project</a> to the tune of <a href="http://www.whiteboardmag.com/youre-hot-or-not-why-elasticsearch-raised-24-million-just-3-months-after-a-10-million-round/">$34 million</a> (a <a href="http://www.zdnet.com/elasticsearch-raises-24-million-big-data-analytics-7000011496/">$10M series A</a> and a <a href="http://gigaom.com/2013/02/19/open-source-search-tool-elasticsearch-gets-24m/">$24M series B</a>) with 200,000 downloads a month.</p>
+<div class="entry-content"><p><img class="left" src="/images/mine/heroku-logo-light.png">Single branch development is easy. But this strategy&#8217;s easiness blows up once you release code to the general public.  If you need to hot-fix an instance of deployed code, while in the midst of a development cycle, single branch development gets in your way by requiring you think. On the other hand, having <em>more than one</em> branch at least allows you to jump back in time via an alternate branch to perform a patch, while not distributing an unfinished developmental branch. And you can do this without having to think much.</p>
 
-<p>Search is the touchstone of the Internet; without search the Internet wouldn&#8217;t be all that useful. Google&#8217;s meteoric rise and its resultant eponymous name for search is clear evidence as to the importance of search. Search, however, hasn&#8217;t always been that easy nor affordable to implement.</p>
-
-<!--more-->
+<!-- more -->
 
 
-<p>Before the likes of open source projects like <a href="http://lucene.apache.org/">Lucene</a>, implementing search in an application involved an expensive commercial product or a series of SQL <code>like</code> statements that were never really good enough. Lucene, however, isn&#8217;t a simple hobbyist&#8217;s pursuit. Lucene requires a lot of expertise; what&#8217;s more, successful projects within the Lucene ecosystem, like <a href="http://lucene.apache.org/solr/">Solr</a> lack a key feature that is defining modern architectures: <a href="http://www.searchblox.com/solr-vs-elasticsearch">distributed</a>.</p>
+<p>Consequently, if you have multiple <a href="http://git-scm.com/">Git</a> branches (such as those managed via <a href="https://github.com/nvie/gitflow">git-flow</a>)  you can map those branches to different <a href="https://www.heroku.com/">Heroku</a> environments quite easily. First, you&#8217;ll want to appropriately name your remote <a href="http://thediscoblog.com/blog/categories/heroku/">Heroku</a> environments; for instance, you can name the remote repositories <code>prod</code>, <code>test</code>, <code>staging</code>, etc.</p>
 
-<p>The continued low cost of storage combined with cheap rent-able infrastructures like <a href="http://www.drdobbs.com/web-development/getting-started-with-the-cloud-amazon-we/231601598">AWS</a> has made it convenient to store a plethora of data, thus bringing to bear the importance that applications must support searching vast amounts of data, do it quickly, and affordably. This is where <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch shines</a>.</p>
+<p>You can add a remote Git repository like so:</p>
 
-<p><a href="http://www.elasticsearch.org/overview/">ElasticSearch sits on top of Lucene</a> and adds not only a simple API for adding and searching content, but does it in a distributed manner. With infinitesimal arm grease, you can set up a search cluster that smears your data and resultant queries across a series of nodes. Not only is this resultant architecture fast, but it&#8217;s easy to set up and extremely affordable as search nodes can run on commodity hardware. In essence, ElasticSearch brings search to the masses.</p>
+<figure class='code'><figcaption><span>Adding a remote Git repo</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git remote add &lt;name&gt; git@heroku.com:&lt;heroku_app_name&gt;.git
+</span></code></pre></td></tr></table></div></figure>
 
-<p>Google and its resultant ease of search has changed the mindset of application users. Searching content is a <em>presumed feature</em> and if you don&#8217;t provide it, you&#8217;re already a few steps behind your competition. ElasticSearch is clearly a path to constructing a viable, easy to install, affordable, distributed search infrastructure for any application. If you don&#8217;t believe me, take a look at some of the innovative companies with substantial amounts of users using it: <a href="https://github.com/">Github</a>, <a href="https://foursquare.com/">foursquare</a>, and <a href="http://stackoverflow.com/">Stack Overflow</a> are just a few.</p>
+
+<p>Where <code>heroku_app_name</code> is the name you gave your app or the one automatically created by Heroku via the <code>heroku create</code> command.</p>
+
+<p>With different Heroku environments, you can easily map each one to a Git branch. For instance, a production environment can map to the <code>master</code> branch and a test environment can map to a branch called <code>release</code>. If you have a development environment, that can map to a branch dubbed <code>develop</code> (note, these branch names correlate nicely with git-flow&#8217;s defaults).</p>
+
+<p>To deploy the <code>release</code> branch to your Heroku test environment, you can issue this command:</p>
+
+<figure class='code'><figcaption><span>Deploying a topic branch</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git push <span class="nb">test </span>release:master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you deploy often (i.e. push a lot!) and you can&#8217;t seem to remember the <code>release:master</code> portion, you can create a remote alias like so:</p>
+
+<figure class='code'><figcaption><span>Adding an alias</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git config remote.test.push release:master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Thus, deployments to the test environment are as simple as:</p>
+
+<figure class='code'><figcaption><span>Simple deployments!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git push <span class="nb">test</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://www.ibm.com/developerworks/library/j-javadev2-21/">Heroku&#8217;s deployment model</a>, which leverages Git, couldn&#8217;t be any simpler; what&#8217;s more, setting up a release pipeline with multiple environments mapped to different Git branches is just as easy. Dig it?</p>
 </div>
 <!-- related posts -->
 <div id='related_posts'>
@@ -142,15 +168,15 @@
           
       
           
-            <li class="related"><a href="/blog/2012/12/02/comprehending-the-mobile-development-landscape/">Comprehending the mobile development landscape</a></li>
-          
-      
-          
-            <li class="related"><a href="/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/">Past performance is no guarantee of future results</a></li>
-          
-      
-          
             <li class="related"><a href="/blog/2013/09/03/effortless-elasticsearch-clustering/">Effortless ElasticSearch clustering</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/10/16/ssh-and-vagrant/">SSH &amp; Vagrant</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry/">JVM fork modes and metaclass wizardry</a></li>
           
       
       </ul>
@@ -176,12 +202,12 @@
   
 
 
-<time datetime="2013-05-14T11:33:00-04:00" pubdate data-updated="true">May 14<span>th</span>, 2013</time>
+<time datetime="2013-12-26T21:46:00-05:00" pubdate data-updated="true">Dec 26<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/elasticsearch/'>elasticsearch</a>
+    <a class='category' href='/blog/categories/git/'>Git</a>, <a class='category' href='/blog/categories/heroku/'>Heroku</a>
   
 </span>
 
@@ -190,7 +216,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2013/12/26/heroku-deployments-with-git-branches/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2013/12/26/heroku-deployments-with-git-branches/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -203,10 +229,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left articlenav" href="/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/" title="Previous Post: Hold your horses! It's still only a two horse race.">&laquo; Hold your horses! It's still only a two horse race.</a>
+        <a class="basic-alignment left articlenav" href="/blog/2013/11/25/elasticsearch-in-a-box/" title="Previous Post: Elasticsearch in a box">&laquo; Elasticsearch in a box</a>
       
-      
-        <a class="basic-alignment right articlenav" href="/blog/2013/05/15/mobile-isticly-optimized-in-10-seconds/" title="Next Post: Mobile-isticly optimized in 10 seconds">Mobile-isticly optimized in 10 seconds &raquo;</a>
       
     </p>
   </footer>
@@ -305,8 +329,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/';
-        var disqus_url = 'http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/';
+        var disqus_identifier = 'http://thediscoblog.com/blog/2013/12/26/heroku-deployments-with-git-branches/';
+        var disqus_url = 'http://thediscoblog.com/blog/2013/12/26/heroku-deployments-with-git-branches/';
         var disqus_script = 'embed.js';
       
     (function () {
