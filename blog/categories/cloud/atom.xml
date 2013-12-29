@@ -4,7 +4,7 @@
   <title><![CDATA[Category: cloud | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/cloud/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-12-26T22:10:24-05:00</updated>
+  <updated>2013-12-29T14:58:27-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps/"/>
     <updated>2013-10-12T17:47:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/4fingers.jpg %}When you fire up an AWS AMI, you are given a small partition of disk space that survives reboots. For example, the base <a href="https://github.com/aglover/ubuntu-equip">Ubuntu AMI</a> I tend to favor comes with an 8GB primary partition; however, 8GB is often not enough, especially if you're running a database or something that requires a lot of disk space.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/4fingers.jpg">When you fire up an AWS AMI, you are given a small partition of disk space that survives reboots. For example, the base <a href="https://github.com/aglover/ubuntu-equip">Ubuntu AMI</a> I tend to favor comes with an 8GB primary partition; however, 8GB is often not enough, especially if you're running a database or something that requires a lot of disk space.</p>
 
 <p>If you poke around on an AMI instance, you'll notice some AMI instances will have additional partitions and in many cases, these partitions will be huge; nevertheless, they're transient and any data on those disks will disappear after a reboot.</p>
 
@@ -31,11 +31,11 @@
 
 <p>First, you'll need to create an EBS volume in the same zone as the AMI instance. In my case, the instance I'd like to augment with a beefy hard drive resides in us-east-1b. What's more, you'll need to configure how much space you'll want -- you can also select if you'd like to have <a href="http://aws.amazon.com/about-aws/whats-new/2012/07/31/announcing-provisioned-iops-for-amazon-ebs/">provisioned IOPS</a> -- this is a high performance I/O feature of AWS and is intended for databases.</p>
 
-<p>{% img center /images/mine/ebs1.png %}</p>
+<p><img class="center" src="/images/mine/ebs1.png"></p>
 
 <p>Once the EBS is created, you'll need to <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html">attach it</a> to your running AMI -- you can do this by right clicking on the EBS in the AWS Management Console and selecting Attach Volume. You'll need to pick your instance from a drop down. Once you've picked your instance, AWS will suggest a Device -- I suggest you keep it. Click the "Yes, Attach" button.</p>
 
-<p>{% img center /images/mine/ebs2.png %}</p>
+<p><img class="center" src="/images/mine/ebs2.png"></p>
 
 <p>SSH onto your running instance and take a peek at the <code>/proc/partitions</code> file -- you should see at least 2 partitions with your newly attached one on the bottom.  The blocks are listed in kilobytes and pay special attention to the name -- you'll need it for the next few steps.</p>
 
@@ -84,7 +84,7 @@ sudo umount -d /dev/xvdf
     <link href="http://thediscoblog.com/blog/2012/12/12/the-cloud-files-are-out/"/>
     <updated>2012-12-12T17:22:00-05:00</updated>
     <id>http://thediscoblog.com/blog/2012/12/12/the-cloud-files-are-out</id>
-    <content type="html"><![CDATA[<p>{% img left http://www.ibm.com/developerworks/i/t-j-f-cloudpodcast_ffffff.jpg %}The good folks over at <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a> have recently published <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">season 5 of the Java technical podcast series</a>. This season
+    <content type="html"><![CDATA[<p><img class="left" src="http://www.ibm.com/developerworks/i/t-j-f-cloudpodcast_ffffff.jpg">The good folks over at <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a> have recently published <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">season 5 of the Java technical podcast series</a>. This season
 focuses on the technologies, companies, and people influencing cloud computing. I had the pleasure to chat with a cadre of super interesting people, including <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#labourey">Sacha Labourey</a> of CloudBees, <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#engineyard">Bill Platt and Mark Gaydos</a> of Engine Yard, and <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html#proudman">Jesse Proudman</a> of BlueBox, just to name a few!</p>
 
 <p><a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">In these podcasts</a>, you'll hear from people who not only influence, but directly impact cloud computing, regardless of the underlying language or platform. There's a lot to learn here, so put on your headphones and get ready for some interesting conversations! So what are you waiting for? <a href="http://www.ibm.com/developerworks/library/j-gloverpodcast5/index.html">Go listen right this instant</a>!</p>

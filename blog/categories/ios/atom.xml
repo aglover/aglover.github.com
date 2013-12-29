@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-12-26T22:10:24-05:00</updated>
+  <updated>2013-12-29T14:58:27-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/10/05/the-significance-of-html5/"/>
     <updated>2013-10-05T21:18:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/10/05/the-significance-of-html5</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/no-flash.jpg %}<a href="http://thediscoblog.com/blog/categories/html5/">HTML5</a> is important for three reasons. And its importance starts with the end of browser plugins. That's right. With HTML5, rich media aspects that were formally handled by plugins (think Flash), are now built-in. That's why there are <a href="http://www.w3schools.com/html/html5_new_elements.asp">new media tags</a> like <code>&lt;audio&gt;</code> and <code>&lt;video&gt;</code>.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/no-flash.jpg"><a href="http://thediscoblog.com/blog/categories/html5/">HTML5</a> is important for three reasons. And its importance starts with the end of browser plugins. That's right. With HTML5, rich media aspects that were formally handled by plugins (think Flash), are now built-in. That's why there are <a href="http://www.w3schools.com/html/html5_new_elements.asp">new media tags</a> like <code>&lt;audio&gt;</code> and <code>&lt;video&gt;</code>.</p>
 
 <p>Think about it for a second -- when's the last time you visited a site on your tablet that asked you to install a plugin? Never.</p>
 
@@ -29,13 +29,13 @@
 
 <p></p>
 
-<p>{% img left /images/mine/alotofdevices.jpg %}HTML5 is important because now that <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">all major vendors support it</a> -- including those in the mobile space -- you get a universal experience across a wide spectrum of devices. While particular features of HTML5 might <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">vary by device platform</a>, there are enough common ground features to build a compelling web app that looks and feels similar across the gamut of devices.</p>
+<p><img class="left" src="/images/mine/alotofdevices.jpg">HTML5 is important because now that <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">all major vendors support it</a> -- including those in the mobile space -- you get a universal experience across a wide spectrum of devices. While particular features of HTML5 might <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">vary by device platform</a>, there are enough common ground features to build a compelling web app that looks and feels similar across the gamut of devices.</p>
 
 <p>And as HTML5 <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">continues to evolve</a>, the differences between various implementations should narrow. Accordingly, with HTML5, you get device ubiquity. You get a chance to build something once and have it work across a wide spectrum of browsers.</p>
 
 <p>What's more, while the mobile market is still dominated by Apple and Google, as other players, <a href="http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters/">like Microsoft</a>, begin to establish a beachhead, app developers will have to contend with more than two platforms. For a variety of apps, like those being built for the enterprise, the promise of HTML5's device ubiquity starts to become quite appealing -- after all, building an app once, as <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">opposed to three or more times</a>, is less expensive.</p>
 
-<p>{% img right /images/mine/amazonappstore.jpg %}Finally, HTML5 is important because <a href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">Amazon recently announced support for HTML5</a> apps in their App Store for Android. Previous to this announcement, pure HTML5 apps had no real mass distribution model. HTML5 app developers relied on a search engine, while native app developers have a direct channel to consumers that cuts through a lot of noise and makes it easy to find specific apps.</p>
+<p><img class="right" src="/images/mine/amazonappstore.jpg">Finally, HTML5 is important because <a href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">Amazon recently announced support for HTML5</a> apps in their App Store for Android. Previous to this announcement, pure HTML5 apps had no real mass distribution model. HTML5 app developers relied on a search engine, while native app developers have a direct channel to consumers that cuts through a lot of noise and makes it easy to find specific apps.</p>
 
 <p>Consequently, a lot of HTML5 apps ended up being <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">wrapped in native code</a> so as to get a chance to compete in the app stores. Amazon's support of HTML5 is a much needed <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">shot-in-the-arm for HTML5</a> because it means a direct channel to mass consumers; what's more, Amazon also is offering a chance to monetize HTML5 apps <a href="https://developer.amazon.com/sdk/webapps/iap/understanding.html">via a JavaScript In-App purchase API</a>. While Amazon isn't the first In-App purchase API for HTML5, it's the first one linked to a major e-commerce platform and mass consumer channel.</p>
 
@@ -48,7 +48,7 @@
     <link href="http://thediscoblog.com/blog/2013/09/26/app-signing-ios-versus-android/"/>
     <updated>2013-09-26T10:16:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/26/app-signing-ios-versus-android</id>
-    <content type="html"><![CDATA[<p>{% img left /images/mine/sealed.jpg %}Apple's app signing process can be a real pain-in-the-neck; nevertheless, it works to keep apps trusted. You know when you download a Bank of America app from iTunes that it's the real thing. You know that the app comes from <em>the</em> Bank of America.</p>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/sealed.jpg">Apple's app signing process can be a real pain-in-the-neck; nevertheless, it works to keep apps trusted. You know when you download a Bank of America app from iTunes that it's the real thing. You know that the app comes from <em>the</em> Bank of America.</p>
 
 <p>On the other hand, Android allows apps to be self-signed. This has a fundamental flaw: an Android developer can claim to be anyone they want, <em>including Bank of America</em>. Thus, when you download an app from an Android App store, there's a real possibility that the app was submitted by a charlatan. What's more, those charlatan apps can actually be malicious!</p>
 
@@ -68,18 +68,14 @@
     <id>http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters</id>
     <content type="html"><![CDATA[<p>I saw some news related to <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">Microsoft Windows Phone</a> that gave me pause for thought. Specifically, <a href="http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/">I read an article</a> that stated:</p>
 
-<p>{% blockquote Liam Tung http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/ iOS up, Android down in the US as Windows Phone hits eight percent in Europe  %}
-Microsoft's mobile platform reached new heights in the three months to July 2013 in Europe, making up 8.2 percent of sales across UK, France, Germany, Italy and Spain
-{% endblockquote %}</p>
+<p><blockquote><p>Microsoft's mobile platform reached new heights in the three months to July 2013 in Europe, making up 8.2 percent of sales across UK, France, Germany, Italy and Spain</p><footer><strong>Liam Tung</strong> <cite><a href='http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/'>iOS Up, Android Down in the US as Windows Phone Hits Eight Percent in Europe</a></cite></footer></blockquote></p>
 
 <!-- more -->
 
 
 <p>While <a href="http://www.expertreviews.co.uk/smartphones/1301902/windows-phone-market-share-growing-in-europe">8.2% market share</a> might seem insignificant, what's interesting is that</p>
 
-<p>{% blockquote Liam Tung http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/ iOS up, Android down in the US as Windows Phone hits eight percent in Europe %}
-At the same time last year, Windows Phone accounted for 4.9 percent of sales
-{% endblockquote %}</p>
+<p><blockquote><p>At the same time last year, Windows Phone accounted for 4.9 percent of sales</p><footer><strong>Liam Tung</strong> <cite><a href='http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/'>iOS Up, Android Down in the US as Windows Phone Hits Eight Percent in Europe</a></cite></footer></blockquote></p>
 
 <p>That is, <a href="http://wmpoweruser.com/kantar-windows-phone-hits-record-high-of-8-2-market-share-in-europe/">Windows Phone market share</a> for the same five markets has increased by a little more than 3% over the last year. Accordingly, Windows Phone is a <a href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/">growing platform (in some markets)</a>, which means developers will eventually need to start considering it as a <a href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/">third platform</a>. And throwing a third platform into the mix does change the variables in a native versus <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">non-native</a> argument <em>in favor of an HTML5 approach</em>.</p>
 
@@ -96,7 +92,7 @@ At the same time last year, Windows Phone accounted for 4.9 percent of sales
     <link href="http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules/"/>
     <updated>2013-05-29T13:42:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/29/callbacks-in-appcelerator-titanium-modules</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/appc_stacked.png %}I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>'s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47's <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/appc_stacked.png">I recently found myself implementing both an Android and iOS <a href="http://www.appcelerator.com/">Appcelerator</a> module for <a href="http://www.app47.com/">App47</a>'s <a href="https://github.com/App47/appcelerator-modules">respective Agent libraries</a>. Like <a href="https://github.com/App47/phonegap-plugins">PhoneGap plugins</a>, <a href="https://wiki.appcelerator.org/display/tis/Using+Titanium+Modules">Appcelerator modules</a> are a way to bridge an Appcelerator app with native code running on a device; in this case, the native code happens to be App47's <a href="http://app47.com/wiki/doku.php?id=configure:androidapp">Android</a> and <a href="http://app47.com/wiki/doku.php?id=configure:iosapp">IOS</a> Agents, which capture <a href="http://www.app47.com/features/">usage analytics</a> and facilitate a few security features. Naturally, these Agent libraries are  coded in Java and Objective-C.</p>
 
 <p>In the end, what I wanted to implement was a <a href="http://recurial.com/programming/understanding-callback-functions-in-javascript/">JavaScript-ish callback</a> associated with a native App47 Agent call. Alas, it took me a lot of digging to achieve this goal.</p>
 

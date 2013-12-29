@@ -4,7 +4,7 @@
   <title><![CDATA[Category: elasticsearch | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/elasticsearch/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-12-26T22:10:24-05:00</updated>
+  <updated>2013-12-29T14:58:27-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,11 +14,209 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Just require tire to inquire]]></title>
+    <link href="http://thediscoblog.com/blog/2013/12/29/just-require-tire-to-inquire/"/>
+    <updated>2013-12-29T12:53:00-05:00</updated>
+    <id>http://thediscoblog.com/blog/2013/12/29/just-require-tire-to-inquire</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/es-bonzai.jpg">In the land of <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a> there's a few client libraries for <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a>, however, one stands above the rest with a comprehensive set of features and remarkable <a href="http://karmi.github.io/retire/">documentation</a>: <a href="https://github.com/karmi/retire">Tire</a>.</p>
+
+<p>With its DSL based API, you'll find working with <a href="http://www.ibm.com/developerworks/library/j-javadev2-24/">Elasticsearch</a> straightforward and a lot of fun. And even though the project's repository has been renamed to <a href="https://github.com/karmi/retire/wiki/Tire-Retire">retire</a>, the Tire library</p>
+
+<p><blockquote><p>will continue to work...bugs will be fixed and important features will be added.</p><footer><strong>Karel Minarik</strong> <cite><a href='https://github.com/karmi/retire/wiki/Tire-Retire'>Tire Retire</a></cite></footer></blockquote></p>
+
+<p>In my opinion, for the time being, Tire is still superior to the <a href="https://github.com/elasticsearch/elasticsearch-ruby">elasticsearch-ruby</a> alternative in terms of features and its elegant DSL.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p>To begin using Tire, grab the gem. For instance, if you're using Bundler, then add the following line to your <code>Gemfile</code>:</p>
+
+<p><code>ruby Adding Tire to a Gemfile
+gem 'tire'
+</code></p>
+
+<p>After running a <code>bundle install</code>, you'll be able to require Tire.</p>
+
+<p><code>ruby Requiring Tire
+require 'tire'
+</code></p>
+
+<p>Tire assumes a locally running instance of Elasticsearch; if you wish to connect to a remote node, then create a <code>configure</code> block and set the <code>url</code> to a remote Elasticsearch instance.</p>
+
+<p><code>ruby Configuring a remote Elasticsearch instance
+Tire.configure do
+  url environment['elasticsearch_host']
+end
+</code></p>
+
+<p>In the code above, the <code>url</code> is set the value of <code>elasticsearch_host</code>.</p>
+
+<h5>Dealing with Indexes</h5>
+
+<p>First and foremost to working with Elasticsearch is the creation of an index, which can be thought of as a database. Search-able documents are then stored in an index and the process of adding documents to an index is known as <em>indexing</em>.</p>
+
+<p>Consequently, to create an index, you simply name it an issue a <code>create</code> in an <code>index</code> block.</p>
+
+<p><code>ruby Creating an index
+Tire.index 'beer_recipes' do
+  create
+end
+</code></p>
+
+<p>In this case, the index is named 'beer_recipes'.</p>
+
+<p>As I've <a href="http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers/">covered before</a>, you can alter how Elasticsearch indexes a document by providing a customized index mapping. In the code below, I've specified that the <code>ingredients</code> property of the <code>beer</code> type will be analyzed using the snowball algorithm, which converts a word into its root, yielding a simpler token (i.e. 'lemons' becomes 'lemon', 'jazzy' becomes 'jazz').</p>
+
+<p>``` ruby Changing the mapping of an index
+Tire.index 'beer_recipes' do
+  create mappings:  {</p>
+
+<pre><code>beer: {
+    properties: { 
+        ingredients:  { type: 'string', analyzer: 'snowball' } 
+    } 
+}
+</code></pre>
+
+<p>  }
+end
+```</p>
+
+<p>Finally, to delete an index, simply issue a <code>delete</code>, like so:</p>
+
+<p>``` ruby Delete an index
+Tire.index 'beer_recipes' do</p>
+
+<pre><code>delete
+</code></pre>
+
+<p>end
+```</p>
+
+<p>Of course, the whole point of <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">Elasticsearch is search</a>! And searching with Tire is super simple; what's more, Tire offers a slick feature of allowing you to define model objects for both indexing and searching (think <a href="https://gist.github.com/karmi/3200212">ActiveRecord</a> integration).</p>
+
+<h5>Indexing &amp; Searching with Tire</h5>
+
+<p>In <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a>, an index can be thought of as a database and a <em>type</em> can be thought of as a database table. Accordingly, when you index a document, you give it a type and associate properties, which essentially act like columns.</p>
+
+<p>Indexing a document is executed via the <code>store</code> command. In the code below, a document is stored as a <code>beer</code> type with three properties: <code>name</code>, <code>style</code>, and <code>ingredients</code>. The <code>refresh</code> command updates the index and accordingly makes this newly indexed document available for search.</p>
+
+<p>``` ruby Indexing a document
+Tire.index 'beer_recipes' do</p>
+
+<pre><code>store type: 'beer',
+name: "Todd Enders' Witbier",
+style: "wit, Belgian ale, wheat beer",
+ingredients: "4.0 lbs Belgian pils malt, 4.0 lbs raw soft red winter wheat, 0.5 lbs rolled oats, 0.75 oz coriander, freshly ground Zest from two table oranges and two lemons, 1.0 oz 3.1% AA Saaz, 3/4 corn sugar for priming, Hoegaarden strain yeast"
+</code></pre>
+
+<p>  refresh
+end
+```</p>
+
+<p>Consequently, to search for a document in an index, you use the <code>search</code> method, which returns a list of results.</p>
+
+<p>``` ruby Searching for a document
+search_res = Tire.search('beer_recipes') do</p>
+
+<pre><code>query do
+    term :ingredients, 'lemon'
+end
+</code></pre>
+
+<p>end</p>
+
+<p>assert_equal 1, search_res.results.size
+assert_equal "Todd Enders' Witbier", search_res.results[0].name
+```</p>
+
+<p>In the code above, the <code>search</code> block defines a simple query where the <code>ingredients</code> property is searched for the term 'lemon', which yields one result. Note, the resultant list contains maps whose keys are the document's properties (i.e. <code>name</code>, <code>style</code>, and <code>ingredients</code>).</p>
+
+<p>You can use normal Ruby objects for both indexing and searching in Tire. The only requirement is that your model object provide a <code>type</code>, <code>_type</code> or <code>document_type</code> method as well as a <code>to_indexed_json</code> method.</p>
+
+<p>In this case, I've defined a <code>Beer</code> class that includes the two required methods as well as a class method that enables searching the <code>ingredients</code> property.</p>
+
+<p>``` ruby Using a model object
+class Beer</p>
+
+<pre><code>attr_reader :name, :style, :ingredients
+
+class &lt;&lt; self
+    def search_ingredients_for(ingredient)
+        search_res = Tire.search('beer_recipes') do
+        query do
+            term :ingredients, ingredient
+        end
+    end
+    search_res.results
+    end
+end
+
+def initialize(attributes={})
+    @attributes = attributes
+@attributes.each_pair { |name,value| instance_variable_set :"@#{name}", value }
+</code></pre>
+
+<p>  end</p>
+
+<p>  def type</p>
+
+<pre><code>  'beer'
+</code></pre>
+
+<p>  end</p>
+
+<p>  def to_indexed_json</p>
+
+<pre><code>@attributes.to_json
+</code></pre>
+
+<p>  end</p>
+
+<p>end
+```</p>
+
+<p>Next, to make use of my <code>Beer</code> model object, I need to configure Tire to use it via the <code>wrapper</code> command. Once that is done, I can use my <code>Beer</code> object to index beers and to search for them.</p>
+
+<p>``` ruby
+Tire.configure do</p>
+
+<pre><code>wrapper Beer #forces results to be of type beer!
+</code></pre>
+
+<p>end</p>
+
+<p>Tire.index 'beer_recipes' do</p>
+
+<pre><code>store Beer.new type: 'beer',
+name: "Todd Enders' Witbier",
+style: "wit, Belgian ale, wheat beer",
+ingredients: "4.0 lbs Belgian pils malt, 4.0 lbs raw soft red winter wheat, 0.5 lbs rolled oats, 0.75 oz coriander, freshly ground Zest from two table oranges and two lemons, 1.0 oz 3.1% AA Saaz, 3/4 corn sugar for priming, Hoegaarden strain yeast"
+</code></pre>
+
+<p>  refresh
+end</p>
+
+<p>results = Beer.search_ingredients_for 'lemons'
+assert_equal 1, results.size
+assert_equal Beer, results[0].class
+assert_equal "Todd Enders' Witbier", results[0].name
+```</p>
+
+<p>As you can see above, the <code>store</code> method takes a new instantiated <code>Beer</code> instance; what's more, I can use my <code>search_ingredients_for</code> class method to find a corresponding document.</p>
+
+<p>While there are alternate Ruby <a href="http://thediscoblog.com/blog/2013/01/02/scalable-searching-with-elasticsearch/">Elasticsearch</a> libraries available, Tire is by far the richest -- its features along with its DSL make working with <a href="http://www.ibm.com/developerworks/library/j-javadev2-24/">Elasticsearch</a> easy along with fun. So what are you waiting for? Require Tire to inquire!</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Elasticsearch in a box]]></title>
     <link href="http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box/"/>
     <updated>2013-11-25T13:42:00-05:00</updated>
     <id>http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box</id>
-    <content type="html"><![CDATA[<p>{% img left /images/mine/esbox.jpg %}Are you looking to get going with <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a> as quickly as possible without having to worry about <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">installing Java or Elasticsearch</a> itself? Are you looking for a repeatable and automated mechanism for bringing up Elasticsearch instances for developmental and or testing purposes? While there's certainly a number of <a href="http://www.elasticsearch.org/">Elasticsearch</a>-as-a-platform service providers out there, there's one other option: use <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a>.</p>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/esbox.jpg">Are you looking to get going with <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a> as quickly as possible without having to worry about <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">installing Java or Elasticsearch</a> itself? Are you looking for a repeatable and automated mechanism for bringing up Elasticsearch instances for developmental and or testing purposes? While there's certainly a number of <a href="http://www.elasticsearch.org/">Elasticsearch</a>-as-a-platform service providers out there, there's one other option: use <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a>.</p>
 
 <p>Elasticsearch-in-a-box is a freely available <a href="http://www.vagrantbox.es/">Vagrant base box</a>. What that means is that you can quickly fire up and tear down an Elasticsearch environment with <a href="http://docs.vagrantup.com/v2/getting-started/">simple commands</a> like <code>vagrant up</code> and <code>vagrant destroy</code>.</p>
 
@@ -72,7 +270,7 @@ vagrant destroy -f
     <link href="http://thediscoblog.com/blog/2013/09/21/i-like-my-elasticsearch-a-la-node-dot-js/"/>
     <updated>2013-09-21T08:57:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/21/i-like-my-elasticsearch-a-la-node-dot-js</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/320px-Pie_A_La_Mode.jpg %}While <a href="http://thediscoblog.com/blog/categories/elasticsearch/">ElasticSearch</a> is easy enough to work with via its RESTful HTTP API, there are <a href="http://www.elasticsearch.org/guide/clients/">myriad client libraries</a> available in almost every conceivable programming language. If <a href="http://thediscoblog.com/blog/categories/node/">Node.js</a> is your language of choice, then there's at least two actively supported libraries available.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/320px-Pie_A_La_Mode.jpg">While <a href="http://thediscoblog.com/blog/categories/elasticsearch/">ElasticSearch</a> is easy enough to work with via its RESTful HTTP API, there are <a href="http://www.elasticsearch.org/guide/clients/">myriad client libraries</a> available in almost every conceivable programming language. If <a href="http://thediscoblog.com/blog/categories/node/">Node.js</a> is your language of choice, then there's at least two actively supported libraries available.</p>
 
 <p>My favorite is dubbed, albeit rather dully, "<a href="https://github.com/phillro/node-elasticsearch-client">Elastic Search Client</a>", but don't let the library's unimaginative name fool you: this is a handy library that allows you to do everything you could do via cURL with the added benefit of JavaScript callbacks. Best of all, you can use the Node Elastic Search Client in <a href="http://thediscoblog.com/blog/categories/coffeescript/">Coffeescript</a>, which is a handy language that makes JavaScript less verbose and that ultimately compiles into JavaScript.</p>
 
@@ -207,7 +405,7 @@ done()
     <link href="http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers/"/>
     <updated>2013-09-14T08:37:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/old-beer.jpg %}Sadly, lots of early Internet beer recipes aren't necessarily in an easily digestible format; that is, these recipes are <em>unstructured</em> intermixed lists of directions and ingredients often originally composed in an email or forum post.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/old-beer.jpg">Sadly, lots of early Internet beer recipes aren't necessarily in an easily digestible format; that is, these recipes are <em>unstructured</em> intermixed lists of directions and ingredients often originally composed in an email or forum post.</p>
 
 <p>So while it's hard to easily put these recipes into traditional data stores (ostensibly for easier searching), they're perfect for <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">ElasticSearch</a> in their current form.</p>
 
@@ -348,7 +546,7 @@ for doc in data.hits.hits
     <link href="http://thediscoblog.com/blog/2013/09/03/effortless-elasticsearch-clustering/"/>
     <updated>2013-09-03T07:50:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/03/effortless-elasticsearch-clustering</id>
-    <content type="html"><![CDATA[<p>{% img left /images/mine/cluster.jpg %}<a href="http://thediscoblog.com/blog/categories/elasticsearch/">ElasticSearch</a> supports <a href="http://www.elasticsearch.org/guide/reference/modules/cluster/">clustering</a>; that is, you can have a series of distinct <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">ElasticSearch</a> instances work in a coordinated manner without much administrative intervention at all. Clustering ElasticSearch instances (or nodes) provides data redundancy as well as data availability.</p>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/cluster.jpg"><a href="http://thediscoblog.com/blog/categories/elasticsearch/">ElasticSearch</a> supports <a href="http://www.elasticsearch.org/guide/reference/modules/cluster/">clustering</a>; that is, you can have a series of distinct <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">ElasticSearch</a> instances work in a coordinated manner without much administrative intervention at all. Clustering ElasticSearch instances (or nodes) provides data redundancy as well as data availability.</p>
 
 <p>Best of all, clustering in ElasticSearch, by default, doesn't require <em>any</em> configuration -- nodes discover each other. You can set up a cluster in about 60 seconds. Let me show you how!</p>
 
@@ -479,60 +677,6 @@ curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
 <p>Finally, you can control how nodes operate in a cluster. You can explicitly forbid a node from being a master, for example, and you can also configure nodes to not hold data (thus, those nodes become veritable routers for searches). These options allow you to create an interesting topology that has some intelligent routing built in.</p>
 
 <p>Regardless of how you configure an ElasticSearch cluster, I hope you've seen that it couldn't be any easier. Can you dig it, man?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ElasticSearch on EC2 in less than 60 seconds]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/"/>
-    <updated>2013-05-17T17:24:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds</id>
-    <content type="html"><![CDATA[<p>{% img left /images/mine/es-bonzai.jpg %}Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend -- in less than 60 seconds, I'll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
-
-<p>You'll first <a href="http://www.drdobbs.com/web-development/getting-started-with-the-cloud-amazon-we/231601598">need an AWS account</a> along with an SSH key pair. If you don't already have those two steps done, go ahead and do that. The steps that follow suggest a particular AMI; however, you are free to select the <a href="http://aws.amazon.com/ec2/instance-types/">instance type</a>. <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Micro instance types</a> are free to use; consequently, you can get <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">up and running with ElasticSearch</a> in less than a minute <em>for free</em>.</p>
-
-<!-- more -->
-
-
-<p>Now that you've got an <a href="http://www.ibm.com/developerworks/web/library/j-s3/">AWS</a> account and an SSH key pair, go ahead and create a new security group (or edit an existing one). It's important that the <a href="http://www.elasticsearch.org/tutorials/elasticsearch-on-ec2/">following ports</a> are open:</p>
-
-<ul>
-<li>22 (required for SSH)</li>
-<li>80 (ElasticSearch uses HTTP for standard API calls)</li>
-<li>9200 (required for ElasticSearch)</li>
-<li>9300 (required for ElasticSearch)</li>
-</ul>
-
-
-<p>Next, fire up a Linux AMI. I, for example, prefer <a href="http://cloud-images.ubuntu.com/locator/ec2/">ami-c30360aa</a> (this is Ubuntu Server version 13.04) and I configure the AMI to use the security group that I just covered.</p>
-
-<p>Now, SSH to your newly instantiated AMI.  Once on the AMI, you'll need to install Java. Never fear though, I've got you covered. All you need to do is run a handy script via the <a href="https://github.com/aglover/ubuntu-equip">Ubuntu-Equip project</a>, that I use frequently just for this sorta thing:</p>
-
-<p><code>bash installing Java
-wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_java.sh &amp;&amp; bash equip_java.sh
-</code></p>
-
-<p>You'll need to accept the license from Oracle. Once that script completes, go ahead and type  <code>java -version</code> and you should see Oracle's JDK (i.e Java version "1.7.0_21").</p>
-
-<p>Next, download and install ElasticSearch via another nifty <a href="https://github.com/aglover/ubuntu-equip">Ubuntu-Equip</a> script:</p>
-
-<p><code>bash installing elasticsearch
-wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_elasticsearch.sh &amp;&amp; bash equip_elasticsearch.sh
-</code></p>
-
-<p>This script doesn't start ElasticSearch for you; thus, go ahead and change directories into the <code>elasticsearch</code> directory and fire it up like so:</p>
-
-<p><code>bash starting elasticsearch
-~/elasticsearch$ bin/elasticsearch -f
-</code></p>
-
-<p>Take a deep breath (but not too deep, as I need you to finish in less than 60 seconds) and find the Public DNS of the AMI you've been working on. Go ahead and copy it, then fire up a browser on your local machine and go to http://YOUR_AMI_DNS_NAME.com:9200/_plugin/inquisitor/ (be sure to note the port).</p>
-
-<p>By the way, <a href="https://github.com/polyfractal/elasticsearch-inquisitor">Inquisitor</a> is a handy web application that lets you query your indexes. It was installed via the Ubuntu-Equip script -- this tool is invaluable in figuring out how to properly query your indexes.</p>
-
-<p>And that is it. In less than 60 seconds you've got ElasticSearch running in the cloud for you. Want to create a cluster? No problem, just follow these steps again to fire up another ElasticSearch instance and then <a href="http://www.elasticsearch.org/videos/three-nodes-and-one-cluster/">configure the cluster accordingly</a>.</p>
-
-<p>I've not gone over <a href="http://www.elasticsearch.org/guide/reference/setup/configuration/">configuring ElasticSearch</a> nor have I showed you how to create ElasticSearch as a service on a Linux instance, but for one minute, what do you expect?</p>
 ]]></content>
   </entry>
   

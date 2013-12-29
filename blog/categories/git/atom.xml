@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-12-26T22:10:24-05:00</updated>
+  <updated>2013-12-29T14:58:27-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/12/26/heroku-deployments-with-git-branches/"/>
     <updated>2013-12-26T21:46:00-05:00</updated>
     <id>http://thediscoblog.com/blog/2013/12/26/heroku-deployments-with-git-branches</id>
-    <content type="html"><![CDATA[<p>{% img left /images/mine/heroku-logo-light.png %}Single branch development is easy. But this strategy's easiness blows up once you release code to the general public.  If you need to hot-fix an instance of deployed code, while in the midst of a development cycle, single branch development gets in your way by requiring you think. On the other hand, having <em>more than one</em> branch at least allows you to jump back in time via an alternate branch to perform a patch, while not disturbing an unfinished developmental branch. And you can do this without having to think much.</p>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/heroku-logo-light.png">Single branch development is easy. But this strategy's easiness blows up once you release code to the general public.  If you need to hot-fix an instance of deployed code, while in the midst of a development cycle, single branch development gets in your way by requiring you think. On the other hand, having <em>more than one</em> branch at least allows you to jump back in time via an alternate branch to perform a patch, while not disturbing an unfinished developmental branch. And you can do this without having to think much.</p>
 
 <!-- more -->
 

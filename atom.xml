@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-12-26T22:09:37-05:00</updated>
+  <updated>2013-12-29T14:58:27-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,11 +14,268 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Just require tire to inquire]]></title>
+    <link href="http://thediscoblog.com/blog/2013/12/29/just-require-tire-to-inquire/"/>
+    <updated>2013-12-29T12:53:00-05:00</updated>
+    <id>http://thediscoblog.com/blog/2013/12/29/just-require-tire-to-inquire</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/es-bonzai.jpg">In the land of <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a> there&#8217;s a few client libraries for <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a>, however, one stands above the rest with a comprehensive set of features and remarkable <a href="http://karmi.github.io/retire/">documentation</a>: <a href="https://github.com/karmi/retire">Tire</a>.</p>
+
+<p>With its DSL based API, you&#8217;ll find working with <a href="http://www.ibm.com/developerworks/library/j-javadev2-24/">Elasticsearch</a> straightforward and a lot of fun. And even though the project&#8217;s repository has been renamed to <a href="https://github.com/karmi/retire/wiki/Tire-Retire">retire</a>, the Tire library</p>
+
+<blockquote><p>will continue to work&#8230;bugs will be fixed and important features will be added.</p><footer><strong>Karel Minarik</strong> <cite><a href='https://github.com/karmi/retire/wiki/Tire-Retire'>Tire Retire</a></cite></footer></blockquote>
+
+
+<p>In my opinion, for the time being, Tire is still superior to the <a href="https://github.com/elasticsearch/elasticsearch-ruby">elasticsearch-ruby</a> alternative in terms of features and its elegant DSL.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p>To begin using Tire, grab the gem. For instance, if you&#8217;re using Bundler, then add the following line to your <code>Gemfile</code>:</p>
+
+<figure class='code'><figcaption><span>Adding Tire to a Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;tire&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After running a <code>bundle install</code>, you&#8217;ll be able to require Tire.</p>
+
+<figure class='code'><figcaption><span>Requiring Tire</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;tire&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Tire assumes a locally running instance of Elasticsearch; if you wish to connect to a remote node, then create a <code>configure</code> block and set the <code>url</code> to a remote Elasticsearch instance.</p>
+
+<figure class='code'><figcaption><span>Configuring a remote Elasticsearch instance</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Tire</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">url</span> <span class="n">environment</span><span class="o">[</span><span class="s1">&#39;elasticsearch_host&#39;</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the code above, the <code>url</code> is set the value of <code>elasticsearch_host</code>.</p>
+
+<h5>Dealing with Indexes</h5>
+
+<p>First and foremost to working with Elasticsearch is the creation of an index, which can be thought of as a database. Search-able documents are then stored in an index and the process of adding documents to an index is known as <em>indexing</em>.</p>
+
+<p>Consequently, to create an index, you simply name it an issue a <code>create</code> in an <code>index</code> block.</p>
+
+<figure class='code'><figcaption><span>Creating an index</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Tire</span><span class="o">.</span><span class="n">index</span> <span class="s1">&#39;beer_recipes&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">create</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, the index is named &#8216;beer_recipes&#8217;.</p>
+
+<p>As I&#8217;ve <a href="http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers/">covered before</a>, you can alter how Elasticsearch indexes a document by providing a customized index mapping. In the code below, I&#8217;ve specified that the <code>ingredients</code> property of the <code>beer</code> type will be analyzed using the snowball algorithm, which converts a word into its root, yielding a simpler token (i.e. &#8216;lemons&#8217; becomes &#8216;lemon&#8217;, &#8216;jazzy&#8217; becomes &#8216;jazz&#8217;).</p>
+
+<figure class='code'><figcaption><span>Changing the mapping of an index</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Tire</span><span class="o">.</span><span class="n">index</span> <span class="s1">&#39;beer_recipes&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">create</span> <span class="n">mappings</span><span class="p">:</span>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">beer</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>          <span class="n">properties</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>              <span class="n">ingredients</span><span class="p">:</span>  <span class="p">{</span> <span class="n">type</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="n">analyzer</span><span class="p">:</span> <span class="s1">&#39;snowball&#39;</span> <span class="p">}</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, to delete an index, simply issue a <code>delete</code>, like so:</p>
+
+<figure class='code'><figcaption><span>Delete an index</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Tire</span><span class="o">.</span><span class="n">index</span> <span class="s1">&#39;beer_recipes&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">delete</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Of course, the whole point of <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">Elasticsearch is search</a>! And searching with Tire is super simple; what&#8217;s more, Tire offers a slick feature of allowing you to define model objects for both indexing and searching (think <a href="https://gist.github.com/karmi/3200212">ActiveRecord</a> integration).</p>
+
+<h5>Indexing &amp; Searching with Tire</h5>
+
+<p>In <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a>, an index can be thought of as a database and a <em>type</em> can be thought of as a database table. Accordingly, when you index a document, you give it a type and associate properties, which essentially act like columns.</p>
+
+<p>Indexing a document is executed via the <code>store</code> command. In the code below, a document is stored as a <code>beer</code> type with three properties: <code>name</code>, <code>style</code>, and <code>ingredients</code>. The <code>refresh</code> command updates the index and accordingly makes this newly indexed document available for search.</p>
+
+<figure class='code'><figcaption><span>Indexing a document</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Tire</span><span class="o">.</span><span class="n">index</span> <span class="s1">&#39;beer_recipes&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">store</span> <span class="n">type</span><span class="p">:</span> <span class="s1">&#39;beer&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Todd Enders&#39; Witbier&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">style</span><span class="p">:</span> <span class="s2">&quot;wit, Belgian ale, wheat beer&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">ingredients</span><span class="p">:</span> <span class="s2">&quot;4.0 lbs Belgian pils malt, 4.0 lbs raw soft red winter wheat, 0.5 lbs rolled oats, 0.75 oz coriander, freshly ground Zest from two table oranges and two lemons, 1.0 oz 3.1% AA Saaz, 3/4 corn sugar for priming, Hoegaarden strain yeast&quot;</span>
+</span><span class='line'>  <span class="n">refresh</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Consequently, to search for a document in an index, you use the <code>search</code> method, which returns a list of results.</p>
+
+<figure class='code'><figcaption><span>Searching for a document</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">search_res</span> <span class="o">=</span> <span class="no">Tire</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;beer_recipes&#39;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">query</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">term</span> <span class="ss">:ingredients</span><span class="p">,</span> <span class="s1">&#39;lemon&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">assert_equal</span> <span class="mi">1</span><span class="p">,</span> <span class="n">search_res</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">size</span>
+</span><span class='line'><span class="n">assert_equal</span> <span class="s2">&quot;Todd Enders&#39; Witbier&quot;</span><span class="p">,</span> <span class="n">search_res</span><span class="o">.</span><span class="n">results</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">name</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the code above, the <code>search</code> block defines a simple query where the <code>ingredients</code> property is searched for the term &#8216;lemon&#8217;, which yields one result. Note, the resultant list contains maps whose keys are the document&#8217;s properties (i.e. <code>name</code>, <code>style</code>, and <code>ingredients</code>).</p>
+
+<p>You can use normal Ruby objects for both indexing and searching in Tire. The only requirement is that your model object provide a <code>type</code>, <code>_type</code> or <code>document_type</code> method as well as a <code>to_indexed_json</code> method.</p>
+
+<p>In this case, I&#8217;ve defined a <code>Beer</code> class that includes the two required methods as well as a class method that enables searching the <code>ingredients</code> property.</p>
+
+<figure class='code'><figcaption><span>Using a model object</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Beer</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:style</span><span class="p">,</span> <span class="ss">:ingredients</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span>
+</span><span class='line'>      <span class="k">def</span> <span class="nf">search_ingredients_for</span><span class="p">(</span><span class="n">ingredient</span><span class="p">)</span>
+</span><span class='line'>          <span class="n">search_res</span> <span class="o">=</span> <span class="no">Tire</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;beer_recipes&#39;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>          <span class="n">query</span> <span class="k">do</span>
+</span><span class='line'>              <span class="n">term</span> <span class="ss">:ingredients</span><span class="p">,</span> <span class="n">ingredient</span>
+</span><span class='line'>          <span class="k">end</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>      <span class="n">search_res</span><span class="o">.</span><span class="n">results</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">attributes</span><span class="o">=</span><span class="p">{})</span>
+</span><span class='line'>      <span class="vi">@attributes</span> <span class="o">=</span> <span class="n">attributes</span>
+</span><span class='line'>    <span class="vi">@attributes</span><span class="o">.</span><span class="n">each_pair</span> <span class="p">{</span> <span class="o">|</span><span class="nb">name</span><span class="p">,</span><span class="n">value</span><span class="o">|</span> <span class="nb">instance_variable_set</span> <span class="ss">:&quot;@</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="ss">&quot;</span><span class="p">,</span> <span class="n">value</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">type</span>
+</span><span class='line'>    <span class="s1">&#39;beer&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">to_indexed_json</span>
+</span><span class='line'>    <span class="vi">@attributes</span><span class="o">.</span><span class="n">to_json</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, to make use of my <code>Beer</code> model object, I need to configure Tire to use it via the <code>wrapper</code> command. Once that is done, I can use my <code>Beer</code> object to index beers and to search for them.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Tire</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">wrapper</span> <span class="no">Beer</span> <span class="c1">#forces results to be of type beer!</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Tire</span><span class="o">.</span><span class="n">index</span> <span class="s1">&#39;beer_recipes&#39;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">store</span> <span class="no">Beer</span><span class="o">.</span><span class="n">new</span> <span class="n">type</span><span class="p">:</span> <span class="s1">&#39;beer&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Todd Enders&#39; Witbier&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">style</span><span class="p">:</span> <span class="s2">&quot;wit, Belgian ale, wheat beer&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">ingredients</span><span class="p">:</span> <span class="s2">&quot;4.0 lbs Belgian pils malt, 4.0 lbs raw soft red winter wheat, 0.5 lbs rolled oats, 0.75 oz coriander, freshly ground Zest from two table oranges and two lemons, 1.0 oz 3.1% AA Saaz, 3/4 corn sugar for priming, Hoegaarden strain yeast&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">refresh</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">results</span> <span class="o">=</span> <span class="no">Beer</span><span class="o">.</span><span class="n">search_ingredients_for</span> <span class="s1">&#39;lemons&#39;</span>
+</span><span class='line'><span class="n">assert_equal</span> <span class="mi">1</span><span class="p">,</span> <span class="n">results</span><span class="o">.</span><span class="n">size</span>
+</span><span class='line'><span class="n">assert_equal</span> <span class="no">Beer</span><span class="p">,</span> <span class="n">results</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">class</span>
+</span><span class='line'><span class="n">assert_equal</span> <span class="s2">&quot;Todd Enders&#39; Witbier&quot;</span><span class="p">,</span> <span class="n">results</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">name</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see above, the <code>store</code> method takes a new instantiated <code>Beer</code> instance; what&#8217;s more, I can use my <code>search_ingredients_for</code> class method to find a corresponding document.</p>
+
+<p>While there are alternate Ruby <a href="http://thediscoblog.com/blog/2013/01/02/scalable-searching-with-elasticsearch/">Elasticsearch</a> libraries available, Tire is by far the richest &#8211; its features along with its DSL make working with <a href="http://www.ibm.com/developerworks/library/j-javadev2-24/">Elasticsearch</a> easy along with fun. So what are you waiting for? Require Tire to inquire!</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Heroku deployments with Git branches]]></title>
     <link href="http://thediscoblog.com/blog/2013/12/26/heroku-deployments-with-git-branches/"/>
     <updated>2013-12-26T21:46:00-05:00</updated>
     <id>http://thediscoblog.com/blog/2013/12/26/heroku-deployments-with-git-branches</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/heroku-logo-light.png">Single branch development is easy. But this strategy&#8217;s easiness blows up once you release code to the general public.  If you need to hot-fix an instance of deployed code, while in the midst of a development cycle, single branch development gets in your way by requiring you think. On the other hand, having <em>more than one</em> branch at least allows you to jump back in time via an alternate branch to perform a patch, while not distributing an unfinished developmental branch. And you can do this without having to think much.</p>
+    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/heroku-logo-light.png">Single branch development is easy. But this strategy&#8217;s easiness blows up once you release code to the general public.  If you need to hot-fix an instance of deployed code, while in the midst of a development cycle, single branch development gets in your way by requiring you think. On the other hand, having <em>more than one</em> branch at least allows you to jump back in time via an alternate branch to perform a patch, while not disturbing an unfinished developmental branch. And you can do this without having to think much.</p>
 
 <!-- more -->
 
@@ -1617,74 +1874,6 @@ what ever you mounted (i.e <code>/dev/xvdf</code>), the mount point will be the 
 <p>The beauty, of course, is that my test cases effectively test my adapter code without relying on a third party system (in this case, Bar). This is naturally a time honored testing technique employable in any language with a mocking framework worth its salt!</p>
 
 <p>If you find yourself writing some integration code in Java, then I can&#8217;t recommend Mockito enough. <a href="http://www.javaworld.com/community/node/3772">Mockito&#8217;s API</a> is quite straightforward and it makes tests easy to comprehend. I mean, it makes tests easy to imbibe.  Dig it?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Swipe gestures in jQuery Mobile apps]]></title>
-    <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
-    <updated>2013-07-30T12:52:00-04:00</updated>
-    <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
-
-<p>Implementing right and left swipes in an <a href="http://jquerymobile.com/">jQuery Mobile</a> app is fairly straightforward, but there are a few gotchas that I was able to piece together via multiple <a href="http://stackoverflow.com/questions/7533772/how-to-swipe-between-several-jquery-mobile-pages">stackoverflow threads</a>, blogs, and finally <a href="http://api.jquerymobile.com/">jQuery Mobile&#8217;s own documentation</a>.</p>
-
-<!-- more -->
-
-
-<p>In a jQuery Mobile app, you <a href="http://the-jquerymobile-tutorial.org/jquery-mobile-tutorial-CH02.php">define pages</a> within <code>div</code> tags that represent a UI screen &#8211; you can then declare transitions between pages well &#8211; slide, flip, etc.  The key aspect with swiping between page <code>div</code>s is the selector for them, which is <code>div[data-role='page']</code>.</p>
-
-<p>Once you have a handle to that <code>div</code>, you can proceed forward with a left swipe via jQuery&#8217;s <a href="http://api.jquery.com/next/"><code>next</code></a> function. Conversely, swiping right with the intent of going back is facilitated by finding the previous matching <code>div[data-role='page']</code> via jQuery&#8217;s <a href="http://api.jquery.com/prev/"><code>prev</code></a> function.</p>
-
-<p>Also note, going backwards via a swipe requires that you <em>reverse</em> the slide transition, otherwise it looks misleading to the user (i.e. the transition is from left to right rather than the other way around!).</p>
-
-<p>Accordingly, the JavaScript for swipe gestures should be placed within a <a href="http://jquerymobile.com/demos/1.2.0/docs/api/events.html"><code>pageinit</code> event</a> like so:</p>
-
-<figure class='code'><figcaption><span>Enabling swipe between page divs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;pageinit&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
-</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;div.ui-page&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;swipeleft&quot;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">nextpage</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">next</span><span class="p">(</span><span class="s1">&#39;div[data-role=&quot;page&quot;]&#39;</span><span class="p">);</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">nextpage</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">$</span><span class="p">.</span><span class="nx">mobile</span><span class="p">.</span><span class="nx">changePage</span><span class="p">(</span><span class="nx">nextpage</span><span class="p">,</span> <span class="s2">&quot;slide&quot;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>  <span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;div.ui-page&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;swiperight&quot;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">prevpage</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">prev</span><span class="p">(</span><span class="s1">&#39;div[data-role=&quot;page&quot;]&#39;</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">prevpage</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">$</span><span class="p">.</span><span class="nx">mobile</span><span class="p">.</span><span class="nx">changePage</span><span class="p">(</span><span class="nx">prevpage</span><span class="p">,</span> <span class="p">{</span> <span class="nx">transition</span><span class="o">:</span> <span class="s2">&quot;slide&quot;</span><span class="p">,</span> <span class="nx">reverse</span><span class="o">:</span> <span class="kc">true</span> <span class="p">},</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note, this script should be referenced in your DOM <em>before</em> you pull in the jQuery mobile js file. That is, put the code above where you add jQuery mobile in your document&#8217;s header (but <em>after</em> you load jQuery itself):</p>
-
-<figure class='code'><figcaption><span>Including jQuery Mobile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;https://d10ajoocuyu32n.cloudfront.net/jquery-1.9.1.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'><span class="c">&lt;!-- add pageinit swipe initialization here --&gt;</span>
-</span><span class='line'><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;https://d10ajoocuyu32n.cloudfront.net/mobile/1.3.1/jquery.mobile-1.3.1.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once you&#8217;ve done that, you&#8217;ll be able to swipe between page <code>div</code>s.</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-12-26T22:10:24-05:00</updated>
+  <updated>2013-12-29T14:58:27-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,204 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Just require tire to inquire]]></title>
+    <link href="http://thediscoblog.com/blog/2013/12/29/just-require-tire-to-inquire/"/>
+    <updated>2013-12-29T12:53:00-05:00</updated>
+    <id>http://thediscoblog.com/blog/2013/12/29/just-require-tire-to-inquire</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/es-bonzai.jpg">In the land of <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a> there's a few client libraries for <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a>, however, one stands above the rest with a comprehensive set of features and remarkable <a href="http://karmi.github.io/retire/">documentation</a>: <a href="https://github.com/karmi/retire">Tire</a>.</p>
+
+<p>With its DSL based API, you'll find working with <a href="http://www.ibm.com/developerworks/library/j-javadev2-24/">Elasticsearch</a> straightforward and a lot of fun. And even though the project's repository has been renamed to <a href="https://github.com/karmi/retire/wiki/Tire-Retire">retire</a>, the Tire library</p>
+
+<p><blockquote><p>will continue to work...bugs will be fixed and important features will be added.</p><footer><strong>Karel Minarik</strong> <cite><a href='https://github.com/karmi/retire/wiki/Tire-Retire'>Tire Retire</a></cite></footer></blockquote></p>
+
+<p>In my opinion, for the time being, Tire is still superior to the <a href="https://github.com/elasticsearch/elasticsearch-ruby">elasticsearch-ruby</a> alternative in terms of features and its elegant DSL.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p>To begin using Tire, grab the gem. For instance, if you're using Bundler, then add the following line to your <code>Gemfile</code>:</p>
+
+<p><code>ruby Adding Tire to a Gemfile
+gem 'tire'
+</code></p>
+
+<p>After running a <code>bundle install</code>, you'll be able to require Tire.</p>
+
+<p><code>ruby Requiring Tire
+require 'tire'
+</code></p>
+
+<p>Tire assumes a locally running instance of Elasticsearch; if you wish to connect to a remote node, then create a <code>configure</code> block and set the <code>url</code> to a remote Elasticsearch instance.</p>
+
+<p><code>ruby Configuring a remote Elasticsearch instance
+Tire.configure do
+  url environment['elasticsearch_host']
+end
+</code></p>
+
+<p>In the code above, the <code>url</code> is set the value of <code>elasticsearch_host</code>.</p>
+
+<h5>Dealing with Indexes</h5>
+
+<p>First and foremost to working with Elasticsearch is the creation of an index, which can be thought of as a database. Search-able documents are then stored in an index and the process of adding documents to an index is known as <em>indexing</em>.</p>
+
+<p>Consequently, to create an index, you simply name it an issue a <code>create</code> in an <code>index</code> block.</p>
+
+<p><code>ruby Creating an index
+Tire.index 'beer_recipes' do
+  create
+end
+</code></p>
+
+<p>In this case, the index is named 'beer_recipes'.</p>
+
+<p>As I've <a href="http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers/">covered before</a>, you can alter how Elasticsearch indexes a document by providing a customized index mapping. In the code below, I've specified that the <code>ingredients</code> property of the <code>beer</code> type will be analyzed using the snowball algorithm, which converts a word into its root, yielding a simpler token (i.e. 'lemons' becomes 'lemon', 'jazzy' becomes 'jazz').</p>
+
+<p>``` ruby Changing the mapping of an index
+Tire.index 'beer_recipes' do
+  create mappings:  {</p>
+
+<pre><code>beer: {
+    properties: { 
+        ingredients:  { type: 'string', analyzer: 'snowball' } 
+    } 
+}
+</code></pre>
+
+<p>  }
+end
+```</p>
+
+<p>Finally, to delete an index, simply issue a <code>delete</code>, like so:</p>
+
+<p>``` ruby Delete an index
+Tire.index 'beer_recipes' do</p>
+
+<pre><code>delete
+</code></pre>
+
+<p>end
+```</p>
+
+<p>Of course, the whole point of <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">Elasticsearch is search</a>! And searching with Tire is super simple; what's more, Tire offers a slick feature of allowing you to define model objects for both indexing and searching (think <a href="https://gist.github.com/karmi/3200212">ActiveRecord</a> integration).</p>
+
+<h5>Indexing &amp; Searching with Tire</h5>
+
+<p>In <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a>, an index can be thought of as a database and a <em>type</em> can be thought of as a database table. Accordingly, when you index a document, you give it a type and associate properties, which essentially act like columns.</p>
+
+<p>Indexing a document is executed via the <code>store</code> command. In the code below, a document is stored as a <code>beer</code> type with three properties: <code>name</code>, <code>style</code>, and <code>ingredients</code>. The <code>refresh</code> command updates the index and accordingly makes this newly indexed document available for search.</p>
+
+<p>``` ruby Indexing a document
+Tire.index 'beer_recipes' do</p>
+
+<pre><code>store type: 'beer',
+name: "Todd Enders' Witbier",
+style: "wit, Belgian ale, wheat beer",
+ingredients: "4.0 lbs Belgian pils malt, 4.0 lbs raw soft red winter wheat, 0.5 lbs rolled oats, 0.75 oz coriander, freshly ground Zest from two table oranges and two lemons, 1.0 oz 3.1% AA Saaz, 3/4 corn sugar for priming, Hoegaarden strain yeast"
+</code></pre>
+
+<p>  refresh
+end
+```</p>
+
+<p>Consequently, to search for a document in an index, you use the <code>search</code> method, which returns a list of results.</p>
+
+<p>``` ruby Searching for a document
+search_res = Tire.search('beer_recipes') do</p>
+
+<pre><code>query do
+    term :ingredients, 'lemon'
+end
+</code></pre>
+
+<p>end</p>
+
+<p>assert_equal 1, search_res.results.size
+assert_equal "Todd Enders' Witbier", search_res.results[0].name
+```</p>
+
+<p>In the code above, the <code>search</code> block defines a simple query where the <code>ingredients</code> property is searched for the term 'lemon', which yields one result. Note, the resultant list contains maps whose keys are the document's properties (i.e. <code>name</code>, <code>style</code>, and <code>ingredients</code>).</p>
+
+<p>You can use normal Ruby objects for both indexing and searching in Tire. The only requirement is that your model object provide a <code>type</code>, <code>_type</code> or <code>document_type</code> method as well as a <code>to_indexed_json</code> method.</p>
+
+<p>In this case, I've defined a <code>Beer</code> class that includes the two required methods as well as a class method that enables searching the <code>ingredients</code> property.</p>
+
+<p>``` ruby Using a model object
+class Beer</p>
+
+<pre><code>attr_reader :name, :style, :ingredients
+
+class &lt;&lt; self
+    def search_ingredients_for(ingredient)
+        search_res = Tire.search('beer_recipes') do
+        query do
+            term :ingredients, ingredient
+        end
+    end
+    search_res.results
+    end
+end
+
+def initialize(attributes={})
+    @attributes = attributes
+@attributes.each_pair { |name,value| instance_variable_set :"@#{name}", value }
+</code></pre>
+
+<p>  end</p>
+
+<p>  def type</p>
+
+<pre><code>  'beer'
+</code></pre>
+
+<p>  end</p>
+
+<p>  def to_indexed_json</p>
+
+<pre><code>@attributes.to_json
+</code></pre>
+
+<p>  end</p>
+
+<p>end
+```</p>
+
+<p>Next, to make use of my <code>Beer</code> model object, I need to configure Tire to use it via the <code>wrapper</code> command. Once that is done, I can use my <code>Beer</code> object to index beers and to search for them.</p>
+
+<p>``` ruby
+Tire.configure do</p>
+
+<pre><code>wrapper Beer #forces results to be of type beer!
+</code></pre>
+
+<p>end</p>
+
+<p>Tire.index 'beer_recipes' do</p>
+
+<pre><code>store Beer.new type: 'beer',
+name: "Todd Enders' Witbier",
+style: "wit, Belgian ale, wheat beer",
+ingredients: "4.0 lbs Belgian pils malt, 4.0 lbs raw soft red winter wheat, 0.5 lbs rolled oats, 0.75 oz coriander, freshly ground Zest from two table oranges and two lemons, 1.0 oz 3.1% AA Saaz, 3/4 corn sugar for priming, Hoegaarden strain yeast"
+</code></pre>
+
+<p>  refresh
+end</p>
+
+<p>results = Beer.search_ingredients_for 'lemons'
+assert_equal 1, results.size
+assert_equal Beer, results[0].class
+assert_equal "Todd Enders' Witbier", results[0].name
+```</p>
+
+<p>As you can see above, the <code>store</code> method takes a new instantiated <code>Beer</code> instance; what's more, I can use my <code>search_ingredients_for</code> class method to find a corresponding document.</p>
+
+<p>While there are alternate Ruby <a href="http://thediscoblog.com/blog/2013/01/02/scalable-searching-with-elasticsearch/">Elasticsearch</a> libraries available, Tire is by far the richest -- its features along with its DSL make working with <a href="http://www.ibm.com/developerworks/library/j-javadev2-24/">Elasticsearch</a> easy along with fun. So what are you waiting for? Require Tire to inquire!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Lickety-split custom validations in Rails]]></title>
@@ -47,7 +245,7 @@ validate :uri_should_start_with_protocol
     <link href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
     <updated>2013-06-10T12:56:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/heroku-logo-light.png %}Long running web requests are bad. They create resource contention among other waiting incoming requests; what's more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn't be any easier</a>.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what's more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn't be any easier</a>.</p>
 
 <!-- more -->
 
@@ -113,7 +311,7 @@ $&gt; heroku logs -p worker -t
     <link href="http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
     <updated>2013-05-01T09:10:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/hat-trick.png %}<a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
 
 <p>It's easy to configure a <a href="http://rubyonrails.org/">Rails</a> app to take advantage of CloudFront; what's more, if your Rails app is hosted on <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-21/">Heroku</a>, there's <a href="https://github.com/romanbsd/heroku-deflater">a nifty gem</a>, dubbed heroku-deflater, that'll enable <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP compression</a> of static assets (<a href="http://stackoverflow.com/questions/12326191/any-way-to-serve-gzip-assets-from-heroku">other than images</a>).</p>
 
@@ -140,19 +338,19 @@ Content-Encoding: gzip
 
 <p>Next, sign into the AWS Management Console and enable CloudFront if you haven't already. From the CloudFront admin page, create a new distribution via the Create Distribution button on the top left.</p>
 
-<p>{% img center /images/mine/cloudfront_1.png %}</p>
+<p><img class="center" src="/images/mine/cloudfront_1.png"></p>
 
 <p>Once the create distribution wizard begins, be sure to select Download as your delivery method.</p>
 
-<p>{% img center /images/mine/cloudfront_2.png %}</p>
+<p><img class="center" src="/images/mine/cloudfront_2.png"></p>
 
 <p>In the next screen, there are some important fields you'll need to fill out, namely: the Origin Source Name and the Viewer Protocol Policy. For the Origin Source Name, you will need to put in your app's URL or the Heroku URL (if you do not map a custom domain name to it). If you web site supports HTTPS, then be sure to set the Viewer Protocol Policy to HTTP and HTTPS.</p>
 
-<p>{% img center /images/mine/cloudfront_3.png %}</p>
+<p><img class="center" src="/images/mine/cloudfront_3.png"></p>
 
 <p>The only other important setting after these two is the Price Class. It's here where you can set where CloudFront will essentially serve up your content -- the default setting of Use All Edge Locations is most likely what you need.</p>
 
-<p>{% img center /images/mine/cloudfront_5.png %}</p>
+<p><img class="center" src="/images/mine/cloudfront_5.png"></p>
 
 <p>Finally, click the Create Distribution button -- once you do that, it'll take a bit for things to initialize (basically, the CDN needs to get built and this may take up to 30 minutes).</p>
 
@@ -175,11 +373,11 @@ config.action_controller.asset_host = 'the domain name from AWS Dashboard'
 
 <p>In this case, <a href="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/">I'm using Chrome</a>. Go to JavaScript console and hit the Network tab.</p>
 
-<p>{% img center /images/mine/cloudfront_6.png %}</p>
+<p><img class="center" src="/images/mine/cloudfront_6.png"></p>
 
 <p>Surf around and you'll note a few things -- one, that the assets like images and JavaScript files are being severed up from your CDN (just look at the URL) and that the size will often say "(from cache)" -- that means the CDN is handling the load rather than <a href="http://www.ibm.com/developerworks/podcast/glover-heroku-110811/">Heroku</a>. You should also note that your web app is probably a bit more snappy!</p>
 
-<p>{% img center /images/mine/cloudfront_7.png %}</p>
+<p><img class="center" src="/images/mine/cloudfront_7.png"></p>
 
 <p>Check out your Heroku logs and you'll note fewer hits in this case -- dynamic pages are still being loaded, however, static assets are not anymore -- that's the job of your CDN!</p>
 
@@ -210,57 +408,6 @@ Tag.collection.insert tags
 <p>In the code above, the <code>insert</code> takes a collection of hashes; what's more, the <code>insert</code> is tied to the <code>tags</code> collection via the <code>Tag.collection</code> call.</p>
 
 <p>Batch inserts are always faster if you have a lot of similar documents -- in our case, we saw a <em>tremendous</em> performance increase when employing batching.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Testing Rails migrations]]></title>
-    <link href="http://thediscoblog.com/blog/2013/02/18/testing-rails-migrations/"/>
-    <updated>2013-02-18T16:22:00-05:00</updated>
-    <id>http://thediscoblog.com/blog/2013/02/18/testing-rails-migrations</id>
-    <content type="html"><![CDATA[<p>I recently found myself searching <a href="http://stackoverflow.com/">Stackoverflow</a> and Google for various techniques for automatically testing <a href="http://guides.rubyonrails.org/migrations.html">Rails migrations</a>. I was surprised not to have found <a href="http://stackoverflow.com/questions/6079016/how-do-i-test-rails-migrations">too much</a> information though. While testing a migration is fairly straightforward (migrations are classes and you can easily invoke corresponding methods); the challenge can be setting models up properly. That is, migrations are a tool to update an underlying database to reflect changes in models -- by the time you are writing a migration, the models <em>already</em> reflect what should be.</p>
-
-<p>Accordingly, to test a migration, you need to set up your test with how things were and then run your migration and verify things have migrated.  As it turns out, this is super easy to do with a document oriented database like <a href="http://www.mongodb.org/">MongoDB</a>. For this particular project, we're using <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a>,  which is an Object-Document-Mapper (or ODM) for MongoDB and we're also using a nifty gem dubbed <a href="https://github.com/adacosta/mongoid_rails_migrations">mongoid_rails_migrations</a>, which facilitates writing Mongoid migrations.</p>
-
-<p>In order to reflect the state of the underlying datastore before running a migration, I needed to remove a particular collection, which due to changes in our models, is automatically populated with meta data when various events occur (think <a href="http://en.wikipedia.org/wiki/Database_trigger">relational trigger</a> here, for example). As you can probably see, as this new collection doesn't exist in production, all the existing data in production needs some corresponding default meta data to reflect the new requirements which brought this collection to life.</p>
-
-<p>Accordingly, once I initialize my models and the corresponding collection is populated, I need to completely <a href="http://docs.mongodb.org/manual/reference/method/db.collection.drop/">drop the collection</a>. Then, I can run my migration and then verify that the previously nuked collection is present with all the required data.</p>
-
-<p>In my case, I'm using <a href="https://github.com/thoughtbot/shoulda">shoulda</a> in concert with <a href="http://ruby-doc.org/stdlib-1.9.3/libdoc/test/unit/rdoc/Test/Unit.html">Test::Unit</a>, but the details of a test framework really don't matter -- in any case, you'll need to load your migration, which can be done via a <code>require</code> statement like so:</p>
-
-<p><code>ruby Requiring a migration
-require File.join(Rails.root, 'db', 'migrate', '20130217194234_member_app_roles_permissions')
-</code></p>
-
-<p>In my <a href="http://en.wikipedia.org/wiki/Test_fixture">fixture</a> logic, I've initialized a few objects and related them, which automatically creates the aforementioned meta data collection; consequently, I need to do two things. First, get a connection to the underlying test datastore and then drop that collection.</p>
-
-<p><code>ruby Obtaining a connection and dropping a collection
-db = @account.db
-db['member_app_roles'].drop
-</code></p>
-
-<p>Now I'm ready to run my migration -- it's as simple as invoking the <a href="http://www.railstips.org/blog/archives/2009/05/11/class-and-instance-methods-in-ruby/">class method</a> <code>up</code>!</p>
-
-<p><code>ruby Invoking a migration
-MemberAppRolesPermissions.up
-</code></p>
-
-<p>Once the migration has finished running, I can then verify that everything is cool and copasetic. In this case, I need to go directly to the datastore because those objects in memory won't reflect my changes just yet.</p>
-
-<p>``` ruby Asserting things worked!
-member = Member.find(member.id)</p>
-
-<p>assert_equal 2, member.member_app_roles.size
-member.member_app_roles.each do |app_role|
-  assert_equal 'admin', app_role.role
-  assert_equal member, app_role.member
-  assert_not_nil app_role.app
-end
-```</p>
-
-<p>As a benefit of thinking through how to test a migration, you end up unveiling how you'd construct the migration's <code>down</code> method. That is, in my case, to roll back, all I need to do is blow away the <code>member_app_roles</code> collection!</p>
-
-<p>As you can see, testing migrations isn't terribly difficult (probably a good reason why I haven't found too much information about it); the key aspect is the logic that is applied to verify your migration actually worked. It should be noted that while I executed this test in the context of a document oriented database, you could certainly do the same in a relational database. For example, by dropping  columns, tables, etc before running a migration. Either way, testing a migration is a snap. Can you dig it?</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SQS | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/sqs/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-12-26T22:10:24-05:00</updated>
+  <updated>2013-12-29T14:58:27-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless/"/>
     <updated>2013-10-09T18:04:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless</id>
-    <content type="html"><![CDATA[<p>{% img left /images/mine/time1.jpg %}When it comes to queues, whether they're implemented as <a href="http://en.wikipedia.org/wiki/Java_Message_Service">JMS</a>, database tables (i.e. what Ruby's <a href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Delayed::Job</a> uses for a queue), or even <a href="http://aws.amazon.com/sqs/">Amazon's SQS</a>, the most common metric used to evaluate the state of a queue is its length. In essence, one derives an efficiency metric based upon how many messages are residing in a queue at any given time. If there are just a few messages, the queue is operating efficiently. If there are numerous messages, things are inefficient and alarms must be sounded.</p>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/time1.jpg">When it comes to queues, whether they're implemented as <a href="http://en.wikipedia.org/wiki/Java_Message_Service">JMS</a>, database tables (i.e. what Ruby's <a href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Delayed::Job</a> uses for a queue), or even <a href="http://aws.amazon.com/sqs/">Amazon's SQS</a>, the most common metric used to evaluate the state of a queue is its length. In essence, one derives an efficiency metric based upon how many messages are residing in a queue at any given time. If there are just a few messages, the queue is operating efficiently. If there are numerous messages, things are inefficient and alarms must be sounded.</p>
 
 <!-- more -->
 
@@ -133,7 +133,7 @@ sqs.receive(new ReceiveCallback() {
     <link href="http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks/"/>
     <updated>2013-09-29T16:30:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/callback.jpg %}Because it's my bag, I like <a href="http://thediscoblog.com/blog/categories/javascript/">JavaScript</a>. In fact, I've grown to love JavaScritp's asynchronous <a href="http://en.wikipedia.org/wiki/Callback_(computer_programming">callback oriented style of programming</a>. Consequently, when I find myself in a non-JavaScript environment, say, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, I tend to miss using callbacks.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/callback.jpg">Because it's my bag, I like <a href="http://thediscoblog.com/blog/categories/javascript/">JavaScript</a>. In fact, I've grown to love JavaScritp's asynchronous <a href="http://en.wikipedia.org/wiki/Callback_(computer_programming">callback oriented style of programming</a>. Consequently, when I find myself in a non-JavaScript environment, say, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, I tend to miss using callbacks.</p>
 
 <p>The good news is that you can <em>emulate</em> asynchronous callbacks in Java. In fact, I did just that recently with a library I've dubbed <a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">SQS adapter</a> for AWS's Java <a href="http://aws.amazon.com/sqs/">SQS</a> library.</p>
 

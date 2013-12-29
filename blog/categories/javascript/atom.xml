@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-12-26T22:10:24-05:00</updated>
+  <updated>2013-12-29T14:58:27-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -18,7 +18,7 @@
     <link href="http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks/"/>
     <updated>2013-09-29T16:30:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/callback.jpg %}Because it's my bag, I like <a href="http://thediscoblog.com/blog/categories/javascript/">JavaScript</a>. In fact, I've grown to love JavaScritp's asynchronous <a href="http://en.wikipedia.org/wiki/Callback_(computer_programming">callback oriented style of programming</a>. Consequently, when I find myself in a non-JavaScript environment, say, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, I tend to miss using callbacks.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/callback.jpg">Because it's my bag, I like <a href="http://thediscoblog.com/blog/categories/javascript/">JavaScript</a>. In fact, I've grown to love JavaScritp's asynchronous <a href="http://en.wikipedia.org/wiki/Callback_(computer_programming">callback oriented style of programming</a>. Consequently, when I find myself in a non-JavaScript environment, say, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, I tend to miss using callbacks.</p>
 
 <p>The good news is that you can <em>emulate</em> asynchronous callbacks in Java. In fact, I did just that recently with a library I've dubbed <a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">SQS adapter</a> for AWS's Java <a href="http://aws.amazon.com/sqs/">SQS</a> library.</p>
 
@@ -121,7 +121,7 @@ private void send(final AmazonSQS sqs, final String queueURL, final String messa
     <link href="http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers/"/>
     <updated>2013-09-14T08:37:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/old-beer.jpg %}Sadly, lots of early Internet beer recipes aren't necessarily in an easily digestible format; that is, these recipes are <em>unstructured</em> intermixed lists of directions and ingredients often originally composed in an email or forum post.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/old-beer.jpg">Sadly, lots of early Internet beer recipes aren't necessarily in an easily digestible format; that is, these recipes are <em>unstructured</em> intermixed lists of directions and ingredients often originally composed in an email or forum post.</p>
 
 <p>So while it's hard to easily put these recipes into traditional data stores (ostensibly for easier searching), they're perfect for <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">ElasticSearch</a> in their current form.</p>
 
@@ -262,7 +262,7 @@ for doc in data.hits.hits
     <link href="http://thediscoblog.com/blog/2013/08/13/whiskered-node-views/"/>
     <updated>2013-08-13T12:00:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/13/whiskered-node-views</id>
-    <content type="html"><![CDATA[<p>{% img right /images/mine/mustache_template.png %}As we draw closer to the glorious month of <a href="http://us.movember.com/">Movember</a>, I find myself pondering the <a href="http://paularmstrong.github.io/node-templates/">myriad template engines</a> available for Node apps. The most popular is still probably <a href="http://jade-lang.com/">Jade</a> as its syntax is <a href="http://haml.info/">Haml</a>-like and results in quite clean views, lacking in HTMLish clutter.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mustache_template.png">As we draw closer to the glorious month of <a href="http://us.movember.com/">Movember</a>, I find myself pondering the <a href="http://paularmstrong.github.io/node-templates/">myriad template engines</a> available for Node apps. The most popular is still probably <a href="http://jade-lang.com/">Jade</a> as its syntax is <a href="http://haml.info/">Haml</a>-like and results in quite clean views, lacking in HTMLish clutter.</p>
 
 <p>While Jade is handy, it takes some time to get used to. Plus, if you find yourself working with a UI person who prefers to speak in HTML, you'll find yourself translating between HTML and Jade (which isn't that hard with web apps like <a href="http://html2jade.aaron-powell.com/">HTML2Jade</a>, but nevertheless involves an extra <em>translation</em> step).</p>
 
@@ -273,9 +273,7 @@ for doc in data.hits.hits
 
 <p>In the world of Node, there are <a href="https://github.com/raycmorgan/Mu">a few</a> Mustache implementations. One of the more interesting ones that I've used is <a href="https://github.com/gsf/whiskers.js/">Whiskers</a>. Whiskers is fairly lightweight and doesn't offer a lot of bells and whistles. As the project's README states</p>
 
-<p>{% blockquote https://github.com/gsf/whiskers.js/ https://github.com/gsf/whiskers.js/ About Whiskers.js %}
-Whiskers is focused on template readability. By limiting template logic, careful preparation of the context is encouraged, and the processing and formatting of data is kept separate from the design of the display.
-{% endblockquote %}</p>
+<p><blockquote><p>Whiskers is focused on template readability. By limiting template logic, careful preparation of the context is encouraged, and the processing and formatting of data is kept separate from the design of the display.</p><footer><strong>https://github.com/gsf/whiskers.js/</strong> <cite><a href='https://github.com/gsf/whiskers.js/'>About Whiskers.js</a></cite></footer></blockquote></p>
 
 <p>Accordingly, you can do variable substitution, conditional logic, and looping out-of-the-box easily. But that's about all.</p>
 
@@ -348,13 +346,11 @@ res.render 'index', {words: allWords}
     <link href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/"/>
     <updated>2013-08-07T21:09:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters</id>
-    <content type="html"><![CDATA[<p>{% img right https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114.<em>V379662584</em>.png %}Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114.<em>V379662584</em>.png">Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
 
 <p>As I wrote almost a year ago:</p>
 
-<p>{% blockquote thediscoblog.com http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/ Past Performance Is No Guarantee of Future Results %}
-software delivery on the mobile platform is, at least for the foreseeable future, firmly established via app stores. And app stores cater to native apps (100% native and/or hybrid) only. The average person will not look for useful apps via their device’s browser: that route is still a jungle. And, at this point, there is no viable pure play mobile web app delivery channel.
-{% endblockquote %}</p>
+<p><blockquote><p>software delivery on the mobile platform is, at least for the foreseeable future, firmly established via app stores. And app stores cater to native apps (100% native and/or hybrid) only. The average person will not look for useful apps via their device’s browser: that route is still a jungle. And, at this point, there is no viable pure play mobile web app delivery channel.</p><footer><strong>thediscoblog.com</strong> <cite><a href='http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/'>Past Performance Is No Guarantee of Future Results</a></cite></footer></blockquote></p>
 
 <p>Today, it's still true that the most convenient mechanism  for app delivery on mobile devices (and increasingly desktops) is via various app stores. And until today, HTML5 apps were not included in these app stores (unless they were wrapped by some hybrid-web container like <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">PhoneGap</a>).</p>
 
@@ -367,9 +363,7 @@ software delivery on the mobile platform is, at least for the foreseeable future
 
 <p>As <a href="https://developer.amazon.com/blog/author/Mike+Hines.html">Mike Hines</a> of Amazon puts it:</p>
 
-<p>{% blockquote https://developer.amazon.com/blog/ https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html Amazon is Now Accepting HTML5 Web Apps—Making it Easy for You to Reach Millions of Kindle Fire and Android Customers Worldwide %}
-Starting today, you can submit your web apps and mobile optimized web sites and have them merchandised alongside native apps on Amazon and Kindle Fire in nearly 200 countries worldwide, without any third-party software or doing any native app development.
-{% endblockquote %}</p>
+<p><blockquote><p>Starting today, you can submit your web apps and mobile optimized web sites and have them merchandised alongside native apps on Amazon and Kindle Fire in nearly 200 countries worldwide, without any third-party software or doing any native app development.</p><footer><strong>https://developer.amazon.com/blog/</strong> <cite><a href='https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html'>Amazon Is Now Accepting HTML5 Web Apps—Making It Easy for You to Reach Millions of Kindle Fire and Android Customers Worldwide</a></cite></footer></blockquote></p>
 
 <p>This is big news for HTML5 developers. A direct channel to the masses and monetization APIs to boot -- what more could you ask for? Standby folks because it's about to get even more interesting, as I'm willing to bet that Google and Apple will follow suit in the near future.</p>
 ]]></content>
@@ -380,7 +374,7 @@ Starting today, you can submit your web apps and mobile optimized web sites and 
     <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
     <updated>2013-07-30T12:52:00-04:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
-    <content type="html"><![CDATA[<p>{% img left /images/mine/swipe-right.png %}I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
 
 <p>Implementing right and left swipes in an <a href="http://jquerymobile.com/">jQuery Mobile</a> app is fairly straightforward, but there are a few gotchas that I was able to piece together via multiple <a href="http://stackoverflow.com/questions/7533772/how-to-swipe-between-several-jquery-mobile-pages">stackoverflow threads</a>, blogs, and finally <a href="http://api.jquerymobile.com/">jQuery Mobile's own documentation</a>.</p>
 
