@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Redis | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/redis/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2013-12-29T14:58:27-05:00</updated>
+  <updated>2014-01-06T14:03:37-05:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[HipChat's 1 billion messages served]]></title>
+    <link href="http://thediscoblog.com/blog/2014/01/06/hipchats-1-billion-messages-served/"/>
+    <updated>2014-01-06T13:50:00-05:00</updated>
+    <id>http://thediscoblog.com/blog/2014/01/06/hipchats-1-billion-messages-served</id>
+    <content type="html"><![CDATA[<p>There's an <a href="http://blog.hipchat.com/2013/10/16/how-hipchat-scales-to-1-billion-messages/">instructive post on the HipChat blog</a> regarding how their product's message count has risen from 110 million to over a billion since they were acquired by Atlassian. Central to their scaling strategy to meet data growth was their migration from Lucene to <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a>.</p>
+
+<!-- more -->
+
+
+<p>In their words they:</p>
+
+<p><blockquote><p>kicked Lucene to the curb in favor of Elasticsearch.</p><footer><strong>Zuhaib Siddique</strong> <cite><a href='http://blog.hipchat.com/2013/10/16/how-hipchat-scales-to-1-billion-messages/'>How HipChat Scales to 1 Billion Messages</a></cite></footer></blockquote></p>
+
+<p>Their reasoning? <a href="http://thediscoblog.com/blog/2013/09/03/effortless-elasticsearch-clustering/">Elasticsearch's cluttering</a>  allows them to:</p>
+
+<p><blockquote><p>add more nodes to our cluster when we need more capacity, so we can handle extra load while concurrently serving requests. Moreover, the ability to have our shards replicated across the cluster means if we ever lose an instance, we can still continue serving requests, reducing the amount of time HipChat Search is offline.</p><footer><strong>Zuhaib Siddique</strong> <cite><a href='http://blog.hipchat.com/2013/10/16/how-hipchat-scales-to-1-billion-messages/'>How HipChat Scales to 1 Billion Messages</a></cite></footer></blockquote></p>
+
+<p>The other two primary pieces of their architecture haven't changed: CouchDB and <a href="http://thediscoblog.com/blog/categories/redis/">Redis</a>. Interestingly, HipChat <a href="http://www.ibm.com/developerworks/library/j-javadev2-11/">shards</a> Redis data:</p>
+
+<p><blockquote><p>we shard our data over 3 Redis servers, with each server having its own slave.</p><footer><strong>Zuhaib Siddique</strong> <cite><a href='http://blog.hipchat.com/2013/10/16/how-hipchat-scales-to-1-billion-messages/'>How HipChat Scales to 1 Billion Messages</a></cite></footer></blockquote></p>
+
+<p>Sharding in <a href="http://redis.io/">Redis</a> isn't supported out of the box and requires an application to determine how to partition data across shards.  I wonder how HipChat data is partitioned and if their strategy evenly smears data across their shards -- like with any sharing strategy, once you've sharded on a particular key, <a href="http://www.javaworld.com/article/2073449/think-twice-before-sharding.html">it's extremely difficult to re-shard</a>.</p>
+
+<p>"<a href="http://blog.hipchat.com/2013/10/16/how-hipchat-scales-to-1-billion-messages/">How HipChat scales to 1 Billion Messages</a>" is a good read -- so what are you waiting for? Check <a href="http://blog.hipchat.com/2013/10/16/how-hipchat-scales-to-1-billion-messages/">it out</a>!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Sampling Redis keys for memory consumption]]></title>
