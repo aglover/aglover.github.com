@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-01-06T14:03:37-05:00</updated>
+  <updated>2014-01-24T21:11:14-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Ahoy there callbacks!]]></title>
     <link href="http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks/"/>
-    <updated>2013-09-29T16:30:00-04:00</updated>
+    <updated>2013-09-29T16:30:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/callback.jpg">Because it's my bag, I like <a href="http://thediscoblog.com/blog/categories/javascript/">JavaScript</a>. In fact, I've grown to love JavaScritp's asynchronous <a href="http://en.wikipedia.org/wiki/Callback_(computer_programming">callback oriented style of programming</a>. Consequently, when I find myself in a non-JavaScript environment, say, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, I tend to miss using callbacks.</p>
 
@@ -119,7 +119,7 @@ private void send(final AmazonSQS sqs, final String queueURL, final String messa
   <entry>
     <title type="html"><![CDATA[Understanding ElasticSearch analyzers]]></title>
     <link href="http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers/"/>
-    <updated>2013-09-14T08:37:00-04:00</updated>
+    <updated>2013-09-14T08:37:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/old-beer.jpg">Sadly, lots of early Internet beer recipes aren't necessarily in an easily digestible format; that is, these recipes are <em>unstructured</em> intermixed lists of directions and ingredients often originally composed in an email or forum post.</p>
 
@@ -260,7 +260,7 @@ for doc in data.hits.hits
   <entry>
     <title type="html"><![CDATA[Whiskered Node views]]></title>
     <link href="http://thediscoblog.com/blog/2013/08/13/whiskered-node-views/"/>
-    <updated>2013-08-13T12:00:00-04:00</updated>
+    <updated>2013-08-13T12:00:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/13/whiskered-node-views</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/mustache_template.png">As we draw closer to the glorious month of <a href="http://us.movember.com/">Movember</a>, I find myself pondering the <a href="http://paularmstrong.github.io/node-templates/">myriad template engines</a> available for Node apps. The most popular is still probably <a href="http://jade-lang.com/">Jade</a> as its syntax is <a href="http://haml.info/">Haml</a>-like and results in quite clean views, lacking in HTMLish clutter.</p>
 
@@ -344,7 +344,7 @@ res.render 'index', {words: allWords}
   <entry>
     <title type="html"><![CDATA[Why Amazon Appstore's support of HTML5 matters]]></title>
     <link href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/"/>
-    <updated>2013-08-07T21:09:00-04:00</updated>
+    <updated>2013-08-07T21:09:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters</id>
     <content type="html"><![CDATA[<p><img class="right" src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114.<em>V379662584</em>.png">Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
 
@@ -372,7 +372,7 @@ res.render 'index', {words: allWords}
   <entry>
     <title type="html"><![CDATA[Swipe gestures in jQuery Mobile apps]]></title>
     <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
-    <updated>2013-07-30T12:52:00-04:00</updated>
+    <updated>2013-07-30T12:52:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
     <content type="html"><![CDATA[<p><img class="left" src="/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
 

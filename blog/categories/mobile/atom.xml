@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mobile | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/mobile/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-01-06T14:03:37-05:00</updated>
+  <updated>2014-01-24T21:11:14-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[The significance of HTML5]]></title>
     <link href="http://thediscoblog.com/blog/2013/10/05/the-significance-of-html5/"/>
-    <updated>2013-10-05T21:18:00-04:00</updated>
+    <updated>2013-10-05T21:18:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/10/05/the-significance-of-html5</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/no-flash.jpg"><a href="http://thediscoblog.com/blog/categories/html5/">HTML5</a> is important for three reasons. And its importance starts with the end of browser plugins. That's right. With HTML5, rich media aspects that were formally handled by plugins (think Flash), are now built-in. That's why there are <a href="http://www.w3schools.com/html/html5_new_elements.asp">new media tags</a> like <code>&lt;audio&gt;</code> and <code>&lt;video&gt;</code>.</p>
 
@@ -46,7 +46,7 @@
   <entry>
     <title type="html"><![CDATA[App signing: iOS versus Android]]></title>
     <link href="http://thediscoblog.com/blog/2013/09/26/app-signing-ios-versus-android/"/>
-    <updated>2013-09-26T10:16:00-04:00</updated>
+    <updated>2013-09-26T10:16:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/26/app-signing-ios-versus-android</id>
     <content type="html"><![CDATA[<p><img class="left" src="/images/mine/sealed.jpg">Apple's app signing process can be a real pain-in-the-neck; nevertheless, it works to keep apps trusted. You know when you download a Bank of America app from iTunes that it's the real thing. You know that the app comes from <em>the</em> Bank of America.</p>
 
@@ -64,7 +64,7 @@
   <entry>
     <title type="html"><![CDATA[Mobile for the masses: Sign, seal, and deliver your Android app]]></title>
     <link href="http://thediscoblog.com/blog/2013/09/17/mobile-for-the-masses-sign-seal-and-deliver-your-android-app/"/>
-    <updated>2013-09-17T15:20:00-04:00</updated>
+    <updated>2013-09-17T15:20:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/17/mobile-for-the-masses-sign-seal-and-deliver-your-android-app</id>
     <content type="html"><![CDATA[<p>The fifth article in <a href="http://www.ibm.com/developerworks/">IBM developerWorks</a>' series <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mobile+for+the+masses">Mobile for the Masses</a> has been published! <a href="http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html">This hip article</a> shows you how to add a multiple-choice quiz to your Android mobile app, then sign it with a secure digital certificate.</p>
 
@@ -84,7 +84,7 @@
   <entry>
     <title type="html"><![CDATA[8% is itty-bitty, but it matters]]></title>
     <link href="http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters/"/>
-    <updated>2013-09-09T15:49:00-04:00</updated>
+    <updated>2013-09-09T15:49:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters</id>
     <content type="html"><![CDATA[<p>I saw some news related to <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">Microsoft Windows Phone</a> that gave me pause for thought. Specifically, <a href="http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/">I read an article</a> that stated:</p>
 
@@ -110,7 +110,7 @@
   <entry>
     <title type="html"><![CDATA[Why Amazon Appstore's support of HTML5 matters]]></title>
     <link href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/"/>
-    <updated>2013-08-07T21:09:00-04:00</updated>
+    <updated>2013-08-07T21:09:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters</id>
     <content type="html"><![CDATA[<p><img class="right" src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114.<em>V379662584</em>.png">Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
 

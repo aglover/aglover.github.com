@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-01-06T14:03:37-05:00</updated>
+  <updated>2014-01-24T21:11:14-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Just require tire to inquire]]></title>
     <link href="http://thediscoblog.com/blog/2013/12/29/just-require-tire-to-inquire/"/>
-    <updated>2013-12-29T12:53:00-05:00</updated>
+    <updated>2013-12-29T12:53:00-08:00</updated>
     <id>http://thediscoblog.com/blog/2013/12/29/just-require-tire-to-inquire</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/es-bonzai.jpg">In the land of <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a> there's a few client libraries for <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a>, however, one stands above the rest with a comprehensive set of features and remarkable <a href="http://karmi.github.io/retire/">documentation</a>: <a href="https://github.com/karmi/retire">Tire</a>.</p>
 
@@ -214,7 +214,7 @@ assert_equal "Todd Enders' Witbier", results[0].name
   <entry>
     <title type="html"><![CDATA[Lickety-split custom validations in Rails]]></title>
     <link href="http://thediscoblog.com/blog/2013/06/12/lickety-split-custom-validations-in-rails/"/>
-    <updated>2013-06-12T13:19:00-04:00</updated>
+    <updated>2013-06-12T13:19:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/12/lickety-split-custom-validations-in-rails</id>
     <content type="html"><![CDATA[<p>Have a highly specific, yet custom validation for a particular field on one of your <a href="http://thediscoblog.com/blog/categories/rails/">Rails</a> model objects? Don't want to create a <code>ActiveModel::Validator</code> type? Not a problem!</p>
 
@@ -243,7 +243,7 @@ validate :uri_should_start_with_protocol
   <entry>
     <title type="html"><![CDATA[Backgrounding tasks in Heroku with Delayed Job]]></title>
     <link href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
-    <updated>2013-06-10T12:56:00-04:00</updated>
+    <updated>2013-06-10T12:56:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what's more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn't be any easier</a>.</p>
 
@@ -309,7 +309,7 @@ $&gt; heroku logs -p worker -t
   <entry>
     <title type="html"><![CDATA[The Rails, CloudFront, and Heroku performance hat-trick]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
-    <updated>2013-05-01T09:10:00-04:00</updated>
+    <updated>2013-05-01T09:10:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
 
@@ -390,7 +390,7 @@ config.action_controller.asset_host = 'the domain name from AWS Dashboard'
   <entry>
     <title type="html"><![CDATA[Mongoid batch inserts]]></title>
     <link href="http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts/"/>
-    <updated>2013-03-27T11:34:00-04:00</updated>
+    <updated>2013-03-27T11:34:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts</id>
     <content type="html"><![CDATA[<p>In SQL land, all databases support batch inserts. Batch inserts are an effective and efficient mechanism to insert a lot of similar data. That is, instead of issuing x insert statements, you execute 1 insert with x records. This is much more efficient because the insert statement doesn't need to be re-parsed x times, there is only 1 network trip as opposed to x, and in the case of transactions, there is only 1 transaction instead of x. When compared to x inserts, batch inserts are always faster.</p>
 

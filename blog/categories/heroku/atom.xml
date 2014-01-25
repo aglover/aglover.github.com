@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Heroku | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/heroku/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-01-06T14:03:37-05:00</updated>
+  <updated>2014-01-24T21:11:14-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,9 +14,45 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Continuous Delivery for Heroku with Jenkins]]></title>
+    <link href="http://thediscoblog.com/blog/2014/01/24/continuous-delivery-for-heroku-with-jenkins/"/>
+    <updated>2014-01-24T20:43:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2014/01/24/continuous-delivery-for-heroku-with-jenkins</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/jenkins.png">A <a href="http://thediscoblog.com/blog/categories/devops/">continuous delivery pipeline</a> that leverages <a href="http://jenkins-ci.org/">Jenkins</a> and targets <a href="http://heroku.com/">Heroku</a> is fairly simple to set up, provided you install the Jenkins Git plugin. With this pipeline, changes to a specific Git branch will result in a Heroku deployment.</p>
+
+<p>For this deployment process to work nicely, you should use at least two Git branches, as you'll want to have one branch targeted for auto-deploys and another that doesn't (as it represents active development).  For example, following the <a href="http://nvie.com/posts/a-successful-git-branching-model/">git-flow</a> convention, those two branches could be named <code>development</code> and <code>master</code>, where changes to <code>master</code> are deployed to Heroku and changes to <code>development</code> aren't. Thus, you will have at least two Jenkins jobs that monitor <em>each</em> of these branches.</p>
+
+<!-- more -->
+
+
+<p>Naturally, this pipeline process is language agnostic -- <a href="http://thediscoblog.com/blog/categories/node/">Node</a>, <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a>, <a href="http://thediscoblog.com/blog/categories/java/">Java</a> -- it doesn't matter what you do during your build as this entire process is choreographed via Git.</p>
+
+<p>When approaching Heroku auto-deployment from Jenkins, <em>don't bother with Heroku's API</em> because it's much easier to use the Git publisher feature of Jenkins to push a branch from your repository to Heroku (which uses Git anyway).</p>
+
+<p>At a high level, you'll need to define a Jenkins job that monitors your <code>master</code> Git branch; if there are changes, this job will run whatever your build needs to do and as a post-build step you can publish that branch to Heroku. It's that easy.</p>
+
+<p>To configure this pipeline, you will need the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin">Git plugin</a>. With the Git plugin installed, create a job and in the Source Code management section, add your source Git repository and then add another repository which is the Heroku remote repository.</p>
+
+<p><img class="center" src="/images/mine/scm-jenkins1.png"></p>
+
+<p>Be sure to give the Heroku repository a name like <code>heroku</code>. This is done by clicking the Advanced button under the Credentials section.</p>
+
+<p>Second, in the Post-build Actions section, you'll configure a Git Publisher.</p>
+
+<p><img class="center" src="/images/mine/git-pub.png"></p>
+
+<p>In this case, the Git repository you are going to publish to will be the Heroku one defined earlier.  Hit the Add Branch button and be sure to indicate the <code>master</code> branch as the Branch to push and the Target remote name should be the name your gave to the remote Heroku repository in the Source Code Management section (i.e. <code>heroku</code>).</p>
+
+<p><img class="center" src="/images/mine/scm-jenkins2.png"></p>
+
+<p>Depending on how you've set up your Build Trigger on your job, when a build completes, Jenkins will push the resultant snapshot to the Heroku repository, <a href="http://stackoverflow.com/questions/16840196/tutorial-on-pushing-to-heroku-via-jenkins/20828183#20828183">resulting in a deployment</a>! Now wasn't that easy, man?</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Heroku deployments with Git branches]]></title>
     <link href="http://thediscoblog.com/blog/2013/12/26/heroku-deployments-with-git-branches/"/>
-    <updated>2013-12-26T21:46:00-05:00</updated>
+    <updated>2013-12-26T21:46:00-08:00</updated>
     <id>http://thediscoblog.com/blog/2013/12/26/heroku-deployments-with-git-branches</id>
     <content type="html"><![CDATA[<p><img class="left" src="/images/mine/heroku-logo-light.png">Single branch development is easy. But this strategy's easiness blows up once you release code to the general public.  If you need to hot-fix an instance of deployed code, while in the midst of a development cycle, single branch development gets in your way by requiring you think. On the other hand, having <em>more than one</em> branch at least allows you to jump back in time via an alternate branch to perform a patch, while not disturbing an unfinished developmental branch. And you can do this without having to think much.</p>
 
@@ -60,7 +96,7 @@ git push test
   <entry>
     <title type="html"><![CDATA[SSH &amp; Vagrant]]></title>
     <link href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/"/>
-    <updated>2013-10-16T15:55:00-04:00</updated>
+    <updated>2013-10-16T15:55:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant</id>
     <content type="html"><![CDATA[<p><a href="http://www.vagrantup.com/">Vagrant</a> is a handy tool for creating VMs. It's a lot like firing up an <a href="http://thediscoblog.com/blog/categories/aws/">EC2</a> instance, but in Vagrant's case, everything is localized. And best of all, it's free.</p>
 
@@ -129,7 +165,7 @@ vagrant destroy
   <entry>
     <title type="html"><![CDATA[Backgrounding tasks in Heroku with Delayed Job]]></title>
     <link href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/"/>
-    <updated>2013-06-10T12:56:00-04:00</updated>
+    <updated>2013-06-10T12:56:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what's more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn't be any easier</a>.</p>
 
@@ -195,7 +231,7 @@ $&gt; heroku logs -p worker -t
   <entry>
     <title type="html"><![CDATA[The Rails, CloudFront, and Heroku performance hat-trick]]></title>
     <link href="http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
-    <updated>2013-05-01T09:10:00-04:00</updated>
+    <updated>2013-05-01T09:10:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
 

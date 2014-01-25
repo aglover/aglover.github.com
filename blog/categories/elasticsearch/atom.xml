@@ -4,7 +4,7 @@
   <title><![CDATA[Category: elasticsearch | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/elasticsearch/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-01-06T14:03:37-05:00</updated>
+  <updated>2014-01-24T21:11:14-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[HipChat's 1 billion messages served]]></title>
     <link href="http://thediscoblog.com/blog/2014/01/06/hipchats-1-billion-messages-served/"/>
-    <updated>2014-01-06T13:50:00-05:00</updated>
+    <updated>2014-01-06T13:50:00-08:00</updated>
     <id>http://thediscoblog.com/blog/2014/01/06/hipchats-1-billion-messages-served</id>
     <content type="html"><![CDATA[<p>There's an <a href="http://blog.hipchat.com/2013/10/16/how-hipchat-scales-to-1-billion-messages/">instructive post on the HipChat blog</a> regarding how their product's message count has risen from 110 million to over a billion since they were acquired by Atlassian. Central to their scaling strategy to meet data growth was their migration from Lucene to <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a>.</p>
 
@@ -44,7 +44,7 @@
   <entry>
     <title type="html"><![CDATA[Just require tire to inquire]]></title>
     <link href="http://thediscoblog.com/blog/2013/12/29/just-require-tire-to-inquire/"/>
-    <updated>2013-12-29T12:53:00-05:00</updated>
+    <updated>2013-12-29T12:53:00-08:00</updated>
     <id>http://thediscoblog.com/blog/2013/12/29/just-require-tire-to-inquire</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/es-bonzai.jpg">In the land of <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a> there's a few client libraries for <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a>, however, one stands above the rest with a comprehensive set of features and remarkable <a href="http://karmi.github.io/retire/">documentation</a>: <a href="https://github.com/karmi/retire">Tire</a>.</p>
 
@@ -242,7 +242,7 @@ assert_equal "Todd Enders' Witbier", results[0].name
   <entry>
     <title type="html"><![CDATA[Elasticsearch in a box]]></title>
     <link href="http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box/"/>
-    <updated>2013-11-25T13:42:00-05:00</updated>
+    <updated>2013-11-25T13:42:00-08:00</updated>
     <id>http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box</id>
     <content type="html"><![CDATA[<p><img class="left" src="/images/mine/esbox.jpg">Are you looking to get going with <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a> as quickly as possible without having to worry about <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">installing Java or Elasticsearch</a> itself? Are you looking for a repeatable and automated mechanism for bringing up Elasticsearch instances for developmental and or testing purposes? While there's certainly a number of <a href="http://www.elasticsearch.org/">Elasticsearch</a>-as-a-platform service providers out there, there's one other option: use <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a>.</p>
 
@@ -296,7 +296,7 @@ vagrant destroy -f
   <entry>
     <title type="html"><![CDATA[I like my ElasticSearch a la Node.js]]></title>
     <link href="http://thediscoblog.com/blog/2013/09/21/i-like-my-elasticsearch-a-la-node-dot-js/"/>
-    <updated>2013-09-21T08:57:00-04:00</updated>
+    <updated>2013-09-21T08:57:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/21/i-like-my-elasticsearch-a-la-node-dot-js</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/320px-Pie_A_La_Mode.jpg">While <a href="http://thediscoblog.com/blog/categories/elasticsearch/">ElasticSearch</a> is easy enough to work with via its RESTful HTTP API, there are <a href="http://www.elasticsearch.org/guide/clients/">myriad client libraries</a> available in almost every conceivable programming language. If <a href="http://thediscoblog.com/blog/categories/node/">Node.js</a> is your language of choice, then there's at least two actively supported libraries available.</p>
 
@@ -431,7 +431,7 @@ done()
   <entry>
     <title type="html"><![CDATA[Understanding ElasticSearch analyzers]]></title>
     <link href="http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers/"/>
-    <updated>2013-09-14T08:37:00-04:00</updated>
+    <updated>2013-09-14T08:37:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/old-beer.jpg">Sadly, lots of early Internet beer recipes aren't necessarily in an easily digestible format; that is, these recipes are <em>unstructured</em> intermixed lists of directions and ingredients often originally composed in an email or forum post.</p>
 

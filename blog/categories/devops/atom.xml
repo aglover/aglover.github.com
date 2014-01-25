@@ -4,7 +4,7 @@
   <title><![CDATA[Category: DevOps | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-01-06T14:03:37-05:00</updated>
+  <updated>2014-01-24T21:11:14-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,9 +14,45 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Continuous Delivery for Heroku with Jenkins]]></title>
+    <link href="http://thediscoblog.com/blog/2014/01/24/continuous-delivery-for-heroku-with-jenkins/"/>
+    <updated>2014-01-24T20:43:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2014/01/24/continuous-delivery-for-heroku-with-jenkins</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/jenkins.png">A <a href="http://thediscoblog.com/blog/categories/devops/">continuous delivery pipeline</a> that leverages <a href="http://jenkins-ci.org/">Jenkins</a> and targets <a href="http://heroku.com/">Heroku</a> is fairly simple to set up, provided you install the Jenkins Git plugin. With this pipeline, changes to a specific Git branch will result in a Heroku deployment.</p>
+
+<p>For this deployment process to work nicely, you should use at least two Git branches, as you'll want to have one branch targeted for auto-deploys and another that doesn't (as it represents active development).  For example, following the <a href="http://nvie.com/posts/a-successful-git-branching-model/">git-flow</a> convention, those two branches could be named <code>development</code> and <code>master</code>, where changes to <code>master</code> are deployed to Heroku and changes to <code>development</code> aren't. Thus, you will have at least two Jenkins jobs that monitor <em>each</em> of these branches.</p>
+
+<!-- more -->
+
+
+<p>Naturally, this pipeline process is language agnostic -- <a href="http://thediscoblog.com/blog/categories/node/">Node</a>, <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a>, <a href="http://thediscoblog.com/blog/categories/java/">Java</a> -- it doesn't matter what you do during your build as this entire process is choreographed via Git.</p>
+
+<p>When approaching Heroku auto-deployment from Jenkins, <em>don't bother with Heroku's API</em> because it's much easier to use the Git publisher feature of Jenkins to push a branch from your repository to Heroku (which uses Git anyway).</p>
+
+<p>At a high level, you'll need to define a Jenkins job that monitors your <code>master</code> Git branch; if there are changes, this job will run whatever your build needs to do and as a post-build step you can publish that branch to Heroku. It's that easy.</p>
+
+<p>To configure this pipeline, you will need the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin">Git plugin</a>. With the Git plugin installed, create a job and in the Source Code management section, add your source Git repository and then add another repository which is the Heroku remote repository.</p>
+
+<p><img class="center" src="/images/mine/scm-jenkins1.png"></p>
+
+<p>Be sure to give the Heroku repository a name like <code>heroku</code>. This is done by clicking the Advanced button under the Credentials section.</p>
+
+<p>Second, in the Post-build Actions section, you'll configure a Git Publisher.</p>
+
+<p><img class="center" src="/images/mine/git-pub.png"></p>
+
+<p>In this case, the Git repository you are going to publish to will be the Heroku one defined earlier.  Hit the Add Branch button and be sure to indicate the <code>master</code> branch as the Branch to push and the Target remote name should be the name your gave to the remote Heroku repository in the Source Code Management section (i.e. <code>heroku</code>).</p>
+
+<p><img class="center" src="/images/mine/scm-jenkins2.png"></p>
+
+<p>Depending on how you've set up your Build Trigger on your job, when a build completes, Jenkins will push the resultant snapshot to the Heroku repository, <a href="http://stackoverflow.com/questions/16840196/tutorial-on-pushing-to-heroku-via-jenkins/20828183#20828183">resulting in a deployment</a>! Now wasn't that easy, man?</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Elasticsearch in a box]]></title>
     <link href="http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box/"/>
-    <updated>2013-11-25T13:42:00-05:00</updated>
+    <updated>2013-11-25T13:42:00-08:00</updated>
     <id>http://thediscoblog.com/blog/2013/11/25/elasticsearch-in-a-box</id>
     <content type="html"><![CDATA[<p><img class="left" src="/images/mine/esbox.jpg">Are you looking to get going with <a href="http://thediscoblog.com/blog/categories/elasticsearch/">Elasticsearch</a> as quickly as possible without having to worry about <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">installing Java or Elasticsearch</a> itself? Are you looking for a repeatable and automated mechanism for bringing up Elasticsearch instances for developmental and or testing purposes? While there's certainly a number of <a href="http://www.elasticsearch.org/">Elasticsearch</a>-as-a-platform service providers out there, there's one other option: use <a href="https://github.com/aglover/coffer">Elasticsearch-in-a-box</a>.</p>
 
@@ -70,7 +106,7 @@ vagrant destroy -f
   <entry>
     <title type="html"><![CDATA[Provisioning Ubuntu with Java in 3 steps]]></title>
     <link href="http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/"/>
-    <updated>2013-11-18T17:34:00-05:00</updated>
+    <updated>2013-11-18T17:34:00-08:00</updated>
     <id>http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/mine/ubuntu.png"> <a href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">As I've written about before</a>, <a href="http://www.vagrantup.com/">Vagrant</a> is handy tool for creating <a href="http://www.vagrantbox.es/">localized VMs</a>. It's a lot like firing up <a href="http://thediscoblog.com/blog/categories/aws/">EC2</a> images, but, for the most part, things are localized (you can, by the way, use Vagrant to <a href="https://github.com/mitchellh/vagrant-aws">fire up EC2 images</a>). If you've ever used VMWare before, its the same thing, except Vagrant is free. You can create VMs of various operating systems, fire them up, and tear them down all with ease.</p>
 
