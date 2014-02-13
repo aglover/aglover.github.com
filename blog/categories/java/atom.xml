@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-01-24T21:11:14-08:00</updated>
+  <updated>2014-02-12T21:52:01-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ahoy there Maven Central]]></title>
+    <link href="http://thediscoblog.com/blog/2014/02/12/ahoy-there-maven-central/"/>
+    <updated>2014-02-12T20:54:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2014/02/12/ahoy-there-maven-central</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous <a href="http://thediscoblog.com/blog/categories/sqs/">SQS</a> adapter for <a href="http://thediscoblog.com/blog/categories/aws/">AWS's Java SQS library</a>, is now syncing with Maven Central. This means you can easily use Ahoy! in your Maven or Gradle builds.</p>
+
+<p>For example, if you want to <a href="http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks/">spice up your SQS</a> and you use Maven, just add the following dependency for your <code>pom.xml</code> file and you'll be rockin' it in no time, baby!</p>
+
+<p>``` xml Including Ahoy! into your Maven pom.xml
+<dependency></p>
+
+<pre><code>&lt;groupId&gt;com.github.aglover&lt;/groupId&gt;
+&lt;artifactId&gt;ahoy&lt;/artifactId&gt;
+&lt;version&gt;1.0.1&lt;/version&gt;
+</code></pre>
+
+<p></dependency>
+```</p>
+
+<p>You don't use Maven? But rather use Gradle? I've got you covered!</p>
+
+<p><code>groovy Adding Ahoy! into your Gradle build.gradle file
+compile 'com.github.aglover:ahoy:1.0.1'
+</code></p>
+
+<p>Check out <a href="http://mvnrepository.com/artifact/com.github.aglover/ahoy">mvnrepository.com</a> for how to include Ahoy! into your SBT build or other dependency management tool like Ivy.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Elasticsearch in a box]]></title>
@@ -284,109 +314,6 @@ sqs.receive(new ReceiveCallback() {
 <p>Note, if upon the receive of a message, Moo notices that a message has been waiting in a queue for more than the max queue wait time threshold configured for an associated <code>QueueWaitTimeCallback</code>, Moo will invoke it. Note, Moo can invoke more than one instance; thus, you can set up a chain to take various actions as times increase.</p>
 
 <p>Remember, a queue's length is usually a lagging indicator.  The metric that actually means something is how long a message resides in a queue. That's an actionable metric and <a href="https://github.com/aglover/moo">Moo</a> gives you the ability to do something about it! Can you dig it?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Ahoy there callbacks!]]></title>
-    <link href="http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks/"/>
-    <updated>2013-09-29T16:30:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/callback.jpg">Because it's my bag, I like <a href="http://thediscoblog.com/blog/categories/javascript/">JavaScript</a>. In fact, I've grown to love JavaScritp's asynchronous <a href="http://en.wikipedia.org/wiki/Callback_(computer_programming">callback oriented style of programming</a>. Consequently, when I find myself in a non-JavaScript environment, say, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, I tend to miss using callbacks.</p>
-
-<p>The good news is that you can <em>emulate</em> asynchronous callbacks in Java. In fact, I did just that recently with a library I've dubbed <a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">SQS adapter</a> for AWS's Java <a href="http://aws.amazon.com/sqs/">SQS</a> library.</p>
-
-<!-- more -->
-
-
-<p>For the uninitiated, <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">SQS is a cloud based messaging platform</a> -- with SQS you can create queues and put messages onto those queues, which can then be read -- later or immediately by some other process or the same exact process. All of this leverages Amazon’s massively redundant architecture to offer extremely high availability in the face of concurrent access.</p>
-
-<p>Asynchronous callbacks in Java can be achieved with two features: anonymous classes (containing one method) and Java's <code>java.util.concurrent</code> package.</p>
-
-<p>Because Java doesn't allow you to pass functions (or methods) <em>easily</em> as a parameter, to simulate a callback, you can create an interface that contains one method, which basically mimics a function. In the case of Ahoy, there are two interfaces: <code>MessageSendCallback</code> and <code>MessageReceivedCallback</code> -- both have one method: <code>onSend</code> and <code>onReceive</code> respectively. Accordingly, Ahoy!''s primary class, dubbed <code>SQSAdapter</code> exposes two simple methods: <code>send</code> and <code>receive</code> and both take their related callback interface.</p>
-
-<p>The most straightforward callback to understand is the <code>receive</code> method. As you can imagine, <code>receive</code> is intended to handle behavior when a message is received off of a particular queue. Thus, the <code>receive</code> method is defined as follows:</p>
-
-<p><code>java SQSAdapter's receive method
-public void receive(final MessageReceivedCallback callback) {}
-</code></p>
-
-<p>The <code>MessageReceivedCallback</code> interface looks like this:</p>
-
-<p>``` java The MessageReceivedCallback interface
-public interface MessageReceivedCallback {</p>
-
-<pre><code>public void onReceive(String messageId, String message);
-</code></pre>
-
-<p>}
-```</p>
-
-<p>Note, the <code>onReceive</code> method takes a message id (which is particular to SQS) and the message itself -- which in the case of SQS is always a <code>String</code> (that <code>String</code> can hold anything you want, keep in mind: JSON, XML, byte sequence, etc).</p>
-
-<p>Thus, clients of Ahoy! provide the intended behavior for a message when it is received. This behavior could be to write something to a database, generate another message and send it on another queue, you name it.</p>
-
-<p>Now the interesting part is the implementation of Ahoy!'s <code>receive</code> method. To achieve asynchronocity, I employed Java's <code>java.util.concurrent</code> package, which sadly, seems to be under appreciated.</p>
-
-<p>``` java The receive method's implementation with callback being invoked
-private void receive(final AmazonSQS sqs, final String queueURL, final MessageReceivedCallback callback) {
-  pool.execute(new Runnable() {</p>
-
-<pre><code>public void run() {
-  final List&lt;Message&gt; messages = sqs.receiveMessage(
-          new ReceiveMessageRequest(queueURL).withMaxNumberOfMessages(10).withWaitTimeSeconds(20)).getMessages();
-  if (messages.size() &gt; 0) {
-      for (final Message message : messages) {
-        callback.onReceive(message.getMessageId(), message.getBody());
-        sqs.deleteMessage(new DeleteMessageRequest(queueURL, message.getReceiptHandle()));
-      }
-  }
-}
-</code></pre>
-
-<p>  });
-}
-```</p>
-
-<p>With a fixed Thread pool, a thread is created, which waits for messages to arrive on a particular queue; when one shows up, the passed in <code>MessageReceivedCalledback</code> is invoked for each message.</p>
-
-<p>For an example of how this works for clients of Ahoy!, here's a test case that verifies the execution of the callback:</p>
-
-<p>``` java The receive method implemented
-final boolean[] wasReceived = {false};
-ahoy.receive(new MessageReceivedCallback() {
-  public void onReceive(String messageId, String message) {</p>
-
-<pre><code>wasReceived[0] = true;
-assertNotNull("message id was null", messageId);
-assertEquals("message wasn't " + origMessage, origMessage, message);
-</code></pre>
-
-<p>  }
-});
-```</p>
-
-<p>Likewise, sending a message is similar -- a new <code>Runnable</code> instance is created, which sends a particular message and invokes the passed in <code>MessageSentCallback</code>'s <code>onSend</code> method, passing in the newly sent messages's id.</p>
-
-<p>``` java The send method is also asynchronous
-private void send(final AmazonSQS sqs, final String queueURL, final String message, final MessageSentCallback callback) {
-  pool.execute(new Runnable() {</p>
-
-<pre><code>  public void run() {
-  SendMessageResult res = sqs.sendMessage(new SendMessageRequest(queueURL, message));
-  if (callback != null) {
-    callback.onSend(res.getMessageId());
-  }
-  }
-</code></pre>
-
-<p>  });
-}
-```</p>
-
-<p>Incidentally, the AWS Java SDK <em>does provide an asynchronous client</em>; however, this client's implementation leverages Java's <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html">Futures</a>. While <a href="http://nurkiewicz.blogspot.com/2013/02/javautilconcurrentfuture-basics.html">Futures are a neat concept</a>, Ahoy!'s implementation is more convenient (<em>at least for me and in the patterns of how I employ SQS</em>) than Futures as there isn't any polling involved once a message is sent or received.</p>
-
-<p>While callbacks aren't <a href="http://en.wikipedia.org/wiki/Function_object#In_Java">necessarily supported</a> natively in Java, you can emulate them quite nicely and achieve the same level of code conciseness as what's common in JavaScript. And if you need a handy way to interface with AWS SQS, <a href="https://github.com/aglover/ahoy">then give Ahoy! a try</a>! Can you dig it, man?</p>
 ]]></content>
   </entry>
   

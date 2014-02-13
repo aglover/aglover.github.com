@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>MoDevTablet 2012 video: Mobile Web Realities - The Disco Blog</title>
+  <title>Ahoy there Maven Central - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
@@ -20,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/">
+  <link rel="canonical" href="http://thediscoblog.com/blog/2014/02/12/ahoy-there-maven-central/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -85,7 +85,7 @@
   <header>
     
       
-        <h1 class="entry-title">MoDevTablet 2012 Video: Mobile Web Realities</h1>
+        <h1 class="entry-title">Ahoy There Maven Central</h1>
       
     
     
@@ -102,24 +102,38 @@
   
 
 
-<time datetime="2012-09-25T12:51:00-07:00" pubdate data-updated="true">Sep 25<span>th</span>, 2012</time>
+<time datetime="2014-02-12T20:54:00-08:00" pubdate data-updated="true">Feb 12<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Recently, I had the distinct pleasure of speaking at <a href="http://modevtablet.com/">MoDevTablet</a> where I gave a presentation entitled &#8220;Mobile Web Realities&#8221; and the <a href="http://www.meetup.com/modevdc/">good folks who put on the conference</a> recorded it.</p>
+<div class="entry-content"><p><a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous <a href="http://thediscoblog.com/blog/categories/sqs/">SQS</a> adapter for <a href="http://thediscoblog.com/blog/categories/aws/">AWS&#8217;s Java SQS library</a>, is now syncing with Maven Central. This means you can easily use Ahoy! in your Maven or Gradle builds.</p>
 
-<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/rqfJS3F_YYk "></iframe></div>
+<p>For example, if you want to <a href="http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks/">spice up your SQS</a> and you use Maven, just add the following dependency for your <code>pom.xml</code> file and you&#8217;ll be rockin&#8217; it in no time, baby!</p>
+
+<figure class='code'><figcaption><span>Including Ahoy! into your Maven pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;groupId&gt;</span>com.github.aglover<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;artifactId&gt;</span>ahoy<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;version&gt;</span>1.0.1<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>You don&#8217;t use Maven? But rather use Gradle? I&#8217;ve got you covered!</p>
+
+<figure class='code'><figcaption><span>Adding Ahoy! into your Gradle build.gradle file</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">compile</span> <span class="s1">&#39;com.github.aglover:ahoy:1.0.1&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p></p>
-
-
-<p>In summary: a year ago, hybrid development frameworks like <a href="http://phonegap.com/">PhoneGap</a> that leverage HTML5 were poised to radically alter mobile app development, but the potential has failed to live up to the promise: Faster/Easier/Cheaper <em>doesn&#8217;t always mean</em> Better.</p>
+<p>Check out <a href="http://mvnrepository.com/artifact/com.github.aglover/ahoy">mvnrepository.com</a> for how to include Ahoy! into your SBT build or other dependency management tool like Ivy.</p>
 </div>
 <!-- related posts -->
 <div id='related_posts'>
@@ -131,23 +145,23 @@
           
       
           
-            <li class="related"><a href="/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">Cost and the Great Mobile App Debate</a></li>
+            <li class="related"><a href="/blog/2013/10/09/all-other-metrics-are-useless/">All other metrics are useless</a></li>
           
       
           
-            <li class="related"><a href="/blog/2013/10/05/the-significance-of-html5/">The significance of HTML5</a></li>
+            <li class="related"><a href="/blog/2013/04/07/painless-android-swipe-detection/">Painless Android swipe detection</a></li>
           
       
           
-            <li class="related"><a href="/blog/2013/04/14/hybrid-inappropriateness/">Hybrid inappropriateness</a></li>
+            <li class="related"><a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku performance hat-trick</a></li>
           
       
           
-            <li class="related"><a href="/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/">Past performance is no guarantee of future results</a></li>
+            <li class="related"><a href="/blog/2013/04/18/curling-for-wget/">cURLing for Wget</a></li>
           
       
           
-            <li class="related"><a href="/blog/2013/03/04/its-a-question-of-wow/">It's a question of wow</a></li>
+            <li class="related"><a href="/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Backgrounding tasks in Heroku with Delayed Job</a></li>
           
       
       </ul>
@@ -173,12 +187,12 @@
   
 
 
-<time datetime="2012-09-25T12:51:00-07:00" pubdate data-updated="true">Sep 25<span>th</span>, 2012</time>
+<time datetime="2014-02-12T20:54:00-08:00" pubdate data-updated="true">Feb 12<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/mobile/'>mobile</a>
+    <a class='category' href='/blog/categories/aws/'>AWS</a>, <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/sqs/'>SQS</a>
   
 </span>
 
@@ -187,7 +201,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2014/02/12/ahoy-there-maven-central/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2014/02/12/ahoy-there-maven-central/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -200,10 +214,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left articlenav" href="/blog/2012/09/24/a-tale-of-three-browsers/" title="Previous Post: A tale of three browsers">&laquo; A tale of three browsers</a>
+        <a class="basic-alignment left articlenav" href="/blog/2014/01/24/continuous-delivery-for-heroku-with-jenkins/" title="Previous Post: Continuous Delivery for Heroku with Jenkins">&laquo; Continuous Delivery for Heroku with Jenkins</a>
       
-      
-        <a class="basic-alignment right articlenav" href="/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry/" title="Next Post: JVM fork modes and metaclass wizardry">JVM fork modes and metaclass wizardry &raquo;</a>
       
     </p>
   </footer>
@@ -302,8 +314,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/';
-        var disqus_url = 'http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/';
+        var disqus_identifier = 'http://thediscoblog.com/blog/2014/02/12/ahoy-there-maven-central/';
+        var disqus_url = 'http://thediscoblog.com/blog/2014/02/12/ahoy-there-maven-central/';
         var disqus_script = 'embed.js';
       
     (function () {

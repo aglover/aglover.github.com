@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-01-24T21:11:14-08:00</updated>
+  <updated>2014-02-12T21:52:01-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,39 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ahoy there Maven Central]]></title>
+    <link href="http://thediscoblog.com/blog/2014/02/12/ahoy-there-maven-central/"/>
+    <updated>2014-02-12T20:54:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2014/02/12/ahoy-there-maven-central</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous <a href="http://thediscoblog.com/blog/categories/sqs/">SQS</a> adapter for <a href="http://thediscoblog.com/blog/categories/aws/">AWS&#8217;s Java SQS library</a>, is now syncing with Maven Central. This means you can easily use Ahoy! in your Maven or Gradle builds.</p>
+
+<p>For example, if you want to <a href="http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks/">spice up your SQS</a> and you use Maven, just add the following dependency for your <code>pom.xml</code> file and you&#8217;ll be rockin&#8217; it in no time, baby!</p>
+
+<figure class='code'><figcaption><span>Including Ahoy! into your Maven pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;groupId&gt;</span>com.github.aglover<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;artifactId&gt;</span>ahoy<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;version&gt;</span>1.0.1<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You don&#8217;t use Maven? But rather use Gradle? I&#8217;ve got you covered!</p>
+
+<figure class='code'><figcaption><span>Adding Ahoy! into your Gradle build.gradle file</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">compile</span> <span class="s1">&#39;com.github.aglover:ahoy:1.0.1&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Check out <a href="http://mvnrepository.com/artifact/com.github.aglover/ahoy">mvnrepository.com</a> for how to include Ahoy! into your SBT build or other dependency management tool like Ivy.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Continuous Delivery for Heroku with Jenkins]]></title>
@@ -1678,36 +1711,6 @@ what ever you mounted (i.e <code>/dev/xvdf</code>), the mount point will be the 
 <p>Note inside the <code>for</code> loop, I have access to a <code>word</code> instance. I can call properties on it as well. Note, with Whiskers, you can&#8217;t invoke methods on passed in objects. Only properties (i.e. <code>word.definition</code> isn&#8217;t a function).</p>
 
 <p>Jade certainly produces more elegant, less verbose view code. But Jade&#8217;s whitespace delimiting coupled with the fact that basic HTML knowledge is near universal, make template frameworks like Whiskers, which permit normal HTML with <code>{}</code> delimiters appealing from time to time.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Why Amazon Appstore's support of HTML5 matters]]></title>
-    <link href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/"/>
-    <updated>2013-08-07T21:09:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters</id>
-    <content type="html"><![CDATA[<p><img class="right" src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114._V379662584_.png">Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
-
-<p>As I wrote almost a year ago:</p>
-
-<blockquote><p>software delivery on the mobile platform is, at least for the foreseeable future, firmly established via app stores. And app stores cater to native apps (100% native and/or hybrid) only. The average person will not look for useful apps via their device’s browser: that route is still a jungle. And, at this point, there is no viable pure play mobile web app delivery channel.</p><footer><strong>thediscoblog.com</strong> <cite><a href='http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/'>Past Performance Is No Guarantee of Future Results</a></cite></footer></blockquote>
-
-
-<p>Today, it&#8217;s still true that the most convenient mechanism  for app delivery on mobile devices (and increasingly desktops) is via various app stores. And until today, HTML5 apps were not included in these app stores (unless they were wrapped by some hybrid-web container like <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">PhoneGap</a>).</p>
-
-<!-- more -->
-
-
-<p>But now with Amazon&#8217;s announcement, <a href="http://thediscoblog.com/blog/categories/html5/">HTML5</a> apps <em>without any native container</em> can be submitted into their Appstore. What&#8217;s more, these apps can take advantage of monetization features like <a href="https://developer.amazon.com/sdk/webapps/iap/understanding.html">In-App purchasing</a> using Amazon&#8217;s API.</p>
-
-<p>Now HTML5 apps have a direct channel to consumers along with an API to make HTML5 app developers money. HTML5 apps are now icon-ized and people don&#8217;t have to use a search engine to find them!</p>
-
-<p>As <a href="https://developer.amazon.com/blog/author/Mike+Hines.html">Mike Hines</a> of Amazon puts it:</p>
-
-<blockquote><p>Starting today, you can submit your web apps and mobile optimized web sites and have them merchandised alongside native apps on Amazon and Kindle Fire in nearly 200 countries worldwide, without any third-party software or doing any native app development.</p><footer><strong>https://developer.amazon.com/blog/</strong> <cite><a href='https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html'>Amazon Is Now Accepting HTML5 Web Apps—Making It Easy for You to Reach Millions of Kindle Fire and Android Customers Worldwide</a></cite></footer></blockquote>
-
-
-<p>This is big news for HTML5 developers. A direct channel to the masses and monetization APIs to boot &#8211; what more could you ask for? Standby folks because it&#8217;s about to get even more interesting, as I&#8217;m willing to bet that Google and Apple will follow suit in the near future.</p>
 ]]></content>
   </entry>
   

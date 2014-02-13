@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SQS | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/sqs/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-01-24T21:11:14-08:00</updated>
+  <updated>2014-02-12T21:52:01-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ahoy there Maven Central]]></title>
+    <link href="http://thediscoblog.com/blog/2014/02/12/ahoy-there-maven-central/"/>
+    <updated>2014-02-12T20:54:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2014/02/12/ahoy-there-maven-central</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous <a href="http://thediscoblog.com/blog/categories/sqs/">SQS</a> adapter for <a href="http://thediscoblog.com/blog/categories/aws/">AWS's Java SQS library</a>, is now syncing with Maven Central. This means you can easily use Ahoy! in your Maven or Gradle builds.</p>
+
+<p>For example, if you want to <a href="http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks/">spice up your SQS</a> and you use Maven, just add the following dependency for your <code>pom.xml</code> file and you'll be rockin' it in no time, baby!</p>
+
+<p>``` xml Including Ahoy! into your Maven pom.xml
+<dependency></p>
+
+<pre><code>&lt;groupId&gt;com.github.aglover&lt;/groupId&gt;
+&lt;artifactId&gt;ahoy&lt;/artifactId&gt;
+&lt;version&gt;1.0.1&lt;/version&gt;
+</code></pre>
+
+<p></dependency>
+```</p>
+
+<p>You don't use Maven? But rather use Gradle? I've got you covered!</p>
+
+<p><code>groovy Adding Ahoy! into your Gradle build.gradle file
+compile 'com.github.aglover:ahoy:1.0.1'
+</code></p>
+
+<p>Check out <a href="http://mvnrepository.com/artifact/com.github.aglover/ahoy">mvnrepository.com</a> for how to include Ahoy! into your SBT build or other dependency management tool like Ivy.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[All other metrics are useless]]></title>
