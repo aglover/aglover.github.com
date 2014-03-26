@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-02-12T21:52:01-08:00</updated>
+  <updated>2014-03-25T22:44:03-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,103 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Java 8's functional fomentation]]></title>
+    <link href="http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation/"/>
+    <updated>2014-03-25T20:39:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/revolution_small.png">Java 8 has revolutionized Java. It's easily the most significant release of Java in the last <a href="http://en.wikipedia.org/wiki/Java_version_history#J2SE_5.0_.28September_30.2C_2004.29">10 years</a>. There are a ton of new features including default methods, method and constructor references, and lambdas, <a href="http://winterbe.com/posts/2014/03/16/java-8-tutorial/">just to name a few</a>.</p>
+
+<p>One of the more interesting features is the new <a href="http://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html"><code>java.util.stream</code></a> API, which as the Javadoc states, enables</p>
+
+<p><blockquote><p>functional-style operations on streams of elements, such as map-reduce transformations on collections</p></blockquote></p>
+
+<p>Combine this new API with lambda expressions and you end up with a terse, yet, powerful syntax that significantly simplifies code through the application of projections.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p>Take, for example, the ostensibly simple task of filtering a collection. In this case, a simple <code>Collection</code> of <code>Message</code> types, created like so:</p>
+
+<p><code>java Creating a Collection of Messages
+List&lt;Message&gt; messages = new ArrayList&lt;&gt;();
+messages.add(new Message("aglover", "foo", 56854));
+messages.add(new Message("aglover", "foo", 85));
+messages.add(new Message("aglover", "bar", 9999));
+messages.add(new Message("rsmith", "foo", 4564));
+</code></p>
+
+<p>With this collection, I'd like to filter out <code>Message</code>s with a <code>delay</code> (3rd constructor parameter) greater than 3,000 seconds.</p>
+
+<p><a href="http://stackoverflow.com/questions/122105/java-what-is-the-best-way-to-filter-a-collection">Previous to Java 8</a>, you could hand jam this sort of logic like so:</p>
+
+<p>``` java Filtering old school style
+for (Message message : messages) {
+  if (message.delay > 3000) {</p>
+
+<pre><code>System.out.println(message);
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>In Java 8, however, this job becomes a lot more concise. Collections now support the <code>stream</code> method, which converts the underlying data structure into a iterate-able steam of objects and thereby permits a new breed of functional operations that leverage lambda expressions. Most of these operations can be chained as well. These chain-able methods are dubbed <em>intermediate</em>, methods that cannot be chained are denoted as <em>terminal</em>.</p>
+
+<p>Briefly, lambda expressions are a lot like anonymous classes except with <em>a lot less</em> syntax. For example, if you look at the Javadocs for the parameter to a <code>Stream</code>'s <code>filter</code> method, you'll see that it takes a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html"><code>Predicate</code></a> type. Yet, you don't have to implement this interface as you would, say, before Java 8 with an anonymous class. Consequently, the <code>Predicate</code> lambda expression for filtering all values of <code>delay</code> greater than 3000 would be:</p>
+
+<p><code>java Lambda expression
+x -&gt; x.delay &gt; 3000
+</code></p>
+
+<p>Where <code>x</code> is the parameter passed in for <em>each value</em> in the stream and everything to the right of the <code>-&gt;</code> being the expression evaluated.</p>
+
+<p>Putting this all together in Java 8 yields:</p>
+
+<p><code>java Streaming lambdas!
+messages.stream().filter(m -&gt; m.delay &gt; 3000).forEach(item -&gt; System.out.println(item));
+</code></p>
+
+<p>Interestingly, due to some other new features of Java 8, the <code>forEach</code>'s lambda can be simplified further to:</p>
+
+<p><code>java Streaming lambdas are even shorter!
+messages.stream().filter(m -&gt; m.delay &gt; 3000).forEach(System.out::println);
+</code></p>
+
+<p>Because the parameter of the <code>forEach</code> lambda is simply consumed by the <code>println</code>, Java 8 now permits you to drop the parameter entirely.</p>
+
+<p>Earlier, I mentioned that streams permit you to chain lambdas -- in the case above, the <code>filter</code> method is an intermediate method, while the <code>forEach</code> is a terminal method. Other intermediate methods, that are immediately recognizable to functional programmers, are:  <code>map</code>, <code>flatMap</code>, and <code>reduce</code>, to name a few.</p>
+
+<p>To elaborate, I'd like to find all <code>Message</code>s that are delayed more than 3,000 seconds and sum up the total delay time. Without functional magic, I could write:</p>
+
+<p>``` java Prosaic Java<br/>
+long totalWaitTime = 0;
+for (Message message : messages) {
+  if (message.delay > 3000) {</p>
+
+<pre><code>totalWaitTime += message.delay;
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>Nevertheless, with Java 8 and a bit of functional-foo, you can achieve a more elegant code construct like so:</p>
+
+<p><code>java Java 8 elegance
+long totWaitTime = messages.stream().filter(m -&gt; m.delay &gt; 3000).mapToLong(m -&gt; m.delay).sum();
+</code></p>
+
+<p>Note how I am able to chain the <code>filter</code> and <code>mapToLong</code> methods, along with a terminal <code>sum</code>. Incidentally, the <code>sum</code> method requires a specific map style method that yields a collection of primitive types, such as <code>mapToLong</code>, <code>mapToInt</code>, etc.</p>
+
+<p>Functional style programming as a core language feature is an  astoundingly powerful construct. And while a lot of these techniques have been available in various 3rd party libraries like Guava and JVM languages like Scala and Groovy, having these features core to the language will surely reach a wider audience of developers and have the biggest impact to the developmental landscape.</p>
+
+<p>Java 8, without a doubt, drastically changes the <a href="http://thediscoblog.com/blog/categories/java/">Java language</a> for the better.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ahoy there Maven Central]]></title>
@@ -199,121 +296,6 @@ Java HotSpot(TM) 64-Bit Server VM (build 23.25-b01, mixed mode)
 </code></p>
 
 <p>And that's it. To use the VM, <a href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">simply SSH to it</a>. Go ahead and type <code>java -version</code> just to convince yourself. Go ahead, I'll wait for you...there, are you happy now?  Wasn't that easy? Provisioning Ubuntu VMs with Vagrant couldn't be any easier with <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a>, dig it?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[All other metrics are useless]]></title>
-    <link href="http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless/"/>
-    <updated>2013-10-09T18:04:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/time1.jpg">When it comes to queues, whether they're implemented as <a href="http://en.wikipedia.org/wiki/Java_Message_Service">JMS</a>, database tables (i.e. what Ruby's <a href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Delayed::Job</a> uses for a queue), or even <a href="http://aws.amazon.com/sqs/">Amazon's SQS</a>, the most common metric used to evaluate the state of a queue is its length. In essence, one derives an efficiency metric based upon how many messages are residing in a queue at any given time. If there are just a few messages, the queue is operating efficiently. If there are numerous messages, things are inefficient and alarms must be sounded.</p>
-
-<!-- more -->
-
-
-<p>But what if you're in a consistently busy environment with extreme bursts where queues have the tendency to rapidly fill up? If you have sufficient workers <em>already running</em> to handle that burst, do you need to fire up more?</p>
-
-<p>You can fire up more workers, but doing so might cost you. That is, you might have to provision new worker instances, such as <a href="https://devcenter.heroku.com/articles/dynos">Heroku worker dynos</a> or AWS AMIs, which will end up costing you tangible money. And sometimes those worker instances take a few moments to fire up and when they're operational, the burst of activity is over and the queue is back to normal -- the initially available workers handled the load adequately.</p>
-
-<p>It turns out that the queue's length was a lagging indicator. You spun up unneeded resources. False alarm!</p>
-
-<p>If you already have sufficient capacity to handle the influx of messages on a queue, then monitoring a queue's length isn't too helpful. In fact, it's a misleading metric and can cause you to take unneeded actions.</p>
-
-<p>Consequently, a queue's length <em>is not indicative of a system's efficiency</em> when there's already sufficient workers present. Rather, the metric that means something in a high capacity environment is <em>how long a message resides in a queue</em>. That is an actionable metric: if messages are stuck in a queue waiting to be processed then you need more processors!</p>
-
-<h2>Moo over queue length and let queue wait time in</h2>
-
-<p>By default, <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">Amazon's SQS</a> doesn't provide the ability to query how long a message has been residing in a queue. Therefore, <a href="https://github.com/aglover/moo">I wrote Moo</a>.</p>
-
-<p>Moo provides an interface for clients to obtain and take action on the message time in queue metric. This is done by augmenting an SQS message with a time stamp. That time stamp is then checked when a message is popped off of an SQS queue. If a threshold difference is exceed, then a callback is invoked.</p>
-
-<p>Users of Moo will find its usage similar to <a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous callback oriented facade on top of <a href="http://aws.amazon.com/sdkforjava/">AWS's Java SDK</a>. In fact, Moo uses Ahoy! underneath, with the added feature of attaching a "maximum time in queue" asynchronous callback.</p>
-
-<p>Moo supports multiple time in queue thresholds and setting a maximum time in queue threshold is done like so:</p>
-
-<p>``` java Adding a maximum threshold for time in queue
-//adds a 1 second max threshold
-sqs.addQueueWaitTimeCallback(1000, new QueueWaitTimeCallback() {
-  public void onThresholdExceeded(long waitTime) {</p>
-
-<pre><code>//waitTime is the actual time in queue
-//do something... like fire off a web hook, etc
-</code></pre>
-
-<p>  }
-});
-```</p>
-
-<p>Note the <code>addQueueWaitTimeCallback</code> method takes a millisecond maximum time in queue value and an accompanying <code>QueueWaitTimeCallback</code> callback implementation. The <code>onThresholdExceeded</code> method will be invoked asynchronously during a message receive if the maximum threshold value is exceeded; what's more, the <code>onThresholdExceeded</code> will receive as a parameter the actual queue wait time.</p>
-
-<h4>Show me the Moo</h4>
-
-<p>To fire up an instance of Moo, you have a number of options, including configuring an instance of AWS's <code>AmazonSQS</code> or just passing along a key, secret, and queue name like so:</p>
-
-<p><code>
-SQS sqs = new SQS(System.getProperty("key"), System.getProperty("secret"), System.getProperty("queue"));
-</code></p>
-
-<p>Next, you can attach zero to many <code>QueueWaitTimeCallback</code> instances like so:</p>
-
-<p>```
-sqs.addQueueWaitTimeCallback(600000, new QueueWaitTimeCallback() {
-  public void onThresholdExceeded(long actualWaitTime) {</p>
-
-<pre><code>//do something -- fire off SNS message?
-</code></pre>
-
-<p>  }
-});
-```</p>
-
-<p>In this case, I've added a callback to be invoked if messages are in a queue longer than 10 minutes. Note, these <code>QueueWaitTimeCallback</code> callbacks are fired by the <em>queue reader</em> instance; accordingly, a <code>QueueWaitTimeCallback</code> can certainly fire up more instances of itself, for example.</p>
-
-<p>Here's a sample JSON document that you might want to throw onto an SQS queue:</p>
-
-<p>```
-{ "employees":[</p>
-
-<pre><code>  { "firstName":"John", "lastName":"Doe" },
-  { "firstName":"Anna", "lastName":"Smith" },
-  { "firstName":"Peter", "lastName":"Jones" }
-</code></pre>
-
-<p>]}
-```</p>
-
-<p>Sending and receiving this message are exactly like you'd do if you were using Ahoy!. For example, to send a message, just pass along a <code>String</code> to the <code>send</code> method:</p>
-
-<p>```
-sqs.send(json, new SendCallback() {
-  public void onSend(String messageId) {</p>
-
-<pre><code>//messageId is from SQS
-</code></pre>
-
-<p>  }
-});
-```</p>
-
-<p>Note, the <code>send</code> method takes an optional <code>SendCallback</code>.</p>
-
-<p>Receiving a message is via the <code>receive</code> method, which takes a mandatory <code>ReceiveCallback</code> -- this callback will be invoked asynchronously <em>for each</em> message received off of a queue. Each instance will receive the message placed upon the queue and the message's SQS id.</p>
-
-<p>```
-sqs.receive(new ReceiveCallback() {
-  public void onReceive(String messageId, String message) {</p>
-
-<pre><code>//do something w/the message -- in this case it's JSON
-</code></pre>
-
-<p>  }
-});
-```</p>
-
-<p>Note, if upon the receive of a message, Moo notices that a message has been waiting in a queue for more than the max queue wait time threshold configured for an associated <code>QueueWaitTimeCallback</code>, Moo will invoke it. Note, Moo can invoke more than one instance; thus, you can set up a chain to take various actions as times increase.</p>
-
-<p>Remember, a queue's length is usually a lagging indicator.  The metric that actually means something is how long a message resides in a queue. That's an actionable metric and <a href="https://github.com/aglover/moo">Moo</a> gives you the ability to do something about it! Can you dig it?</p>
 ]]></content>
   </entry>
   

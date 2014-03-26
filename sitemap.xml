@@ -351,8 +351,12 @@
         <lastmod>2014-02-12T21:51:05-08:00</lastmod>
     </url>
     <url>
+        <loc>http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation/</loc>
+        <lastmod>2014-03-25T22:44:02-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://thediscoblog.com/blog/archives/</loc>
-        <lastmod>2014-02-12T21:51:05-08:00</lastmod>
+        <lastmod>2014-03-25T22:44:02-07:00</lastmod>
     </url>
     <url>
         <loc>http://thediscoblog.com/blog/categories/</loc>
@@ -360,6 +364,6 @@
     </url>
     <url>
         <loc>http://thediscoblog.com/</loc>
-        <lastmod>2014-02-12T21:51:05-08:00</lastmod>
+        <lastmod>2014-03-25T22:44:02-07:00</lastmod>
     </url>
 </urlset>

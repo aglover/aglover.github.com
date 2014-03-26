@@ -88,6 +88,56 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2014/03/25/java-8-s-functional-fomentation/">Java 8&#8217;s Functional Fomentation</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-25T20:39:00-07:00" pubdate data-updated="true">Mar 25<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/mine/revolution_small.png">Java 8 has revolutionized Java. It&#8217;s easily the most significant release of Java in the last <a href="http://en.wikipedia.org/wiki/Java_version_history#J2SE_5.0_.28September_30.2C_2004.29">10 years</a>. There are a ton of new features including default methods, method and constructor references, and lambdas, <a href="http://winterbe.com/posts/2014/03/16/java-8-tutorial/">just to name a few</a>.</p>
+
+<p>One of the more interesting features is the new <a href="http://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html"><code>java.util.stream</code></a> API, which as the Javadoc states, enables</p>
+
+<blockquote><p>functional-style operations on streams of elements, such as map-reduce transformations on collections</p></blockquote>
+
+
+<p>Combine this new API with lambda expressions and you end up with a terse, yet, powerful syntax that significantly simplifies code through the application of projections.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/03/25/java-8-s-functional-fomentation/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2014/02/12/ahoy-there-maven-central/">Ahoy There Maven Central</a></h1>
       
     
@@ -505,53 +555,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/10/12/aws-ebs-in-4-steps/">AWS EBS in 4 Steps</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-12T17:47:00-07:00" pubdate data-updated="true">Oct 12<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img class="right" src="/images/mine/4fingers.jpg">When you fire up an AWS AMI, you are given a small partition of disk space that survives reboots. For example, the base <a href="https://github.com/aglover/ubuntu-equip">Ubuntu AMI</a> I tend to favor comes with an 8GB primary partition; however, 8GB is often not enough, especially if you&#8217;re running a database or something that requires a lot of disk space.</p>
-
-<p>If you poke around on an AMI instance, you&#8217;ll notice some AMI instances will have additional partitions and in many cases, these partitions will be huge; nevertheless, they&#8217;re transient and any data on those disks will disappear after a reboot.</p>
-
-<p>Accordingly, if you need to gain some more permanent space on an AMI instance, you&#8217;ll need to leverage an <a href="http://aws.amazon.com/ebs/">Elastic Block Store (or EBS)</a>, which is basically a permanent hard disk that you can attach to a running AMI instance. The data on an EBS will survive a reboot.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/12/aws-ebs-in-4-steps/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -570,6 +573,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/25/java-8-s-functional-fomentation/">Java 8&#8217;s functional fomentation</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/12/ahoy-there-maven-central/">Ahoy there Maven Central</a>
       </li>
     
@@ -583,10 +590,6 @@
     
       <li class="post">
         <a href="/blog/2013/12/29/just-require-tire-to-inquire/">Just require tire to inquire</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/26/heroku-deployments-with-git-branches/">Heroku deployments with Git branches</a>
       </li>
     
   </ul>

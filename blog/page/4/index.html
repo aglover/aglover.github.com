@@ -88,6 +88,49 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/22/mongodb-primary-keys-are-your-friend/">MongoDB Primary Keys Are Your Friend</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-22T15:00:00-07:00" pubdate data-updated="true">Jun 22<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>All documents in a <a href="http://www.mongodb.org/">MongoDB</a> collection have a primary key dubbed <code>_id</code>. This field is automatically assigned to a document upon insert, so there&#8217;s rarely a need to provide it. What&#8217;s interesting about the <code>_id</code> field is that it is <em>time based</em>. That is, the underlying type of <code>_id</code>, which is <code>ObjectId</code>, is a <a href="http://docs.mongodb.org/manual/reference/object-id/">12-byte BSON type</a>, and 4 of those bytes represent the seconds since Unix epoch.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/06/22/mongodb-primary-keys-are-your-friend/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2013/06/12/lickety-split-custom-validations-in-rails/">Lickety-split Custom Validations in Rails</a></h1>
       
     
@@ -502,53 +545,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku Performance Hat-trick</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-01T09:10:00-07:00" pubdate data-updated="true">May 1<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img class="right" src="/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
-
-<p>It&#8217;s easy to configure a <a href="http://rubyonrails.org/">Rails</a> app to take advantage of CloudFront; what&#8217;s more, if your Rails app is hosted on <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-21/">Heroku</a>, there&#8217;s <a href="https://github.com/romanbsd/heroku-deflater">a nifty gem</a>, dubbed heroku-deflater, that&#8217;ll enable <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP compression</a> of static assets (<a href="http://stackoverflow.com/questions/12326191/any-way-to-serve-gzip-assets-from-heroku">other than images</a>).</p>
-
-<p>To get these three entities to play nicely together requires a few simple steps. Let me show you how.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -569,6 +565,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/25/java-8-s-functional-fomentation/">Java 8&#8217;s functional fomentation</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/12/ahoy-there-maven-central/">Ahoy there Maven Central</a>
       </li>
     
@@ -582,10 +582,6 @@
     
       <li class="post">
         <a href="/blog/2013/12/29/just-require-tire-to-inquire/">Just require tire to inquire</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/26/heroku-deployments-with-git-branches/">Heroku deployments with Git branches</a>
       </li>
     
   </ul>
