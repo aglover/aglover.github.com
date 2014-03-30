@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-03-25T22:44:03-07:00</updated>
+  <updated>2014-03-29T19:49:18-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,65 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Custom git commands in 3 steps]]></title>
+    <link href="http://thediscoblog.com/blog/2014/03/29/custom-git-commands-in-3-steps/"/>
+    <updated>2014-03-29T18:12:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2014/03/29/custom-git-commands-in-3-steps</id>
+    <content type="html"><![CDATA[<p>I'm lazy and so I seek ways to <a href="http://threevirtues.com/">reduce repetitious activities</a>. For instance, I've spent a lot of time in a terminal typing Git commands. A few of the more common commands, I've <a href="http://tldp.org/LDP/abs/html/aliases.html">aliased</a>. If I want to see a list of branches, I used to type:</p>
+
+<p><code>bash Listing Git branches
+$&gt; git branch -v -a
+</code></p>
+
+<p>But after adding an alias to my bash profile, I simply type <code>gb</code>. I've done this for a few commands like <code>git commit</code>, which is <code>gc</code> and <code>gca</code> for the <code>-a</code> flag.</p>
+
+<!-- more -->
+
+
+<p>Occasionally, aliases aren't enough and when it comes to Git, you can create custom commands that can be referenced like so:</p>
+
+<p><code>bash Your custom Git command
+$&gt; git my-command
+</code></p>
+
+<p>To create a custom command, you first need to create a file named <code>git-my-command</code>; second, you must place the resultant file on your path. Finally, you need to make the file executable. You can write this file in <a href="http://thediscoblog.com/blog/categories/linux/">Bash</a>, <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a>, or Python -- it doesn't matter.</p>
+
+<p>For example, I tend to find myself <a href="http://git-scm.com/book/en/Git-Tools-Stashing">stashing</a> some uncommitted changes and then later popping those stashed changes onto a new branch. I end up executing the following steps:</p>
+
+<p><code>bash A simple Git flow
+$&gt; git stash
+$&gt; git stash branch some_branch
+</code></p>
+
+<p>The key step I want to simplify is the last one -- I'm lazy and I'd rather not type 4 words. I'd rather type <code>git unstash some_branch</code> because it saves me one word.</p>
+
+<p>Following the three simple steps I mentioned above, I'll first create a file in my <code>~/bin</code> directory called <code>git-unstash</code>. The <code>~/bin</code> directory is in my path because my <code>.bashrc</code> has this line: <code>PATH=$PATH:$HOME/bin</code>.</p>
+
+<p>My <code>git-unstash</code> script will be simple -- it takes an argument (the branch name, i.e. <code>$1</code>); therefore, the script does a simple check to ensure the branch name is provided.</p>
+
+<p>``` bash Custom Git command: unstash</p>
+
+<h1>!/bin/bash</h1>
+
+<p>((!$#)) &amp;&amp; echo No branch name, command ignored! &amp;&amp; exit 1</p>
+
+<p>git stash branch $1
+```</p>
+
+<p>After I'm done writing it, I'll do a quick <code>chomd +x</code> and all three steps are accomplished.</p>
+
+<p>Now my new flow is this:</p>
+
+<p><code>bash A simple Git flow
+$&gt; git stash
+$&gt; git unstash some_branch
+</code></p>
+
+<p>Custom Git commands are that simple to invent -- first, create a file named <code>git-my-command</code>. Next, place it on your path; and, finally, make it executable. Be lazy and carry on, baby!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Elasticsearch in a box]]></title>
@@ -261,36 +320,6 @@ sudo umount -d /dev/xvdf
 <p>And then go into the AWS Management Console, find your EBS volume, right click on it and select detach volume.</p>
 
 <p>That's it -- you're done! You've got a permanent store. In 4 steps, you've created an EBS volume, attached it to a running AMI, formatted and mounted it. And you've made it attach automatically after a reboot.  Can you dig it?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[cURLing for Wget]]></title>
-    <link href="http://thediscoblog.com/blog/2013/04/18/curling-for-wget/"/>
-    <updated>2013-04-18T09:33:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/04/18/curling-for-wget</id>
-    <content type="html"><![CDATA[<p><a href="http://en.wikipedia.org/wiki/Wget">Wget</a> is an extremely handy utility I use all the time when I find myself on a Linux box. It's quite helpful, for example, for downloading files. Need to <a href="https://github.com/aglover/ubuntu-equip/blob/master/equip_ruby.sh">install Ruby</a>? No problem, just download the binary like so:</p>
-
-<p><code>bash wget example of downloading Ruby binary
-wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
-</code></p>
-
-<p>and you're one step closer. There's no flags to remember either.</p>
-
-<!--more-->
-
-
-<p>Wget, however, isn't natively available on OSX. From time to time, I'm stung to see the nefarious 'command not found' message after expectantly waiting to see some file I need downloaded.</p>
-
-<p>Luckily, you can force <a href="http://curl.haxx.se/docs/manpage.html">cURL</a> to act like Wget with a few flags. Simply use the <code>-OL</code> flags like so:</p>
-
-<p><code>bash cURL acting like Wget
-curl -OL http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
-</code></p>
-
-<p>and you'll be on your way to downloading some file.</p>
-
-<p>Of course, it's possible to get <code>wget</code> on your Mac via <a href="http://osxdaily.com/2012/05/22/install-wget-mac-os-x/">MacPorts or Homebrew</a>; nevertheless, knowing you can achieve the same goals with cURL is always handy.</p>
 ]]></content>
   </entry>
   

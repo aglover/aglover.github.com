@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-03-25T22:44:03-07:00</updated>
+  <updated>2014-03-29T19:49:18-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,65 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Custom git commands in 3 steps]]></title>
+    <link href="http://thediscoblog.com/blog/2014/03/29/custom-git-commands-in-3-steps/"/>
+    <updated>2014-03-29T18:12:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2014/03/29/custom-git-commands-in-3-steps</id>
+    <content type="html"><![CDATA[<p>I'm lazy and so I seek ways to <a href="http://threevirtues.com/">reduce repetitious activities</a>. For instance, I've spent a lot of time in a terminal typing Git commands. A few of the more common commands, I've <a href="http://tldp.org/LDP/abs/html/aliases.html">aliased</a>. If I want to see a list of branches, I used to type:</p>
+
+<p><code>bash Listing Git branches
+$&gt; git branch -v -a
+</code></p>
+
+<p>But after adding an alias to my bash profile, I simply type <code>gb</code>. I've done this for a few commands like <code>git commit</code>, which is <code>gc</code> and <code>gca</code> for the <code>-a</code> flag.</p>
+
+<!-- more -->
+
+
+<p>Occasionally, aliases aren't enough and when it comes to Git, you can create custom commands that can be referenced like so:</p>
+
+<p><code>bash Your custom Git command
+$&gt; git my-command
+</code></p>
+
+<p>To create a custom command, you first need to create a file named <code>git-my-command</code>; second, you must place the resultant file on your path. Finally, you need to make the file executable. You can write this file in <a href="http://thediscoblog.com/blog/categories/linux/">Bash</a>, <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a>, or Python -- it doesn't matter.</p>
+
+<p>For example, I tend to find myself <a href="http://git-scm.com/book/en/Git-Tools-Stashing">stashing</a> some uncommitted changes and then later popping those stashed changes onto a new branch. I end up executing the following steps:</p>
+
+<p><code>bash A simple Git flow
+$&gt; git stash
+$&gt; git stash branch some_branch
+</code></p>
+
+<p>The key step I want to simplify is the last one -- I'm lazy and I'd rather not type 4 words. I'd rather type <code>git unstash some_branch</code> because it saves me one word.</p>
+
+<p>Following the three simple steps I mentioned above, I'll first create a file in my <code>~/bin</code> directory called <code>git-unstash</code>. The <code>~/bin</code> directory is in my path because my <code>.bashrc</code> has this line: <code>PATH=$PATH:$HOME/bin</code>.</p>
+
+<p>My <code>git-unstash</code> script will be simple -- it takes an argument (the branch name, i.e. <code>$1</code>); therefore, the script does a simple check to ensure the branch name is provided.</p>
+
+<p>``` bash Custom Git command: unstash</p>
+
+<h1>!/bin/bash</h1>
+
+<p>((!$#)) &amp;&amp; echo No branch name, command ignored! &amp;&amp; exit 1</p>
+
+<p>git stash branch $1
+```</p>
+
+<p>After I'm done writing it, I'll do a quick <code>chomd +x</code> and all three steps are accomplished.</p>
+
+<p>Now my new flow is this:</p>
+
+<p><code>bash A simple Git flow
+$&gt; git stash
+$&gt; git unstash some_branch
+</code></p>
+
+<p>Custom Git commands are that simple to invent -- first, create a file named <code>git-my-command</code>. Next, place it on your path; and, finally, make it executable. Be lazy and carry on, baby!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Continuous Delivery for Heroku with Jenkins]]></title>

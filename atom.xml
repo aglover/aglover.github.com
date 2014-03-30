@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-03-25T22:44:03-07:00</updated>
+  <updated>2014-03-29T19:49:18-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,75 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Custom git commands in 3 steps]]></title>
+    <link href="http://thediscoblog.com/blog/2014/03/29/custom-git-commands-in-3-steps/"/>
+    <updated>2014-03-29T18:12:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2014/03/29/custom-git-commands-in-3-steps</id>
+    <content type="html"><![CDATA[<p>I&#8217;m lazy and so I seek ways to <a href="http://threevirtues.com/">reduce repetitious activities</a>. For instance, I&#8217;ve spent a lot of time in a terminal typing Git commands. A few of the more common commands, I&#8217;ve <a href="http://tldp.org/LDP/abs/html/aliases.html">aliased</a>. If I want to see a list of branches, I used to type:</p>
+
+<figure class='code'><figcaption><span>Listing Git branches</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$&gt;</span> git branch -v -a
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But after adding an alias to my bash profile, I simply type <code>gb</code>. I&#8217;ve done this for a few commands like <code>git commit</code>, which is <code>gc</code> and <code>gca</code> for the <code>-a</code> flag.</p>
+
+<!-- more -->
+
+
+<p>Occasionally, aliases aren&#8217;t enough and when it comes to Git, you can create custom commands that can be referenced like so:</p>
+
+<figure class='code'><figcaption><span>Your custom Git command</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$&gt;</span> git my-command
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To create a custom command, you first need to create a file named <code>git-my-command</code>; second, you must place the resultant file on your path. Finally, you need to make the file executable. You can write this file in <a href="http://thediscoblog.com/blog/categories/linux/">Bash</a>, <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a>, or Python &#8211; it doesn&#8217;t matter.</p>
+
+<p>For example, I tend to find myself <a href="http://git-scm.com/book/en/Git-Tools-Stashing">stashing</a> some uncommitted changes and then later popping those stashed changes onto a new branch. I end up executing the following steps:</p>
+
+<figure class='code'><figcaption><span>A simple Git flow</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$&gt;</span> git stash
+</span><span class='line'><span class="nv">$&gt;</span> git stash branch some_branch
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The key step I want to simplify is the last one &#8211; I&#8217;m lazy and I&#8217;d rather not type 4 words. I&#8217;d rather type <code>git unstash some_branch</code> because it saves me one word.</p>
+
+<p>Following the three simple steps I mentioned above, I&#8217;ll first create a file in my <code>~/bin</code> directory called <code>git-unstash</code>. The <code>~/bin</code> directory is in my path because my <code>.bashrc</code> has this line: <code>PATH=$PATH:$HOME/bin</code>.</p>
+
+<p>My <code>git-unstash</code> script will be simple &#8211; it takes an argument (the branch name, i.e. <code>$1</code>); therefore, the script does a simple check to ensure the branch name is provided.</p>
+
+<figure class='code'><figcaption><span>Custom Git command: unstash</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">((</span>!<span class="nv">$#)</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nb">echo </span>No branch name, <span class="nb">command </span>ignored! <span class="o">&amp;&amp;</span> <span class="nb">exit </span>1
+</span><span class='line'>
+</span><span class='line'>git stash branch <span class="nv">$1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After I&#8217;m done writing it, I&#8217;ll do a quick <code>chomd +x</code> and all three steps are accomplished.</p>
+
+<p>Now my new flow is this:</p>
+
+<figure class='code'><figcaption><span>A simple Git flow</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$&gt;</span> git stash
+</span><span class='line'><span class="nv">$&gt;</span> git unstash some_branch
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Custom Git commands are that simple to invent &#8211; first, create a file named <code>git-my-command</code>. Next, place it on your path; and, finally, make it executable. Be lazy and carry on, baby!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Java 8's functional fomentation]]></title>
@@ -1536,187 +1605,6 @@ what ever you mounted (i.e <code>/dev/xvdf</code>), the mount point will be the 
 <p>Consequently, HTML5 will continue on its path as an advantageous development platform; moreover, HTML5&#8217;s rise will <em>most likely be at the expense of hybrid frameworks</em> as there&#8217;s a point of diminishing returns for <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">frameworks</a> to support 100% of all native features across multiple native platforms. Plus, Amazon&#8217;s recent announcement that their <a href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">Appstore for Android supports the submission of HTML5 apps</a> only adds to the pro-HTML5 argument.</p>
 
 <p>8% is an itty-bitty number, but I&#8217;ll be keeping an eye on Microsoft&#8217;s Windows Phone market share. And I&#8217;ll be watching the world of HTML5 closely. How about you?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Effortless ElasticSearch clustering]]></title>
-    <link href="http://thediscoblog.com/blog/2013/09/03/effortless-elasticsearch-clustering/"/>
-    <updated>2013-09-03T07:50:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/09/03/effortless-elasticsearch-clustering</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/cluster.jpg"><a href="http://thediscoblog.com/blog/categories/elasticsearch/">ElasticSearch</a> supports <a href="http://www.elasticsearch.org/guide/reference/modules/cluster/">clustering</a>; that is, you can have a series of distinct <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">ElasticSearch</a> instances work in a coordinated manner without much administrative intervention at all. Clustering ElasticSearch instances (or nodes) provides data redundancy as well as data availability.</p>
-
-<p>Best of all, clustering in ElasticSearch, by default, doesn&#8217;t require <em>any</em> configuration &#8211; nodes discover each other. You can set up a cluster in about 60 seconds. Let me show you how!</p>
-
-<!-- more -->
-
-
-<p></p>
-
-<p>First, download and unzip or untar the <a href="http://thediscoblog.com/blog/2013/01/02/scalable-searching-with-elasticsearch/">latest version of ElasticSearch</a>. Next, copy the resultant ElasticSearch install directory (for example, mine is dubbed <code>elasticsearch-0.90.3</code>) into 3 different directories; for example, I&#8217;ve called my directories <code>node-1</code>, <code>node-2</code>, and <code>node-3</code>.</p>
-
-<p>Next, open up three terminal windows and in each, change directories to a sequential node. Start the instance in the <code>node-1</code> directory like so:</p>
-
-<figure class='code'><figcaption><span>Starting up ElasticSearch</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>./bin/elasticsearch -f
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <code>-f</code> forces the process to run in the foreground.</p>
-
-<p>By default, ElasticSearch nodes will name themselves if you don&#8217;t provide a name (via the <code>elasticsearch.yml</code> configuration file). Thus, after you start the first instance, you should see something along the lines of:</p>
-
-<figure class='code'><figcaption><span>A master node is created!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>cluster.service<span class="o">]</span> <span class="o">[</span>Dionysus<span class="o">]</span> new_master <span class="o">[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]</span>, reason: zen-disco-join <span class="o">(</span>elected_as_master<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In the above log output, &#8220;Dionysus&#8221; is the automatic name chosen by ElasticSearch. Note the part about &#8220;new_master&#8221; for the <code>cluster.service</code>.</p>
-
-<p>Next, go into the next terminal window, say <code>node-2</code>, and start that instance the same way (via the <code>-f</code> flag). You should see the 2nd instance (in my case, named <code>Caiera</code>) discover the master:</p>
-
-<figure class='code'><figcaption><span>Node #2 discovers the master node</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>cluster.service<span class="o">]</span> <span class="o">[</span>Caiera<span class="o">]</span> detected_master <span class="o">[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]</span>, added <span class="o">{[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]</span>,<span class="o">}</span>, reason: zen-disco-receive<span class="o">(</span>from master <span class="o">[[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>See the <code>detected_master</code> statement above?  And you should see the master, &#8220;Dionysus&#8221;, add the 2nd instance, &#8220;Caiera&#8221;, too (via the first terminal window):</p>
-
-<figure class='code'><figcaption><span>The master node adds node #2</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>cluster.service<span class="o">]</span> <span class="o">[</span>Dionysus<span class="o">]</span> added <span class="o">{[</span>Caiera<span class="o">][</span>Eh3DHlcRQhGxatGnUG8smA<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9301<span class="o">]]</span>,<span class="o">}</span>, reason: zen-disco-receive<span class="o">(</span>join from node<span class="o">[[</span>Caiera<span class="o">][</span>Eh3DHlcRQhGxatGnUG8smA<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9301<span class="o">]]])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Lastly, start the 3rd instance in the 3rd window.</p>
-
-<p>In this case, my 3rd node is dubbed &#8220;Phantom Rider&#8221; and it&#8217;ll discover the master:</p>
-
-<figure class='code'><figcaption><span>Node #3 discovers the master</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>cluster.service<span class="o">]</span> <span class="o">[</span>Phantom Rider<span class="o">]</span> detected_master <span class="o">[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]</span>, added <span class="o">{[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]</span>,<span class="o">[</span>Caiera<span class="o">][</span>Eh3DHlcRQhGxatGnUG8smA<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9301<span class="o">]]</span>,<span class="o">}</span>, reason: zen-disco-receive<span class="o">(</span>from master <span class="o">[[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And the master, will in turn, add &#8220;Phantom Rider&#8221; into the cluster:</p>
-
-<figure class='code'><figcaption><span>The master node adds node #3</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>cluster.service<span class="o">]</span> <span class="o">[</span>Dionysus<span class="o">]</span> added <span class="o">{[</span>Phantom Rider<span class="o">][</span>Sw1bDSbFQqeTq4M45qbNpg<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9302<span class="o">]]</span>,<span class="o">}</span>, reason: zen-disco-receive<span class="o">(</span>join from node<span class="o">[[</span>Phantom Rider<span class="o">][</span>Sw1bDSbFQqeTq4M45qbNpg<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9302<span class="o">]]])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now that you have 3 ElasticSearch instances running, you can run a few RESTful commands to verify your cluster is operational.</p>
-
-<p>First, in a new terminal window, run this command:</p>
-
-<figure class='code'><figcaption><span>cURL to ascertain cluster nodes</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -XGET <span class="s1">&#39;http://localhost:9200/_cluster/nodes?pretty=true&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You should see a nicely formatting JSON response. It&#8217;ll look something like:</p>
-
-<figure class='code'><figcaption><span>ElasticSearch nodes</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="nt">&quot;cluster_name&quot;</span> <span class="p">:</span> <span class="s2">&quot;elasticsearch&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;nodes&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;Eh3DHlcRQhGxatGnUG8smA&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;hostname&quot;</span> <span class="p">:</span> <span class="s2">&quot;new-host-5.home&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="nt">&quot;http_address&quot;</span> <span class="p">:</span> <span class="s2">&quot;inet[/192.168.1.12:9201]&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="nt">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;Caiera&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="nt">&quot;transport_address&quot;</span> <span class="p">:</span> <span class="s2">&quot;inet[/192.168.1.12:9301]&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="nt">&quot;version&quot;</span> <span class="p">:</span> <span class="s2">&quot;0.90.3&quot;</span>
-</span><span class='line'>        <span class="p">},</span>
-</span><span class='line'>      <span class="nt">&quot;Sw1bDSbFQqeTq4M45qbNpg&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;hostname&quot;</span> <span class="p">:</span> <span class="s2">&quot;new-host-5.home&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="nt">&quot;http_address&quot;</span> <span class="p">:</span> <span class="s2">&quot;inet[/192.168.1.12:9202]&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="nt">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;Phantom Rider&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="nt">&quot;transport_address&quot;</span> <span class="p">:</span> <span class="s2">&quot;inet[/192.168.1.12:9302]&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="nt">&quot;version&quot;</span> <span class="p">:</span> <span class="s2">&quot;0.90.3&quot;</span>
-</span><span class='line'>        <span class="p">},</span>
-</span><span class='line'>      <span class="nt">&quot;r7gbosdKSWGfTCgRPrS6vw&quot;</span> <span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;hostname&quot;</span> <span class="p">:</span> <span class="s2">&quot;new-host-5.home&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="nt">&quot;http_address&quot;</span> <span class="p">:</span> <span class="s2">&quot;inet[/192.168.1.12:9200]&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="nt">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;Dionysus&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="nt">&quot;transport_address&quot;</span> <span class="p">:</span> <span class="s2">&quot;inet[/192.168.1.12:9300]&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="nt">&quot;version&quot;</span> <span class="p">:</span> <span class="s2">&quot;0.90.3&quot;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">},</span>
-</span><span class='line'>  <span class="nt">&quot;ok&quot;</span> <span class="p">:</span> <span class="kc">true</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note the <code>cluster_name</code> is by default elasticsearch &#8211; you can change this name as well. Also, by default, the master node will claim the 9200 port, however, you can run that same command against any node (for example, <code>http://localhost:9201/_cluster/nodes?pretty=true</code> will respond with the same exact response).</p>
-
-<p>You can check the health of a cluster, as well, by running this command:</p>
-
-<figure class='code'><figcaption><span>cURL to ascertain cluster health</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -XGET <span class="s1">&#39;http://localhost:9200/_cluster/health?pretty=true&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And you should see another JSON response like:</p>
-
-<figure class='code'><figcaption><span>ElasticSearch cluster health</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="nt">&quot;active_primary_shards&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;active_shards&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;cluster_name&quot;</span> <span class="p">:</span> <span class="s2">&quot;elasticsearch&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;initializing_shards&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;number_of_data_nodes&quot;</span> <span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;number_of_nodes&quot;</span> <span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;relocating_shards&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;status&quot;</span> <span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;timed_out&quot;</span> <span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;unassigned_shards&quot;</span> <span class="p">:</span> <span class="mi">0</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Nodes a cluster will elect a new master if your master node goes down. For example, if you go into the master node terminal window and control-c the process, you should see the two other nodes quickly recognize the master&#8217;s failure and consequently elect one of themselves as the new master:</p>
-
-<figure class='code'><figcaption><span>A new master is elected</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>discovery.zen<span class="o">]</span> <span class="o">[</span>Caiera<span class="o">]</span> master_left <span class="o">[[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]]</span>, reason <span class="o">[</span>shut_down<span class="o">]</span>
-</span><span class='line'><span class="o">[</span>cluster.service<span class="o">]</span> <span class="o">[</span>Caiera<span class="o">]</span> master <span class="o">{</span>new <span class="o">[</span>Caiera<span class="o">][</span>Eh3DHlcRQhGxatGnUG8smA<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9301<span class="o">]]</span>, previous <span class="o">[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]}</span>, removed <span class="o">{[</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]]</span>,<span class="o">}</span>, reason: zen-disco-master_failed <span class="o">([</span>Dionysus<span class="o">][</span>r7gbosdKSWGfTCgRPrS6vw<span class="o">][</span>inet<span class="o">[</span>/192.168.1.12:9300<span class="o">]])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Remember, ElasticSearch will make intelligent defaults for you, however, you should most likely look closely at the various aspects you can configure when it comes to clustering. For example, cluster name and node names are something you should consider implementing.</p>
-
-<p>What&#8217;s more, the process of discovery can be configured. For instance, multicast is used for auto-discovery, however, there are other options available, such as unicast, which allows you to specify which nodes can be a part of a cluster (that is, unknown nodes cannot join).</p>
-
-<p>Finally, you can control how nodes operate in a cluster. You can explicitly forbid a node from being a master, for example, and you can also configure nodes to not hold data (thus, those nodes become veritable routers for searches). These options allow you to create an interesting topology that has some intelligent routing built in.</p>
-
-<p>Regardless of how you configure an ElasticSearch cluster, I hope you&#8217;ve seen that it couldn&#8217;t be any easier. Can you dig it, man?</p>
 ]]></content>
   </entry>
   

@@ -355,8 +355,12 @@
         <lastmod>2014-03-25T22:44:02-07:00</lastmod>
     </url>
     <url>
+        <loc>http://thediscoblog.com/blog/2014/03/29/custom-git-commands-in-3-steps/</loc>
+        <lastmod>2014-03-29T19:49:18-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://thediscoblog.com/blog/archives/</loc>
-        <lastmod>2014-03-25T22:44:02-07:00</lastmod>
+        <lastmod>2014-03-29T19:49:18-07:00</lastmod>
     </url>
     <url>
         <loc>http://thediscoblog.com/blog/categories/</loc>
@@ -364,6 +368,6 @@
     </url>
     <url>
         <loc>http://thediscoblog.com/</loc>
-        <lastmod>2014-03-25T22:44:02-07:00</lastmod>
+        <lastmod>2014-03-29T19:49:18-07:00</lastmod>
     </url>
 </urlset>
