@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Custom git commands in 3 steps"
+title: "Custom Git commands in 3 steps"
 date: 2014-03-29 18:12
 comments: true
 categories: [Linux, OSX, Git]
