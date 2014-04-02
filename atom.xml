@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-03-29T19:49:18-07:00</updated>
+  <updated>2014-04-01T21:18:22-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -14,7 +14,296 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Custom git commands in 3 steps]]></title>
+    <title type="html"><![CDATA[Schooled in ping pong]]></title>
+    <link href="http://thediscoblog.com/blog/2014/04/01/schooled-in-ping-pong/"/>
+    <updated>2014-04-01T20:53:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2014/04/01/schooled-in-ping-pong</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/pingpong.jpg">Years ago, a <a href="http://www.pauljulius.com/">good friend of mine</a> taught me an effective pair programming technique that results in universally covered code. What&#8217;s more, this manner of pairing ultimately made me a better developer as I learned myriad different coding skills from my coding partner, ranging from testing techniques, defensive coding, and encapsulation, just to name a few.</p>
+
+<p>A lot of my coding practices today can be traced to tactics I learned from playing what&#8217;s known as <em>ping pong</em>.</p>
+
+<!-- more -->
+
+
+<p>What&#8217;s <a href="http://c2.com/cgi/wiki?PairProgrammingPingPongPattern">ping pong</a> you ask? It&#8217;s a pair programming approach that&#8217;s absurdly simple:</p>
+
+<ol>
+<li>You write a failing test.</li>
+<li>Your crony writes just enough code to make that test pass.</li>
+<li>Your crony writes an additional failing test.</li>
+<li>You write just enough code to make that new failing test pass.</li>
+<li>Repeat (and refactor as needed).</li>
+</ol>
+
+
+<p>It&#8217;s that easy. The beauty of this process is that by limiting your coding to <em>just enough logic</em> to make a test pass, followed up with an additional test that <em>must fail</em> (which is thereby testing something new) you end up with 100% code coverage. What&#8217;s more, you don&#8217;t end up writing a lot of superfluous code.</p>
+
+<h4>Show me the money</h4>
+
+<p>Let me show you how it works. My fictitious ping pong pairing, with Frank and Glenn, will focus on creating a calculator that can add 2 numbers in <a href="http://thediscoblog.com/blog/categories/coffeescript/">CoffeeScript</a>.</p>
+
+<p>Step 1 is to write a failing test. Accordingly, Frank crafts a test in <a href="http://visionmedia.github.io/mocha/">Mocha</a> with the expectation that 1 and 4 make 5.</p>
+
+<figure class='code'><figcaption><span>Step 1: a failing test</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">require</span> <span class="s1">&#39;should&#39;</span>
+</span><span class='line'><span class="nx">require</span> <span class="s1">&#39;mocha&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">describe</span> <span class="s1">&#39;a calculator&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>    <span class="nx">describe</span> <span class="s1">&#39;the addition function&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>        <span class="nx">it</span> <span class="s1">&#39;should support adding 2 positive numbers&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>          <span class="nx">calculator</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Calculator</span>
+</span><span class='line'>          <span class="nx">value</span> <span class="o">=</span> <span class="nx">calculator</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+</span><span class='line'>          <span class="nx">value</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span> <span class="mi">5</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Glenn runs the test and is immediately presented with an error:</p>
+
+<figure class='code'><figcaption><span>Oh no! </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>1<span class="o">)</span> a calculator the addition <span class="k">function </span>should support adding 2 positive numbers:
+</span><span class='line'>   ReferenceError: Calculator is not defined
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>&#8220;No problem&#8221; thinks Glenn and he adds the following line of code to the top of the test:</p>
+
+<figure class='code'><figcaption><span>Import it, baby</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Calculator</span> <span class="o">=</span> <span class="nx">require</span> <span class="s1">&#39;Calculator&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Glenn knew this wouldn&#8217;t make the test pass, but he recognized that the error he saw was related to the fact that <code>Calculator</code> wasn&#8217;t defined in the test. One problem has been licked, but he knows another one exists. Nevertheless, he runs the test again.</p>
+
+<figure class='code'><figcaption><span>Still erroring out?</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Error: Cannot find module <span class="s1">&#39;Calculator&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Glenn&#8217;s one step closer to making the test pass &#8211; he must define a <code>Calculator</code> class. Here, Glenn decides to write the <em>absolute minimum amount of code</em> to make the test pass:</p>
+
+<figure class='code'><figcaption><span>As easy as it gets</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">class</span> <span class="nx">Calculator</span>
+</span><span class='line'>  <span class="nx">add</span><span class="o">:</span> <span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>      <span class="mi">5</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Calculator</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Glenn now proceeds to run the test.</p>
+
+<figure class='code'><figcaption><span>And it passes!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>a calculator
+</span><span class='line'>    the addition <span class="k">function</span>
+</span><span class='line'>      ✓
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Step 2 is now complete: Glenn has written the minimum amount of code to make Frank&#8217;s test pass. Now Glenn must write a new test that fails.</p>
+
+<p>Accordingly, for step 3, Glenn decides to do a bit of refactoring of the test and adds the following logic:</p>
+
+<figure class='code'><figcaption><span>Step 3: A newly failing test</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">require</span> <span class="s1">&#39;should&#39;</span>
+</span><span class='line'><span class="nx">require</span> <span class="s1">&#39;mocha&#39;</span>
+</span><span class='line'><span class="nx">Calculator</span> <span class="o">=</span> <span class="nx">require</span> <span class="s1">&#39;Calculator&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">describe</span> <span class="s1">&#39;a calculator&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>    <span class="nx">describe</span> <span class="s1">&#39;the addition function&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>        <span class="nx">it</span> <span class="s1">&#39;should support adding 2 positive numbers&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>          <span class="nx">inputs</span> <span class="o">=</span> <span class="p">[{</span><span class="nx">x</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">ans</span><span class="o">:</span> <span class="mi">3</span><span class="p">},</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">ans</span><span class="o">:</span> <span class="mi">5</span><span class="p">}]</span>
+</span><span class='line'>          <span class="nx">calculator</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Calculator</span>
+</span><span class='line'>          <span class="k">for</span> <span class="nx">input</span> <span class="k">in</span> <span class="nx">inputs</span>
+</span><span class='line'>            <span class="nx">calculator</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">input</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="nx">input</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]).</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span> <span class="nx">input</span><span class="p">[</span><span class="s1">&#39;ans&#39;</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Frank runs the test and, indeed, the two intrepid developers are presented with a new error:</p>
+
+<figure class='code'><figcaption><span>Without a surprise, it fails</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>a calculator
+</span><span class='line'>    the addition <span class="k">function</span>
+</span><span class='line'><span class="k">      </span>1<span class="o">)</span> should support adding 2 positive numbers
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  0 passing <span class="o">(</span>5ms<span class="o">)</span>
+</span><span class='line'>  1 failing
+</span><span class='line'>
+</span><span class='line'>  1<span class="o">)</span> a calculator the addition <span class="k">function </span>should support adding 2 positive numbers:
+</span><span class='line'>     AssertionError: expected 5 to equal 3
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But Frank&#8217;s no fink. He quickly corrects the state of failing code with a simple change to the <code>Calculator</code>.</p>
+
+<figure class='code'><figcaption><span>Addition at its finest</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">class</span> <span class="nx">Calculator</span>
+</span><span class='line'>  <span class="nx">add</span><span class="o">:</span> <span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>    <span class="nx">x</span> <span class="o">+</span> <span class="nx">y</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Calculator</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>He reruns the test and, not surprisingly, everything is kosher. Now it&#8217;s Frank&#8217;s turn for a bit of sadism, so he refactors the test slightly but throwing in a random <code>String</code>.</p>
+
+<figure class='code'><figcaption><span>Tricky, Frank. Tricky.</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">require</span> <span class="s1">&#39;should&#39;</span>
+</span><span class='line'><span class="nx">require</span> <span class="s1">&#39;mocha&#39;</span>
+</span><span class='line'><span class="nx">Calculator</span> <span class="o">=</span> <span class="nx">require</span> <span class="s1">&#39;Calculator&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">describe</span> <span class="s1">&#39;a calculator&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>    <span class="nx">describe</span> <span class="s1">&#39;the addition function&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>        <span class="nx">it</span> <span class="s1">&#39;should support adding 2 positive numbers&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>          <span class="nx">inputs</span> <span class="o">=</span> <span class="p">[{</span><span class="nx">x</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">ans</span><span class="o">:</span> <span class="mi">3</span><span class="p">},</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">ans</span><span class="o">:</span> <span class="mi">5</span><span class="p">},</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">ans</span><span class="o">:</span> <span class="mi">5</span><span class="p">}]</span>
+</span><span class='line'>          <span class="nx">calculator</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Calculator</span>
+</span><span class='line'>          <span class="k">for</span> <span class="nx">input</span> <span class="k">in</span> <span class="nx">inputs</span>
+</span><span class='line'>            <span class="nx">calculator</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">input</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="nx">input</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]).</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span> <span class="nx">input</span><span class="p">[</span><span class="s1">&#39;ans&#39;</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>Naturally, the test fails with the not too strange result of <code>AssertionError: expected '14' to equal 5</code>.</p>
+
+<p>Glenn, feeling fiendish, goes to work by enhancing the <code>Calculator</code> <em>ever so slightly</em>.</p>
+
+<figure class='code'><figcaption><span>Why just x?</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">class</span> <span class="nx">Calculator</span>
+</span><span class='line'>  <span class="nx">add</span><span class="o">:</span> <span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>    <span class="k">new</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="o">+</span> <span class="nx">y</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Calculator</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The addition of the <code>Number</code> type for <em>x only</em> fixes Frank&#8217;s tricky test. Time to write a failing test. In what should be no big surprise, Glenn simply adds an additional associative array which contains <em>two</em> <code>String</code>s.</p>
+
+<p>This step might seem pedestrian, but it&#8217;s deliberate: by only writing the minimum amount of code required to make a test pass and following that step up with an additional test, Glenn&#8217;s villainous coding behavior is ensuring every logical path through the evolving code is covered by a test.</p>
+
+<p>Naturally, once Glenn&#8217;s new associative array is forcing a failure, Frank updates the <code>add</code> method to make the <code>y</code> input parameter a <code>Number</code> as well. Frank then proceeds to add a few more values to the <code>inputs</code> array.</p>
+
+<figure class='code'><figcaption><span>Let&#8217;s see if you can make it fail now!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">require</span> <span class="s1">&#39;should&#39;</span>
+</span><span class='line'><span class="nx">require</span> <span class="s1">&#39;mocha&#39;</span>
+</span><span class='line'><span class="nx">Calculator</span> <span class="o">=</span> <span class="nx">require</span> <span class="s1">&#39;Calculator&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">describe</span> <span class="s1">&#39;a calculator&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>    <span class="nx">describe</span> <span class="s1">&#39;the addition function&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>        <span class="nx">it</span> <span class="s1">&#39;should support adding 2 positive numbers&#39;</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span><span class='line'>          <span class="nx">inputs</span> <span class="o">=</span> <span class="p">[{</span><span class="nx">x</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">ans</span><span class="o">:</span> <span class="mi">3</span><span class="p">},</span>
+</span><span class='line'>             <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">ans</span><span class="o">:</span> <span class="mi">5</span><span class="p">},</span>
+</span><span class='line'>             <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">ans</span><span class="o">:</span> <span class="mi">5</span><span class="p">},</span>
+</span><span class='line'>             <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="nx">ans</span><span class="o">:</span> <span class="mi">5</span><span class="p">},</span>
+</span><span class='line'>             <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">ans</span><span class="o">:</span> <span class="mi">3</span><span class="p">},</span>
+</span><span class='line'>             <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="mf">1.5</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">ans</span><span class="o">:</span> <span class="mf">5.5</span><span class="p">}]</span>
+</span><span class='line'>          <span class="nx">calculator</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Calculator</span>
+</span><span class='line'>          <span class="k">for</span> <span class="nx">input</span> <span class="k">in</span> <span class="nx">inputs</span>
+</span><span class='line'>            <span class="nx">calculator</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">input</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="nx">input</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]).</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span> <span class="nx">input</span><span class="p">[</span><span class="s1">&#39;ans&#39;</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>He runs the test hoping for a failure, but to no avail. Time to think a bit harder. Time to embrace one&#8217;s inner sadistic troll. He then adds the following associative array to the <code>inputs</code> array: <code>{x: 1.5, y: null, ans: 1.5}</code>. Yet, the test still passes.</p>
+
+<p>It&#8217;s at this point that both Frank and Glenn feel they&#8217;re done: <code>add</code> works to their expectations. If they wanted to go on, Frank could proceed to write a failing test for a <code>subtract</code> function and so on.</p>
+
+<h4>It&#8217;s a learning experience</h4>
+
+<p>Interestingly, Frank learned a new way to approach testing from Glenn. When Glenn introduced the array of associative arrays, Frank was initially surprised. He figured it would be easier to write an additional test case. He even pointed that out to Glenn.  But Glenn countered that more <code>it</code> phrases don&#8217;t necessarily mean better tests; and besides, using his method of iterating over a series of values provided them with a lot of flexibility <em>without</em> a lot of boiler plate code &#8211; something Frank agreed with. Accordingly, Frank learned a new way of thinking about testing &#8211; make a single test a bit more powerful by using a series of values rather than making a lot of similar tests.</p>
+
+<p>Frank also learned a bit of coding patience. He was initially annoyed when Glenn only updated <code>x</code> to use a <code>Number</code> type and completely ignored <code>y</code>. He accosted Glenn: &#8220;Update <code>y</code> too?!&#8221; to which Glenn countered that the only amount of code he needed to write to make Frank&#8217;s test pass. Frank then saw that his tricky test case with only 1 <code>String</code> input was essentially inadequate.</p>
+
+<h4>Benefits and costs</h4>
+
+<p>Ping pong pairing is a methodically deliberate manner of programming that forces you to be extremely patient, because you are limited to write the least amount of code to make a test pass <em>and no more</em>. And while it might seem like this process is a slow way to get things done, the benefits far outweigh the costs.</p>
+
+<p>For one thing, two chums practicing ping pong will produce well tested functionality. Second, they&#8217;ll produce this functionality in a lot fewer lines of code than if they had done it otherwise. That&#8217;s a good thing and I&#8217;ve seen this result consistently. There&#8217;s one thing that I&#8217;ve come to learn: less working code is better than more. And pay attention here: producing fewer lines of working code usually means you have more tests than the code those tests are validating.</p>
+
+<p>Additionally, this technique forces developers to learn from each other. Every developer has a great coding facility up their sleeves and every developer can learn something <em>new</em>.</p>
+
+<p>Finally, ping pong results in two parties having an intimate knowledge of code. Two is better than one, in my book.</p>
+
+<h4>Ping pong style</h4>
+
+<p>I&#8217;ve found that ping pong is best practiced <a href="http://en.wikipedia.org/wiki/Pomodoro_Technique">Pomodoro style</a> &#8211; ping pong isn&#8217;t something you can do all day, nor would I recommend you do so. Do it for 20 to 25 minutes then take a break and figure out if it was valuable or not. Chances are you&#8217;ll find it was a worthwhile investment in time and you&#8217;ll elect to do it again later in the day or another time.</p>
+
+<p>Make no mistake: holding back the urge to loquaciously code away takes a lot of discipline and practice. But ping pong <em>will make you a better programmer</em> even if you only do it once in a while.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Custom Git commands in 3 steps]]></title>
     <link href="http://thediscoblog.com/blog/2014/03/29/custom-git-commands-in-3-steps/"/>
     <updated>2014-03-29T18:12:00-07:00</updated>
     <id>http://thediscoblog.com/blog/2014/03/29/custom-git-commands-in-3-steps</id>
@@ -1575,36 +1864,6 @@ what ever you mounted (i.e <code>/dev/xvdf</code>), the mount point will be the 
 <p>Keep in mind that <a href="http://stackoverflow.com/questions/3875382/lucene-standard-analyzer-vs-snowball">snowballing can inadvertently</a> make your search results <em>less relevant</em>. Long words can be stemmed into more common but completely different words. For example, if you snowball a document that contains the word &#8220;sextant&#8221;, the word &#8220;sex&#8221; will result as a stem. Thus, searches for &#8220;sextant&#8221; will also return documents that contain the word &#8220;sex&#8221; (and vice versa).</p>
 
 <p>ElasticSearch puts a powerful search engine into your clutches; plus, with a little forethought into how a document&#8217;s contents are analyzed, you&#8217;ll make searches event more relevant.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[8% is itty-bitty, but it matters]]></title>
-    <link href="http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters/"/>
-    <updated>2013-09-09T15:49:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters</id>
-    <content type="html"><![CDATA[<p>I saw some news related to <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">Microsoft Windows Phone</a> that gave me pause for thought. Specifically, <a href="http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/">I read an article</a> that stated:</p>
-
-<blockquote><p>Microsoft&#8217;s mobile platform reached new heights in the three months to July 2013 in Europe, making up 8.2 percent of sales across UK, France, Germany, Italy and Spain</p><footer><strong>Liam Tung</strong> <cite><a href='http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/'>iOS Up, Android Down in the US as Windows Phone Hits Eight Percent in Europe</a></cite></footer></blockquote>
-
-
-
-
-<!-- more -->
-
-
-<p>While <a href="http://www.expertreviews.co.uk/smartphones/1301902/windows-phone-market-share-growing-in-europe">8.2% market share</a> might seem insignificant, what&#8217;s interesting is that</p>
-
-<blockquote><p>At the same time last year, Windows Phone accounted for 4.9 percent of sales</p><footer><strong>Liam Tung</strong> <cite><a href='http://www.zdnet.com/ios-up-android-down-in-the-us-as-windows-phone-hits-eight-percent-in-europe-7000020117/'>iOS Up, Android Down in the US as Windows Phone Hits Eight Percent in Europe</a></cite></footer></blockquote>
-
-
-<p>That is, <a href="http://wmpoweruser.com/kantar-windows-phone-hits-record-high-of-8-2-market-share-in-europe/">Windows Phone market share</a> for the same five markets has increased by a little more than 3% over the last year. Accordingly, Windows Phone is a <a href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/">growing platform (in some markets)</a>, which means developers will eventually need to start considering it as a <a href="http://thediscoblog.com/blog/2013/05/09/hold-your-horses-its-still-only-a-two-horse-race/">third platform</a>. And throwing a third platform into the mix does change the variables in a native versus <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">non-native</a> argument <em>in favor of an HTML5 approach</em>.</p>
-
-<p>Microsoft has deep pockets and has <a href="http://www.latimes.com/business/technology/la-fi-tn-microsoft-ceo-steve-ballmers-failures-20130823,0,5988522,full.story">shown before</a> that it will fight (and hang on) to create a market for itself (i.e. Xbox and Bing). I suspect that Windows Phone will continue to gain market share, albeit slowly, mostly at the expense of nominal platforms like Blackberry.</p>
-
-<p>Consequently, HTML5 will continue on its path as an advantageous development platform; moreover, HTML5&#8217;s rise will <em>most likely be at the expense of hybrid frameworks</em> as there&#8217;s a point of diminishing returns for <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">frameworks</a> to support 100% of all native features across multiple native platforms. Plus, Amazon&#8217;s recent announcement that their <a href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">Appstore for Android supports the submission of HTML5 apps</a> only adds to the pro-HTML5 argument.</p>
-
-<p>8% is an itty-bitty number, but I&#8217;ll be keeping an eye on Microsoft&#8217;s Windows Phone market share. And I&#8217;ll be watching the world of HTML5 closely. How about you?</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: TDD | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/tdd/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-03-29T19:49:18-07:00</updated>
+  <updated>2014-04-01T21:18:22-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,235 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Schooled in ping pong]]></title>
+    <link href="http://thediscoblog.com/blog/2014/04/01/schooled-in-ping-pong/"/>
+    <updated>2014-04-01T20:53:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2014/04/01/schooled-in-ping-pong</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/pingpong.jpg">Years ago, a <a href="http://www.pauljulius.com/">good friend of mine</a> taught me an effective pair programming technique that results in universally covered code. What's more, this manner of pairing ultimately made me a better developer as I learned myriad different coding skills from my coding partner, ranging from testing techniques, defensive coding, and encapsulation, just to name a few.</p>
+
+<p>A lot of my coding practices today can be traced to tactics I learned from playing what's known as <em>ping pong</em>.</p>
+
+<!-- more -->
+
+
+<p>What's <a href="http://c2.com/cgi/wiki?PairProgrammingPingPongPattern">ping pong</a> you ask? It's a pair programming approach that's absurdly simple:</p>
+
+<ol>
+<li>You write a failing test.</li>
+<li>Your crony writes just enough code to make that test pass.</li>
+<li>Your crony writes an additional failing test.</li>
+<li>You write just enough code to make that new failing test pass.</li>
+<li>Repeat (and refactor as needed).</li>
+</ol>
+
+
+<p>It's that easy. The beauty of this process is that by limiting your coding to <em>just enough logic</em> to make a test pass, followed up with an additional test that <em>must fail</em> (which is thereby testing something new) you end up with 100% code coverage. What's more, you don't end up writing a lot of superfluous code.</p>
+
+<h4>Show me the money</h4>
+
+<p>Let me show you how it works. My fictitious ping pong pairing, with Frank and Glenn, will focus on creating a calculator that can add 2 numbers in <a href="http://thediscoblog.com/blog/categories/coffeescript/">CoffeeScript</a>.</p>
+
+<p>Step 1 is to write a failing test. Accordingly, Frank crafts a test in <a href="http://visionmedia.github.io/mocha/">Mocha</a> with the expectation that 1 and 4 make 5.</p>
+
+<p>``` javascript Step 1: a failing test
+require 'should'
+require 'mocha'</p>
+
+<p>describe 'a calculator', -></p>
+
+<pre><code>describe 'the addition function', -&gt;
+    it 'should support adding 2 positive numbers', -&gt;
+        calculator = new Calculator
+        value = calculator.add(1, 4)
+        value.should.equal 5
+</code></pre>
+
+<p>```</p>
+
+<p>Glenn runs the test and is immediately presented with an error:</p>
+
+<p><code>bash Oh no!
+1) a calculator the addition function should support adding 2 positive numbers:
+   ReferenceError: Calculator is not defined
+</code></p>
+
+<p>"No problem" thinks Glenn and he adds the following line of code to the top of the test:</p>
+
+<p><code>javascript Import it, baby
+Calculator = require 'Calculator'
+</code></p>
+
+<p>Glenn knew this wouldn't make the test pass, but he recognized that the error he saw was related to the fact that <code>Calculator</code> wasn't defined in the test. One problem has been licked, but he knows another one exists. Nevertheless, he runs the test again.</p>
+
+<p><code>bash Still erroring out?
+Error: Cannot find module 'Calculator'
+</code></p>
+
+<p>Glenn's one step closer to making the test pass -- he must define a <code>Calculator</code> class. Here, Glenn decides to write the <em>absolute minimum amount of code</em> to make the test pass:</p>
+
+<p>``` javascript As easy as it gets
+class Calculator</p>
+
+<pre><code>add: (x, y) -&gt;
+    5
+</code></pre>
+
+<p>module.exports = Calculator
+```</p>
+
+<p>Glenn now proceeds to run the test.</p>
+
+<p>``` bash And it passes!
+a calculator</p>
+
+<pre><code>the addition function
+  ✓
+</code></pre>
+
+<p>```</p>
+
+<p>Step 2 is now complete: Glenn has written the minimum amount of code to make Frank's test pass. Now Glenn must write a new test that fails.</p>
+
+<p>Accordingly, for step 3, Glenn decides to do a bit of refactoring of the test and adds the following logic:</p>
+
+<p>``` javascript Step 3: A newly failing test
+require 'should'
+require 'mocha'
+Calculator = require 'Calculator'</p>
+
+<p>describe 'a calculator', -></p>
+
+<pre><code>describe 'the addition function', -&gt;
+    it 'should support adding 2 positive numbers', -&gt;
+      inputs = [{x: 1, y: 2, ans: 3}, {x: 1, y: 4, ans: 5}]
+      calculator = new Calculator
+      for input in inputs
+        calculator.add(input['x'], input['y']).should.equal input['ans']
+</code></pre>
+
+<p>```</p>
+
+<p>Frank runs the test and, indeed, the two intrepid developers are presented with a new error:</p>
+
+<p>``` bash Without a surprise, it fails
+a calculator</p>
+
+<pre><code>the addition function
+  1) should support adding 2 positive numbers
+</code></pre>
+
+<p>  0 passing (5ms)
+  1 failing</p>
+
+<p>  1) a calculator the addition function should support adding 2 positive numbers:</p>
+
+<pre><code> AssertionError: expected 5 to equal 3
+</code></pre>
+
+<p>```</p>
+
+<p>But Frank's no fink. He quickly corrects the state of failing code with a simple change to the <code>Calculator</code>.</p>
+
+<p>``` javascript Addition at its finest
+class Calculator
+  add: (x, y) -></p>
+
+<pre><code>x + y
+</code></pre>
+
+<p>module.exports = Calculator
+```</p>
+
+<p>He reruns the test and, not surprisingly, everything is kosher. Now it's Frank's turn for a bit of sadism, so he refactors the test slightly but throwing in a random <code>String</code>.</p>
+
+<p>``` javascript Tricky, Frank. Tricky.
+require 'should'
+require 'mocha'
+Calculator = require 'Calculator'</p>
+
+<p>describe 'a calculator', -></p>
+
+<pre><code>describe 'the addition function', -&gt;
+    it 'should support adding 2 positive numbers', -&gt;
+      inputs = [{x: 1, y: 2, ans: 3}, {x: 1, y: 4, ans: 5}, {x: '1', y: 4, ans: 5}]
+      calculator = new Calculator
+      for input in inputs
+        calculator.add(input['x'], input['y']).should.equal input['ans']
+</code></pre>
+
+<p>```</p>
+
+<p>Naturally, the test fails with the not too strange result of <code>AssertionError: expected '14' to equal 5</code>.</p>
+
+<p>Glenn, feeling fiendish, goes to work by enhancing the <code>Calculator</code> <em>ever so slightly</em>.</p>
+
+<p>``` javascript Why just x?
+class Calculator
+  add: (x, y) -></p>
+
+<pre><code>new Number(x) + y
+</code></pre>
+
+<p>module.exports = Calculator
+```</p>
+
+<p>The addition of the <code>Number</code> type for <em>x only</em> fixes Frank's tricky test. Time to write a failing test. In what should be no big surprise, Glenn simply adds an additional associative array which contains <em>two</em> <code>String</code>s.</p>
+
+<p>This step might seem pedestrian, but it's deliberate: by only writing the minimum amount of code required to make a test pass and following that step up with an additional test, Glenn's villainous coding behavior is ensuring every logical path through the evolving code is covered by a test.</p>
+
+<p>Naturally, once Glenn's new associative array is forcing a failure, Frank updates the <code>add</code> method to make the <code>y</code> input parameter a <code>Number</code> as well. Frank then proceeds to add a few more values to the <code>inputs</code> array.</p>
+
+<p>``` javascript Let's see if you can make it fail now!
+require 'should'
+require 'mocha'
+Calculator = require 'Calculator'</p>
+
+<p>describe 'a calculator', -></p>
+
+<pre><code>describe 'the addition function', -&gt;
+    it 'should support adding 2 positive numbers', -&gt;
+      inputs = [{x: 1, y: 2, ans: 3}, 
+         {x: 1, y: 4, ans: 5}, 
+         {x: '1', y: 4, ans: 5},
+         {x: '1', y: '4', ans: 5},
+         {x: -1, y: 4, ans: 3},
+         {x: 1.5, y: 4, ans: 5.5}]
+      calculator = new Calculator
+      for input in inputs
+        calculator.add(input['x'], input['y']).should.equal input['ans']  
+</code></pre>
+
+<p>```</p>
+
+<p>He runs the test hoping for a failure, but to no avail. Time to think a bit harder. Time to embrace one's inner sadistic troll. He then adds the following associative array to the <code>inputs</code> array: <code>{x: 1.5, y: null, ans: 1.5}</code>. Yet, the test still passes.</p>
+
+<p>It's at this point that both Frank and Glenn feel they're done: <code>add</code> works to their expectations. If they wanted to go on, Frank could proceed to write a failing test for a <code>subtract</code> function and so on.</p>
+
+<h4>It's a learning experience</h4>
+
+<p>Interestingly, Frank learned a new way to approach testing from Glenn. When Glenn introduced the array of associative arrays, Frank was initially surprised. He figured it would be easier to write an additional test case. He even pointed that out to Glenn.  But Glenn countered that more <code>it</code> phrases don't necessarily mean better tests; and besides, using his method of iterating over a series of values provided them with a lot of flexibility <em>without</em> a lot of boiler plate code -- something Frank agreed with. Accordingly, Frank learned a new way of thinking about testing -- make a single test a bit more powerful by using a series of values rather than making a lot of similar tests.</p>
+
+<p>Frank also learned a bit of coding patience. He was initially annoyed when Glenn only updated <code>x</code> to use a <code>Number</code> type and completely ignored <code>y</code>. He accosted Glenn: "Update <code>y</code> too?!" to which Glenn countered that the only amount of code he needed to write to make Frank's test pass. Frank then saw that his tricky test case with only 1 <code>String</code> input was essentially inadequate.</p>
+
+<h4>Benefits and costs</h4>
+
+<p>Ping pong pairing is a methodically deliberate manner of programming that forces you to be extremely patient, because you are limited to write the least amount of code to make a test pass <em>and no more</em>. And while it might seem like this process is a slow way to get things done, the benefits far outweigh the costs.</p>
+
+<p>For one thing, two chums practicing ping pong will produce well tested functionality. Second, they'll produce this functionality in a lot fewer lines of code than if they had done it otherwise. That's a good thing and I've seen this result consistently. There's one thing that I've come to learn: less working code is better than more. And pay attention here: producing fewer lines of working code usually means you have more tests than the code those tests are validating.</p>
+
+<p>Additionally, this technique forces developers to learn from each other. Every developer has a great coding facility up their sleeves and every developer can learn something <em>new</em>.</p>
+
+<p>Finally, ping pong results in two parties having an intimate knowledge of code. Two is better than one, in my book.</p>
+
+<h4>Ping pong style</h4>
+
+<p>I've found that ping pong is best practiced <a href="http://en.wikipedia.org/wiki/Pomodoro_Technique">Pomodoro style</a> -- ping pong isn't something you can do all day, nor would I recommend you do so. Do it for 20 to 25 minutes then take a break and figure out if it was valuable or not. Chances are you'll find it was a worthwhile investment in time and you'll elect to do it again later in the day or another time.</p>
+
+<p>Make no mistake: holding back the urge to loquaciously code away takes a lot of discipline and practice. But ping pong <em>will make you a better programmer</em> even if you only do it once in a while.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Book review: Instant Mockito]]></title>
