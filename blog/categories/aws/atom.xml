@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AWS | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-04-01T21:18:22-07:00</updated>
+  <updated>2014-05-05T13:56:01-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,153 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Dockerfiles in a jiffy]]></title>
+    <link href="http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/"/>
+    <updated>2014-05-05T10:19:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/docker.png"><a href="https://www.docker.io/">Docker</a> is a lightweight container for applications -- think of a Docker as an app in a box, except that the box in this case isn't an entire VM, but the bare necessities required to run a process. Consequently, you can run many Dockers in a VM. In essence, Docker replaces installation steps for a particular app. Rather than having to execute a series of steps to get, say, <a href="http://thediscoblog.com/blog/categories/mongodb/">MongoDB</a> running, you can simply fire up a Mongo Docker image.</p>
+
+<p>Docker images can be created from a <code>Dockerfile</code>, which is similar to a <code>Vagrantfile</code> or even a build script -- it's a prescription for how to assemble an image. You don't need to have a <code>Dockerfile</code> to create a Docker image, however, creating one makes image creation <em>repeatable</em>. It also provides a means for others to verify an image.</p>
+
+<!-- more -->
+
+
+<p>There are a few key instructions you should be aware of when creating <code>Dockerfiles</code> -- mainly,  <code>FROM</code>, <code>RUN</code>, <code>EXPOSE</code>, and <code>CMD</code>. To demonstrate how easy this process is, I'm going to create a <code>Dockerfile</code> that runs Amazon's DynamoDB Local.</p>
+
+<h4>DynamoDB Local</h4>
+
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tools.DynamoDBLocal.html">DynamoDB Local</a> is a simple Java application that emulates <a href="http://aws.amazon.com/dynamodb/">AWS DynamoDB</a>. The benefit of using DynamoDB Local is that you can iterate quickly without using bandwidth against the real DynamoDB and you'll save a few coins in the process.</p>
+
+<p>Running DynamoDB Local isn't terribly difficult; in fact, provided you have <a href="http://thediscoblog.com/blog/categories/java/">Java</a> installed, it's as easy as:</p>
+
+<p><code>bash Firing up DynamoDB Local
+$ java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar
+</code></p>
+
+<p>Of course, if you aren't developing a Java application and don't have Java installed, you would need to, of course, install Java. Then you'd need to download the DynamoDB Local package and install it. And then you'd need to run it.</p>
+
+<p>Alternatively, you could just <code>pull</code> a Docker image, <code>run</code> it, and get back to work.</p>
+
+<h4>Creating a Dockerfile</h4>
+
+<p>Creating a <code>Dockerfile</code> is simple. Fire up your favorite editor and follow along.</p>
+
+<p>The first required element, <code>FROM</code>, indicates the base image or parent from which a docker image is built upon. In many cases, this'll be something like <code>ubuntu</code> or <code>centos</code>, for example.  In the case of an image for DynamoDB Local, I'm going to base it off <em>another image</em> that already has Oracle's <a href="http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation/">Java 8</a> installed. That image is based upon <a href="http://thediscoblog.com/blog/categories/ubuntu/">Ubuntu</a>. Note, basing your <code>FROM</code> off of another image implies the image is available in an accessible Docker index. You can run your own local or remote indexes or use <a href="https://index.docker.io/">Docker's public index</a>.</p>
+
+<p>Consequently, the first two lines of my <code>Dockerfile</code> are:</p>
+
+<p><code>bash FROM and MAINTAINER elements of a Dockerfile
+FROM aglover/java8-pier
+MAINTAINER Andy Glover "ajglover@gmail.com"
+</code></p>
+
+<p>Have a look at my <a href="https://index.docker.io/u/aglover/java8-pier/">java8-pier project</a> and you'll see its <code>Dockerfile</code> has the line <code>FROM ubuntu</code>. The <code>MAINTAINER</code> line is self evident.</p>
+
+<p>The 2nd most important instruction of a <code>Dockerfile</code> is <code>RUN</code>. Think of <code>RUN</code> as <code>bash</code> commands required to set up your Docker image. In the case of setting up DynamoDB Local, there are a few things I would like done on the image. First and foremost, I'd like to update base aspects of the underlying <a href="http://thediscoblog.com/blog/categories/ubuntu/">Ubuntu</a> OS via an <code>apt-get update</code>. Then I'd like to download the DynamoDB Local archive, however, I'd like to use <code>wget</code>, which isn't available on base Ubuntu installs, however. Consequently, I'll install <code>wget</code> while I'm at it.</p>
+
+<p><code>bash apt-get update and wget install
+RUN apt-get update -y
+RUN apt-get install wget -y
+</code></p>
+
+<p>Next, I'm going to <code>wget</code> the latest version of DynamoDB Local via an AWS URL that points to the latest version (which obviously changes); thus, the <code>-O</code> flag forces the downloaded file to the generic name of <code>dynamo.tar.gz</code> (rather than something like <code>dynamodb_local_2014-04-24.tar.gz</code> where the date can change depending on when AWS releases an update). Finally, after the download completes, the file is moved into a directory dubbed <code>dynamodb_local</code>.</p>
+
+<p><code>bash Downloading the archive
+RUN wget http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest -O dynamo.tar.gz
+RUN tar xvzf dynamo.tar.gz &amp;&amp; mv dynamodb_local_* dynamodb_local
+</code></p>
+
+<p>Docker images, by default, don't expose any ports through the host on which they are running. You must expose desired ports via the <code>EXPOSE</code> command. In my case, DynamoDB Local defaults to port 8000; accordingly, I'll specify in my <code>Dockerfile</code> that I wish this port to be open:</p>
+
+<p><code>bash Exposing port 8000
+EXPOSE 8000
+</code></p>
+
+<p>Finally, as I wish to run a service via my Docker image, I need to fire it up! DynamoDB Local is simply a Java process that requires, at a minimum, two parameters. If I were to run DynamoDB Local manually, the corresponding command would be:</p>
+
+<p><code>bash The command to run DynamoDB Local
+$ java -Djava.library.path=./dynamodb_local/DynamoDBLocal_lib -jar ./dynamodb_local/DynamoDBLocal.jar
+</code></p>
+
+<p>Consequently, to execute this command in a <code>Dockerfile</code> I'll need to use the <code>CMD</code> instruction (which is probably the most important instruction for creating Dockers!). This instruction takes an array of values -- logically, just take the corresponding manual command and tokenize it by a space and you've got your <code>CMD</code>:</p>
+
+<p><code>bash The CMD instruction is important if your Docker image runs a service
+CMD ["java", "-Djava.library.path=./dynamodb_local/DynamoDBLocal_lib", "-jar", "./dynamodb_local/DynamoDBLocal.jar"]
+</code></p>
+
+<p>That's it -- 8 lines and you've got a <code>Dockerfile</code> that'll yield Docker image running DynamoDB Local as a service.</p>
+
+<h4>Creating images from Dockerfiles</h4>
+
+<p>With a <code>Dockerfile</code> I can now create an image via the <code>build</code> command. Thus, in a terminal window, I'll change directories to where I've saved my <code>Dockerfile</code> and run the following:</p>
+
+<p><code>bash Building a Docker image
+$ docker build -t aglover/dynamodb-pier .
+</code></p>
+
+<p><code>aglover/dynamodb-pier</code> is the desired name of my image. After you run this command, you will see a whole lot of commands executed, including the ones specified in your <code>Dockerfile</code>. Once things finish successfully, you should be able to see the resultant image via the <code>images</code> command.</p>
+
+<p><code>bash Listing Docker images
+$ docker images
+REPOSITORY              TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+aglover/dynamodb-pier   latest              aa51ccc5dc3f        14 seconds ago      1.089 GB
+aglover/java8-pier      latest              cb8436bb816a        4 weeks ago         1.026 GB
+base                    latest              b750fe79269d        13 months ago       175.3 MB
+base                    ubuntu-12.10        b750fe79269d        13 months ago       175.3 MB
+base                    ubuntu-quantal      b750fe79269d        13 months ago       175.3 MB
+base                    ubuntu-quantl       b750fe79269d        13 months ago       175.3 MB
+</code></p>
+
+<p>I can run my newly minted Docker image via its ID, which, if you look closely in the listing above, is <code>aa51ccc5dc3f</code>.</p>
+
+<p><code>bash Running a Docker image
+$ docker run aa51ccc5dc3f
+2014-05-05 17:04:14.037:INFO:oejs.Server:jetty-8.1.12.v20130726
+2014-05-05 17:04:14.119:INFO:oejs.AbstractConnector:Started SelectChannelConnector@0.0.0.0:8000
+</code></p>
+
+<p>Note, by default, Docker will run the image in the foreground; accordingly, you can see things are working via the output coming from the DynamoDB Local instance running.</p>
+
+<p>You can run a Docker image as a daemon via the <code>-d</code> flag:</p>
+
+<p><code>bash Running a Docker image as daemon
+$ docker run -d aa51ccc5dc3f
+7be2708d94eedaa82432d239659ddb696d66004516174a6e2f79f4ec465eb9fc
+</code></p>
+
+<p>You can now see what Docker images are running via the <code>ps</code> command.</p>
+
+<p><code>bash Docker ps lists running images
+$ docker ps
+CONTAINER ID        IMAGE                          COMMAND                CREATED             STATUS              PORTS               NAMES
+7be2708d94ee        aglover/dynamodb-pier:latest   java -Djava.library.   17 seconds ago      Up 16 seconds       8000/tcp            compassionate_bardeen
+</code></p>
+
+<p>Finally, you can stop an image via the <code>stop</code> command. You must provide the ID of the image, which you can see via a <code>ps</code>.</p>
+
+<p><code>bash Stopping a Docker image
+$ docker stop 7be2708d94ee
+</code></p>
+
+<p>Docker has a <a href="http://docs.docker.io/use/workingwithrepository/">public repository</a> can you publish to, provided you have an account. Ultimately, publishing is done via the <code>push</code> command. For example, I've published my DynamoDB Local image via:</p>
+
+<p><code>bash Docker pushing
+$ docker push aglover/dynamodb-pier
+</code></p>
+
+<p>Once an image has been published, it can correspondingly be downloaded via the <code>pull</code> command:</p>
+
+<p><code>bash Using a Docker image
+$ docker pull aglover/dynamodb-pier
+</code></p>
+
+<p>Think of <code>pull</code>ing as simply downloading and registering a Docker. To use a 'pull'ed Docker, you must still execute the <code>run</code> command.</p>
+
+<p>Docker makes it super easy to distribute pre-packaged applications -- rather than installing various binaries on different operating systems (like MongoDB on OSX for development and <em>a different</em> MongoDB binary on Ubuntu for production), you can use the <em>same</em> package across environments. <code>Dockerfile</code>s make creating Dockers repeatable. And hopefully I've shown you that crafting a <code>Dockerfile</code> isn't terribly difficult.  Go forth and Docker.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ahoy there Maven Central]]></title>
@@ -324,60 +471,6 @@ private void send(final AmazonSQS sqs, final String queueURL, final String messa
 <p>Incidentally, the AWS Java SDK <em>does provide an asynchronous client</em>; however, this client's implementation leverages Java's <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html">Futures</a>. While <a href="http://nurkiewicz.blogspot.com/2013/02/javautilconcurrentfuture-basics.html">Futures are a neat concept</a>, Ahoy!'s implementation is more convenient (<em>at least for me and in the patterns of how I employ SQS</em>) than Futures as there isn't any polling involved once a message is sent or received.</p>
 
 <p>While callbacks aren't <a href="http://en.wikipedia.org/wiki/Function_object#In_Java">necessarily supported</a> natively in Java, you can emulate them quite nicely and achieve the same level of code conciseness as what's common in JavaScript. And if you need a handy way to interface with AWS SQS, <a href="https://github.com/aglover/ahoy">then give Ahoy! a try</a>! Can you dig it, man?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ElasticSearch on EC2 in less than 60 seconds]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/"/>
-    <updated>2013-05-17T17:24:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/es-bonzai.jpg">Curious to see what all the <a href="http://www.elasticsearch.org/">ElasticSearch</a> hubbub is about? Wanna see it in action without a lot of elbow grease? Then look no further, friend -- in less than 60 seconds, I'll show you how to install <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-24/">ElasticSearch</a> on an <a href="http://aws.amazon.com/">AWS AMI</a>.</p>
-
-<p>You'll first <a href="http://www.drdobbs.com/web-development/getting-started-with-the-cloud-amazon-we/231601598">need an AWS account</a> along with an SSH key pair. If you don't already have those two steps done, go ahead and do that. The steps that follow suggest a particular AMI; however, you are free to select the <a href="http://aws.amazon.com/ec2/instance-types/">instance type</a>. <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Micro instance types</a> are free to use; consequently, you can get <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">up and running with ElasticSearch</a> in less than a minute <em>for free</em>.</p>
-
-<!-- more -->
-
-
-<p>Now that you've got an <a href="http://www.ibm.com/developerworks/web/library/j-s3/">AWS</a> account and an SSH key pair, go ahead and create a new security group (or edit an existing one). It's important that the <a href="http://www.elasticsearch.org/tutorials/elasticsearch-on-ec2/">following ports</a> are open:</p>
-
-<ul>
-<li>22 (required for SSH)</li>
-<li>80 (ElasticSearch uses HTTP for standard API calls)</li>
-<li>9200 (required for ElasticSearch)</li>
-<li>9300 (required for ElasticSearch)</li>
-</ul>
-
-
-<p>Next, fire up a Linux AMI. I, for example, prefer <a href="http://cloud-images.ubuntu.com/locator/ec2/">ami-c30360aa</a> (this is Ubuntu Server version 13.04) and I configure the AMI to use the security group that I just covered.</p>
-
-<p>Now, SSH to your newly instantiated AMI.  Once on the AMI, you'll need to install Java. Never fear though, I've got you covered. All you need to do is run a handy script via the <a href="https://github.com/aglover/ubuntu-equip">Ubuntu-Equip project</a>, that I use frequently just for this sorta thing:</p>
-
-<p><code>bash installing Java
-wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_java.sh &amp;&amp; bash equip_java.sh
-</code></p>
-
-<p>You'll need to accept the license from Oracle. Once that script completes, go ahead and type  <code>java -version</code> and you should see Oracle's JDK (i.e Java version "1.7.0_21").</p>
-
-<p>Next, download and install ElasticSearch via another nifty <a href="https://github.com/aglover/ubuntu-equip">Ubuntu-Equip</a> script:</p>
-
-<p><code>bash installing elasticsearch
-wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_elasticsearch.sh &amp;&amp; bash equip_elasticsearch.sh
-</code></p>
-
-<p>This script doesn't start ElasticSearch for you; thus, go ahead and change directories into the <code>elasticsearch</code> directory and fire it up like so:</p>
-
-<p><code>bash starting elasticsearch
-~/elasticsearch$ bin/elasticsearch -f
-</code></p>
-
-<p>Take a deep breath (but not too deep, as I need you to finish in less than 60 seconds) and find the Public DNS of the AMI you've been working on. Go ahead and copy it, then fire up a browser on your local machine and go to http://YOUR_AMI_DNS_NAME.com:9200/_plugin/inquisitor/ (be sure to note the port).</p>
-
-<p>By the way, <a href="https://github.com/polyfractal/elasticsearch-inquisitor">Inquisitor</a> is a handy web application that lets you query your indexes. It was installed via the Ubuntu-Equip script -- this tool is invaluable in figuring out how to properly query your indexes.</p>
-
-<p>And that is it. In less than 60 seconds you've got ElasticSearch running in the cloud for you. Want to create a cluster? No problem, just follow these steps again to fire up another ElasticSearch instance and then <a href="http://www.elasticsearch.org/videos/three-nodes-and-one-cluster/">configure the cluster accordingly</a>.</p>
-
-<p>I've not gone over <a href="http://www.elasticsearch.org/guide/reference/setup/configuration/">configuring ElasticSearch</a> nor have I showed you how to create ElasticSearch as a service on a Linux instance, but for one minute, what do you expect?</p>
 ]]></content>
   </entry>
   

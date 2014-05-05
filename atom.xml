@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-04-01T21:18:22-07:00</updated>
+  <updated>2014-05-05T13:56:01-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,183 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Dockerfiles in a jiffy]]></title>
+    <link href="http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/"/>
+    <updated>2014-05-05T10:19:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/docker.png"><a href="https://www.docker.io/">Docker</a> is a lightweight container for applications &#8211; think of a Docker as an app in a box, except that the box in this case isn&#8217;t an entire VM, but the bare necessities required to run a process. Consequently, you can run many Dockers in a VM. In essence, Docker replaces installation steps for a particular app. Rather than having to execute a series of steps to get, say, <a href="http://thediscoblog.com/blog/categories/mongodb/">MongoDB</a> running, you can simply fire up a Mongo Docker image.</p>
+
+<p>Docker images can be created from a <code>Dockerfile</code>, which is similar to a <code>Vagrantfile</code> or even a build script &#8211; it&#8217;s a prescription for how to assemble an image. You don&#8217;t need to have a <code>Dockerfile</code> to create a Docker image, however, creating one makes image creation <em>repeatable</em>. It also provides a means for others to verify an image.</p>
+
+<!-- more -->
+
+
+<p>There are a few key instructions you should be aware of when creating <code>Dockerfiles</code> &#8211; mainly,  <code>FROM</code>, <code>RUN</code>, <code>EXPOSE</code>, and <code>CMD</code>. To demonstrate how easy this process is, I&#8217;m going to create a <code>Dockerfile</code> that runs Amazon&#8217;s DynamoDB Local.</p>
+
+<h4>DynamoDB Local</h4>
+
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tools.DynamoDBLocal.html">DynamoDB Local</a> is a simple Java application that emulates <a href="http://aws.amazon.com/dynamodb/">AWS DynamoDB</a>. The benefit of using DynamoDB Local is that you can iterate quickly without using bandwidth against the real DynamoDB and you&#8217;ll save a few coins in the process.</p>
+
+<p>Running DynamoDB Local isn&#8217;t terribly difficult; in fact, provided you have <a href="http://thediscoblog.com/blog/categories/java/">Java</a> installed, it&#8217;s as easy as:</p>
+
+<figure class='code'><figcaption><span>Firing up DynamoDB Local</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>java -Djava.library.path<span class="o">=</span>./DynamoDBLocal_lib -jar DynamoDBLocal.jar
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Of course, if you aren&#8217;t developing a Java application and don&#8217;t have Java installed, you would need to, of course, install Java. Then you&#8217;d need to download the DynamoDB Local package and install it. And then you&#8217;d need to run it.</p>
+
+<p>Alternatively, you could just <code>pull</code> a Docker image, <code>run</code> it, and get back to work.</p>
+
+<h4>Creating a Dockerfile</h4>
+
+<p>Creating a <code>Dockerfile</code> is simple. Fire up your favorite editor and follow along.</p>
+
+<p>The first required element, <code>FROM</code>, indicates the base image or parent from which a docker image is built upon. In many cases, this&#8217;ll be something like <code>ubuntu</code> or <code>centos</code>, for example.  In the case of an image for DynamoDB Local, I&#8217;m going to base it off <em>another image</em> that already has Oracle&#8217;s <a href="http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation/">Java 8</a> installed. That image is based upon <a href="http://thediscoblog.com/blog/categories/ubuntu/">Ubuntu</a>. Note, basing your <code>FROM</code> off of another image implies the image is available in an accessible Docker index. You can run your own local or remote indexes or use <a href="https://index.docker.io/">Docker&#8217;s public index</a>.</p>
+
+<p>Consequently, the first two lines of my <code>Dockerfile</code> are:</p>
+
+<figure class='code'><figcaption><span>FROM and MAINTAINER elements of a Dockerfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>FROM aglover/java8-pier
+</span><span class='line'>MAINTAINER Andy Glover <span class="s2">&quot;ajglover@gmail.com&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Have a look at my <a href="https://index.docker.io/u/aglover/java8-pier/">java8-pier project</a> and you&#8217;ll see its <code>Dockerfile</code> has the line <code>FROM ubuntu</code>. The <code>MAINTAINER</code> line is self evident.</p>
+
+<p>The 2nd most important instruction of a <code>Dockerfile</code> is <code>RUN</code>. Think of <code>RUN</code> as <code>bash</code> commands required to set up your Docker image. In the case of setting up DynamoDB Local, there are a few things I would like done on the image. First and foremost, I&#8217;d like to update base aspects of the underlying <a href="http://thediscoblog.com/blog/categories/ubuntu/">Ubuntu</a> OS via an <code>apt-get update</code>. Then I&#8217;d like to download the DynamoDB Local archive, however, I&#8217;d like to use <code>wget</code>, which isn&#8217;t available on base Ubuntu installs, however. Consequently, I&#8217;ll install <code>wget</code> while I&#8217;m at it.</p>
+
+<figure class='code'><figcaption><span>apt-get update and wget install</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>RUN apt-get update -y
+</span><span class='line'>RUN apt-get install wget -y
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, I&#8217;m going to <code>wget</code> the latest version of DynamoDB Local via an AWS URL that points to the latest version (which obviously changes); thus, the <code>-O</code> flag forces the downloaded file to the generic name of <code>dynamo.tar.gz</code> (rather than something like <code>dynamodb_local_2014-04-24.tar.gz</code> where the date can change depending on when AWS releases an update). Finally, after the download completes, the file is moved into a directory dubbed <code>dynamodb_local</code>.</p>
+
+<figure class='code'><figcaption><span>Downloading the archive</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>RUN wget http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest -O dynamo.tar.gz
+</span><span class='line'>RUN tar xvzf dynamo.tar.gz <span class="o">&amp;&amp;</span> mv dynamodb_local_* dynamodb_local
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Docker images, by default, don&#8217;t expose any ports through the host on which they are running. You must expose desired ports via the <code>EXPOSE</code> command. In my case, DynamoDB Local defaults to port 8000; accordingly, I&#8217;ll specify in my <code>Dockerfile</code> that I wish this port to be open:</p>
+
+<figure class='code'><figcaption><span>Exposing port 8000</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>EXPOSE 8000
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, as I wish to run a service via my Docker image, I need to fire it up! DynamoDB Local is simply a Java process that requires, at a minimum, two parameters. If I were to run DynamoDB Local manually, the corresponding command would be:</p>
+
+<figure class='code'><figcaption><span>The command to run DynamoDB Local</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>java -Djava.library.path<span class="o">=</span>./dynamodb_local/DynamoDBLocal_lib -jar ./dynamodb_local/DynamoDBLocal.jar
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Consequently, to execute this command in a <code>Dockerfile</code> I&#8217;ll need to use the <code>CMD</code> instruction (which is probably the most important instruction for creating Dockers!). This instruction takes an array of values &#8211; logically, just take the corresponding manual command and tokenize it by a space and you&#8217;ve got your <code>CMD</code>:</p>
+
+<figure class='code'><figcaption><span>The CMD instruction is important if your Docker image runs a service</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>CMD <span class="o">[</span><span class="s2">&quot;java&quot;</span>, <span class="s2">&quot;-Djava.library.path=./dynamodb_local/DynamoDBLocal_lib&quot;</span>, <span class="s2">&quot;-jar&quot;</span>, <span class="s2">&quot;./dynamodb_local/DynamoDBLocal.jar&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&#8217;s it &#8211; 8 lines and you&#8217;ve got a <code>Dockerfile</code> that&#8217;ll yield Docker image running DynamoDB Local as a service.</p>
+
+<h4>Creating images from Dockerfiles</h4>
+
+<p>With a <code>Dockerfile</code> I can now create an image via the <code>build</code> command. Thus, in a terminal window, I&#8217;ll change directories to where I&#8217;ve saved my <code>Dockerfile</code> and run the following:</p>
+
+<figure class='code'><figcaption><span>Building a Docker image</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker build -t aglover/dynamodb-pier .
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>aglover/dynamodb-pier</code> is the desired name of my image. After you run this command, you will see a whole lot of commands executed, including the ones specified in your <code>Dockerfile</code>. Once things finish successfully, you should be able to see the resultant image via the <code>images</code> command.</p>
+
+<figure class='code'><figcaption><span>Listing Docker images</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker images
+</span><span class='line'>REPOSITORY              TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+</span><span class='line'>aglover/dynamodb-pier   latest              aa51ccc5dc3f        14 seconds ago      1.089 GB
+</span><span class='line'>aglover/java8-pier      latest              cb8436bb816a        4 weeks ago         1.026 GB
+</span><span class='line'>base                    latest              b750fe79269d        13 months ago       175.3 MB
+</span><span class='line'>base                    ubuntu-12.10        b750fe79269d        13 months ago       175.3 MB
+</span><span class='line'>base                    ubuntu-quantal      b750fe79269d        13 months ago       175.3 MB
+</span><span class='line'>base                    ubuntu-quantl       b750fe79269d        13 months ago       175.3 MB
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I can run my newly minted Docker image via its ID, which, if you look closely in the listing above, is <code>aa51ccc5dc3f</code>.</p>
+
+<figure class='code'><figcaption><span>Running a Docker image</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker run aa51ccc5dc3f
+</span><span class='line'>2014-05-05 17:04:14.037:INFO:oejs.Server:jetty-8.1.12.v20130726
+</span><span class='line'>2014-05-05 17:04:14.119:INFO:oejs.AbstractConnector:Started SelectChannelConnector@0.0.0.0:8000
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note, by default, Docker will run the image in the foreground; accordingly, you can see things are working via the output coming from the DynamoDB Local instance running.</p>
+
+<p>You can run a Docker image as a daemon via the <code>-d</code> flag:</p>
+
+<figure class='code'><figcaption><span>Running a Docker image as daemon</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker run -d aa51ccc5dc3f
+</span><span class='line'>7be2708d94eedaa82432d239659ddb696d66004516174a6e2f79f4ec465eb9fc
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can now see what Docker images are running via the <code>ps</code> command.</p>
+
+<figure class='code'><figcaption><span>Docker ps lists running images</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker ps
+</span><span class='line'>CONTAINER ID        IMAGE                          COMMAND                CREATED             STATUS              PORTS               NAMES
+</span><span class='line'>7be2708d94ee        aglover/dynamodb-pier:latest   java -Djava.library.   17 seconds ago      Up 16 seconds       8000/tcp            compassionate_bardeen
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, you can stop an image via the <code>stop</code> command. You must provide the ID of the image, which you can see via a <code>ps</code>.</p>
+
+<figure class='code'><figcaption><span>Stopping a Docker image</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker stop 7be2708d94ee
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Docker has a <a href="http://docs.docker.io/use/workingwithrepository/">public repository</a> can you publish to, provided you have an account. Ultimately, publishing is done via the <code>push</code> command. For example, I&#8217;ve published my DynamoDB Local image via:</p>
+
+<figure class='code'><figcaption><span>Docker pushing</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker push aglover/dynamodb-pier
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once an image has been published, it can correspondingly be downloaded via the <code>pull</code> command:</p>
+
+<figure class='code'><figcaption><span>Using a Docker image</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker pull aglover/dynamodb-pier
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Think of <code>pull</code>ing as simply downloading and registering a Docker. To use a &#8216;pull&#8217;ed Docker, you must still execute the <code>run</code> command.</p>
+
+<p>Docker makes it super easy to distribute pre-packaged applications &#8211; rather than installing various binaries on different operating systems (like MongoDB on OSX for development and <em>a different</em> MongoDB binary on Ubuntu for production), you can use the <em>same</em> package across environments. <code>Dockerfile</code>s make creating Dockers repeatable. And hopefully I&#8217;ve shown you that crafting a <code>Dockerfile</code> isn&#8217;t terribly difficult.  Go forth and Docker.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Schooled in ping pong]]></title>
@@ -1694,176 +1871,6 @@ what ever you mounted (i.e <code>/dev/xvdf</code>), the mount point will be the 
 <p>Check out &#8221;<a href="http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html">Mobile for the masses: Sign, seal, and deliver your Android app</a>&#8221; and learn how to sign your app in preparation for submitting it to an app store! If you missed the first article, check out &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses1/">Mobile for the masses: A gentle introduction to Android</a>&#8221;; what&#8217;s more, don&#8217;t forget to read my second article, entitled &#8221;<a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Mobile for the masses: Take a swipe at it! Programming gestures in Android</a>&#8221; and the third article &#8221;<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses3/index.html">Mobile for the masses: Activities and icons in your Android application lifecycle</a>&#8221;. Finally, don&#8217;t forget to read article number four: &#8221;<a href="http://www.ibm.com/developerworks/java/library/j-mobileforthemasses4/index.html">Mobile for the masses: Mobile for the masses: Words and gestures with Overheard Word</a>&#8221; and programmatically integrate third-party code into your Android UI!</p>
 
 <p>Stay tuned for more articles in this series and don&#8217;t forget to watch for <a href="http://thediscoblog.com/blog/categories/mobile/">mobile focused articles on this blog</a> as well.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Understanding ElasticSearch analyzers]]></title>
-    <link href="http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers/"/>
-    <updated>2013-09-14T08:37:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/09/14/understanding-elasticsearch-analyzers</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/old-beer.jpg">Sadly, lots of early Internet beer recipes aren&#8217;t necessarily in an easily digestible format; that is, these recipes are <em>unstructured</em> intermixed lists of directions and ingredients often originally composed in an email or forum post.</p>
-
-<p>So while it&#8217;s hard to easily put these recipes into traditional data stores (ostensibly for easier searching), they&#8217;re perfect for <a href="http://thediscoblog.com/blog/2013/05/14/the-democratization-of-search/">ElasticSearch</a> in their current form.</p>
-
-<p>Accordingly, imagine an <a href="http://thediscoblog.com/blog/2013/05/17/elasticsearch-on-ec2-in-less-than-60-seconds/">ElasticSearch</a> index full of beer recipes, since&#8230;well&#8230;I enjoy making beer (and drinking it too).</p>
-
-<!-- more -->
-
-
-<p>First, I&#8217;ll add some beer recipes into ElasticSearch using <a href="https://github.com/phillro/node-elasticsearch-client">Node&#8217;s ElasticSearch Client</a>(note that the code is <a href="http://thediscoblog.com/blog/categories/coffeescript/">CoffeeScript</a> though). I&#8217;ll be adding these beer recipes into a <code>beer_recipes</code> index like so:</p>
-
-<figure class='code'><figcaption><span>Adding a beer recipe </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">beer_1</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Todd Enders&#39; Witbier&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">style</span><span class="o">:</span> <span class="s2">&quot;wit, Belgian ale, wheat beer&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">ingredients</span><span class="o">:</span> <span class="s2">&quot;4.0 lbs Belgian pils malt, 4.0 lbs raw soft red winter wheat, 0.5 lbs rolled oats, 0.75 oz coriander, freshly ground Zest from two table oranges and two lemons, 1.0 oz 3.1% AA Saaz, 3/4 corn sugar for priming, Hoegaarden strain yeast&quot;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">client</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="s1">&#39;beer_recipes&#39;</span><span class="p">,</span> <span class="s1">&#39;beer&#39;</span><span class="p">,</span> <span class="nx">beer_1</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
-</span><span class='line'><span class="p">).</span><span class="nx">exec</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note how the interesting part of a recipe JSON document, dubbed <code>beer_1</code> is found in the <code>ingredients</code> field. This field is basically a big string of valuable text (you can imagine how this string was essentially the body of an email). So while the <code>ingredients</code> field is unstructured, it&#8217;s something clearly that people will want to search on.</p>
-
-<p>I will add one more recipe for good measure:</p>
-
-<figure class='code'><figcaption><span>Adding a second beer recipe</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">beer_2</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Wit&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">style</span><span class="o">:</span> <span class="s2">&quot;wit, Belgian ale, wheat beer&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">ingredients</span><span class="o">:</span> <span class="s2">&quot;4 lbs DeWulf-Cosyns &#39;Pils&#39; malt, 3 lbs brewers&#39; flaked wheat (inauthentic; will try raw wheat nest time), 6 oz rolled oats, 1 oz Saaz hops (3.3% AA), 0.75 oz bitter (Curacao) orange peel quarters (dried), 1 oz sweet orange peel (dried), 0.75 oz coriander (cracked), 0.75 oz anise seed, one small pinch cumin, 0.75 cup corn sugar (priming), 10 ml 88% food-grade lactic acid (at bottling), BrewTek &#39;Belgian Wheat&#39; yeast&quot;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">client</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="s1">&#39;beer_recipes&#39;</span><span class="p">,</span> <span class="s1">&#39;beer&#39;</span><span class="p">,</span> <span class="nx">beer_2</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
-</span><span class='line'><span class="p">).</span><span class="nx">exec</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It&#8217;s a hot summers day and I&#8217;m thinking I&#8217;d like to make a beer with <em>lemon</em> as an ingredient (to be clear: I want to use lemon zest, which is obtained from a lemon peel). So naturally, I need to find (i.e. <em>search for</em>) a recipe with lemons in it.</p>
-
-<p>Consequently, I&#8217;ll search my index for recipes that contain the word &#8220;lemon&#8221; like so:</p>
-
-<figure class='code'><figcaption><span>Searching for lemon</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">query</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;query&quot;</span> <span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;term&quot;</span> <span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;ingredients&quot;</span> <span class="o">:</span> <span class="s2">&quot;lemon&quot;</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">client</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="s1">&#39;beer_recipes&#39;</span><span class="p">,</span> <span class="s1">&#39;beer&#39;</span><span class="p">,</span> <span class="nx">query</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>  <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">for</span> <span class="nx">doc</span> <span class="k">in</span> <span class="nx">data</span><span class="p">.</span><span class="nx">hits</span><span class="p">.</span><span class="nx">hits</span>
-</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">doc</span><span class="p">.</span><span class="nx">_source</span><span class="p">.</span><span class="nx">style</span>
-</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">doc</span><span class="p">.</span><span class="nx">_source</span><span class="p">.</span><span class="nx">name</span>
-</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">doc</span><span class="p">.</span><span class="nx">_source</span><span class="p">.</span><span class="nx">ingredients</span>
-</span><span class='line'><span class="p">).</span><span class="nx">exec</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>But nothing shows up &#8211; there are no results! Why is that?</p>
-
-<p>If you look closely in the earlier code example (specifically, the <code>beer_1</code> JSON document), you can see that the word &#8220;lemons&#8221; is in the text (i.e. &#8220;&#8230;two table oranges and two lemons&#8230;&#8221;). It turns out, by default, the way values are indexed by ElasticSearch, <em>lemon</em> doesn&#8217;t necessarily match &#8211; <em>lemons</em> does though.</p>
-
-<figure class='code'><figcaption><span>Searching for lemons</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">query</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;query&quot;</span> <span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;term&quot;</span> <span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;ingredients&quot;</span> <span class="o">:</span> <span class="s2">&quot;lemons&quot;</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">client</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="s1">&#39;beer_recipes&#39;</span><span class="p">,</span> <span class="s1">&#39;beer&#39;</span><span class="p">,</span> <span class="nx">query</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>  <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">for</span> <span class="nx">doc</span> <span class="k">in</span> <span class="nx">data</span><span class="p">.</span><span class="nx">hits</span><span class="p">.</span><span class="nx">hits</span>
-</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">doc</span><span class="p">.</span><span class="nx">_source</span><span class="p">.</span><span class="nx">style</span>
-</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">doc</span><span class="p">.</span><span class="nx">_source</span><span class="p">.</span><span class="nx">name</span>
-</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">doc</span><span class="p">.</span><span class="nx">_source</span><span class="p">.</span><span class="nx">ingredients</span>
-</span><span class='line'><span class="p">).</span><span class="nx">exec</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Lo and behold, this search returns a hit! But that&#8217;s inconvenient, to say the least. Basically the words in the <code>ingredients</code> field are tokenized <em>as is</em>. Hence, a search for &#8220;lemons&#8221; works while &#8220;lemon&#8221; doesn&#8217;t. Note: there are various mechanisms for searching, and a search on &#8220;lemon*&#8221; should have returned a result.</p>
-
-<p>When a document is added into an <a href="http://thediscoblog.com/blog/2013/01/02/scalable-searching-with-elasticsearch/">ElasticSearch</a> index, its fields are analyzed and converted into <em>tokens</em>. When you execute a search against an index, you search against those tokens. How ElasticSearch tokenizes a document is configurable.</p>
-
-<p>There are different ElasticSearch analyzers available &#8211; from language analyzers that allow you to support non-English language searches to the <a href="http://snowball.tartarus.org/">snowball</a> analyzer, which converts a word into its root (or stem and that process of creating a stem from a word is called <em><a href="http://snowball.tartarus.org/algorithms/english/stemmer.html">stemming</a></em>), yielding a simpler token. For example, a snowball of &#8220;lemons&#8221; would be &#8220;lemon&#8221;. Or if the words &#8220;knocks&#8221; and &#8220;knocking&#8221; were in a snowball analyzed document, both terms would have &#8220;knock&#8221; as a stem.</p>
-
-<p>You can change how documents are tokenized via the index mapping API like so:</p>
-
-<figure class='code'><figcaption><span>Changing the mapping for an index using cURL</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -XPUT <span class="s1">&#39;http://localhost:9200/beer_recipes&#39;</span> -d <span class="s1">&#39;{ &quot;mappings&quot; : {</span>
-</span><span class='line'><span class="s1">  &quot;beer&quot; : {</span>
-</span><span class='line'><span class="s1">    &quot;properties&quot; : {</span>
-</span><span class='line'><span class="s1">      &quot;ingredients&quot; : { &quot;type&quot; : &quot;string&quot;, &quot;analyzer&quot; : &quot;snowball&quot; }</span>
-</span><span class='line'><span class="s1">    }</span>
-</span><span class='line'><span class="s1">   }</span>
-</span><span class='line'><span class="s1"> }</span>
-</span><span class='line'><span class="s1">}&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note how the above mapping specifies that the <code>ingredients</code> field will be analyzed via the snowball analyzer. Also note, you have to change the mapping of an index <em>before</em> you begin to add documents to it! So, in this case, I&#8217;ll need to drop the index, run the mapping call above, and then re-add those two recipes.</p>
-
-<p>Now I can begin searching recipes for the ingredient &#8220;lemon&#8221;  or &#8220;lemons&#8221;.</p>
-
-<figure class='code'><figcaption><span>Searching for lemon now works!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">query</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;query&quot;</span> <span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;term&quot;</span> <span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;ingredients&quot;</span> <span class="o">:</span> <span class="s2">&quot;lemon&quot;</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">client</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="s1">&#39;beer_recipes&#39;</span><span class="p">,</span> <span class="s1">&#39;beer&#39;</span><span class="p">,</span> <span class="nx">query</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>  <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">for</span> <span class="nx">doc</span> <span class="k">in</span> <span class="nx">data</span><span class="p">.</span><span class="nx">hits</span><span class="p">.</span><span class="nx">hits</span>
-</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">doc</span><span class="p">.</span><span class="nx">_source</span><span class="p">.</span><span class="nx">style</span>
-</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">doc</span><span class="p">.</span><span class="nx">_source</span><span class="p">.</span><span class="nx">name</span>
-</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">doc</span><span class="p">.</span><span class="nx">_source</span><span class="p">.</span><span class="nx">ingredients</span>
-</span><span class='line'><span class="p">).</span><span class="nx">exec</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Keep in mind that <a href="http://stackoverflow.com/questions/3875382/lucene-standard-analyzer-vs-snowball">snowballing can inadvertently</a> make your search results <em>less relevant</em>. Long words can be stemmed into more common but completely different words. For example, if you snowball a document that contains the word &#8220;sextant&#8221;, the word &#8220;sex&#8221; will result as a stem. Thus, searches for &#8220;sextant&#8221; will also return documents that contain the word &#8220;sex&#8221; (and vice versa).</p>
-
-<p>ElasticSearch puts a powerful search engine into your clutches; plus, with a little forethought into how a document&#8217;s contents are analyzed, you&#8217;ll make searches event more relevant.</p>
 ]]></content>
   </entry>
   

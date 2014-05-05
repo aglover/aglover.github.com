@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-04-01T21:18:22-07:00</updated>
+  <updated>2014-05-05T13:56:01-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,153 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Dockerfiles in a jiffy]]></title>
+    <link href="http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/"/>
+    <updated>2014-05-05T10:19:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/docker.png"><a href="https://www.docker.io/">Docker</a> is a lightweight container for applications -- think of a Docker as an app in a box, except that the box in this case isn't an entire VM, but the bare necessities required to run a process. Consequently, you can run many Dockers in a VM. In essence, Docker replaces installation steps for a particular app. Rather than having to execute a series of steps to get, say, <a href="http://thediscoblog.com/blog/categories/mongodb/">MongoDB</a> running, you can simply fire up a Mongo Docker image.</p>
+
+<p>Docker images can be created from a <code>Dockerfile</code>, which is similar to a <code>Vagrantfile</code> or even a build script -- it's a prescription for how to assemble an image. You don't need to have a <code>Dockerfile</code> to create a Docker image, however, creating one makes image creation <em>repeatable</em>. It also provides a means for others to verify an image.</p>
+
+<!-- more -->
+
+
+<p>There are a few key instructions you should be aware of when creating <code>Dockerfiles</code> -- mainly,  <code>FROM</code>, <code>RUN</code>, <code>EXPOSE</code>, and <code>CMD</code>. To demonstrate how easy this process is, I'm going to create a <code>Dockerfile</code> that runs Amazon's DynamoDB Local.</p>
+
+<h4>DynamoDB Local</h4>
+
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tools.DynamoDBLocal.html">DynamoDB Local</a> is a simple Java application that emulates <a href="http://aws.amazon.com/dynamodb/">AWS DynamoDB</a>. The benefit of using DynamoDB Local is that you can iterate quickly without using bandwidth against the real DynamoDB and you'll save a few coins in the process.</p>
+
+<p>Running DynamoDB Local isn't terribly difficult; in fact, provided you have <a href="http://thediscoblog.com/blog/categories/java/">Java</a> installed, it's as easy as:</p>
+
+<p><code>bash Firing up DynamoDB Local
+$ java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar
+</code></p>
+
+<p>Of course, if you aren't developing a Java application and don't have Java installed, you would need to, of course, install Java. Then you'd need to download the DynamoDB Local package and install it. And then you'd need to run it.</p>
+
+<p>Alternatively, you could just <code>pull</code> a Docker image, <code>run</code> it, and get back to work.</p>
+
+<h4>Creating a Dockerfile</h4>
+
+<p>Creating a <code>Dockerfile</code> is simple. Fire up your favorite editor and follow along.</p>
+
+<p>The first required element, <code>FROM</code>, indicates the base image or parent from which a docker image is built upon. In many cases, this'll be something like <code>ubuntu</code> or <code>centos</code>, for example.  In the case of an image for DynamoDB Local, I'm going to base it off <em>another image</em> that already has Oracle's <a href="http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation/">Java 8</a> installed. That image is based upon <a href="http://thediscoblog.com/blog/categories/ubuntu/">Ubuntu</a>. Note, basing your <code>FROM</code> off of another image implies the image is available in an accessible Docker index. You can run your own local or remote indexes or use <a href="https://index.docker.io/">Docker's public index</a>.</p>
+
+<p>Consequently, the first two lines of my <code>Dockerfile</code> are:</p>
+
+<p><code>bash FROM and MAINTAINER elements of a Dockerfile
+FROM aglover/java8-pier
+MAINTAINER Andy Glover "ajglover@gmail.com"
+</code></p>
+
+<p>Have a look at my <a href="https://index.docker.io/u/aglover/java8-pier/">java8-pier project</a> and you'll see its <code>Dockerfile</code> has the line <code>FROM ubuntu</code>. The <code>MAINTAINER</code> line is self evident.</p>
+
+<p>The 2nd most important instruction of a <code>Dockerfile</code> is <code>RUN</code>. Think of <code>RUN</code> as <code>bash</code> commands required to set up your Docker image. In the case of setting up DynamoDB Local, there are a few things I would like done on the image. First and foremost, I'd like to update base aspects of the underlying <a href="http://thediscoblog.com/blog/categories/ubuntu/">Ubuntu</a> OS via an <code>apt-get update</code>. Then I'd like to download the DynamoDB Local archive, however, I'd like to use <code>wget</code>, which isn't available on base Ubuntu installs, however. Consequently, I'll install <code>wget</code> while I'm at it.</p>
+
+<p><code>bash apt-get update and wget install
+RUN apt-get update -y
+RUN apt-get install wget -y
+</code></p>
+
+<p>Next, I'm going to <code>wget</code> the latest version of DynamoDB Local via an AWS URL that points to the latest version (which obviously changes); thus, the <code>-O</code> flag forces the downloaded file to the generic name of <code>dynamo.tar.gz</code> (rather than something like <code>dynamodb_local_2014-04-24.tar.gz</code> where the date can change depending on when AWS releases an update). Finally, after the download completes, the file is moved into a directory dubbed <code>dynamodb_local</code>.</p>
+
+<p><code>bash Downloading the archive
+RUN wget http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest -O dynamo.tar.gz
+RUN tar xvzf dynamo.tar.gz &amp;&amp; mv dynamodb_local_* dynamodb_local
+</code></p>
+
+<p>Docker images, by default, don't expose any ports through the host on which they are running. You must expose desired ports via the <code>EXPOSE</code> command. In my case, DynamoDB Local defaults to port 8000; accordingly, I'll specify in my <code>Dockerfile</code> that I wish this port to be open:</p>
+
+<p><code>bash Exposing port 8000
+EXPOSE 8000
+</code></p>
+
+<p>Finally, as I wish to run a service via my Docker image, I need to fire it up! DynamoDB Local is simply a Java process that requires, at a minimum, two parameters. If I were to run DynamoDB Local manually, the corresponding command would be:</p>
+
+<p><code>bash The command to run DynamoDB Local
+$ java -Djava.library.path=./dynamodb_local/DynamoDBLocal_lib -jar ./dynamodb_local/DynamoDBLocal.jar
+</code></p>
+
+<p>Consequently, to execute this command in a <code>Dockerfile</code> I'll need to use the <code>CMD</code> instruction (which is probably the most important instruction for creating Dockers!). This instruction takes an array of values -- logically, just take the corresponding manual command and tokenize it by a space and you've got your <code>CMD</code>:</p>
+
+<p><code>bash The CMD instruction is important if your Docker image runs a service
+CMD ["java", "-Djava.library.path=./dynamodb_local/DynamoDBLocal_lib", "-jar", "./dynamodb_local/DynamoDBLocal.jar"]
+</code></p>
+
+<p>That's it -- 8 lines and you've got a <code>Dockerfile</code> that'll yield Docker image running DynamoDB Local as a service.</p>
+
+<h4>Creating images from Dockerfiles</h4>
+
+<p>With a <code>Dockerfile</code> I can now create an image via the <code>build</code> command. Thus, in a terminal window, I'll change directories to where I've saved my <code>Dockerfile</code> and run the following:</p>
+
+<p><code>bash Building a Docker image
+$ docker build -t aglover/dynamodb-pier .
+</code></p>
+
+<p><code>aglover/dynamodb-pier</code> is the desired name of my image. After you run this command, you will see a whole lot of commands executed, including the ones specified in your <code>Dockerfile</code>. Once things finish successfully, you should be able to see the resultant image via the <code>images</code> command.</p>
+
+<p><code>bash Listing Docker images
+$ docker images
+REPOSITORY              TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+aglover/dynamodb-pier   latest              aa51ccc5dc3f        14 seconds ago      1.089 GB
+aglover/java8-pier      latest              cb8436bb816a        4 weeks ago         1.026 GB
+base                    latest              b750fe79269d        13 months ago       175.3 MB
+base                    ubuntu-12.10        b750fe79269d        13 months ago       175.3 MB
+base                    ubuntu-quantal      b750fe79269d        13 months ago       175.3 MB
+base                    ubuntu-quantl       b750fe79269d        13 months ago       175.3 MB
+</code></p>
+
+<p>I can run my newly minted Docker image via its ID, which, if you look closely in the listing above, is <code>aa51ccc5dc3f</code>.</p>
+
+<p><code>bash Running a Docker image
+$ docker run aa51ccc5dc3f
+2014-05-05 17:04:14.037:INFO:oejs.Server:jetty-8.1.12.v20130726
+2014-05-05 17:04:14.119:INFO:oejs.AbstractConnector:Started SelectChannelConnector@0.0.0.0:8000
+</code></p>
+
+<p>Note, by default, Docker will run the image in the foreground; accordingly, you can see things are working via the output coming from the DynamoDB Local instance running.</p>
+
+<p>You can run a Docker image as a daemon via the <code>-d</code> flag:</p>
+
+<p><code>bash Running a Docker image as daemon
+$ docker run -d aa51ccc5dc3f
+7be2708d94eedaa82432d239659ddb696d66004516174a6e2f79f4ec465eb9fc
+</code></p>
+
+<p>You can now see what Docker images are running via the <code>ps</code> command.</p>
+
+<p><code>bash Docker ps lists running images
+$ docker ps
+CONTAINER ID        IMAGE                          COMMAND                CREATED             STATUS              PORTS               NAMES
+7be2708d94ee        aglover/dynamodb-pier:latest   java -Djava.library.   17 seconds ago      Up 16 seconds       8000/tcp            compassionate_bardeen
+</code></p>
+
+<p>Finally, you can stop an image via the <code>stop</code> command. You must provide the ID of the image, which you can see via a <code>ps</code>.</p>
+
+<p><code>bash Stopping a Docker image
+$ docker stop 7be2708d94ee
+</code></p>
+
+<p>Docker has a <a href="http://docs.docker.io/use/workingwithrepository/">public repository</a> can you publish to, provided you have an account. Ultimately, publishing is done via the <code>push</code> command. For example, I've published my DynamoDB Local image via:</p>
+
+<p><code>bash Docker pushing
+$ docker push aglover/dynamodb-pier
+</code></p>
+
+<p>Once an image has been published, it can correspondingly be downloaded via the <code>pull</code> command:</p>
+
+<p><code>bash Using a Docker image
+$ docker pull aglover/dynamodb-pier
+</code></p>
+
+<p>Think of <code>pull</code>ing as simply downloading and registering a Docker. To use a 'pull'ed Docker, you must still execute the <code>run</code> command.</p>
+
+<p>Docker makes it super easy to distribute pre-packaged applications -- rather than installing various binaries on different operating systems (like MongoDB on OSX for development and <em>a different</em> MongoDB binary on Ubuntu for production), you can use the <em>same</em> package across environments. <code>Dockerfile</code>s make creating Dockers repeatable. And hopefully I've shown you that crafting a <code>Dockerfile</code> isn't terribly difficult.  Go forth and Docker.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Java 8's functional fomentation]]></title>
@@ -234,68 +381,6 @@ vagrant destroy -f
 <p>In the case of <a href="http://www.amazon.com/gp/product/B00ESX15M2/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00ESX15M2&amp;linkCode=as2&amp;tag=thdibl-20"><em>Instant Mockito</em></a>, the code examples (at least reading the epub version on my iPad) have such narrow margins that each logical line of code is often broken into 3 or more lines (and dashes are used to signify a line break). While it certainly doesn't render the code unreadable, it makes instant code comprehension challenging. I found myself having to read through each code example multiple times just to get the basic idea.</p>
 
 <p>Code formatting aside, <a href="http://www.packtpub.com/how-to-create-stubs-mocks-spies-using-mockito/book">Marcin's book was an easy read</a> and the 8 features he feels every Mockito user should know are well explained.  As a user of Mockito, I couldn't agree more with the relevance of these features. If you enjoy quick reads, want to learn the basics of mocking in JUnit with Mockito, and you can put up with inadequate code formatting, then go ahead and give <a href="http://www.amazon.com/gp/product/B00ESX15M2/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00ESX15M2&amp;linkCode=as2&amp;tag=thdibl-20"><em>Instant Mockito</em></a> a read!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Provisioning Ubuntu with Java in 3 steps]]></title>
-    <link href="http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/"/>
-    <updated>2013-11-18T17:34:00-08:00</updated>
-    <id>http://thediscoblog.com/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/ubuntu.png"> <a href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">As I've written about before</a>, <a href="http://www.vagrantup.com/">Vagrant</a> is handy tool for creating <a href="http://www.vagrantbox.es/">localized VMs</a>. It's a lot like firing up <a href="http://thediscoblog.com/blog/categories/aws/">EC2</a> images, but, for the most part, things are localized (you can, by the way, use Vagrant to <a href="https://github.com/mitchellh/vagrant-aws">fire up EC2 images</a>). If you've ever used VMWare before, its the same thing, except Vagrant is free. You can create VMs of various operating systems, fire them up, and tear them down all with ease.</p>
-
-<p>Vagrant plays nicely with hip DevOps frameworks like <a href="http://www.opscode.com/chef/">Chef</a> and <a href="http://puppetlabs.com/">Puppet</a> and if your installations require a number of components, then these tools are defiantly the way to go. Sometimes, however, a simple Bash script is good enough as in the case for auto-installing some base component, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, <a href="http://thediscoblog.com/blog/categories/node/">Node.js</a> or <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a>.</p>
-
-<p>Using Vagrant's configuration file, aptly dubbed <code>Vagrantfile</code>, you can instruct a VM instance to run a series of steps -- these steps can be simple shell scripts, Chef cookbooks, or the Puppet equivalent.</p>
-
-<!-- more -->
-
-
-<p>Accordingly, the first step to provision an Ubuntu box with Java is to initialize a 64-bit <a href="http://thediscoblog.com/blog/categories/linux/">Ubuntu</a> 12.04 LTS (<a href="https://wiki.ubuntu.com/PrecisePangolin">Precise Pangolin</a>) instance. You can do this via the <code>vagrant init</code> command like so:</p>
-
-<p><code>bash Initializing a Vagrant box
-$&gt; vagrant init ubuntu.lts.64 http://files.vagrantup.com/precise64.box
-</code></p>
-
-<p>This creates a <code>Vagrantfile</code> in the directory where you ran the command and creates a named VM (i.e. "ubuntu.lts.64") that is based off of Ubuntu 12.04 LTS.</p>
-
-<p>Base Ubuntu installations do not come with Java; if you'd like to install a particular JDK, say Oracle's JDK 7, you can leverage <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a>, which is a series of Bash scripts that install various components like Java, Node.js, MongoDB, Redis, Ruby, etc.</p>
-
-<p>Thus, for step 2, open up the newly created <code>Vagrantfile</code> and you should see two lines like so:</p>
-
-<p>``` ruby A basic VagrantFile contains the box and box_url attributes
-config.vm.box = 'ubuntu.lts.64'</p>
-
-<h1>a few comments...</h1>
-
-<p>config.vm.box_url = 'http://files.vagrantup.com/precise64.box'
-```</p>
-
-<p>After the <code>vm.box_url</code> declaration, insert the following line:</p>
-
-<p><code>ruby Installing Java
-config.vm.provision :shell, inline: 'wget --no-check-certificate https://github.com/aglover/ubuntu-equip/raw/master/equip_java7_64.sh &amp;&amp; bash equip_java7_64.sh'
-</code></p>
-
-<p>This command instructs the instance to run an inline Bash command once it is up and running, which in this case auto-installs Oracle's Java 7 JDK (see the <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a> project for more information).</p>
-
-<p>Save your <code>VagrantFile</code> and then, for step 3, run the following command in the same directory:</p>
-
-<p><code>bash Firing up a new VM
-$&gt; vagrant up
-</code></p>
-
-<p>If this is the first time firing up this particular VM, you should see some text indicating that a particular box is being downloaded. Once the download is complete, the instance will boot up and subsequently invoke the inline provision command that kicks off the installation of Java.</p>
-
-<p>If all goes well, you should see a lot of text scroll by ending with:</p>
-
-<p><code>bash Java is installed!
-java version "1.7.0_25"
-Java(TM) SE Runtime Environment (build 1.7.0_25-b15)
-Java HotSpot(TM) 64-Bit Server VM (build 23.25-b01, mixed mode)
-</code></p>
-
-<p>And that's it. To use the VM, <a href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">simply SSH to it</a>. Go ahead and type <code>java -version</code> just to convince yourself. Go ahead, I'll wait for you...there, are you happy now?  Wasn't that easy? Provisioning Ubuntu VMs with Vagrant couldn't be any easier with <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a>, dig it?</p>
 ]]></content>
   </entry>
   

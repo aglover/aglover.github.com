@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-04-01T21:18:22-07:00</updated>
+  <updated>2014-05-05T13:56:01-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,153 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Dockerfiles in a jiffy]]></title>
+    <link href="http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/"/>
+    <updated>2014-05-05T10:19:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/docker.png"><a href="https://www.docker.io/">Docker</a> is a lightweight container for applications -- think of a Docker as an app in a box, except that the box in this case isn't an entire VM, but the bare necessities required to run a process. Consequently, you can run many Dockers in a VM. In essence, Docker replaces installation steps for a particular app. Rather than having to execute a series of steps to get, say, <a href="http://thediscoblog.com/blog/categories/mongodb/">MongoDB</a> running, you can simply fire up a Mongo Docker image.</p>
+
+<p>Docker images can be created from a <code>Dockerfile</code>, which is similar to a <code>Vagrantfile</code> or even a build script -- it's a prescription for how to assemble an image. You don't need to have a <code>Dockerfile</code> to create a Docker image, however, creating one makes image creation <em>repeatable</em>. It also provides a means for others to verify an image.</p>
+
+<!-- more -->
+
+
+<p>There are a few key instructions you should be aware of when creating <code>Dockerfiles</code> -- mainly,  <code>FROM</code>, <code>RUN</code>, <code>EXPOSE</code>, and <code>CMD</code>. To demonstrate how easy this process is, I'm going to create a <code>Dockerfile</code> that runs Amazon's DynamoDB Local.</p>
+
+<h4>DynamoDB Local</h4>
+
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tools.DynamoDBLocal.html">DynamoDB Local</a> is a simple Java application that emulates <a href="http://aws.amazon.com/dynamodb/">AWS DynamoDB</a>. The benefit of using DynamoDB Local is that you can iterate quickly without using bandwidth against the real DynamoDB and you'll save a few coins in the process.</p>
+
+<p>Running DynamoDB Local isn't terribly difficult; in fact, provided you have <a href="http://thediscoblog.com/blog/categories/java/">Java</a> installed, it's as easy as:</p>
+
+<p><code>bash Firing up DynamoDB Local
+$ java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar
+</code></p>
+
+<p>Of course, if you aren't developing a Java application and don't have Java installed, you would need to, of course, install Java. Then you'd need to download the DynamoDB Local package and install it. And then you'd need to run it.</p>
+
+<p>Alternatively, you could just <code>pull</code> a Docker image, <code>run</code> it, and get back to work.</p>
+
+<h4>Creating a Dockerfile</h4>
+
+<p>Creating a <code>Dockerfile</code> is simple. Fire up your favorite editor and follow along.</p>
+
+<p>The first required element, <code>FROM</code>, indicates the base image or parent from which a docker image is built upon. In many cases, this'll be something like <code>ubuntu</code> or <code>centos</code>, for example.  In the case of an image for DynamoDB Local, I'm going to base it off <em>another image</em> that already has Oracle's <a href="http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation/">Java 8</a> installed. That image is based upon <a href="http://thediscoblog.com/blog/categories/ubuntu/">Ubuntu</a>. Note, basing your <code>FROM</code> off of another image implies the image is available in an accessible Docker index. You can run your own local or remote indexes or use <a href="https://index.docker.io/">Docker's public index</a>.</p>
+
+<p>Consequently, the first two lines of my <code>Dockerfile</code> are:</p>
+
+<p><code>bash FROM and MAINTAINER elements of a Dockerfile
+FROM aglover/java8-pier
+MAINTAINER Andy Glover "ajglover@gmail.com"
+</code></p>
+
+<p>Have a look at my <a href="https://index.docker.io/u/aglover/java8-pier/">java8-pier project</a> and you'll see its <code>Dockerfile</code> has the line <code>FROM ubuntu</code>. The <code>MAINTAINER</code> line is self evident.</p>
+
+<p>The 2nd most important instruction of a <code>Dockerfile</code> is <code>RUN</code>. Think of <code>RUN</code> as <code>bash</code> commands required to set up your Docker image. In the case of setting up DynamoDB Local, there are a few things I would like done on the image. First and foremost, I'd like to update base aspects of the underlying <a href="http://thediscoblog.com/blog/categories/ubuntu/">Ubuntu</a> OS via an <code>apt-get update</code>. Then I'd like to download the DynamoDB Local archive, however, I'd like to use <code>wget</code>, which isn't available on base Ubuntu installs, however. Consequently, I'll install <code>wget</code> while I'm at it.</p>
+
+<p><code>bash apt-get update and wget install
+RUN apt-get update -y
+RUN apt-get install wget -y
+</code></p>
+
+<p>Next, I'm going to <code>wget</code> the latest version of DynamoDB Local via an AWS URL that points to the latest version (which obviously changes); thus, the <code>-O</code> flag forces the downloaded file to the generic name of <code>dynamo.tar.gz</code> (rather than something like <code>dynamodb_local_2014-04-24.tar.gz</code> where the date can change depending on when AWS releases an update). Finally, after the download completes, the file is moved into a directory dubbed <code>dynamodb_local</code>.</p>
+
+<p><code>bash Downloading the archive
+RUN wget http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest -O dynamo.tar.gz
+RUN tar xvzf dynamo.tar.gz &amp;&amp; mv dynamodb_local_* dynamodb_local
+</code></p>
+
+<p>Docker images, by default, don't expose any ports through the host on which they are running. You must expose desired ports via the <code>EXPOSE</code> command. In my case, DynamoDB Local defaults to port 8000; accordingly, I'll specify in my <code>Dockerfile</code> that I wish this port to be open:</p>
+
+<p><code>bash Exposing port 8000
+EXPOSE 8000
+</code></p>
+
+<p>Finally, as I wish to run a service via my Docker image, I need to fire it up! DynamoDB Local is simply a Java process that requires, at a minimum, two parameters. If I were to run DynamoDB Local manually, the corresponding command would be:</p>
+
+<p><code>bash The command to run DynamoDB Local
+$ java -Djava.library.path=./dynamodb_local/DynamoDBLocal_lib -jar ./dynamodb_local/DynamoDBLocal.jar
+</code></p>
+
+<p>Consequently, to execute this command in a <code>Dockerfile</code> I'll need to use the <code>CMD</code> instruction (which is probably the most important instruction for creating Dockers!). This instruction takes an array of values -- logically, just take the corresponding manual command and tokenize it by a space and you've got your <code>CMD</code>:</p>
+
+<p><code>bash The CMD instruction is important if your Docker image runs a service
+CMD ["java", "-Djava.library.path=./dynamodb_local/DynamoDBLocal_lib", "-jar", "./dynamodb_local/DynamoDBLocal.jar"]
+</code></p>
+
+<p>That's it -- 8 lines and you've got a <code>Dockerfile</code> that'll yield Docker image running DynamoDB Local as a service.</p>
+
+<h4>Creating images from Dockerfiles</h4>
+
+<p>With a <code>Dockerfile</code> I can now create an image via the <code>build</code> command. Thus, in a terminal window, I'll change directories to where I've saved my <code>Dockerfile</code> and run the following:</p>
+
+<p><code>bash Building a Docker image
+$ docker build -t aglover/dynamodb-pier .
+</code></p>
+
+<p><code>aglover/dynamodb-pier</code> is the desired name of my image. After you run this command, you will see a whole lot of commands executed, including the ones specified in your <code>Dockerfile</code>. Once things finish successfully, you should be able to see the resultant image via the <code>images</code> command.</p>
+
+<p><code>bash Listing Docker images
+$ docker images
+REPOSITORY              TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+aglover/dynamodb-pier   latest              aa51ccc5dc3f        14 seconds ago      1.089 GB
+aglover/java8-pier      latest              cb8436bb816a        4 weeks ago         1.026 GB
+base                    latest              b750fe79269d        13 months ago       175.3 MB
+base                    ubuntu-12.10        b750fe79269d        13 months ago       175.3 MB
+base                    ubuntu-quantal      b750fe79269d        13 months ago       175.3 MB
+base                    ubuntu-quantl       b750fe79269d        13 months ago       175.3 MB
+</code></p>
+
+<p>I can run my newly minted Docker image via its ID, which, if you look closely in the listing above, is <code>aa51ccc5dc3f</code>.</p>
+
+<p><code>bash Running a Docker image
+$ docker run aa51ccc5dc3f
+2014-05-05 17:04:14.037:INFO:oejs.Server:jetty-8.1.12.v20130726
+2014-05-05 17:04:14.119:INFO:oejs.AbstractConnector:Started SelectChannelConnector@0.0.0.0:8000
+</code></p>
+
+<p>Note, by default, Docker will run the image in the foreground; accordingly, you can see things are working via the output coming from the DynamoDB Local instance running.</p>
+
+<p>You can run a Docker image as a daemon via the <code>-d</code> flag:</p>
+
+<p><code>bash Running a Docker image as daemon
+$ docker run -d aa51ccc5dc3f
+7be2708d94eedaa82432d239659ddb696d66004516174a6e2f79f4ec465eb9fc
+</code></p>
+
+<p>You can now see what Docker images are running via the <code>ps</code> command.</p>
+
+<p><code>bash Docker ps lists running images
+$ docker ps
+CONTAINER ID        IMAGE                          COMMAND                CREATED             STATUS              PORTS               NAMES
+7be2708d94ee        aglover/dynamodb-pier:latest   java -Djava.library.   17 seconds ago      Up 16 seconds       8000/tcp            compassionate_bardeen
+</code></p>
+
+<p>Finally, you can stop an image via the <code>stop</code> command. You must provide the ID of the image, which you can see via a <code>ps</code>.</p>
+
+<p><code>bash Stopping a Docker image
+$ docker stop 7be2708d94ee
+</code></p>
+
+<p>Docker has a <a href="http://docs.docker.io/use/workingwithrepository/">public repository</a> can you publish to, provided you have an account. Ultimately, publishing is done via the <code>push</code> command. For example, I've published my DynamoDB Local image via:</p>
+
+<p><code>bash Docker pushing
+$ docker push aglover/dynamodb-pier
+</code></p>
+
+<p>Once an image has been published, it can correspondingly be downloaded via the <code>pull</code> command:</p>
+
+<p><code>bash Using a Docker image
+$ docker pull aglover/dynamodb-pier
+</code></p>
+
+<p>Think of <code>pull</code>ing as simply downloading and registering a Docker. To use a 'pull'ed Docker, you must still execute the <code>run</code> command.</p>
+
+<p>Docker makes it super easy to distribute pre-packaged applications -- rather than installing various binaries on different operating systems (like MongoDB on OSX for development and <em>a different</em> MongoDB binary on Ubuntu for production), you can use the <em>same</em> package across environments. <code>Dockerfile</code>s make creating Dockers repeatable. And hopefully I've shown you that crafting a <code>Dockerfile</code> isn't terribly difficult.  Go forth and Docker.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Custom Git commands in 3 steps]]></title>
@@ -254,72 +401,6 @@ vagrant destroy
 </code></p>
 
 <p>Vagrant makes it super easy to fire up localized development environments -- Vagrant instances boot up faster than EC2 instances and they're free. And now you know how to use normal SSH to connect to them. Can you dig it?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[AWS EBS in 4 steps]]></title>
-    <link href="http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps/"/>
-    <updated>2013-10-12T17:47:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/4fingers.jpg">When you fire up an AWS AMI, you are given a small partition of disk space that survives reboots. For example, the base <a href="https://github.com/aglover/ubuntu-equip">Ubuntu AMI</a> I tend to favor comes with an 8GB primary partition; however, 8GB is often not enough, especially if you're running a database or something that requires a lot of disk space.</p>
-
-<p>If you poke around on an AMI instance, you'll notice some AMI instances will have additional partitions and in many cases, these partitions will be huge; nevertheless, they're transient and any data on those disks will disappear after a reboot.</p>
-
-<p>Accordingly, if you need to gain some more permanent space on an AMI instance, you'll need to leverage an <a href="http://aws.amazon.com/ebs/">Elastic Block Store (or EBS)</a>, which is basically a permanent hard disk that you can attach to a running AMI instance. The data on an EBS will survive a reboot.</p>
-
-<!-- more -->
-
-
-<p>Attaching an <a href="http://aws.amazon.com/articles/1667">EBS is super simple</a> and can be done in 4 steps. These steps assume you've got a running AMI; accordingly, if you don't have one up and running, go ahead and do that first. Finally, these instructions are for Linix/Unix systems.</p>
-
-<p>First, you'll need to create an EBS volume in the same zone as the AMI instance. In my case, the instance I'd like to augment with a beefy hard drive resides in us-east-1b. What's more, you'll need to configure how much space you'll want -- you can also select if you'd like to have <a href="http://aws.amazon.com/about-aws/whats-new/2012/07/31/announcing-provisioned-iops-for-amazon-ebs/">provisioned IOPS</a> -- this is a high performance I/O feature of AWS and is intended for databases.</p>
-
-<p><img class="center" src="/images/mine/ebs1.png"></p>
-
-<p>Once the EBS is created, you'll need to <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html">attach it</a> to your running AMI -- you can do this by right clicking on the EBS in the AWS Management Console and selecting Attach Volume. You'll need to pick your instance from a drop down. Once you've picked your instance, AWS will suggest a Device -- I suggest you keep it. Click the "Yes, Attach" button.</p>
-
-<p><img class="center" src="/images/mine/ebs2.png"></p>
-
-<p>SSH onto your running instance and take a peek at the <code>/proc/partitions</code> file -- you should see at least 2 partitions with your newly attached one on the bottom.  The blocks are listed in kilobytes and pay special attention to the name -- you'll need it for the next few steps.</p>
-
-<p>``` bash The contents of /proc/partitions
-ubuntu@ip-10-194-97-73:~$ cat /proc/partitions
-major minor  #blocks  name</p>
-
-<p> 202        1    8388608 xvda1
- 202       80    8388608 xvdf
-```</p>
-
-<p>As you can see above, there is an 8GB EBS volume named <code>xvdf</code> in the <code>partitions</code> file.</p>
-
-<p>Next, you'll want to format the volume -- I'm going to format the EBS volume as ext4. The command to do this is:</p>
-
-<p><code>bash Foratting an EBS volume
-sudo mke2fs -F -t ext4 /dev/xvdf
-</code></p>
-
-<p>Now that the volume is formatted, I can mount it -- I'm going to mount it to a directory called <code>/ebs</code>; accordingly, I need to create the <code>/ebs</code> directory and then mount the <code>xvdf</code> device like so:</p>
-
-<p><code>bash Creating and mounting the device to the ebs directory
-sudo mkdir /ebs
-sudo mount /dev/xvdf /ebs
-</code></p>
-
-<p>At this point, you are 98% done; however, the volume will not be reattached if this instance is rebooted.</p>
-
-<p>To make this EBS volume automatically reattach after a reboot, you'll need to add it to the <code>fstab</code> file (it's in the <code>/etc</code> directory). When you edit that file, the file system will be
-what ever you mounted (i.e <code>/dev/xvdf</code>), the mount point will be the directory you mounted it to -- in my case, it's <code>/ebs</code>. The type will be ext4 (if you formatted it that way) and for options, put default. The last two values can be 0 as well.</p>
-
-<p>If you need to remove your EBS volume, on the attached instance, run</p>
-
-<p><code>bash Unmounting a device
-sudo umount -d /dev/xvdf
-</code></p>
-
-<p>And then go into the AWS Management Console, find your EBS volume, right click on it and select detach volume.</p>
-
-<p>That's it -- you're done! You've got a permanent store. In 4 steps, you've created an EBS volume, attached it to a running AMI, formatted and mounted it. And you've made it attach automatically after a reboot.  Can you dig it?</p>
 ]]></content>
   </entry>
   

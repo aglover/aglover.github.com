@@ -1,0 +1,510 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Dockerfiles in a jiffy - The Disco Blog</title>
+  <meta name="author" content="Andrew Glover">
+
+  
+  <meta name="description" content="Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code.">
+  
+  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, CoffeScript, Docker, "/>
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="The Disco Blog" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-3500051-4']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Disco Blog</a></h1>
+  
+    <h2>Can you dig it?</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:thediscoblog.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/categories">Categories</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Dockerfiles in a Jiffy</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-05T10:19:00-07:00" pubdate data-updated="true">May 5<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img class="left" src="/images/mine/docker.png"><a href="https://www.docker.io/">Docker</a> is a lightweight container for applications &#8211; think of a Docker as an app in a box, except that the box in this case isn&#8217;t an entire VM, but the bare necessities required to run a process. Consequently, you can run many Dockers in a VM. In essence, Docker replaces installation steps for a particular app. Rather than having to execute a series of steps to get, say, <a href="http://thediscoblog.com/blog/categories/mongodb/">MongoDB</a> running, you can simply fire up a Mongo Docker image.</p>
+
+<p>Docker images can be created from a <code>Dockerfile</code>, which is similar to a <code>Vagrantfile</code> or even a build script &#8211; it&#8217;s a prescription for how to assemble an image. You don&#8217;t need to have a <code>Dockerfile</code> to create a Docker image, however, creating one makes image creation <em>repeatable</em>. It also provides a means for others to verify an image.</p>
+
+<!-- more -->
+
+
+<p>There are a few key instructions you should be aware of when creating <code>Dockerfiles</code> &#8211; mainly,  <code>FROM</code>, <code>RUN</code>, <code>EXPOSE</code>, and <code>CMD</code>. To demonstrate how easy this process is, I&#8217;m going to create a <code>Dockerfile</code> that runs Amazon&#8217;s DynamoDB Local.</p>
+
+<h4>DynamoDB Local</h4>
+
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tools.DynamoDBLocal.html">DynamoDB Local</a> is a simple Java application that emulates <a href="http://aws.amazon.com/dynamodb/">AWS DynamoDB</a>. The benefit of using DynamoDB Local is that you can iterate quickly without using bandwidth against the real DynamoDB and you&#8217;ll save a few coins in the process.</p>
+
+<p>Running DynamoDB Local isn&#8217;t terribly difficult; in fact, provided you have <a href="http://thediscoblog.com/blog/categories/java/">Java</a> installed, it&#8217;s as easy as:</p>
+
+<figure class='code'><figcaption><span>Firing up DynamoDB Local</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>java -Djava.library.path<span class="o">=</span>./DynamoDBLocal_lib -jar DynamoDBLocal.jar
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Of course, if you aren&#8217;t developing a Java application and don&#8217;t have Java installed, you would need to, of course, install Java. Then you&#8217;d need to download the DynamoDB Local package and install it. And then you&#8217;d need to run it.</p>
+
+<p>Alternatively, you could just <code>pull</code> a Docker image, <code>run</code> it, and get back to work.</p>
+
+<h4>Creating a Dockerfile</h4>
+
+<p>Creating a <code>Dockerfile</code> is simple. Fire up your favorite editor and follow along.</p>
+
+<p>The first required element, <code>FROM</code>, indicates the base image or parent from which a docker image is built upon. In many cases, this&#8217;ll be something like <code>ubuntu</code> or <code>centos</code>, for example.  In the case of an image for DynamoDB Local, I&#8217;m going to base it off <em>another image</em> that already has Oracle&#8217;s <a href="http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation/">Java 8</a> installed. That image is based upon <a href="http://thediscoblog.com/blog/categories/ubuntu/">Ubuntu</a>. Note, basing your <code>FROM</code> off of another image implies the image is available in an accessible Docker index. You can run your own local or remote indexes or use <a href="https://index.docker.io/">Docker&#8217;s public index</a>.</p>
+
+<p>Consequently, the first two lines of my <code>Dockerfile</code> are:</p>
+
+<figure class='code'><figcaption><span>FROM and MAINTAINER elements of a Dockerfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>FROM aglover/java8-pier
+</span><span class='line'>MAINTAINER Andy Glover <span class="s2">&quot;ajglover@gmail.com&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Have a look at my <a href="https://index.docker.io/u/aglover/java8-pier/">java8-pier project</a> and you&#8217;ll see its <code>Dockerfile</code> has the line <code>FROM ubuntu</code>. The <code>MAINTAINER</code> line is self evident.</p>
+
+<p>The 2nd most important instruction of a <code>Dockerfile</code> is <code>RUN</code>. Think of <code>RUN</code> as <code>bash</code> commands required to set up your Docker image. In the case of setting up DynamoDB Local, there are a few things I would like done on the image. First and foremost, I&#8217;d like to update base aspects of the underlying <a href="http://thediscoblog.com/blog/categories/ubuntu/">Ubuntu</a> OS via an <code>apt-get update</code>. Then I&#8217;d like to download the DynamoDB Local archive, however, I&#8217;d like to use <code>wget</code>, which isn&#8217;t available on base Ubuntu installs, however. Consequently, I&#8217;ll install <code>wget</code> while I&#8217;m at it.</p>
+
+<figure class='code'><figcaption><span>apt-get update and wget install</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>RUN apt-get update -y
+</span><span class='line'>RUN apt-get install wget -y
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, I&#8217;m going to <code>wget</code> the latest version of DynamoDB Local via an AWS URL that points to the latest version (which obviously changes); thus, the <code>-O</code> flag forces the downloaded file to the generic name of <code>dynamo.tar.gz</code> (rather than something like <code>dynamodb_local_2014-04-24.tar.gz</code> where the date can change depending on when AWS releases an update). Finally, after the download completes, the file is moved into a directory dubbed <code>dynamodb_local</code>.</p>
+
+<figure class='code'><figcaption><span>Downloading the archive</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>RUN wget http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest -O dynamo.tar.gz
+</span><span class='line'>RUN tar xvzf dynamo.tar.gz <span class="o">&amp;&amp;</span> mv dynamodb_local_* dynamodb_local
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Docker images, by default, don&#8217;t expose any ports through the host on which they are running. You must expose desired ports via the <code>EXPOSE</code> command. In my case, DynamoDB Local defaults to port 8000; accordingly, I&#8217;ll specify in my <code>Dockerfile</code> that I wish this port to be open:</p>
+
+<figure class='code'><figcaption><span>Exposing port 8000</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>EXPOSE 8000
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, as I wish to run a service via my Docker image, I need to fire it up! DynamoDB Local is simply a Java process that requires, at a minimum, two parameters. If I were to run DynamoDB Local manually, the corresponding command would be:</p>
+
+<figure class='code'><figcaption><span>The command to run DynamoDB Local</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>java -Djava.library.path<span class="o">=</span>./dynamodb_local/DynamoDBLocal_lib -jar ./dynamodb_local/DynamoDBLocal.jar
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Consequently, to execute this command in a <code>Dockerfile</code> I&#8217;ll need to use the <code>CMD</code> instruction (which is probably the most important instruction for creating Dockers!). This instruction takes an array of values &#8211; logically, just take the corresponding manual command and tokenize it by a space and you&#8217;ve got your <code>CMD</code>:</p>
+
+<figure class='code'><figcaption><span>The CMD instruction is important if your Docker image runs a service</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>CMD <span class="o">[</span><span class="s2">&quot;java&quot;</span>, <span class="s2">&quot;-Djava.library.path=./dynamodb_local/DynamoDBLocal_lib&quot;</span>, <span class="s2">&quot;-jar&quot;</span>, <span class="s2">&quot;./dynamodb_local/DynamoDBLocal.jar&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&#8217;s it &#8211; 8 lines and you&#8217;ve got a <code>Dockerfile</code> that&#8217;ll yield Docker image running DynamoDB Local as a service.</p>
+
+<h4>Creating images from Dockerfiles</h4>
+
+<p>With a <code>Dockerfile</code> I can now create an image via the <code>build</code> command. Thus, in a terminal window, I&#8217;ll change directories to where I&#8217;ve saved my <code>Dockerfile</code> and run the following:</p>
+
+<figure class='code'><figcaption><span>Building a Docker image</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker build -t aglover/dynamodb-pier .
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>aglover/dynamodb-pier</code> is the desired name of my image. After you run this command, you will see a whole lot of commands executed, including the ones specified in your <code>Dockerfile</code>. Once things finish successfully, you should be able to see the resultant image via the <code>images</code> command.</p>
+
+<figure class='code'><figcaption><span>Listing Docker images</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker images
+</span><span class='line'>REPOSITORY              TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+</span><span class='line'>aglover/dynamodb-pier   latest              aa51ccc5dc3f        14 seconds ago      1.089 GB
+</span><span class='line'>aglover/java8-pier      latest              cb8436bb816a        4 weeks ago         1.026 GB
+</span><span class='line'>base                    latest              b750fe79269d        13 months ago       175.3 MB
+</span><span class='line'>base                    ubuntu-12.10        b750fe79269d        13 months ago       175.3 MB
+</span><span class='line'>base                    ubuntu-quantal      b750fe79269d        13 months ago       175.3 MB
+</span><span class='line'>base                    ubuntu-quantl       b750fe79269d        13 months ago       175.3 MB
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I can run my newly minted Docker image via its ID, which, if you look closely in the listing above, is <code>aa51ccc5dc3f</code>.</p>
+
+<figure class='code'><figcaption><span>Running a Docker image</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker run aa51ccc5dc3f
+</span><span class='line'>2014-05-05 17:04:14.037:INFO:oejs.Server:jetty-8.1.12.v20130726
+</span><span class='line'>2014-05-05 17:04:14.119:INFO:oejs.AbstractConnector:Started SelectChannelConnector@0.0.0.0:8000
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note, by default, Docker will run the image in the foreground; accordingly, you can see things are working via the output coming from the DynamoDB Local instance running.</p>
+
+<p>You can run a Docker image as a daemon via the <code>-d</code> flag:</p>
+
+<figure class='code'><figcaption><span>Running a Docker image as daemon</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker run -d aa51ccc5dc3f
+</span><span class='line'>7be2708d94eedaa82432d239659ddb696d66004516174a6e2f79f4ec465eb9fc
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can now see what Docker images are running via the <code>ps</code> command.</p>
+
+<figure class='code'><figcaption><span>Docker ps lists running images</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker ps
+</span><span class='line'>CONTAINER ID        IMAGE                          COMMAND                CREATED             STATUS              PORTS               NAMES
+</span><span class='line'>7be2708d94ee        aglover/dynamodb-pier:latest   java -Djava.library.   17 seconds ago      Up 16 seconds       8000/tcp            compassionate_bardeen
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, you can stop an image via the <code>stop</code> command. You must provide the ID of the image, which you can see via a <code>ps</code>.</p>
+
+<figure class='code'><figcaption><span>Stopping a Docker image</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker stop 7be2708d94ee
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Docker has a <a href="http://docs.docker.io/use/workingwithrepository/">public repository</a> can you publish to, provided you have an account. Ultimately, publishing is done via the <code>push</code> command. For example, I&#8217;ve published my DynamoDB Local image via:</p>
+
+<figure class='code'><figcaption><span>Docker pushing</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker push aglover/dynamodb-pier
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once an image has been published, it can correspondingly be downloaded via the <code>pull</code> command:</p>
+
+<figure class='code'><figcaption><span>Using a Docker image</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker pull aglover/dynamodb-pier
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Think of <code>pull</code>ing as simply downloading and registering a Docker. To use a &#8216;pull&#8217;ed Docker, you must still execute the <code>run</code> command.</p>
+
+<p>Docker makes it super easy to distribute pre-packaged applications &#8211; rather than installing various binaries on different operating systems (like MongoDB on OSX for development and <em>a different</em> MongoDB binary on Ubuntu for production), you can use the <em>same</em> package across environments. <code>Dockerfile</code>s make creating Dockers repeatable. And hopefully I&#8217;ve shown you that crafting a <code>Dockerfile</code> isn&#8217;t terribly difficult.  Go forth and Docker.</p>
+</div>
+<!-- related posts -->
+<div id='related_posts'>
+  <h4>Related Posts</h4>
+      <ul class="posts">
+      
+          
+          <!-- nothing, skip it as its the same as the post itself -->
+          
+      
+          
+            <li class="related"><a href="/blog/2013/07/24/introducing-android-migrations/">Introducing Android migrations</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku performance hat-trick</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/11/18/provisioning-ubuntu-with-java-in-3-steps/">Provisioning Ubuntu with Java in 3 steps</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2014/04/01/schooled-in-ping-pong/">Schooled in ping pong</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/12/29/just-require-tire-to-inquire/">Just require tire to inquire</a></li>
+          
+      
+      </ul>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-05T10:19:00-07:00" pubdate data-updated="true">May 5<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/aws/'>AWS</a>, <a class='category' href='/blog/categories/devops/'>DevOps</a>, <a class='category' href='/blog/categories/docker/'>Docker</a>, <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/ubuntu/'>Ubuntu</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2014/04/01/schooled-in-ping-pong/" title="Previous Post: Schooled in ping pong">&laquo; Schooled in ping pong</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <div id='influads_block' class='influads_block'></div><script type='text/javascript'>(function(){var acc='acc_1097d812_pub';var st='css';var or='130';var e=document.getElementsByTagName('script')[0];var d=document.createElement('script');d.src=('https:' == document.location.protocol ?'https://' : 'http://') +'engine.influads.com/show/'+or+'/'+st+'/'+acc;d.type='text/javascript';d.async=true;d.defer=true; e.parentNode.insertBefore(d,e);})();</script>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/05/05/dockerfiles-in-a-jiffy/">Dockerfiles in a jiffy</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/01/schooled-in-ping-pong/">Schooled in ping pong</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/29/custom-git-commands-in-3-steps/">Custom Git commands in 3 steps</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/25/java-8-s-functional-fomentation/">Java 8's functional fomentation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/12/ahoy-there-maven-central/">Ahoy there Maven Central</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/aglover">@aglover</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'aglover',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+ <h1>Latest Tweets</h1>
+ <a class="twitter-timeline" href="https://twitter.com/aglover" data-widget-id="345533522750099456">Tweets by @aglover</a>
+ <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Andrew Glover -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'thediscoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/';
+        var disqus_url = 'http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
