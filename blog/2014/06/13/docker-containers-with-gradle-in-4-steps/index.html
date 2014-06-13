@@ -1,0 +1,549 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Docker containers with Gradle in 4 steps - The Disco Blog</title>
+  <meta name="author" content="Andrew Glover">
+
+  
+  <meta name="description" content="Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code.">
+  
+  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, CoffeScript, Docker, "/>
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://thediscoblog.com/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="The Disco Blog" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-3500051-4']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Disco Blog</a></h1>
+  
+    <h2>Can you dig it?</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:thediscoblog.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/categories">Categories</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Docker Containers With Gradle in 4 Steps</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-13T11:52:00-07:00" pubdate data-updated="true">Jun 13<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img class="right" src="/images/mine/fourdoor.jpg"> Do you need to create a <a href="http://www.docker.com/">Docker</a> image from your Java web app? Are you using <a href="http://www.gradle.org/">Gradle</a>? If so, then you are only 4 steps away from Docker nivana.</p>
+
+<p>For this example, I&#8217;m going to use a simple <a href="http://projects.spring.io/spring-boot/">Spring Boot</a> application. You can find all the source code in my <a href="https://github.com/aglover/galoshe">Github repository dubbed galoshe</a>.</p>
+
+<p>If you haven&#8217;t had a chance to see Spring Boot in action, then you&#8217;re in for a treat, <em>especially</em> if the words <em>simple</em> and <em>Java web app</em> in the same sentence make you flinch. That was certainly my long standing reaction until I took a serious look at Boot.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p>For instance, a quick and dirty &#8220;hello world&#8221; Boot app is essentially more imports &amp; annotations than actual code. Check it out:</p>
+
+<figure class='code'><figcaption><span>A simple Spring Boot application</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">github</span><span class="o">.</span><span class="na">aglover</span><span class="o">.</span><span class="na">galoshe</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.springframework.boot.SpringApplication</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.EnableAutoConfiguration</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.springframework.context.ApplicationContext</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.springframework.context.annotation.ComponentScan</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nd">@RestController</span>
+</span><span class='line'><span class="nd">@Configuration</span>
+</span><span class='line'><span class="nd">@EnableAutoConfiguration</span>
+</span><span class='line'><span class="nd">@ComponentScan</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">ApplicationContext</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="n">String</span> <span class="nf">index</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s">&quot;Hello to you, world&quot;</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Running this application is as easy as typing:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>java -jar build/libs/galoshe-0.1.0.jar
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That command will fire up an embedded web container with the request path <code>/</code> mapped to return the simple <code>String</code> &#8220;Hello to you, world&#8221;. You can define what port this application will run on via an <code>application.properties</code> file like so:</p>
+
+<figure class='code'><figcaption><span>application.properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">server</span><span class="o">.</span><span class="na">port</span><span class="o">:</span> <span class="mi">8080</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Consequently, if I take my browser and point it to localhost:8080, I see the pedestrian, but oh-so-gratifying-when-you-see-it salutation.</p>
+
+<p>Now that you&#8217;ve been introduced to the application I&#8217;d like to distribute as a Docker container, let me show you how to do it in 4 easy steps.</p>
+
+<p>Keep in mind, however, that in order to use the gradle-docker plugin I use in this example, you&#8217;ll need to have Docker installed as the plugin shells out to the <code>docker</code> command.</p>
+
+<h4>Step 1: Apply some plugins</h4>
+
+<p>First and foremost, to Docker-ize your application, you&#8217;ll need to use two Gradle plugins: <code>docker</code> and <code>application</code>.</p>
+
+<p>The <a href="https://github.com/Transmode/gradle-docker">gradle-docker plugin</a> by <a href="https://github.com/Transmode">Transmode</a> is actually 1 of 2 available plugins for Dockering with Gradle. The <a href="https://github.com/bmuschko/gradle-docker-plugin">other plugin</a> by <a href="https://github.com/bmuschko">Ben Muschko</a> of <a href="http://www.gradleware.com/">Gradleware</a> is a bit more advanced with additional features, however, I find the Transmode plugin the easiest and quickest to get going.</p>
+
+<p>The <code>application</code> plugin is actually included <em>automatically</em> via the <code>spring-boot</code> plugin in my particular example, however, if you aren&#8217;t using Boot, then you&#8217;ll need to add the following two plugins to your <code>build.gradle</code> file:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">apply</span> <span class="nl">plugin:</span> <span class="err">&#39;</span><span class="n">application</span><span class="err">&#39;</span>
+</span><span class='line'><span class="n">apply</span> <span class="nl">plugin:</span> <span class="err">&#39;</span><span class="n">docker</span><span class="err">&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As the <code>docker</code> plugin is a 3rd party plugin, you&#8217;ll need to tell Gradle how to find it via a <code>dependencies</code> clause.</p>
+
+<figure class='code'><figcaption><span>Specifying the classpath for the docker plugin</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">buildscript</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">repositories</span> <span class="o">{</span> <span class="n">mavenCentral</span><span class="o">()</span> <span class="o">}</span>
+</span><span class='line'>    <span class="n">dependencies</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">classpath</span> <span class="err">&#39;</span><span class="n">se</span><span class="o">.</span><span class="na">transmode</span><span class="o">.</span><span class="na">gradle</span><span class="o">:</span><span class="n">gradle</span><span class="o">-</span><span class="nl">docker:</span><span class="mf">1.1</span><span class="err">&#39;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now your Gradle script is ready to start Docker-ing. Next up, you&#8217;ll need to provide some clues so the plugin can create a valid <a href="http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/"><code>Dockerfile</code></a>.</p>
+
+<h4>Step 2: Provide some properties</h4>
+
+<p>The gradle-docker plugin doesn&#8217;t directly create a Docker container &#8211; it merely creates a <code>Dockerfile</code> and then shells out to the <code>docker</code> command to build an image. Consequently, you need to specify a few properties in your <code>build.gradle</code> file so that the corresponding <code>Dockerfile</code> builds a valid container that automatically runs your application.</p>
+
+<p>You need to provide:</p>
+
+<ul>
+<li>The class to run i.e. the class in your application that contains a <code>main</code> method</li>
+<li>The target JVM version (default is Java 7)</li>
+<li><a href="http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation/">Optionally</a>, a group id, which feeds into the corresponding Docker tag.</li>
+</ul>
+
+
+<p>Accordingly, my <code>build.gradle</code> defines all three properties like so:</p>
+
+<figure class='code'><figcaption><span>Defining properties for the docker plugin</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">group</span> <span class="o">=</span> <span class="err">&#39;</span><span class="n">aglover</span><span class="err">&#39;</span>
+</span><span class='line'><span class="n">sourceCompatibility</span> <span class="o">=</span> <span class="mf">1.7</span>
+</span><span class='line'><span class="n">mainClassName</span> <span class="o">=</span> <span class="err">&#39;</span><span class="n">com</span><span class="o">.</span><span class="na">github</span><span class="o">.</span><span class="na">aglover</span><span class="o">.</span><span class="na">galoshe</span><span class="o">.</span><span class="na">Application</span><span class="err">&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A few notes about these properties. Firstly, <a href="http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation/">Java 8</a> isn&#8217;t <em><a href="https://github.com/Transmode/gradle-docker/pull/9">currently</a></em> available for this plugin. If you don&#8217;t specify a <code>sourceCompatibility</code>, you&#8217;ll get Java 7. Next, the <code>group</code> property isn&#8217;t required; however, it helps in Docker tagging. For example, my project&#8217;s <code>baseName</code> is dubbed <code>galoshe</code>; consequently, when the plugin creates a Docker image, it&#8217;ll tag that image with the pattern <code>group/name</code>. So in my case, the corresponding image is tagged <code>aglover/galoshe</code>.</p>
+
+<p>Finally, the <code>mainClassName</code> shouldn&#8217;t be too surprising - it&#8217;s the hook into your application. In truth, the plugin will create a script that your resultant Docker image will invoke on startup. That script will essentially call the command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>java -classpath your_class_path your_main_class
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>At this point, you are almost done. Next up, you&#8217;ll need to specify any <code>Dockerfile</code> instructions.</p>
+
+<h4>Step 3: Specify any required Dockerfile instructions</h4>
+
+<p><code>Dockerfile</code>s contain specialized instructions for the corresponding image they create. There <a href="http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/">are a few important ones</a>; nevertheless, my Boot app only requires one: <code>port</code>, which is set via the <code>exposePort</code> method of the plugin.</p>
+
+<p>Consequently, to ensure my Docker container exposes port 8080 as defined in my <code>application.properites</code> file, I&#8217;ll add the following clause to my <code>build.gradle</code> file:</p>
+
+<figure class='code'><figcaption><span>Specifying port 8080</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">distDocker</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">exposePort</span> <span class="mi">8080</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A few other aspects you can muddle with via the plugin are <code>addFile</code> which results in an <code>ADD</code> instruction, <code>runCommand</code>, which results in a <code>RUN</code> instruction, and finally <code>setEnvironment</code>, which creates an <code>ENV</code> instruction.</p>
+
+<p>Now you&#8217;re done with your Gradle build. All that&#8217;s left to do is run your build and fire the image up!</p>
+
+<h4>Step 4: Build and run it</h4>
+
+<p>Provided you&#8217;ve configured the gradle-plugin properly, all that&#8217;s left to do is run your build. In this case, the command is simply <code>distDocker</code>.</p>
+
+<figure class='code'><figcaption><span>Running my build </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>./gradlew distDocker
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The first time you run this command it&#8217;ll take a bit as various images will be downloaded. Subsequent runs will be lightning quick though.</p>
+
+<p>After your build completes, your image will be created with the tag I noted earlier. In my case, the tag will be <code>aglover/galoshe</code>, which I can quickly see by running the <code>images</code> command:</p>
+
+<figure class='code'><figcaption><span>Listing available local Docker images</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker images
+</span><span class='line'>REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+</span><span class='line'>aglover/galoshe     latest              332e163221bc        20 hours ago        1.042 GB
+</span><span class='line'>dockerfile/java     latest              f9793c257930        3 weeks ago         1.026 GB
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I can subsequently run my image like so:</p>
+
+<figure class='code'><figcaption><span>Running my container</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>docker run 332e163221bc
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I can naturally go to my browser, hit localhost:8080 and find myself quite satisfied that my image runs a nifty greeting.</p>
+
+<p>Of course, I would need to <a href="https://hub.docker.com/u/aglover/">publish this image</a> for others to use it; nevertheless, as you can see, the gradle-plugin allows me to quickly create Docker containers for Java apps.</p>
+</div>
+<!-- related posts -->
+<div id='related_posts'>
+  <h4>Related Posts</h4>
+      <ul class="posts">
+      
+          
+          <!-- nothing, skip it as its the same as the post itself -->
+          
+      
+          
+            <li class="related"><a href="/blog/2014/05/05/dockerfiles-in-a-jiffy/">Dockerfiles in a jiffy</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/07/24/introducing-android-migrations/">Introducing Android migrations</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku performance hat-trick</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2014/04/01/schooled-in-ping-pong/">Schooled in ping pong</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/12/29/just-require-tire-to-inquire/">Just require tire to inquire</a></li>
+          
+      
+      </ul>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-13T11:52:00-07:00" pubdate data-updated="true">Jun 13<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/devops/'>DevOps</a>, <a class='category' href='/blog/categories/docker/'>Docker</a>, <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/ubuntu/'>Ubuntu</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2014/05/05/dockerfiles-in-a-jiffy/" title="Previous Post: Dockerfiles in a jiffy">&laquo; Dockerfiles in a jiffy</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <div id='influads_block' class='influads_block'></div><script type='text/javascript'>(function(){var acc='acc_1097d812_pub';var st='css';var or='130';var e=document.getElementsByTagName('script')[0];var d=document.createElement('script');d.src=('https:' == document.location.protocol ?'https://' : 'http://') +'engine.influads.com/show/'+or+'/'+st+'/'+acc;d.type='text/javascript';d.async=true;d.defer=true; e.parentNode.insertBefore(d,e);})();</script>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/">Docker containers with Gradle in 4 steps</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/05/dockerfiles-in-a-jiffy/">Dockerfiles in a jiffy</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/01/schooled-in-ping-pong/">Schooled in ping pong</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/29/custom-git-commands-in-3-steps/">Custom Git commands in 3 steps</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/25/java-8-s-functional-fomentation/">Java 8's functional fomentation</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/aglover">@aglover</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'aglover',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+ <h1>Latest Tweets</h1>
+ <a class="twitter-timeline" href="https://twitter.com/aglover" data-widget-id="345533522750099456">Tweets by @aglover</a>
+ <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Andrew Glover -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'thediscoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://thediscoblog.com/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/';
+        var disqus_url = 'http://thediscoblog.com/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

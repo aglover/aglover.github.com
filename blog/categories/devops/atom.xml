@@ -4,7 +4,7 @@
   <title><![CDATA[Category: DevOps | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-05-05T13:56:01-07:00</updated>
+  <updated>2014-06-13T14:40:18-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,185 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Docker containers with Gradle in 4 steps]]></title>
+    <link href="http://thediscoblog.com/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/"/>
+    <updated>2014-06-13T11:52:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2014/06/13/docker-containers-with-gradle-in-4-steps</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/fourdoor.jpg"> Do you need to create a <a href="http://www.docker.com/">Docker</a> image from your Java web app? Are you using <a href="http://www.gradle.org/">Gradle</a>? If so, then you are only 4 steps away from Docker nivana.</p>
+
+<p>For this example, I'm going to use a simple <a href="http://projects.spring.io/spring-boot/">Spring Boot</a> application. You can find all the source code in my <a href="https://github.com/aglover/galoshe">Github repository dubbed galoshe</a>.</p>
+
+<p>If you haven't had a chance to see Spring Boot in action, then you're in for a treat, <em>especially</em> if the words <em>simple</em> and <em>Java web app</em> in the same sentence make you flinch. That was certainly my long standing reaction until I took a serious look at Boot.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p>For instance, a quick and dirty "hello world" Boot app is essentially more imports &amp; annotations than actual code. Check it out:</p>
+
+<p>```java A simple Spring Boot application
+package com.github.aglover.galoshe;</p>
+
+<p>import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;</p>
+
+<p>@RestController
+@Configuration
+@EnableAutoConfiguration
+@ComponentScan
+public class Application {</p>
+
+<p>  public static void main(String[] args) {</p>
+
+<pre><code>ApplicationContext ctx = SpringApplication.run(Application.class, args);
+</code></pre>
+
+<p>  }</p>
+
+<p>  @RequestMapping("/")
+  public String index() {</p>
+
+<pre><code>return "Hello to you, world";
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>Running this application is as easy as typing:</p>
+
+<p><code>bash
+$ java -jar build/libs/galoshe-0.1.0.jar
+</code></p>
+
+<p>That command will fire up an embedded web container with the request path <code>/</code> mapped to return the simple <code>String</code> "Hello to you, world". You can define what port this application will run on via an <code>application.properties</code> file like so:</p>
+
+<p><code>java application.properties
+server.port: 8080
+</code></p>
+
+<p>Consequently, if I take my browser and point it to localhost:8080, I see the pedestrian, but oh-so-gratifying-when-you-see-it salutation.</p>
+
+<p>Now that you've been introduced to the application I'd like to distribute as a Docker container, let me show you how to do it in 4 easy steps.</p>
+
+<p>Keep in mind, however, that in order to use the gradle-docker plugin I use in this example, you'll need to have Docker installed as the plugin shells out to the <code>docker</code> command.</p>
+
+<h4>Step 1: Apply some plugins</h4>
+
+<p>First and foremost, to Docker-ize your application, you'll need to use two Gradle plugins: <code>docker</code> and <code>application</code>.</p>
+
+<p>The <a href="https://github.com/Transmode/gradle-docker">gradle-docker plugin</a> by <a href="https://github.com/Transmode">Transmode</a> is actually 1 of 2 available plugins for Dockering with Gradle. The <a href="https://github.com/bmuschko/gradle-docker-plugin">other plugin</a> by <a href="https://github.com/bmuschko">Ben Muschko</a> of <a href="http://www.gradleware.com/">Gradleware</a> is a bit more advanced with additional features, however, I find the Transmode plugin the easiest and quickest to get going.</p>
+
+<p>The <code>application</code> plugin is actually included <em>automatically</em> via the <code>spring-boot</code> plugin in my particular example, however, if you aren't using Boot, then you'll need to add the following two plugins to your <code>build.gradle</code> file:</p>
+
+<p><code>java
+apply plugin: 'application'
+apply plugin: 'docker'
+</code></p>
+
+<p>As the <code>docker</code> plugin is a 3rd party plugin, you'll need to tell Gradle how to find it via a <code>dependencies</code> clause.</p>
+
+<p>```java Specifying the classpath for the docker plugin
+buildscript {</p>
+
+<pre><code>repositories { mavenCentral() }
+dependencies {
+    classpath 'se.transmode.gradle:gradle-docker:1.1'
+}
+</code></pre>
+
+<p>}
+<code>``
+Now your Gradle script is ready to start Docker-ing. Next up, you'll need to provide some clues so the plugin can create a valid [</code>Dockerfile`]<a href="http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/">5</a>.</p>
+
+<h4>Step 2: Provide some properties</h4>
+
+<p>The gradle-docker plugin doesn't directly create a Docker container -- it merely creates a <code>Dockerfile</code> and then shells out to the <code>docker</code> command to build an image. Consequently, you need to specify a few properties in your <code>build.gradle</code> file so that the corresponding <code>Dockerfile</code> builds a valid container that automatically runs your application.</p>
+
+<p>You need to provide:</p>
+
+<ul>
+<li>The class to run i.e. the class in your application that contains a <code>main</code> method</li>
+<li>The target JVM version (default is Java 7)</li>
+<li><a href="http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation/">Optionally</a>, a group id, which feeds into the corresponding Docker tag.</li>
+</ul>
+
+
+<p>Accordingly, my <code>build.gradle</code> defines all three properties like so:</p>
+
+<p><code>java Defining properties for the docker plugin
+group = 'aglover'
+sourceCompatibility = 1.7
+mainClassName = 'com.github.aglover.galoshe.Application'
+</code></p>
+
+<p>A few notes about these properties. Firstly, <a href="http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation/">Java 8</a> isn't <em><a href="https://github.com/Transmode/gradle-docker/pull/9">currently</a></em> available for this plugin. If you don't specify a <code>sourceCompatibility</code>, you'll get Java 7. Next, the <code>group</code> property isn't required; however, it helps in Docker tagging. For example, my project's <code>baseName</code> is dubbed <code>galoshe</code>; consequently, when the plugin creates a Docker image, it'll tag that image with the pattern <code>group/name</code>. So in my case, the corresponding image is tagged <code>aglover/galoshe</code>.</p>
+
+<p>Finally, the <code>mainClassName</code> shouldn't be too surprising - it's the hook into your application. In truth, the plugin will create a script that your resultant Docker image will invoke on startup. That script will essentially call the command:</p>
+
+<p><code>bash
+java -classpath your_class_path your_main_class
+</code></p>
+
+<p>At this point, you are almost done. Next up, you'll need to specify any <code>Dockerfile</code> instructions.</p>
+
+<h4>Step 3: Specify any required Dockerfile instructions</h4>
+
+<p><code>Dockerfile</code>s contain specialized instructions for the corresponding image they create. There <a href="http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/">are a few important ones</a>; nevertheless, my Boot app only requires one: <code>port</code>, which is set via the <code>exposePort</code> method of the plugin.</p>
+
+<p>Consequently, to ensure my Docker container exposes port 8080 as defined in my <code>application.properites</code> file, I'll add the following clause to my <code>build.gradle</code> file:</p>
+
+<p>```java Specifying port 8080
+distDocker {</p>
+
+<pre><code>exposePort 8080
+</code></pre>
+
+<p>}
+```</p>
+
+<p>A few other aspects you can muddle with via the plugin are <code>addFile</code> which results in an <code>ADD</code> instruction, <code>runCommand</code>, which results in a <code>RUN</code> instruction, and finally <code>setEnvironment</code>, which creates an <code>ENV</code> instruction.</p>
+
+<p>Now you're done with your Gradle build. All that's left to do is run your build and fire the image up!</p>
+
+<h4>Step 4: Build and run it</h4>
+
+<p>Provided you've configured the gradle-plugin properly, all that's left to do is run your build. In this case, the command is simply <code>distDocker</code>.</p>
+
+<p><code>bash Running my build
+$ ./gradlew distDocker
+</code></p>
+
+<p>The first time you run this command it'll take a bit as various images will be downloaded. Subsequent runs will be lightning quick though.</p>
+
+<p>After your build completes, your image will be created with the tag I noted earlier. In my case, the tag will be <code>aglover/galoshe</code>, which I can quickly see by running the <code>images</code> command:</p>
+
+<p><code>bash Listing available local Docker images
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+aglover/galoshe     latest              332e163221bc        20 hours ago        1.042 GB
+dockerfile/java     latest              f9793c257930        3 weeks ago         1.026 GB
+</code></p>
+
+<p>I can subsequently run my image like so:</p>
+
+<p><code>bash Running my container
+docker run 332e163221bc
+</code></p>
+
+<p>I can naturally go to my browser, hit localhost:8080 and find myself quite satisfied that my image runs a nifty greeting.</p>
+
+<p>Of course, I would need to <a href="https://hub.docker.com/u/aglover/">publish this image</a> for others to use it; nevertheless, as you can see, the gradle-plugin allows me to quickly create Docker containers for Java apps.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Dockerfiles in a jiffy]]></title>

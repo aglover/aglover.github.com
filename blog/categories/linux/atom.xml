@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-05-05T13:56:01-07:00</updated>
+  <updated>2014-06-13T14:40:18-07:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,185 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Docker containers with Gradle in 4 steps]]></title>
+    <link href="http://thediscoblog.com/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/"/>
+    <updated>2014-06-13T11:52:00-07:00</updated>
+    <id>http://thediscoblog.com/blog/2014/06/13/docker-containers-with-gradle-in-4-steps</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/fourdoor.jpg"> Do you need to create a <a href="http://www.docker.com/">Docker</a> image from your Java web app? Are you using <a href="http://www.gradle.org/">Gradle</a>? If so, then you are only 4 steps away from Docker nivana.</p>
+
+<p>For this example, I'm going to use a simple <a href="http://projects.spring.io/spring-boot/">Spring Boot</a> application. You can find all the source code in my <a href="https://github.com/aglover/galoshe">Github repository dubbed galoshe</a>.</p>
+
+<p>If you haven't had a chance to see Spring Boot in action, then you're in for a treat, <em>especially</em> if the words <em>simple</em> and <em>Java web app</em> in the same sentence make you flinch. That was certainly my long standing reaction until I took a serious look at Boot.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p>For instance, a quick and dirty "hello world" Boot app is essentially more imports &amp; annotations than actual code. Check it out:</p>
+
+<p>```java A simple Spring Boot application
+package com.github.aglover.galoshe;</p>
+
+<p>import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;</p>
+
+<p>@RestController
+@Configuration
+@EnableAutoConfiguration
+@ComponentScan
+public class Application {</p>
+
+<p>  public static void main(String[] args) {</p>
+
+<pre><code>ApplicationContext ctx = SpringApplication.run(Application.class, args);
+</code></pre>
+
+<p>  }</p>
+
+<p>  @RequestMapping("/")
+  public String index() {</p>
+
+<pre><code>return "Hello to you, world";
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>Running this application is as easy as typing:</p>
+
+<p><code>bash
+$ java -jar build/libs/galoshe-0.1.0.jar
+</code></p>
+
+<p>That command will fire up an embedded web container with the request path <code>/</code> mapped to return the simple <code>String</code> "Hello to you, world". You can define what port this application will run on via an <code>application.properties</code> file like so:</p>
+
+<p><code>java application.properties
+server.port: 8080
+</code></p>
+
+<p>Consequently, if I take my browser and point it to localhost:8080, I see the pedestrian, but oh-so-gratifying-when-you-see-it salutation.</p>
+
+<p>Now that you've been introduced to the application I'd like to distribute as a Docker container, let me show you how to do it in 4 easy steps.</p>
+
+<p>Keep in mind, however, that in order to use the gradle-docker plugin I use in this example, you'll need to have Docker installed as the plugin shells out to the <code>docker</code> command.</p>
+
+<h4>Step 1: Apply some plugins</h4>
+
+<p>First and foremost, to Docker-ize your application, you'll need to use two Gradle plugins: <code>docker</code> and <code>application</code>.</p>
+
+<p>The <a href="https://github.com/Transmode/gradle-docker">gradle-docker plugin</a> by <a href="https://github.com/Transmode">Transmode</a> is actually 1 of 2 available plugins for Dockering with Gradle. The <a href="https://github.com/bmuschko/gradle-docker-plugin">other plugin</a> by <a href="https://github.com/bmuschko">Ben Muschko</a> of <a href="http://www.gradleware.com/">Gradleware</a> is a bit more advanced with additional features, however, I find the Transmode plugin the easiest and quickest to get going.</p>
+
+<p>The <code>application</code> plugin is actually included <em>automatically</em> via the <code>spring-boot</code> plugin in my particular example, however, if you aren't using Boot, then you'll need to add the following two plugins to your <code>build.gradle</code> file:</p>
+
+<p><code>java
+apply plugin: 'application'
+apply plugin: 'docker'
+</code></p>
+
+<p>As the <code>docker</code> plugin is a 3rd party plugin, you'll need to tell Gradle how to find it via a <code>dependencies</code> clause.</p>
+
+<p>```java Specifying the classpath for the docker plugin
+buildscript {</p>
+
+<pre><code>repositories { mavenCentral() }
+dependencies {
+    classpath 'se.transmode.gradle:gradle-docker:1.1'
+}
+</code></pre>
+
+<p>}
+<code>``
+Now your Gradle script is ready to start Docker-ing. Next up, you'll need to provide some clues so the plugin can create a valid [</code>Dockerfile`]<a href="http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/">5</a>.</p>
+
+<h4>Step 2: Provide some properties</h4>
+
+<p>The gradle-docker plugin doesn't directly create a Docker container -- it merely creates a <code>Dockerfile</code> and then shells out to the <code>docker</code> command to build an image. Consequently, you need to specify a few properties in your <code>build.gradle</code> file so that the corresponding <code>Dockerfile</code> builds a valid container that automatically runs your application.</p>
+
+<p>You need to provide:</p>
+
+<ul>
+<li>The class to run i.e. the class in your application that contains a <code>main</code> method</li>
+<li>The target JVM version (default is Java 7)</li>
+<li><a href="http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation/">Optionally</a>, a group id, which feeds into the corresponding Docker tag.</li>
+</ul>
+
+
+<p>Accordingly, my <code>build.gradle</code> defines all three properties like so:</p>
+
+<p><code>java Defining properties for the docker plugin
+group = 'aglover'
+sourceCompatibility = 1.7
+mainClassName = 'com.github.aglover.galoshe.Application'
+</code></p>
+
+<p>A few notes about these properties. Firstly, <a href="http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation/">Java 8</a> isn't <em><a href="https://github.com/Transmode/gradle-docker/pull/9">currently</a></em> available for this plugin. If you don't specify a <code>sourceCompatibility</code>, you'll get Java 7. Next, the <code>group</code> property isn't required; however, it helps in Docker tagging. For example, my project's <code>baseName</code> is dubbed <code>galoshe</code>; consequently, when the plugin creates a Docker image, it'll tag that image with the pattern <code>group/name</code>. So in my case, the corresponding image is tagged <code>aglover/galoshe</code>.</p>
+
+<p>Finally, the <code>mainClassName</code> shouldn't be too surprising - it's the hook into your application. In truth, the plugin will create a script that your resultant Docker image will invoke on startup. That script will essentially call the command:</p>
+
+<p><code>bash
+java -classpath your_class_path your_main_class
+</code></p>
+
+<p>At this point, you are almost done. Next up, you'll need to specify any <code>Dockerfile</code> instructions.</p>
+
+<h4>Step 3: Specify any required Dockerfile instructions</h4>
+
+<p><code>Dockerfile</code>s contain specialized instructions for the corresponding image they create. There <a href="http://thediscoblog.com/blog/2014/05/05/dockerfiles-in-a-jiffy/">are a few important ones</a>; nevertheless, my Boot app only requires one: <code>port</code>, which is set via the <code>exposePort</code> method of the plugin.</p>
+
+<p>Consequently, to ensure my Docker container exposes port 8080 as defined in my <code>application.properites</code> file, I'll add the following clause to my <code>build.gradle</code> file:</p>
+
+<p>```java Specifying port 8080
+distDocker {</p>
+
+<pre><code>exposePort 8080
+</code></pre>
+
+<p>}
+```</p>
+
+<p>A few other aspects you can muddle with via the plugin are <code>addFile</code> which results in an <code>ADD</code> instruction, <code>runCommand</code>, which results in a <code>RUN</code> instruction, and finally <code>setEnvironment</code>, which creates an <code>ENV</code> instruction.</p>
+
+<p>Now you're done with your Gradle build. All that's left to do is run your build and fire the image up!</p>
+
+<h4>Step 4: Build and run it</h4>
+
+<p>Provided you've configured the gradle-plugin properly, all that's left to do is run your build. In this case, the command is simply <code>distDocker</code>.</p>
+
+<p><code>bash Running my build
+$ ./gradlew distDocker
+</code></p>
+
+<p>The first time you run this command it'll take a bit as various images will be downloaded. Subsequent runs will be lightning quick though.</p>
+
+<p>After your build completes, your image will be created with the tag I noted earlier. In my case, the tag will be <code>aglover/galoshe</code>, which I can quickly see by running the <code>images</code> command:</p>
+
+<p><code>bash Listing available local Docker images
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+aglover/galoshe     latest              332e163221bc        20 hours ago        1.042 GB
+dockerfile/java     latest              f9793c257930        3 weeks ago         1.026 GB
+</code></p>
+
+<p>I can subsequently run my image like so:</p>
+
+<p><code>bash Running my container
+docker run 332e163221bc
+</code></p>
+
+<p>I can naturally go to my browser, hit localhost:8080 and find myself quite satisfied that my image runs a nifty greeting.</p>
+
+<p>Of course, I would need to <a href="https://hub.docker.com/u/aglover/">publish this image</a> for others to use it; nevertheless, as you can see, the gradle-plugin allows me to quickly create Docker containers for Java apps.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Dockerfiles in a jiffy]]></title>
@@ -332,75 +511,6 @@ Java HotSpot(TM) 64-Bit Server VM (build 23.25-b01, mixed mode)
 </code></p>
 
 <p>And that's it. To use the VM, <a href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/">simply SSH to it</a>. Go ahead and type <code>java -version</code> just to convince yourself. Go ahead, I'll wait for you...there, are you happy now?  Wasn't that easy? Provisioning Ubuntu VMs with Vagrant couldn't be any easier with <a href="https://github.com/aglover/ubuntu-equip">ubuntu-equip</a>, dig it?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[SSH &amp; Vagrant]]></title>
-    <link href="http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant/"/>
-    <updated>2013-10-16T15:55:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/10/16/ssh-and-vagrant</id>
-    <content type="html"><![CDATA[<p><a href="http://www.vagrantup.com/">Vagrant</a> is a handy tool for creating VMs. It's a lot like firing up an <a href="http://thediscoblog.com/blog/categories/aws/">EC2</a> instance, but in Vagrant's case, everything is localized. And best of all, it's free.</p>
-
-<p>I tend to favor <a href="https://github.com/aglover/ubuntu-equip">Ubuntu</a> as my preferred flavor of linux; consequently, all production EC2 instances use a customized Ubuntu AMI. Testing various aspects of this system with various software libraries, however, is initially tested locally using Vagrant VMs. What's more, you can install localized VMs of <a href="http://www.vagrantbox.es/">other operating systems</a> ranging from Debian to OpenSuse to <a href="https://devcenter.heroku.com/articles/stack">Heroku's Cedalon</a>.</p>
-
-<!-- more -->
-
-
-<p>Firing up a local instance of <a href="http://thediscoblog.com/blog/categories/heroku/">Heroku</a>'s Cedalon (which is a version of Ubuntu 10.04 with Ruby and Node.js installed) is as easy as typing:</p>
-
-<p><code>bash Firing up Heroku's Cedalon locally
-vagrant init heroku http://dl.dropbox.com/u/1906634/heroku.box
-vagrant up
-</code></p>
-
-<p>Then you can SSH to that running VM like so:</p>
-
-<p><code>bash SSHing to a local VM
-vagrant ssh
-</code></p>
-
-<p>The command <code>vagrant ssh</code> can be problematic, though, especially if you are automating some aspect of SSH -- for example, you are using some library on top of SSH. In that case, you need to use SSH <em>directly</em> rather than through Vagrant.</p>
-
-<p>Luckily, you can SSH normally to local Vagrant instances easily enough. You'll need to tell SSH which key to use (Vagrant creates one for you), which user to connect as (usually vagrant), and what port to connect to (usually 2222).  All of this information can be found via the command <code>vagrant ssh-config</code>.</p>
-
-<p>To use plain Jane SSH when working with Vagrant instances, you'll first need to execute this command:</p>
-
-<p><code>bash Printing out the location of Vagrant's key
-vagrant ssh-config | grep IdentityFile  | awk '{print $2}'
-</code></p>
-
-<p>This <a href="https://groups.google.com/forum/#!topic/vagrant-up/B5WIfDcIRtE">3 pronged command</a> ultimately tells you where Vagrant has created a key file. The command <a href="http://www.thegeekstuff.com/2010/01/awk-introduction-tutorial-7-awk-print-examples/"><code>awk '{print $2}'</code></a> prints the second column of the line in the <code>ssh-config</code> string that starts with <code>IdentityFile</code> (which points to its location).</p>
-
-<p>Now that you know where the key file is, you can ssh (assuming the default port hasn't changed from 2222 -- double check your <code>ssh-config</code> to make sure) like so:</p>
-
-<p><code>bash Using normal SSH
-ssh -i /some/dir/.vagrant.d/insecure_private_key -l vagrant -p 2222 127.0.0.1
-</code></p>
-
-<p>If you happen to fire up different VMs -- for example, I have both Heroku Cedalon and normal Ubuntu instances, SSH will probably complain that the remote host identification has changed. This is a valid warning as the RSA fingerprint associated with the local host has indeed changed.</p>
-
-<p>You can suggest that <a href="http://linuxcommando.blogspot.com/2008/10/how-to-disable-ssh-host-key-checking.html">SSH ignore this warning</a> by adding two additional flags. I highly recommend you only do this via the command line and <em>not with some SSH config file</em> as the warning SSH throws is completely legitimate and could be saving you from a man-in-the-middle attack.</p>
-
-<p>Nevertheless, if you are working with localized VMs and need to bypass that warning, use these two flags:</p>
-
-<p><code>bash Two additional flags to SSH
--o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
-</code></p>
-
-<p>Consequently, when I SSH to a local Vagrant instance, I type something along the lines of:</p>
-
-<p><code>bash SSHing to Vagrant instances
-ssh -i /some/dir/.vagrant.d/insecure_private_key -l vagrant -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no 127.0.0.1
-</code></p>
-
-<p>Finally, to shut down a Vagrant instance, just issue the command:</p>
-
-<p><code>
-vagrant destroy
-</code></p>
-
-<p>Vagrant makes it super easy to fire up localized development environments -- Vagrant instances boot up faster than EC2 instances and they're free. And now you know how to use normal SSH to connect to them. Can you dig it?</p>
 ]]></content>
   </entry>
   
