@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Running individual tests in Rails - The Disco Blog</title>
+  <title>Batten down those Node dependency hatches - The Disco Blog</title>
   <meta name="author" content="Andrew Glover">
 
   
@@ -20,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://thediscoblog.com/blog/2012/12/17/running-individual-tests-in-rails/">
+  <link rel="canonical" href="http://thediscoblog.com/blog/2014/12/20/batten-down-those-npm-dependency-hatches/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -85,7 +85,7 @@
   <header>
     
       
-        <h1 class="entry-title">Running Individual Tests in Rails</h1>
+        <h1 class="entry-title">Batten Down Those Node Dependency Hatches</h1>
       
     
     
@@ -102,14 +102,66 @@
   
 
 
-<time datetime="2012-12-17T09:38:00-08:00" pubdate data-updated="true">Dec 17<span>th</span>, 2012</time>
+<time datetime="2014-12-20T19:18:00-08:00" pubdate data-updated="true">Dec 20<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Every now and again, I find myself struggling to remember how to execute a single test in <a href="http://rubyonrails.org/">Rails</a>. While I have <a href="https://github.com/guard/guard">Guard</a> running the entire test suite <em>anytime</em> a change is detected, there are times when I want to focus solely on one test. Accordingly, <a href="http://flavio.castelli.name/2010/05/28/rails_execute_single_test/">Flavio Castelli has a great blog entry</a> detailing the manifold ways one can execute a single test using <a href="http://rake.rubyforge.org/">Rake</a> and/or Ruby.</p>
+<div class="entry-content"><p><a href="http://en.wikipedia.org/wiki/Dependency_%28project_management%29">Dependency management</a> is oftentimes a mundane subject. And it&#8217;s not much of a subject at all if you don&#8217;t depend on rapidly changing libraries. Of course, you might not always <em>realize</em> you&#8217;re depending on a rapidly changing library &#8211; especially, if you happen to take a rather liberal approach of depending on snapshots or latest versions, as I often do.</p>
+
+<p>I recently found a nifty <a href="https://www.npmjs.com/">npm</a> utility for <a href="http://thediscoblog.com/blog/categories/node/">Node</a> applications that helped me avoid some rather annoying dependency related issues. It&#8217;s quite similar to Ruby <a href="http://bundler.io/">Bundler</a>&#8217;s <code>Gemfile.lock</code> files, but in the case of npm, you&#8217;ll need to actually run an additional command.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p>Take, for example, the following snippet from a <a href="https://github.com/hubot-scripts/hubot-heroku-dynos">Hubot</a> npm <code>pacakge.json</code> file, which specifies the project&#8217;s dependencies.</p>
+
+<figure class='code'><figcaption><span>package.json NPM file</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="s2">&quot;dependencies&quot;</span><span class="err">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;hubot&quot;</span><span class="p">:</span> <span class="s2">&quot;&gt;= 2.6.0 &lt; 3.0.0&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;hubot-scripts&quot;</span><span class="p">:</span> <span class="s2">&quot;&gt;= 2.5.0 &lt; 3.0.0&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;hubot-hipchat&quot;</span><span class="p">:</span> <span class="s2">&quot;^2.6.4-2&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;underscore&quot;</span><span class="p">:</span> <span class="s2">&quot;1.3.3&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;underscore.string&quot;</span><span class="p">:</span> <span class="s2">&quot;2.1.1&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;githubot&quot;</span><span class="p">:</span> <span class="s2">&quot;0.4.x&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;moment&quot;</span><span class="p">:</span> <span class="s2">&quot;latest&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;cheerio&quot;</span><span class="p">:</span><span class="s2">&quot;latest&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;date-utils&quot;</span><span class="p">:</span> <span class="s2">&quot;&gt;=1.2.5&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, npm has a powerful version syntax (like almost all other dependency management packages) that allows you to target a particular version (like <a href="http://underscorejs.org/">underscore</a> version 1.3.3) or range of versions (like <a href="https://hubot.github.com/">hubot</a> which can be anything greater than or equal to version 2.6.0, but less than 3.0.0).</p>
+
+<p>Take special note though on the versions targeted for cheerio and moment: they&#8217;re both pointing to <em>latest</em>, which means the tip. And as you&#8217;ve probably guessed, latest today could be a different version from latest tomorrow.</p>
+
+<p>Accordingly, if someone else runs <code>npm install</code> later, they could get a different version of moment or cheerio. And this could lead to unexpected behavior and/or failures. You could, naturally, update your <code>package.json</code> file to point to a <em>particular version</em> but that&#8217;s painful, as it forces you to figure out which ones you want. And of course, when a new version is released, you&#8217;ll then have to manually update your <code>package.json</code> file.</p>
+
+<p>Explicitly pointing to a particular version is prudent  &#8211; it frequently makes a lot of sense to rely on known, stable versions of frameworks. In the case of Hubot, for example, that dependency shouldn&#8217;t change much, nor do I plan to keep up to date with the tip. But the moment dependency, that&#8217;s another story &#8211; I want the tip and I am totally willing to get a new version at some point in the future.</p>
+
+<p>Nevertheless, I want everyone who collaborates on my project to have the exact same version &#8211; and that version should be one I decide on.</p>
+
+<p>Enter npm&#8217;s <code>shrinkwrap</code> command.  This creates a <em>lock file</em> dubbed <code>npm-shrinkwrap.json</code>. This lock file points to exact versions and it becomes the source of truth for all versions of required dependencies (even those pulled in by your dependencies&#8217; dependencies).</p>
+
+<p>All you have to do is run, via the command line, <code>npm shrinkwrap</code> and check this file into your SCM. The next time someone runs an <code>npm install</code> (or update) the shrinkwrap file is consulted by npm and <em>only</em> those precise versions are incorporated into your project.</p>
+
+<p>Now anyone who runs <code>npm install</code> will get the exact versions you intend. In fact, if you or anyone else changes the <code>package.json</code> file, nothing will happen unless you delete the shrinkwrap file and then run <code>npm install</code>.</p>
+
+<p>Much like Bundler&#8217;s <code>Gemfile.lock</code> files, <a href="http://blog.nodejs.org/2012/02/27/managing-node-js-dependencies-with-shrinkwrap/">npm&#8217;s shrinkwrap</a> files provide a safety net for dependencies by allowing you to lock to particular versions even when you explicitly rely on the latest and greatest. Now you can keep the pace of a particular library&#8217;s releases without a lot of hassle.</p>
 </div>
 <!-- related posts -->
 <div id='related_posts'>
@@ -121,23 +173,23 @@
           
       
           
-            <li class="related"><a href="/blog/2012/11/02/jvm-fork-modes-and-metaclass-wizardry/">JVM fork modes and metaclass wizardry</a></li>
-          
-      
-          
-            <li class="related"><a href="/blog/2013/02/18/testing-rails-migrations/">Testing Rails migrations</a></li>
-          
-      
-          
-            <li class="related"><a href="/blog/2013/08/04/sometimes-tdd-requires-a-hammer/">Sometimes TDD requires a hammer</a></li>
-          
-      
-          
-            <li class="related"><a href="/blog/2012/12/02/comprehending-the-mobile-development-landscape/">Comprehending the mobile development landscape</a></li>
-          
-      
-          
             <li class="related"><a href="/blog/2014/05/05/dockerfiles-in-a-jiffy/">Dockerfiles in a jiffy</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/">Docker containers with Gradle in 4 steps</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/07/24/introducing-android-migrations/">Introducing Android migrations</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2014/04/01/schooled-in-ping-pong/">Schooled in ping pong</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku performance hat-trick</a></li>
           
       
       </ul>
@@ -163,12 +215,12 @@
   
 
 
-<time datetime="2012-12-17T09:38:00-08:00" pubdate data-updated="true">Dec 17<span>th</span>, 2012</time>
+<time datetime="2014-12-20T19:18:00-08:00" pubdate data-updated="true">Dec 20<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+    <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/node/'>Node</a>
   
 </span>
 
@@ -177,7 +229,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2012/12/17/running-individual-tests-in-rails/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2012/12/17/running-individual-tests-in-rails/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2014/12/20/batten-down-those-npm-dependency-hatches/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2014/12/20/batten-down-those-npm-dependency-hatches/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -190,10 +242,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left articlenav" href="/blog/2012/12/12/the-cloud-files-are-out/" title="Previous Post: The cloud files are out!">&laquo; The cloud files are out!</a>
+        <a class="basic-alignment left articlenav" href="/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/" title="Previous Post: Docker containers with Gradle in 4 steps">&laquo; Docker containers with Gradle in 4 steps</a>
       
-      
-        <a class="basic-alignment right articlenav" href="/blog/2012/12/21/pushing-mongo-gridfs-files-with-sinatra/" title="Next Post: Pushing Mongo GridFS files with Sinatra">Pushing Mongo GridFS files with Sinatra &raquo;</a>
       
     </p>
   </footer>
@@ -292,8 +342,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://thediscoblog.com/blog/2012/12/17/running-individual-tests-in-rails/';
-        var disqus_url = 'http://thediscoblog.com/blog/2012/12/17/running-individual-tests-in-rails/';
+        var disqus_identifier = 'http://thediscoblog.com/blog/2014/12/20/batten-down-those-npm-dependency-hatches/';
+        var disqus_url = 'http://thediscoblog.com/blog/2014/12/20/batten-down-those-npm-dependency-hatches/';
         var disqus_script = 'embed.js';
       
     (function () {

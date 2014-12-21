@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-06-13T14:40:18-07:00</updated>
+  <updated>2014-12-20T19:54:13-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,59 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Batten down those Node dependency hatches]]></title>
+    <link href="http://thediscoblog.com/blog/2014/12/20/batten-down-those-npm-dependency-hatches/"/>
+    <updated>2014-12-20T19:18:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2014/12/20/batten-down-those-npm-dependency-hatches</id>
+    <content type="html"><![CDATA[<p><a href="http://en.wikipedia.org/wiki/Dependency_%28project_management%29">Dependency management</a> is oftentimes a mundane subject. And it's not much of a subject at all if you don't depend on rapidly changing libraries. Of course, you might not always <em>realize</em> you're depending on a rapidly changing library -- especially, if you happen to take a rather liberal approach of depending on snapshots or latest versions, as I often do.</p>
+
+<p>I recently found a nifty <a href="https://www.npmjs.com/">npm</a> utility for <a href="http://thediscoblog.com/blog/categories/node/">Node</a> applications that helped me avoid some rather annoying dependency related issues. It's quite similar to Ruby <a href="http://bundler.io/">Bundler</a>'s <code>Gemfile.lock</code> files, but in the case of npm, you'll need to actually run an additional command.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p>Take, for example, the following snippet from a <a href="https://github.com/hubot-scripts/hubot-heroku-dynos">Hubot</a> npm <code>pacakge.json</code> file, which specifies the project's dependencies.</p>
+
+<p>``` json package.json NPM file
+"dependencies": {</p>
+
+<pre><code>"hubot": "&gt;= 2.6.0 &lt; 3.0.0",
+"hubot-scripts": "&gt;= 2.5.0 &lt; 3.0.0",
+"hubot-hipchat": "^2.6.4-2",
+"underscore": "1.3.3",
+"underscore.string": "2.1.1",
+"githubot": "0.4.x",
+"moment": "latest",
+"cheerio":"latest",
+"date-utils": "&gt;=1.2.5"
+</code></pre>
+
+<p>  }
+```</p>
+
+<p>As you can see, npm has a powerful version syntax (like almost all other dependency management packages) that allows you to target a particular version (like <a href="http://underscorejs.org/">underscore</a> version 1.3.3) or range of versions (like <a href="https://hubot.github.com/">hubot</a> which can be anything greater than or equal to version 2.6.0, but less than 3.0.0).</p>
+
+<p>Take special note though on the versions targeted for cheerio and moment: they're both pointing to <em>latest</em>, which means the tip. And as you've probably guessed, latest today could be a different version from latest tomorrow.</p>
+
+<p>Accordingly, if someone else runs <code>npm install</code> later, they could get a different version of moment or cheerio. And this could lead to unexpected behavior and/or failures. You could, naturally, update your <code>package.json</code> file to point to a <em>particular version</em> but that's painful, as it forces you to figure out which ones you want. And of course, when a new version is released, you'll then have to manually update your <code>package.json</code> file.</p>
+
+<p>Explicitly pointing to a particular version is prudent  -- it frequently makes a lot of sense to rely on known, stable versions of frameworks. In the case of Hubot, for example, that dependency shouldn't change much, nor do I plan to keep up to date with the tip. But the moment dependency, that's another story -- I want the tip and I am totally willing to get a new version at some point in the future.</p>
+
+<p>Nevertheless, I want everyone who collaborates on my project to have the exact same version -- and that version should be one I decide on.</p>
+
+<p>Enter npm's <code>shrinkwrap</code> command.  This creates a <em>lock file</em> dubbed <code>npm-shrinkwrap.json</code>. This lock file points to exact versions and it becomes the source of truth for all versions of required dependencies (even those pulled in by your dependencies' dependencies).</p>
+
+<p>All you have to do is run, via the command line, <code>npm shrinkwrap</code> and check this file into your SCM. The next time someone runs an <code>npm install</code> (or update) the shrinkwrap file is consulted by npm and <em>only</em> those precise versions are incorporated into your project.</p>
+
+<p>Now anyone who runs <code>npm install</code> will get the exact versions you intend. In fact, if you or anyone else changes the <code>package.json</code> file, nothing will happen unless you delete the shrinkwrap file and then run <code>npm install</code>.</p>
+
+<p>Much like Bundler's <code>Gemfile.lock</code> files, <a href="http://blog.nodejs.org/2012/02/27/managing-node-js-dependencies-with-shrinkwrap/">npm's shrinkwrap</a> files provide a safety net for dependencies by allowing you to lock to particular versions even when you explicitly rely on the latest and greatest. Now you can keep the pace of a particular library's releases without a lot of hassle.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ahoy there callbacks!]]></title>
@@ -366,69 +419,6 @@ res.render 'index', {words: allWords}
 <p><blockquote><p>Starting today, you can submit your web apps and mobile optimized web sites and have them merchandised alongside native apps on Amazon and Kindle Fire in nearly 200 countries worldwide, without any third-party software or doing any native app development.</p><footer><strong>https://developer.amazon.com/blog/</strong> <cite><a href='https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html'>Amazon Is Now Accepting HTML5 Web Apps—Making It Easy for You to Reach Millions of Kindle Fire and Android Customers Worldwide</a></cite></footer></blockquote></p>
 
 <p>This is big news for HTML5 developers. A direct channel to the masses and monetization APIs to boot -- what more could you ask for? Standby folks because it's about to get even more interesting, as I'm willing to bet that Google and Apple will follow suit in the near future.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Swipe gestures in jQuery Mobile apps]]></title>
-    <link href="http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps/"/>
-    <updated>2013-07-30T12:52:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/07/30/adding-swipe-gestures-to-jquery-mobile-apps</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/swipe-right.png">I find that <a href="http://thediscoblog.com/blog/2013/04/07/painless-android-swipe-detection/">swipe gestures</a> for navigating between screens in a mobile app <a href="http://thediscoblog.com/blog/2013/07/01/mobile-for-the-masses-words-and-gestures-with-overheard-word/">quite nice</a>. <a href="http://www.ibm.com/developerworks/library/j-mobileforthemasses2/">Early on</a> in my mobile development journey, I found myself instinctively adding navigation buttons, but quickly found them cumbersome for users to tap; plus, those buttons took up precious screen real estate! Gestures, on the other hand, free up screen space by removing needless buttons and give users a more interactive experience.</p>
-
-<p>Implementing right and left swipes in an <a href="http://jquerymobile.com/">jQuery Mobile</a> app is fairly straightforward, but there are a few gotchas that I was able to piece together via multiple <a href="http://stackoverflow.com/questions/7533772/how-to-swipe-between-several-jquery-mobile-pages">stackoverflow threads</a>, blogs, and finally <a href="http://api.jquerymobile.com/">jQuery Mobile's own documentation</a>.</p>
-
-<!-- more -->
-
-
-<p>In a jQuery Mobile app, you <a href="http://the-jquerymobile-tutorial.org/jquery-mobile-tutorial-CH02.php">define pages</a> within <code>div</code> tags that represent a UI screen -- you can then declare transitions between pages well -- slide, flip, etc.  The key aspect with swiping between page <code>div</code>s is the selector for them, which is <code>div[data-role='page']</code>.</p>
-
-<p>Once you have a handle to that <code>div</code>, you can proceed forward with a left swipe via jQuery's <a href="http://api.jquery.com/next/"><code>next</code></a> function. Conversely, swiping right with the intent of going back is facilitated by finding the previous matching <code>div[data-role='page']</code> via jQuery's <a href="http://api.jquery.com/prev/"><code>prev</code></a> function.</p>
-
-<p>Also note, going backwards via a swipe requires that you <em>reverse</em> the slide transition, otherwise it looks misleading to the user (i.e. the transition is from left to right rather than the other way around!).</p>
-
-<p>Accordingly, the JavaScript for swipe gestures should be placed within a <a href="http://jquerymobile.com/demos/1.2.0/docs/api/events.html"><code>pageinit</code> event</a> like so:</p>
-
-<p>``` javascript Enabling swipe between page divs
-$(document).on('pageinit', function(event){
-  $('div.ui-page').on("swipeleft", function () {</p>
-
-<pre><code>var nextpage = $(this).next('div[data-role="page"]');
-  if (nextpage.length &gt; 0) {
-    $.mobile.changePage(nextpage, "slide", false, true);
-  }
-</code></pre>
-
-<p>  });</p>
-
-<p>  $('div.ui-page').on("swiperight", function () {</p>
-
-<pre><code>var prevpage = $(this).prev('div[data-role="page"]');
-if (prevpage.length &gt; 0) {
-  $.mobile.changePage(prevpage, { transition: "slide", reverse: true }, true, true);
-}
-</code></pre>
-
-<p>  });
-});
-```</p>
-
-<p>Note, this script should be referenced in your DOM <em>before</em> you pull in the jQuery mobile js file. That is, put the code above where you add jQuery mobile in your document's header (but <em>after</em> you load jQuery itself):</p>
-
-<p>``` html Including jQuery Mobile</p>
-
-<script src="https://d10ajoocuyu32n.cloudfront.net/jquery-1.9.1.min.js"></script>
-
-
-<!-- add pageinit swipe initialization here -->
-
-
-<script src="https://d10ajoocuyu32n.cloudfront.net/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
-
-
-<p>```</p>
-
-<p>Once you've done that, you'll be able to swipe between page <code>div</code>s.</p>
 ]]></content>
   </entry>
   

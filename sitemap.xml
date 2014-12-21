@@ -373,8 +373,14 @@
         <lastmod>2014-06-13T14:40:17-07:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://thediscoblog.com/blog/2014/12/20/batten-down-those-npm-dependency-hatches/
+        </loc>
+        <lastmod>2014-12-20T19:54:12-08:00</lastmod>
+    </url>
+    <url>
         <loc>http://thediscoblog.com/blog/archives/</loc>
-        <lastmod>2014-06-13T14:40:17-07:00</lastmod>
+        <lastmod>2014-12-20T19:54:12-08:00</lastmod>
     </url>
     <url>
         <loc>http://thediscoblog.com/blog/categories/</loc>
@@ -382,6 +388,6 @@
     </url>
     <url>
         <loc>http://thediscoblog.com/</loc>
-        <lastmod>2014-06-13T14:40:17-07:00</lastmod>
+        <lastmod>2014-12-20T19:54:12-08:00</lastmod>
     </url>
 </urlset>
