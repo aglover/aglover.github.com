@@ -11,7 +11,7 @@
   
   <meta name="description" content="Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code.">
   
-  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, CoffeScript, Docker, "/>
+  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, Continuous Integration, CoffeScript, Docker, "/>
 
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +81,95 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/04/15/chromes-console-commands/">Chrome&#8217;s Console Commands</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-15T10:05:00-07:00" pubdate data-updated="true">Apr 15<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As if the JavaScript console in Chrome couldn&#8217;t be any more awesome. Check it out: <a href="https://developers.google.com/chrome-developer-tools/docs/commandline-api">Command Line API Reference</a>. Yep, it&#8217;s legit. I&#8217;ve been using Firebug and the like for years and only just ran across this feature of Chrome&#8217;s JavaScript console.</p>
+
+<p><img class="center" src="/images/mine/jschrome.png"></p>
+
+<p>My favorite: <code>getEventListeners</code>. Understanding how the DOM is augmented with listeners is amazingly helpful!</p>
+
+<p>All you have to do is fire up the JavaScript Console in Chrome and in the actual console window, you have a host a commands you can execute now just like you have in any other terminal app. Very helpful!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/04/14/hybrid-inappropriateness/">Hybrid Inappropriateness</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-14T11:14:00-07:00" pubdate data-updated="true">Apr 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/mine/confused.png">The mobile development landscape is <a href="http://skytechgeek.com/2011/09/10-mobile-application-frameworks-for-easy-development/">bursting at the seams</a> with frameworks and tools that enable you to target <a href="http://thediscoblog.com/blog/2013/03/25/modeveast-2012-panel-discussion/">two primary mobile platforms</a>: iOS and <a href="http://thediscoblog.com/blog/categories/android/">Android</a>. And the mobile community has <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">classified these frameworks and tools</a> into three categories: native, hybrid, and web. Unfortunately, limiting the classification to three <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">is inadequate</a> as the term hybrid is too generic.</p>
+
+<p>Web apps are truly ubiquitous because they take advantage of the browser and are thus, cross platform. You, for the most part, can get away with <a href="http://thediscoblog.com/blog/2012/09/01/cost-and-the-great-mobile-app-debate/">maintaining one code base</a> that can be viewed on iOS, Android, and the other minor players. Yet, the key point of Web apps is that they are <a href="http://thediscoblog.com/blog/2012/09/25/modevtablet-2012-video-mobile-web-realities/"><em>web sites</em>, not mobile apps</a>.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/14/hybrid-inappropriateness/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -473,140 +562,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/02/23/everything-you-need-to-know-about-mongodb/">Everything You Need to Know About MongoDB</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-23T09:39:00-08:00" pubdate data-updated="true">Feb 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img class="right" src="/images/mine/mongodb_icon.png">Are you new to <a href="http://www.mongodb.org/">MongoDB</a>? Curious to see what&#8217;s interesting about it?  Document-oriented databases like MongoDB are vastly different from relational databases in that they don&#8217;t store data in tables; instead, they store it in the form of documents. From a developer&#8217;s perspective, document-oriented (or schemaless) data is simpler and <a href="http://thediscoblog.com/blog/2012/09/03/mongodb-from-the-trenches-masochistic-embedded-collections/">far more flexible</a> to manage than relational data. Rather than storing data into a rigid schema of tables, rows, and columns, joined by relationships, documents are written individually, containing whatever data they require.</p>
-
-<p>Among open source, document-oriented databases, MongoDB is often billed as a <a href="http://www.ibm.com/developerworks/library/j-javadev2-12/">NoSQL database with RDBMS features</a>. One example of this is MongoDB&#8217;s support for dynamic queries that don&#8217;t require predefined MapReduce functions. MongoDB also comes with an interactive shell that makes accessing its datastore refreshingly easy, and its out-of-the-box support for sharding and clustering (via <a href="http://thediscoblog.com/blog/2012/09/11/mongodb-from-the-trenches-prudent-production-planning/">replica sets</a>) enables high scalability across multiple nodes.</p>
-
-<p>Check out this IBM developerWorks&#8217; Knowledge Path dubbed &#8221;<a href="http://www.ibm.com/developerworks/training/kp/j-kp-mongo/">Discover MongoDB</a>&#8221; &#8211; watch four videos, read a few articles, listen to a podcast and learn everything you need to know about MongoDB!</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/02/18/testing-rails-migrations/">Testing Rails Migrations</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-18T16:22:00-08:00" pubdate data-updated="true">Feb 18<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently found myself searching <a href="http://stackoverflow.com/">Stackoverflow</a> and Google for various techniques for automatically testing <a href="http://guides.rubyonrails.org/migrations.html">Rails migrations</a>. I was surprised not to have found <a href="http://stackoverflow.com/questions/6079016/how-do-i-test-rails-migrations">too much</a> information though. While testing a migration is fairly straightforward (migrations are classes and you can easily invoke corresponding methods); the challenge can be setting models up properly. That is, migrations are a tool to update an underlying database to reflect changes in models &#8211; by the time you are writing a migration, the models <em>already</em> reflect what should be.</p>
-
-<p>Accordingly, to test a migration, you need to set up your test with how things were and then run your migration and verify things have migrated.  As it turns out, this is super easy to do with a document oriented database like <a href="http://www.mongodb.org/">MongoDB</a>. For this particular project, we&#8217;re using <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a>,  which is an Object-Document-Mapper (or ODM) for MongoDB and we&#8217;re also using a nifty gem dubbed <a href="https://github.com/adacosta/mongoid_rails_migrations">mongoid_rails_migrations</a>, which facilitates writing Mongoid migrations.</p>
-
-<p>In order to reflect the state of the underlying datastore before running a migration, I needed to remove a particular collection, which due to changes in our models, is automatically populated with meta data when various events occur (think <a href="http://en.wikipedia.org/wiki/Database_trigger">relational trigger</a> here, for example). As you can probably see, as this new collection doesn&#8217;t exist in production, all the existing data in production needs some corresponding default meta data to reflect the new requirements which brought this collection to life.</p>
-
-<p>Accordingly, once I initialize my models and the corresponding collection is populated, I need to completely <a href="http://docs.mongodb.org/manual/reference/method/db.collection.drop/">drop the collection</a>. Then, I can run my migration and then verify that the previously nuked collection is present with all the required data.</p>
-
-<p>In my case, I&#8217;m using <a href="https://github.com/thoughtbot/shoulda">shoulda</a> in concert with <a href="http://ruby-doc.org/stdlib-1.9.3/libdoc/test/unit/rdoc/Test/Unit.html">Test::Unit</a>, but the details of a test framework really don&#8217;t matter &#8211; in any case, you&#8217;ll need to load your migration, which can be done via a <code>require</code> statement like so:</p>
-
-<figure class='code'><figcaption><span>Requiring a migration</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;db&#39;</span><span class="p">,</span> <span class="s1">&#39;migrate&#39;</span><span class="p">,</span> <span class="s1">&#39;20130217194234_member_app_roles_permissions&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In my <a href="http://en.wikipedia.org/wiki/Test_fixture">fixture</a> logic, I&#8217;ve initialized a few objects and related them, which automatically creates the aforementioned meta data collection; consequently, I need to do two things. First, get a connection to the underlying test datastore and then drop that collection.</p>
-
-<figure class='code'><figcaption><span>Obtaining a connection and dropping a collection</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">db</span> <span class="o">=</span> <span class="vi">@account</span><span class="o">.</span><span class="n">db</span>
-</span><span class='line'><span class="n">db</span><span class="o">[</span><span class="s1">&#39;member_app_roles&#39;</span><span class="o">].</span><span class="n">drop</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now I&#8217;m ready to run my migration &#8211; it&#8217;s as simple as invoking the <a href="http://www.railstips.org/blog/archives/2009/05/11/class-and-instance-methods-in-ruby/">class method</a> <code>up</code>!</p>
-
-<figure class='code'><figcaption><span>Invoking a migration </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">MemberAppRolesPermissions</span><span class="o">.</span><span class="n">up</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once the migration has finished running, I can then verify that everything is cool and copasetic. In this case, I need to go directly to the datastore because those objects in memory won&#8217;t reflect my changes just yet.</p>
-
-<figure class='code'><figcaption><span>Asserting things worked!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">member</span> <span class="o">=</span> <span class="no">Member</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">assert_equal</span> <span class="mi">2</span><span class="p">,</span> <span class="n">member</span><span class="o">.</span><span class="n">member_app_roles</span><span class="o">.</span><span class="n">size</span>
-</span><span class='line'><span class="n">member</span><span class="o">.</span><span class="n">member_app_roles</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">app_role</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">assert_equal</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="n">app_role</span><span class="o">.</span><span class="n">role</span>
-</span><span class='line'>  <span class="n">assert_equal</span> <span class="n">member</span><span class="p">,</span> <span class="n">app_role</span><span class="o">.</span><span class="n">member</span>
-</span><span class='line'>  <span class="n">assert_not_nil</span> <span class="n">app_role</span><span class="o">.</span><span class="n">app</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As a benefit of thinking through how to test a migration, you end up unveiling how you&#8217;d construct the migration&#8217;s <code>down</code> method. That is, in my case, to roll back, all I need to do is blow away the <code>member_app_roles</code> collection!</p>
-
-<p>As you can see, testing migrations isn&#8217;t terribly difficult (probably a good reason why I haven&#8217;t found too much information about it); the key aspect is the logic that is applied to verify your migration actually worked. It should be noted that while I executed this test in the context of a document oriented database, you could certainly do the same in a relational database. For example, by dropping  columns, tables, etc before running a migration. Either way, testing a migration is a snap. Can you dig it?</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -627,6 +582,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/01/21/springone2gx-2014-keynote/">SpringOne2GX 2014 Keynote</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/12/30/continuous-integration-is-a-hack/">Continuous Integration is a hack!</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/12/20/batten-down-those-npm-dependency-hatches/">Batten down those Node dependency hatches</a>
       </li>
     
@@ -636,14 +599,6 @@
     
       <li class="post">
         <a href="/blog/2014/05/05/dockerfiles-in-a-jiffy/">Dockerfiles in a jiffy</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/01/schooled-in-ping-pong/">Schooled in ping pong</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/29/custom-git-commands-in-3-steps/">Custom Git commands in 3 steps</a>
       </li>
     
   </ul>
@@ -689,7 +644,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Andrew Glover -
+  Copyright &copy; 2015 - Andrew Glover -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

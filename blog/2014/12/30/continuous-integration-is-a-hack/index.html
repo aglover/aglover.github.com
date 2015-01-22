@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Continuous Integration is a hack! - The Disco Blog</title>
+  <meta name="author" content="Andrew Glover">
+
+  
+  <meta name="description" content="Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code.">
+  
+  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, Continuous Integration, CoffeScript, Docker, "/>
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://thediscoblog.com/blog/2014/12/30/continuous-integration-is-a-hack/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="The Disco Blog" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-3500051-4']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Disco Blog</a></h1>
+  
+    <h2>Can you dig it?</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:thediscoblog.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/categories">Categories</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Continuous Integration Is a Hack!</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-30T15:21:00-08:00" pubdate data-updated="true">Dec 30<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img class="left" src="/images/mine/surprised-little-boy1.jpg">&#8220;<a href="http://www.amazon.com/gp/product/0321336380?ie=UTF8&amp;tag=thdibl-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321336380">Continuous Integration</a> is a hack!&#8221; said my friend <a href="https://twitter.com/benrady">Ben Rady</a> years ago during a discussion on CI hosted by <a href="http://www.stelligent.com/">Stelligent</a>. At the time, I was incredulous! How dare someone question the value of CI, especially when we had just finished writing a book about it! What&#8217;s more, our book had been nominated for a prestigious <a href="http://en.wikipedia.org/wiki/Jolt_Awards">Jolt award</a>; indeed, <a href="http://www.drdobbs.com/tools/winners-of-the-18th-jolt-product-excelle/207600666?pgno=2">the following day, our CI book won it</a>!</p>
+
+<p>In retrospect, Ben&#8217;s point was poignant: CI is <em>reactionary</em>. You still have to wait some amount of time to ascertain correctness. That is, CI implicitly relies on a passive process to run a project&#8217;s build and any corresponding tests. If those tests fail, you are of course, notified. Nevertheless, that notification is somewhat delayed: by the time a CI process runs the tests and reports on their status, you&#8217;ve already moved on to the next task. So much for failing fast!</p>
+
+<!-- more -->
+
+
+<p>On the other hand, if tests, which are arguably the <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=code+quality:">quintessential proof of valid integration</a>, are run <em>continuously</em>, then there&#8217;s no wait time to ascertain issues! Ben&#8217;s stance is really no surprise (especially if you know him) as he went on to play a major role in <a href="https://infinitest.github.io/">Infinitest</a> and co-author <a href="http://www.amazon.com/gp/product/1934356700/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1934356700&amp;linkCode=as2&amp;tag=thdibl-20&amp;linkId=B53N2UWBWAKQNAVH">Continuous Testing: with Ruby, Rails, and JavaScript</a>. I&#8217;ve come to realize Ben&#8217;s wisdom since then and have become a huge fan of Continuous Testing.</p>
+
+<iframe style="float: right; margin-left: 1.5em; margin-top: 1.0em; width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ss&ref=ss_til&ad_type=product_link&tracking_id=thdibl-20&marketplace=amazon&region=US&placement=1934356700&asins=1934356700&linkId=R2TMR5VSJAZVXCTS&show_border=true&link_opens_in_new_window=true">
+</iframe>
+
+
+<p> A more proactive means to ensuring all is kosher with a code base is to continuously run your tests as you work. In fact, an even more superior process would be to run any tests for code that has changed. That is, once a mapping has been established between code under test and a corresponding test, then when that code changes, the quickest, arguably most effective way to ensure that code isn&#8217;t broken is to run its test(s).</p>
+
+<p>One efficient way to ascertain mapping is to name tests after the code they verify proceeded with a <code>test</code> moniker. For example, an <code>Account</code> object would have its corresponding test called <code>AccountTest</code> (or <code>AccountSpec</code>, etc). Any time the <code>Account</code> object changes, then the <code>AccountTest</code> would be run.</p>
+
+<p><a href="http://www.amazon.com/gp/product/1934356700/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1934356700&amp;linkCode=as2&amp;tag=thdibl-20&amp;linkId=FUVGSKMDG7GWI3CB">Continuous Testing</a> is an established practice in the world of Ruby. A great framework that facilitates it is called <a href="http://www.javaworld.com/article/2074593/core-java/continuous-android-testing-with-guard.html">Guard</a>. Briefly, <a href="https://github.com/guard/guard">Guard</a> is a framework for watching a file system and sending out a notification upon some event (like a change).  With Guard, you can define specific file matching patterns and a corresponding action to take when an event is triggered. You can probably see that this linkage facilitates running tests continuously.</p>
+
+<p>There&#8217;s really no corollary framework or tool in Java (other than Infinittest and other IDE tools). Nevertheless, you can use Guard to continuously test a <a href="http://thediscoblog.com/blog/categories/java/">Java</a> project. I wrote about <a href="http://www.javaworld.com/article/2074593/core-java/continuous-android-testing-with-guard.html">how to do it with an Android over two years ago</a> and about 6 months ago I got involved in a Guard plugin for Gradle, dubbed <a href="https://github.com/bricker/guard-gradle">Guard::Gradle</a>.</p>
+
+<p>To use Guard::Gradle, you&#8217;ll need to have <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a> installed. For those on <a href="http://thediscoblog.com/blog/categories/osx/">OSX</a>, you already have Ruby. Once you have Ruby installed, the installation of Guard::Gradle couldn&#8217;t be more easy: just open up a terminal in your desired Gradle project and type:</p>
+
+<figure class='code'><figcaption><span>Simple installation!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>curl https://raw.githubusercontent.com/bricker/guard-gradle/master/etc/installer.sh | bash -
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above command will download a script and execute it. That script will:</p>
+
+<ul>
+<li>Install Ruby&#8217;s <a href="http://bundler.io/">Bundler</a></li>
+<li>Install the Guard::Gradle plugin</li>
+<li>Create a default <code>Guardfile</code></li>
+<li>Create a Guard launcher script, dubbed <code>guard.sh</code></li>
+</ul>
+
+
+<p>Therefore, after you run the above command, just execute <code>guard.sh</code> to start Guard::Gradle! Any time you change a file in your source tree, a <a href="http://www.ibm.com/developerworks/java/library/j-cq10316/">corresponding test</a> will be executed using the Gradle <code>test</code> task.</p>
+
+<p>The default <code>Guardfile</code> assumes a standard Gradle project setup, with source code located in <code>src/main</code>. In fact, if you are  curious, take a look at the generated <code>Guardfile</code> and you&#8217;ll see:</p>
+
+<figure class='code'><figcaption><span>Default Guard::Gradle Guardfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">guard</span> <span class="ss">:gradle</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">watch</span><span class="p">(</span><span class="sr">%r{^src/main/(.+)\.*$}</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">m</span><span class="o">|</span> <span class="n">m</span><span class="o">[</span><span class="mi">1</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="o">[-</span><span class="mi">1</span><span class="o">]</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<iframe style="float: left; margin-right: 1.5em; margin-top: 0.7em; margin-bottom: 0.5em; width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ss&ref=ss_til&ad_type=product_link&tracking_id=thdibl-20&marketplace=amazon&region=US&placement=0321336380&asins=0321336380&linkId=GQYZOKPUZCUVELWX&show_border=true&link_opens_in_new_window=true">
+</iframe>
+
+
+<p>That <code>watch</code> command examines the <code>src/main</code> directory and attempts to execute a matched file&#8217;s test. If no test is found, all tests are run. So either way, if a change happens, you&#8217;re <a href="http://www.ibm.com/developerworks/java/library/j-cq01316/index.html">covered with some amount of tests</a>.
+which ostensibly updates your local directory with all <a href="http://thediscoblog.com/blog/categories/git/">upstream changes</a>). Consequently, if upstream changes have broken your local branch, you&#8217;ll know instantly. No more need to remember to &#8220;run the tests&#8221; &#8211; they&#8217;re <em>always</em> running.</p>
+
+<p>Of course, Continuous Integration isn&#8217;t a hack. But Ben made a prescient point back then: if you want to fail fast and shorten the time to detect failures, why not do it at the source? Why not know instantly while you&#8217;re working instead of some later time after you&#8217;ve moved on? Assuming your <a href="http://thediscoblog.com/blog/categories/tdd/">project has tests</a>, then Continuous Testing is the answer. Continuous Testing is the proactive yin to CI&#8217;s reactive yang.</p>
+
+<p>Check out <a href="https://github.com/bricker/guard-gradle">Guard:Gradle</a> today and know <em>instantly</em> when you&#8217;ve made a breaking change! Now that&#8217;s something everyone can dig, right?</p>
+</div>
+<!-- related posts -->
+<div id='related_posts'>
+  <h4>Related Posts</h4>
+      <ul class="posts">
+      
+          
+          <!-- nothing, skip it as its the same as the post itself -->
+          
+      
+          
+            <li class="related"><a href="/blog/2014/04/01/schooled-in-ping-pong/">Schooled in ping pong</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/07/24/introducing-android-migrations/">Introducing Android migrations</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/">Docker containers with Gradle in 4 steps</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/">The Rails, CloudFront, and Heroku performance hat-trick</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/12/29/just-require-tire-to-inquire/">Just require tire to inquire</a></li>
+          
+      
+      </ul>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-30T15:21:00-08:00" pubdate data-updated="true">Dec 30<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/continuous-integration/'>Continuous Integration</a>, <a class='category' href='/blog/categories/devops/'>DevOps</a>, <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>, <a class='category' href='/blog/categories/tdd/'>TDD</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2014/12/30/continuous-integration-is-a-hack/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2014/12/30/continuous-integration-is-a-hack/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2014/12/20/batten-down-those-npm-dependency-hatches/" title="Previous Post: Batten down those Node dependency hatches">&laquo; Batten down those Node dependency hatches</a>
+      
+      
+        <a class="basic-alignment right articlenav" href="/blog/2015/01/21/springone2gx-2014-keynote/" title="Next Post: SpringOne2GX 2014 Keynote">SpringOne2GX 2014 Keynote &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <div id='influads_block' class='influads_block'></div><script type='text/javascript'>(function(){var acc='acc_1097d812_pub';var st='css';var or='130';var e=document.getElementsByTagName('script')[0];var d=document.createElement('script');d.src=('https:' == document.location.protocol ?'https://' : 'http://') +'engine.influads.com/show/'+or+'/'+st+'/'+acc;d.type='text/javascript';d.async=true;d.defer=true; e.parentNode.insertBefore(d,e);})();</script>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/01/21/springone2gx-2014-keynote/">SpringOne2GX 2014 Keynote</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/12/30/continuous-integration-is-a-hack/">Continuous Integration is a hack!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/12/20/batten-down-those-npm-dependency-hatches/">Batten down those Node dependency hatches</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/">Docker containers with Gradle in 4 steps</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/05/dockerfiles-in-a-jiffy/">Dockerfiles in a jiffy</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/aglover">@aglover</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'aglover',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+ <h1>Latest Tweets</h1>
+ <a class="twitter-timeline" href="https://twitter.com/aglover" data-widget-id="345533522750099456">Tweets by @aglover</a>
+ <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Glover -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'thediscoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://thediscoblog.com/blog/2014/12/30/continuous-integration-is-a-hack/';
+        var disqus_url = 'http://thediscoblog.com/blog/2014/12/30/continuous-integration-is-a-hack/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

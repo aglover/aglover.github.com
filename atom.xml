@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-12-20T19:54:13-08:00</updated>
+  <updated>2015-01-21T17:26:24-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,106 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SpringOne2GX 2014 Keynote]]></title>
+    <link href="http://thediscoblog.com/blog/2015/01/21/springone2gx-2014-keynote/"/>
+    <updated>2015-01-21T17:53:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2015/01/21/springone2gx-2014-keynote</id>
+    <content type="html"><![CDATA[<p>Last fall, <a href="https://2014.event.springone2gx.com/presenters/andrew_glover.html">I had the distinct pleasure</a> to keynote at <a href="http://springone2gx.com/">Pivotal&#8217;s 2014 SpringOne2GX conference</a>. My message was one of speed; that is, <em>speed is the killer app</em>. Indeed, <a href="http://projects.spring.io/spring-boot/">Spring Boot</a> has been a breath of fresh air and a boon to development velocity. Boot is the bedrock for developmental speed on the JVM.</p>
+
+<!-- more -->
+
+
+<p>In fact, <a href="https://twitter.com/rob_winch/status/364871658483351552">a simple Boot app can fit into a tweet</a>, as <a href="https://twitter.com/rob_winch">Rob Winch</a> ingeniously demonstrated in August of 2013.</p>
+
+<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/xU267-YHN5c?rel=0&start=1935&end=2605.8 "></iframe></div>
+
+
+
+
+<p></p>
+
+
+<p>As I said at the conference and still maintain:</p>
+
+<blockquote><p>Spring Boot makes it super easy and quick to make Spring-powered, production ready services without a lot of code! A Hello World app in a tweet is a radical departure from what it took 10 years ago! Out-of-the-box non-functional features like security, metrics, health-checks, embedded servers, and externalized configuration made Boot an easy choice&#8230;</p></blockquote>
+
+
+<p>Check out <a href="http://projects.spring.io/spring-boot/">Spring Boot</a>! I think you&#8217;ll be impressed.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Continuous Integration is a hack!]]></title>
+    <link href="http://thediscoblog.com/blog/2014/12/30/continuous-integration-is-a-hack/"/>
+    <updated>2014-12-30T15:21:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2014/12/30/continuous-integration-is-a-hack</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/surprised-little-boy1.jpg">&#8220;<a href="http://www.amazon.com/gp/product/0321336380?ie=UTF8&amp;tag=thdibl-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321336380">Continuous Integration</a> is a hack!&#8221; said my friend <a href="https://twitter.com/benrady">Ben Rady</a> years ago during a discussion on CI hosted by <a href="http://www.stelligent.com/">Stelligent</a>. At the time, I was incredulous! How dare someone question the value of CI, especially when we had just finished writing a book about it! What&#8217;s more, our book had been nominated for a prestigious <a href="http://en.wikipedia.org/wiki/Jolt_Awards">Jolt award</a>; indeed, <a href="http://www.drdobbs.com/tools/winners-of-the-18th-jolt-product-excelle/207600666?pgno=2">the following day, our CI book won it</a>!</p>
+
+<p>In retrospect, Ben&#8217;s point was poignant: CI is <em>reactionary</em>. You still have to wait some amount of time to ascertain correctness. That is, CI implicitly relies on a passive process to run a project&#8217;s build and any corresponding tests. If those tests fail, you are of course, notified. Nevertheless, that notification is somewhat delayed: by the time a CI process runs the tests and reports on their status, you&#8217;ve already moved on to the next task. So much for failing fast!</p>
+
+<!-- more -->
+
+
+<p>On the other hand, if tests, which are arguably the <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=code+quality:">quintessential proof of valid integration</a>, are run <em>continuously</em>, then there&#8217;s no wait time to ascertain issues! Ben&#8217;s stance is really no surprise (especially if you know him) as he went on to play a major role in <a href="https://infinitest.github.io/">Infinitest</a> and co-author <a href="http://www.amazon.com/gp/product/1934356700/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1934356700&amp;linkCode=as2&amp;tag=thdibl-20&amp;linkId=B53N2UWBWAKQNAVH">Continuous Testing: with Ruby, Rails, and JavaScript</a>. I&#8217;ve come to realize Ben&#8217;s wisdom since then and have become a huge fan of Continuous Testing.</p>
+
+<iframe style="float: right; margin-left: 1.5em; margin-top: 1.0em; width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="http://thediscoblog.com//ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ss&ref=ss_til&ad_type=product_link&tracking_id=thdibl-20&marketplace=amazon&region=US&placement=1934356700&asins=1934356700&linkId=R2TMR5VSJAZVXCTS&show_border=true&link_opens_in_new_window=true">
+</iframe>
+
+
+<p> A more proactive means to ensuring all is kosher with a code base is to continuously run your tests as you work. In fact, an even more superior process would be to run any tests for code that has changed. That is, once a mapping has been established between code under test and a corresponding test, then when that code changes, the quickest, arguably most effective way to ensure that code isn&#8217;t broken is to run its test(s).</p>
+
+<p>One efficient way to ascertain mapping is to name tests after the code they verify proceeded with a <code>test</code> moniker. For example, an <code>Account</code> object would have its corresponding test called <code>AccountTest</code> (or <code>AccountSpec</code>, etc). Any time the <code>Account</code> object changes, then the <code>AccountTest</code> would be run.</p>
+
+<p><a href="http://www.amazon.com/gp/product/1934356700/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1934356700&amp;linkCode=as2&amp;tag=thdibl-20&amp;linkId=FUVGSKMDG7GWI3CB">Continuous Testing</a> is an established practice in the world of Ruby. A great framework that facilitates it is called <a href="http://www.javaworld.com/article/2074593/core-java/continuous-android-testing-with-guard.html">Guard</a>. Briefly, <a href="https://github.com/guard/guard">Guard</a> is a framework for watching a file system and sending out a notification upon some event (like a change).  With Guard, you can define specific file matching patterns and a corresponding action to take when an event is triggered. You can probably see that this linkage facilitates running tests continuously.</p>
+
+<p>There&#8217;s really no corollary framework or tool in Java (other than Infinittest and other IDE tools). Nevertheless, you can use Guard to continuously test a <a href="http://thediscoblog.com/blog/categories/java/">Java</a> project. I wrote about <a href="http://www.javaworld.com/article/2074593/core-java/continuous-android-testing-with-guard.html">how to do it with an Android over two years ago</a> and about 6 months ago I got involved in a Guard plugin for Gradle, dubbed <a href="https://github.com/bricker/guard-gradle">Guard::Gradle</a>.</p>
+
+<p>To use Guard::Gradle, you&#8217;ll need to have <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a> installed. For those on <a href="http://thediscoblog.com/blog/categories/osx/">OSX</a>, you already have Ruby. Once you have Ruby installed, the installation of Guard::Gradle couldn&#8217;t be more easy: just open up a terminal in your desired Gradle project and type:</p>
+
+<figure class='code'><figcaption><span>Simple installation!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>curl https://raw.githubusercontent.com/bricker/guard-gradle/master/etc/installer.sh | bash -
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above command will download a script and execute it. That script will:</p>
+
+<ul>
+<li>Install Ruby&#8217;s <a href="http://bundler.io/">Bundler</a></li>
+<li>Install the Guard::Gradle plugin</li>
+<li>Create a default <code>Guardfile</code></li>
+<li>Create a Guard launcher script, dubbed <code>guard.sh</code></li>
+</ul>
+
+
+<p>Therefore, after you run the above command, just execute <code>guard.sh</code> to start Guard::Gradle! Any time you change a file in your source tree, a <a href="http://www.ibm.com/developerworks/java/library/j-cq10316/">corresponding test</a> will be executed using the Gradle <code>test</code> task.</p>
+
+<p>The default <code>Guardfile</code> assumes a standard Gradle project setup, with source code located in <code>src/main</code>. In fact, if you are  curious, take a look at the generated <code>Guardfile</code> and you&#8217;ll see:</p>
+
+<figure class='code'><figcaption><span>Default Guard::Gradle Guardfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">guard</span> <span class="ss">:gradle</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">watch</span><span class="p">(</span><span class="sr">%r{^src/main/(.+)\.*$}</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">m</span><span class="o">|</span> <span class="n">m</span><span class="o">[</span><span class="mi">1</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="o">[-</span><span class="mi">1</span><span class="o">]</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<iframe style="float: left; margin-right: 1.5em; margin-top: 0.7em; margin-bottom: 0.5em; width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="http://thediscoblog.com//ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ss&ref=ss_til&ad_type=product_link&tracking_id=thdibl-20&marketplace=amazon&region=US&placement=0321336380&asins=0321336380&linkId=GQYZOKPUZCUVELWX&show_border=true&link_opens_in_new_window=true">
+</iframe>
+
+
+<p>That <code>watch</code> command examines the <code>src/main</code> directory and attempts to execute a matched file&#8217;s test. If no test is found, all tests are run. So either way, if a change happens, you&#8217;re <a href="http://www.ibm.com/developerworks/java/library/j-cq01316/index.html">covered with some amount of tests</a>.
+which ostensibly updates your local directory with all <a href="http://thediscoblog.com/blog/categories/git/">upstream changes</a>). Consequently, if upstream changes have broken your local branch, you&#8217;ll know instantly. No more need to remember to &#8220;run the tests&#8221; &#8211; they&#8217;re <em>always</em> running.</p>
+
+<p>Of course, Continuous Integration isn&#8217;t a hack. But Ben made a prescient point back then: if you want to fail fast and shorten the time to detect failures, why not do it at the source? Why not know instantly while you&#8217;re working instead of some later time after you&#8217;ve moved on? Assuming your <a href="http://thediscoblog.com/blog/categories/tdd/">project has tests</a>, then Continuous Testing is the answer. Continuous Testing is the proactive yin to CI&#8217;s reactive yang.</p>
+
+<p>Check out <a href="https://github.com/bricker/guard-gradle">Guard:Gradle</a> today and know <em>instantly</em> when you&#8217;ve made a breaking change! Now that&#8217;s something everyone can dig, right?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Batten down those Node dependency hatches]]></title>
@@ -1822,151 +1922,6 @@ what ever you mounted (i.e <code>/dev/xvdf</code>), the mount point will be the 
 <p>Consequently, a lot of HTML5 apps ended up being <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">wrapped in native code</a> so as to get a chance to compete in the app stores. Amazon&#8217;s support of HTML5 is a much needed <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">shot-in-the-arm for HTML5</a> because it means a direct channel to mass consumers; what&#8217;s more, Amazon also is offering a chance to monetize HTML5 apps <a href="https://developer.amazon.com/sdk/webapps/iap/understanding.html">via a JavaScript In-App purchase API</a>. While Amazon isn&#8217;t the first In-App purchase API for HTML5, it&#8217;s the first one linked to a major e-commerce platform and mass consumer channel.</p>
 
 <p>HTML5 is by no means a silver bullet for mobile app development. There&#8217;s a time and a place for HTML5 apps, just as there&#8217;s still a need to create native apps. Nevertheless, HTML5 continues to gain favor as app stores (like Amazon&#8217;s App store for Android) begin to distribute HTML5 apps and other platforms begin to capture market share.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Ahoy there callbacks!]]></title>
-    <link href="http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks/"/>
-    <updated>2013-09-29T16:30:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/callback.jpg">Because it&#8217;s my bag, I like <a href="http://thediscoblog.com/blog/categories/javascript/">JavaScript</a>. In fact, I&#8217;ve grown to love JavaScritp&#8217;s asynchronous <a href="http://en.wikipedia.org/wiki/Callback_(computer_programming">callback oriented style of programming</a>. Consequently, when I find myself in a non-JavaScript environment, say, like <a href="http://thediscoblog.com/blog/categories/java/">Java</a>, I tend to miss using callbacks.</p>
-
-<p>The good news is that you can <em>emulate</em> asynchronous callbacks in Java. In fact, I did just that recently with a library I&#8217;ve dubbed <a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">SQS adapter</a> for AWS&#8217;s Java <a href="http://aws.amazon.com/sqs/">SQS</a> library.</p>
-
-<!-- more -->
-
-
-<p>For the uninitiated, <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">SQS is a cloud based messaging platform</a> &#8211; with SQS you can create queues and put messages onto those queues, which can then be read &#8211; later or immediately by some other process or the same exact process. All of this leverages Amazon’s massively redundant architecture to offer extremely high availability in the face of concurrent access.</p>
-
-<p>Asynchronous callbacks in Java can be achieved with two features: anonymous classes (containing one method) and Java&#8217;s <code>java.util.concurrent</code> package.</p>
-
-<p>Because Java doesn&#8217;t allow you to pass functions (or methods) <em>easily</em> as a parameter, to simulate a callback, you can create an interface that contains one method, which basically mimics a function. In the case of Ahoy, there are two interfaces: <code>MessageSendCallback</code> and <code>MessageReceivedCallback</code> &#8211; both have one method: <code>onSend</code> and <code>onReceive</code> respectively. Accordingly, Ahoy!&#8221;s primary class, dubbed <code>SQSAdapter</code> exposes two simple methods: <code>send</code> and <code>receive</code> and both take their related callback interface.</p>
-
-<p>The most straightforward callback to understand is the <code>receive</code> method. As you can imagine, <code>receive</code> is intended to handle behavior when a message is received off of a particular queue. Thus, the <code>receive</code> method is defined as follows:</p>
-
-<figure class='code'><figcaption><span>SQSAdapter&#8217;s receive method</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">receive</span><span class="o">(</span><span class="kd">final</span> <span class="n">MessageReceivedCallback</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <code>MessageReceivedCallback</code> interface looks like this:</p>
-
-<figure class='code'><figcaption><span>The MessageReceivedCallback interface</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MessageReceivedCallback</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onReceive</span><span class="o">(</span><span class="n">String</span> <span class="n">messageId</span><span class="o">,</span> <span class="n">String</span> <span class="n">message</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note, the <code>onReceive</code> method takes a message id (which is particular to SQS) and the message itself &#8211; which in the case of SQS is always a <code>String</code> (that <code>String</code> can hold anything you want, keep in mind: JSON, XML, byte sequence, etc).</p>
-
-<p>Thus, clients of Ahoy! provide the intended behavior for a message when it is received. This behavior could be to write something to a database, generate another message and send it on another queue, you name it.</p>
-
-<p>Now the interesting part is the implementation of Ahoy!&#8217;s <code>receive</code> method. To achieve asynchronocity, I employed Java&#8217;s <code>java.util.concurrent</code> package, which sadly, seems to be under appreciated.</p>
-
-<figure class='code'><figcaption><span>The receive method&#8217;s implementation with callback being invoked</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kt">void</span> <span class="nf">receive</span><span class="o">(</span><span class="kd">final</span> <span class="n">AmazonSQS</span> <span class="n">sqs</span><span class="o">,</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">queueURL</span><span class="o">,</span> <span class="kd">final</span> <span class="n">MessageReceivedCallback</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>  <span class="n">pool</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Message</span><span class="o">&gt;</span> <span class="n">messages</span> <span class="o">=</span> <span class="n">sqs</span><span class="o">.</span><span class="na">receiveMessage</span><span class="o">(</span>
-</span><span class='line'>              <span class="k">new</span> <span class="nf">ReceiveMessageRequest</span><span class="o">(</span><span class="n">queueURL</span><span class="o">).</span><span class="na">withMaxNumberOfMessages</span><span class="o">(</span><span class="mi">10</span><span class="o">).</span><span class="na">withWaitTimeSeconds</span><span class="o">(</span><span class="mi">20</span><span class="o">)).</span><span class="na">getMessages</span><span class="o">();</span>
-</span><span class='line'>      <span class="k">if</span> <span class="o">(</span><span class="n">messages</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>          <span class="k">for</span> <span class="o">(</span><span class="kd">final</span> <span class="n">Message</span> <span class="n">message</span> <span class="o">:</span> <span class="n">messages</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">callback</span><span class="o">.</span><span class="na">onReceive</span><span class="o">(</span><span class="n">message</span><span class="o">.</span><span class="na">getMessageId</span><span class="o">(),</span> <span class="n">message</span><span class="o">.</span><span class="na">getBody</span><span class="o">());</span>
-</span><span class='line'>            <span class="n">sqs</span><span class="o">.</span><span class="na">deleteMessage</span><span class="o">(</span><span class="k">new</span> <span class="n">DeleteMessageRequest</span><span class="o">(</span><span class="n">queueURL</span><span class="o">,</span> <span class="n">message</span><span class="o">.</span><span class="na">getReceiptHandle</span><span class="o">()));</span>
-</span><span class='line'>          <span class="o">}</span>
-</span><span class='line'>      <span class="o">}</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>  <span class="o">});</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>With a fixed Thread pool, a thread is created, which waits for messages to arrive on a particular queue; when one shows up, the passed in <code>MessageReceivedCalledback</code> is invoked for each message.</p>
-
-<p>For an example of how this works for clients of Ahoy!, here&#8217;s a test case that verifies the execution of the callback:</p>
-
-<figure class='code'><figcaption><span>The receive method implemented</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">final</span> <span class="kt">boolean</span><span class="o">[]</span> <span class="n">wasReceived</span> <span class="o">=</span> <span class="o">{</span><span class="kc">false</span><span class="o">};</span>
-</span><span class='line'><span class="n">ahoy</span><span class="o">.</span><span class="na">receive</span><span class="o">(</span><span class="k">new</span> <span class="n">MessageReceivedCallback</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onReceive</span><span class="o">(</span><span class="n">String</span> <span class="n">messageId</span><span class="o">,</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">wasReceived</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-</span><span class='line'>    <span class="n">assertNotNull</span><span class="o">(</span><span class="s">&quot;message id was null&quot;</span><span class="o">,</span> <span class="n">messageId</span><span class="o">);</span>
-</span><span class='line'>    <span class="n">assertEquals</span><span class="o">(</span><span class="s">&quot;message wasn&#39;t &quot;</span> <span class="o">+</span> <span class="n">origMessage</span><span class="o">,</span> <span class="n">origMessage</span><span class="o">,</span> <span class="n">message</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'><span class="o">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Likewise, sending a message is similar &#8211; a new <code>Runnable</code> instance is created, which sends a particular message and invokes the passed in <code>MessageSentCallback</code>&#8217;s <code>onSend</code> method, passing in the newly sent messages&#8217;s id.</p>
-
-<figure class='code'><figcaption><span>The send method is also asynchronous</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kt">void</span> <span class="nf">send</span><span class="o">(</span><span class="kd">final</span> <span class="n">AmazonSQS</span> <span class="n">sqs</span><span class="o">,</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">queueURL</span><span class="o">,</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">message</span><span class="o">,</span> <span class="kd">final</span> <span class="n">MessageSentCallback</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>  <span class="n">pool</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">SendMessageResult</span> <span class="n">res</span> <span class="o">=</span> <span class="n">sqs</span><span class="o">.</span><span class="na">sendMessage</span><span class="o">(</span><span class="k">new</span> <span class="n">SendMessageRequest</span><span class="o">(</span><span class="n">queueURL</span><span class="o">,</span> <span class="n">message</span><span class="o">));</span>
-</span><span class='line'>      <span class="k">if</span> <span class="o">(</span><span class="n">callback</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">callback</span><span class="o">.</span><span class="na">onSend</span><span class="o">(</span><span class="n">res</span><span class="o">.</span><span class="na">getMessageId</span><span class="o">());</span>
-</span><span class='line'>      <span class="o">}</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>  <span class="o">});</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Incidentally, the AWS Java SDK <em>does provide an asynchronous client</em>; however, this client&#8217;s implementation leverages Java&#8217;s <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html">Futures</a>. While <a href="http://nurkiewicz.blogspot.com/2013/02/javautilconcurrentfuture-basics.html">Futures are a neat concept</a>, Ahoy!&#8217;s implementation is more convenient (<em>at least for me and in the patterns of how I employ SQS</em>) than Futures as there isn&#8217;t any polling involved once a message is sent or received.</p>
-
-<p>While callbacks aren&#8217;t <a href="http://en.wikipedia.org/wiki/Function_object#In_Java">necessarily supported</a> natively in Java, you can emulate them quite nicely and achieve the same level of code conciseness as what&#8217;s common in JavaScript. And if you need a handy way to interface with AWS SQS, <a href="https://github.com/aglover/ahoy">then give Ahoy! a try</a>! Can you dig it, man?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[App signing: iOS versus Android]]></title>
-    <link href="http://thediscoblog.com/blog/2013/09/26/app-signing-ios-versus-android/"/>
-    <updated>2013-09-26T10:16:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/09/26/app-signing-ios-versus-android</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://thediscoblog.com/images/mine/sealed.jpg">Apple&#8217;s app signing process can be a real pain-in-the-neck; nevertheless, it works to keep apps trusted. You know when you download a Bank of America app from iTunes that it&#8217;s the real thing. You know that the app comes from <em>the</em> Bank of America.</p>
-
-<p>On the other hand, Android allows apps to be self-signed. This has a fundamental flaw: an Android developer can claim to be anyone they want, <em>including Bank of America</em>. Thus, when you download an app from an Android App store, there&#8217;s a real possibility that the app was submitted by a charlatan. What&#8217;s more, those charlatan apps can actually be malicious!</p>
-
-<!-- more -->
-
-
-<p><a href="http://twitter.com/danieleran">Daniel Eran Dilger</a> has written an excellent article that features the differences between Apple&#8217;s signing process and Google&#8217;s. I highly recommend you read his article entitled &#8221;<a href="http://appleinsider.com/articles/13/07/14/editorial-googles-android-haunted-by-steve-jobs-warnings-on-app-signing-security">Google&#8217;s Android haunted by Steve Jobs&#8217; warnings on app signing security</a>&#8221; as it sheds a bright light on the differences between the two mobile platforms; moreover, the article does a great job of outlining the evolution of iOS and its app security policies.</p>
-
-<p>And while you are at it, check out my article entitled &#8221;<a href="http://www.ibm.com/developerworks/java/library/mo-mobileforthemasses5/index.html">Mobile for the masses: Sign, seal, and deliver your Android app</a>&#8221; and learn how to sign your Android app in preparation for submitting it to an app store!</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2014-12-20T19:54:13-08:00</updated>
+  <updated>2015-01-21T17:26:24-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,96 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SpringOne2GX 2014 Keynote]]></title>
+    <link href="http://thediscoblog.com/blog/2015/01/21/springone2gx-2014-keynote/"/>
+    <updated>2015-01-21T17:53:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2015/01/21/springone2gx-2014-keynote</id>
+    <content type="html"><![CDATA[<p>Last fall, <a href="https://2014.event.springone2gx.com/presenters/andrew_glover.html">I had the distinct pleasure</a> to keynote at <a href="http://springone2gx.com/">Pivotal's 2014 SpringOne2GX conference</a>. My message was one of speed; that is, <em>speed is the killer app</em>. Indeed, <a href="http://projects.spring.io/spring-boot/">Spring Boot</a> has been a breath of fresh air and a boon to development velocity. Boot is the bedrock for developmental speed on the JVM.</p>
+
+<!-- more -->
+
+
+<p>In fact, <a href="https://twitter.com/rob_winch/status/364871658483351552">a simple Boot app can fit into a tweet</a>, as <a href="https://twitter.com/rob_winch">Rob Winch</a> ingeniously demonstrated in August of 2013.</p>
+
+<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/xU267-YHN5c?rel=0&amp;start=1935&amp;end=2605.8 "></iframe></div></p>
+
+<p></p>
+
+
+<p>As I said at the conference and still maintain:</p>
+
+<p><blockquote><p>Spring Boot makes it super easy and quick to make Spring-powered, production ready services without a lot of code! A Hello World app in a tweet is a radical departure from what it took 10 years ago! Out-of-the-box non-functional features like security, metrics, health-checks, embedded servers, and externalized configuration made Boot an easy choice...</p></blockquote></p>
+
+<p>Check out <a href="http://projects.spring.io/spring-boot/">Spring Boot</a>! I think you'll be impressed.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Continuous Integration is a hack!]]></title>
+    <link href="http://thediscoblog.com/blog/2014/12/30/continuous-integration-is-a-hack/"/>
+    <updated>2014-12-30T15:21:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2014/12/30/continuous-integration-is-a-hack</id>
+    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/surprised-little-boy1.jpg">"<a href="http://www.amazon.com/gp/product/0321336380?ie=UTF8&amp;tag=thdibl-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321336380">Continuous Integration</a> is a hack!" said my friend <a href="https://twitter.com/benrady">Ben Rady</a> years ago during a discussion on CI hosted by <a href="http://www.stelligent.com/">Stelligent</a>. At the time, I was incredulous! How dare someone question the value of CI, especially when we had just finished writing a book about it! What's more, our book had been nominated for a prestigious <a href="http://en.wikipedia.org/wiki/Jolt_Awards">Jolt award</a>; indeed, <a href="http://www.drdobbs.com/tools/winners-of-the-18th-jolt-product-excelle/207600666?pgno=2">the following day, our CI book won it</a>!</p>
+
+<p>In retrospect, Ben's point was poignant: CI is <em>reactionary</em>. You still have to wait some amount of time to ascertain correctness. That is, CI implicitly relies on a passive process to run a project's build and any corresponding tests. If those tests fail, you are of course, notified. Nevertheless, that notification is somewhat delayed: by the time a CI process runs the tests and reports on their status, you've already moved on to the next task. So much for failing fast!</p>
+
+<!-- more -->
+
+
+<p>On the other hand, if tests, which are arguably the <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=code+quality:">quintessential proof of valid integration</a>, are run <em>continuously</em>, then there's no wait time to ascertain issues! Ben's stance is really no surprise (especially if you know him) as he went on to play a major role in <a href="https://infinitest.github.io/">Infinitest</a> and co-author <a href="http://www.amazon.com/gp/product/1934356700/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1934356700&amp;linkCode=as2&amp;tag=thdibl-20&amp;linkId=B53N2UWBWAKQNAVH">Continuous Testing: with Ruby, Rails, and JavaScript</a>. I've come to realize Ben's wisdom since then and have become a huge fan of Continuous Testing.</p>
+
+<iframe style="float: right; margin-left: 1.5em; margin-top: 1.0em; width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="http://thediscoblog.com//ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ss&ref=ss_til&ad_type=product_link&tracking_id=thdibl-20&marketplace=amazon&region=US&placement=1934356700&asins=1934356700&linkId=R2TMR5VSJAZVXCTS&show_border=true&link_opens_in_new_window=true">
+</iframe>
+
+
+<p> A more proactive means to ensuring all is kosher with a code base is to continuously run your tests as you work. In fact, an even more superior process would be to run any tests for code that has changed. That is, once a mapping has been established between code under test and a corresponding test, then when that code changes, the quickest, arguably most effective way to ensure that code isn't broken is to run its test(s).</p>
+
+<p>One efficient way to ascertain mapping is to name tests after the code they verify proceeded with a <code>test</code> moniker. For example, an <code>Account</code> object would have its corresponding test called <code>AccountTest</code> (or <code>AccountSpec</code>, etc). Any time the <code>Account</code> object changes, then the <code>AccountTest</code> would be run.</p>
+
+<p><a href="http://www.amazon.com/gp/product/1934356700/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1934356700&amp;linkCode=as2&amp;tag=thdibl-20&amp;linkId=FUVGSKMDG7GWI3CB">Continuous Testing</a> is an established practice in the world of Ruby. A great framework that facilitates it is called <a href="http://www.javaworld.com/article/2074593/core-java/continuous-android-testing-with-guard.html">Guard</a>. Briefly, <a href="https://github.com/guard/guard">Guard</a> is a framework for watching a file system and sending out a notification upon some event (like a change).  With Guard, you can define specific file matching patterns and a corresponding action to take when an event is triggered. You can probably see that this linkage facilitates running tests continuously.</p>
+
+<p>There's really no corollary framework or tool in Java (other than Infinittest and other IDE tools). Nevertheless, you can use Guard to continuously test a <a href="http://thediscoblog.com/blog/categories/java/">Java</a> project. I wrote about <a href="http://www.javaworld.com/article/2074593/core-java/continuous-android-testing-with-guard.html">how to do it with an Android over two years ago</a> and about 6 months ago I got involved in a Guard plugin for Gradle, dubbed <a href="https://github.com/bricker/guard-gradle">Guard::Gradle</a>.</p>
+
+<p>To use Guard::Gradle, you'll need to have <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a> installed. For those on <a href="http://thediscoblog.com/blog/categories/osx/">OSX</a>, you already have Ruby. Once you have Ruby installed, the installation of Guard::Gradle couldn't be more easy: just open up a terminal in your desired Gradle project and type:</p>
+
+<p><code>bash Simple installation!
+$ curl https://raw.githubusercontent.com/bricker/guard-gradle/master/etc/installer.sh | bash -
+</code></p>
+
+<p>The above command will download a script and execute it. That script will:</p>
+
+<ul>
+<li>Install Ruby's <a href="http://bundler.io/">Bundler</a></li>
+<li>Install the Guard::Gradle plugin</li>
+<li>Create a default <code>Guardfile</code></li>
+<li>Create a Guard launcher script, dubbed <code>guard.sh</code></li>
+</ul>
+
+
+<p>Therefore, after you run the above command, just execute <code>guard.sh</code> to start Guard::Gradle! Any time you change a file in your source tree, a <a href="http://www.ibm.com/developerworks/java/library/j-cq10316/">corresponding test</a> will be executed using the Gradle <code>test</code> task.</p>
+
+<p>The default <code>Guardfile</code> assumes a standard Gradle project setup, with source code located in <code>src/main</code>. In fact, if you are  curious, take a look at the generated <code>Guardfile</code> and you'll see:</p>
+
+<p><code>ruby Default Guard::Gradle Guardfile
+guard :gradle do
+  watch(%r{^src/main/(.+)\.*$}) { |m| m[1].split('.')[0].split('/')[-1] }
+end
+</code></p>
+
+<iframe style="float: left; margin-right: 1.5em; margin-top: 0.7em; margin-bottom: 0.5em; width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="http://thediscoblog.com//ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ss&ref=ss_til&ad_type=product_link&tracking_id=thdibl-20&marketplace=amazon&region=US&placement=0321336380&asins=0321336380&linkId=GQYZOKPUZCUVELWX&show_border=true&link_opens_in_new_window=true">
+</iframe>
+
+
+<p>That <code>watch</code> command examines the <code>src/main</code> directory and attempts to execute a matched file's test. If no test is found, all tests are run. So either way, if a change happens, you're <a href="http://www.ibm.com/developerworks/java/library/j-cq01316/index.html">covered with some amount of tests</a>.
+which ostensibly updates your local directory with all <a href="http://thediscoblog.com/blog/categories/git/">upstream changes</a>). Consequently, if upstream changes have broken your local branch, you'll know instantly. No more need to remember to "run the tests" -- they're <em>always</em> running.</p>
+
+<p>Of course, Continuous Integration isn't a hack. But Ben made a prescient point back then: if you want to fail fast and shorten the time to detect failures, why not do it at the source? Why not know instantly while you're working instead of some later time after you've moved on? Assuming your <a href="http://thediscoblog.com/blog/categories/tdd/">project has tests</a>, then Continuous Testing is the answer. Continuous Testing is the proactive yin to CI's reactive yang.</p>
+
+<p>Check out <a href="https://github.com/bricker/guard-gradle">Guard:Gradle</a> today and know <em>instantly</em> when you've made a breaking change! Now that's something everyone can dig, right?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Just require tire to inquire]]></title>
@@ -303,111 +393,6 @@ $&gt; heroku logs -p worker -t
 </code></p>
 
 <p>Was that easy or what?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The Rails, CloudFront, and Heroku performance hat-trick]]></title>
-    <link href="http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick/"/>
-    <updated>2013-05-01T09:10:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/05/01/the-rails-cloudfront-and-heroku-performance-hat-trick</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/hat-trick.png"><a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront</a> is a pay-as-you-go global <a href="http://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a> (or CDN) that provides high availability and high performance serving of static assets. Basically, it means users have to wait less time to view your web app regardless of their location on the globe.</p>
-
-<p>It's easy to configure a <a href="http://rubyonrails.org/">Rails</a> app to take advantage of CloudFront; what's more, if your Rails app is hosted on <a href="http://www.ibm.com/developerworks/java/library/j-javadev2-21/">Heroku</a>, there's <a href="https://github.com/romanbsd/heroku-deflater">a nifty gem</a>, dubbed heroku-deflater, that'll enable <a href="http://en.wikipedia.org/wiki/HTTP_compression">HTTP compression</a> of static assets (<a href="http://stackoverflow.com/questions/12326191/any-way-to-serve-gzip-assets-from-heroku">other than images</a>).</p>
-
-<p>To get these three entities to play nicely together requires a few simple steps. Let me show you how.</p>
-
-<!--more-->
-
-
-<p>First, if you want to enable HTTP gzip compression of static assets other than images from a Heroku app, then add the heroku-deflater gem to your <code>Gemfile</code>. This gem doesn't compress images as in some cases, zipping images creates bigger ones!</p>
-
-<p>Once you've run <code>bundle install</code> and deployed your app to Heroku, fire up a terminal and run <a href="http://thediscoblog.com/blog/2013/04/18/curling-for-wget/">cURL</a> to verify that the HTTP response Content-Encoding is gzip like so:</p>
-
-<p><code>bash cURL testing gzip response
-curl -i -H "Accept-Encoding: gzip,deflate" http://your.awesome.web.app
-</code></p>
-
-<p>You should see in the response this key phrase:</p>
-
-<p><code>bash cURL response
-Content-Encoding: gzip
-</code></p>
-
-<p>If you do see the Content-Encoding set to gzip, then you are good to go. If, for some reason, you don't see it, check your environment's configuration file (which you will have to edit to get CloudFront working anyway) and verify that the property <code>config.serve_static_assets</code> is set to <code>true</code>.</p>
-
-<p>Next, sign into the AWS Management Console and enable CloudFront if you haven't already. From the CloudFront admin page, create a new distribution via the Create Distribution button on the top left.</p>
-
-<p><img class="center" src="/images/mine/cloudfront_1.png"></p>
-
-<p>Once the create distribution wizard begins, be sure to select Download as your delivery method.</p>
-
-<p><img class="center" src="/images/mine/cloudfront_2.png"></p>
-
-<p>In the next screen, there are some important fields you'll need to fill out, namely: the Origin Source Name and the Viewer Protocol Policy. For the Origin Source Name, you will need to put in your app's URL or the Heroku URL (if you do not map a custom domain name to it). If you web site supports HTTPS, then be sure to set the Viewer Protocol Policy to HTTP and HTTPS.</p>
-
-<p><img class="center" src="/images/mine/cloudfront_3.png"></p>
-
-<p>The only other important setting after these two is the Price Class. It's here where you can set where CloudFront will essentially serve up your content -- the default setting of Use All Edge Locations is most likely what you need.</p>
-
-<p><img class="center" src="/images/mine/cloudfront_5.png"></p>
-
-<p>Finally, click the Create Distribution button -- once you do that, it'll take a bit for things to initialize (basically, the CDN needs to get built and this may take up to 30 minutes).</p>
-
-<p>Now to configure your Rails app, you'll need to open up your target environment's configuration file (i.e. <code>production.rb</code>). The <a href="http://bindle.me/blog/index.php/395/caches-cdns-and-heroku-cedar">two fields</a> you'll want to be sure are properly set are <code>serve_static_assets</code> and <code>static_cache_control</code>. In particular, you are setting the cache control variable to one year. This means that once a static asset, like a JavaScript file is downloaded to the browser, it'll be cached for one year. Don't fret, however, if you think that'll inhibit change -- the file that is ultimately downloaded has a hash attached to it (via the magic of <a href="http://guides.rubyonrails.org/asset_pipeline.html">Rail's Asset Pipeline</a>). Consequently, the file that is cached is something like <code>your_js_file-asdf098203820980a980</code> where that last bit is a hash value that'll change if the file itself changes.</p>
-
-<p><code>ruby production.rb edited to support CDN
-config.serve_static_assets = true
-config.static_cache_control = 'public, max-age=31536000'
-</code></p>
-
-<p>The last change you need to make to your environment file is to set the <code>asset_host</code> to the CloudFront domain that you just created. You can find this in your AWS Management Console -- it'll be a cryptic URL like http://asdjlkj2321.cloudfront.net.</p>
-
-<p><code>ruby production.rb edited to support asset host
-config.action_controller.asset_host = 'the domain name from AWS Dashboard'
-</code></p>
-
-<p>Commit your changes and deploy your app.</p>
-
-<p>To verify things are kosher, you'll need to give it some time (check the status of your CloudFront CDN -- if it's status is Enabled then you are good to go!). If things are ready, then fire up a browser and go to your app.</p>
-
-<p>In this case, <a href="http://thediscoblog.com/blog/2013/04/15/chromes-console-commands/">I'm using Chrome</a>. Go to JavaScript console and hit the Network tab.</p>
-
-<p><img class="center" src="/images/mine/cloudfront_6.png"></p>
-
-<p>Surf around and you'll note a few things -- one, that the assets like images and JavaScript files are being severed up from your CDN (just look at the URL) and that the size will often say "(from cache)" -- that means the CDN is handling the load rather than <a href="http://www.ibm.com/developerworks/podcast/glover-heroku-110811/">Heroku</a>. You should also note that your web app is probably a bit more snappy!</p>
-
-<p><img class="center" src="/images/mine/cloudfront_7.png"></p>
-
-<p>Check out your Heroku logs and you'll note fewer hits in this case -- dynamic pages are still being loaded, however, static assets are not anymore -- that's the job of your CDN!</p>
-
-<p>CloudFront isn't free; nevertheless, I think you'll find the corresponding cost quite reasonable. Pricing will vary depending on how much content you'll be serving up with CloudFront -- this is a function of how many visitors you have <em>along with</em> how many static assets that are ultimately downloaded to a user's browser. For instance, 500GB of average content will cost you less than $75/month.</p>
-
-<p>CloudFront's pay-as-you-go model makes it extremely affordable to add a nice bit of pep to your app's performance along with using gzip compression and HTTP caching. And hopefully as I've shown you, it's rather easy to do with a Rails app running on Heroku.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mongoid batch inserts]]></title>
-    <link href="http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts/"/>
-    <updated>2013-03-27T11:34:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/03/27/mongoid-batch-inserts</id>
-    <content type="html"><![CDATA[<p>In SQL land, all databases support batch inserts. Batch inserts are an effective and efficient mechanism to insert a lot of similar data. That is, instead of issuing x insert statements, you execute 1 insert with x records. This is much more efficient because the insert statement doesn't need to be re-parsed x times, there is only 1 network trip as opposed to x, and in the case of transactions, there is only 1 transaction instead of x. When compared to x inserts, batch inserts are always faster.</p>
-
-<p>As it turns out, <a href="http://www.mongodb.org/">MongoDB</a> supports <a href="http://docs.mongodb.org/manual/applications/create/#bulk-insert-multiple-documents">batch inserts</a>! And just like in SQL land, Mongo's batching feature is much faster at inserting a lot of data in one insert rather than x inserts.</p>
-
-<p>For example, the <a href="https://github.com/mongodb/mongo-ruby-driver">Mongo Ruby driver</a>'s <a href="https://github.com/mongodb/mongo-ruby-driver/blob/master/lib/mongo/collection.rb#L371">insert method takes a collection</a>; thus, you can insert an array of hashes quite efficiently. Even if you are using a <a href="http://mongoid.org/en/mongoid/index.html">ODM like Mongoid</a>, you can still perform batch inserts as all you need to do is get a reference to the model object's underlying collection and then issue an <code>insert</code> with an array of hashes matching the collection's intended document structure.</p>
-
-<p>For instance, to insert a collection of <code>Tag</code> models (each having 3 fields: <code>name</code>, <code>system_tag</code>, and <code>account_id</code>) in one fell swoop I can do the following:</p>
-
-<p><code>ruby Batch inserts with Mongoid model example
-tags = ['a', 'bunch', 'of', 'tags'].collect { |tag| {name: tag, system_tag: true, account_id: id} }
-Tag.collection.insert tags
-</code></p>
-
-<p>In the code above, the <code>insert</code> takes a collection of hashes; what's more, the <code>insert</code> is tied to the <code>tags</code> collection via the <code>Tag.collection</code> call.</p>
-
-<p>Batch inserts are always faster if you have a lot of similar documents -- in our case, we saw a <em>tremendous</em> performance increase when employing batching.</p>
 ]]></content>
   </entry>
   
