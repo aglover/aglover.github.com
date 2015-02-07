@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2015-01-21T17:26:24-08:00</updated>
+  <updated>2015-02-07T11:31:20-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,143 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Fault tolerance in Go]]></title>
+    <link href="http://thediscoblog.com/blog/2015/02/07/fault-tolerance-in-go/"/>
+    <updated>2015-02-07T16:29:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2015/02/07/fault-tolerance-in-go</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/hystrix.png">In distributed systems, failure is inevitable. Eventually, some service will become bogged down and consequently won't respond quickly enough or, worse, a service will simply die. Services relying on a degraded (or dead!) service will naturally become affected and potentially cascade instability throughout the system, unless all services are properly built with isolation and in mind.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p><a href="http://techblog.netflix.com/2011/12/making-netflix-api-more-resilient.html">Netflix experienced the vexation distributed system failures inflict</a> and developed <a href="https://github.com/Netflix/Hystrix">Hystrix</a> as a sophisticated implementation of the <a href="http://martinfowler.com/bliki/CircuitBreaker.html">Circuit Breaker pattern</a>. Briefly, Hystrix is</p>
+
+<p><blockquote><p>a latency and fault tolerance library designed to isolate points of access to remote systems, services and 3rd party libraries, stop cascading failure and enable resilience in complex distributed systems where failure is inevitable.</p><footer><strong>Github</strong> <cite><a href='https://github.com/Netflix/Hystrix/wiki'>What Is Hystrix?</a></cite></footer></blockquote></p>
+
+<p>Indeed, Hystrix is leveraged heavily at Netflix and</p>
+
+<p><blockquote><p>tens of billions of thread-isolated and hundreds of billions of semaphore-isolated calls are executed via Hystrix every day at Netflix and a dramatic improvement in uptime and resilience has been achieved through its use.</p><footer><strong>Github</strong> <cite><a href='https://github.com/Netflix/Hystrix/wiki'>What Is Hystrix?</a></cite></footer></blockquote></p>
+
+<p>While <a href="http://techblog.netflix.com/2012/11/hystrix.html">Hystrix</a> is <a href="https://github.com/Netflix/Hystrix/wiki/Getting-Started">implemented in Java</a>, alternate implementations are available. In fact, if you're building a service in <a href="https://golang.org/">Go</a>, then you'll most definitely want to take a look at <a href="https://github.com/afex/hystrix-go">hystrix-go</a>, which as its name implies, is a fairly easy to use Go implementation of Hystrix.</p>
+
+<p>As an example, here's some Go code that queries a 3rd party service (in this case, JIRA, in order to fetch open issues):</p>
+
+<p>``` go Simple function to fetch open issues
+func retrieveOpenIssues(userConfig UserDefinedConfig) JiraSearchResponse {</p>
+
+<pre><code>url := fmt.Sprintf("%s/rest/api/2/search", userConfig.Host)
+query := fmt.Sprintf("project = %s AND resolution = Unresolved ORDER BY priority DESC", userConfig.Project)
+fields := []string{"summary", "key", "status", "assignee", "description", "issuetype", "created"}
+jsonStr, _ := json.Marshal(JiraSearchRequest{query, 0, fields})
+responseChannel := make(chan JiraSearchResponse)
+go func() {
+    body := httpRequest(url, "POST", jsonStr, userConfig)
+    var searchRes JiraSearchResponse
+    json.Unmarshal(body, &amp;searchRes)
+    responseChannel &lt;- searchRes
+}()
+return &lt;-responseChannel
+</code></pre>
+
+<p>}
+```</p>
+
+<p>This code works well enough <em>until JIRA starts to have issues</em>, in which case, a timeout will eventually create a rather nasty error within the calling code. In fact, Go's <a href="http://blog.golang.org/defer-panic-and-recover">built in panic</a> will occur:</p>
+
+<p>``` bash Go panics!
+panic: Post https://jira.acme.com/rest/api/2/search: dial tcp 94.144.0.13:443: i/o timeout</p>
+
+<p>goroutine 24 [running]:
+runtime.panic(0x325620, 0xc208024bd0)</p>
+
+<pre><code>/usr/local/go/src/pkg/runtime/panic.c:279 +0xf5
+</code></pre>
+
+<p>...
+```</p>
+
+<p>Of course, I could naturally build in some guard-like code to handle these errors, or I could use a framework modeled after Hystrix to do that for me. As <a href="http://thediscoblog.com/blog/2014/03/29/custom-git-commands-in-3-steps/">I'm lazy</a>, I tend to want to leverage other people's expertise and hystrix-go is no exception!</p>
+
+<p>Naturally, you'll first need to import hystrix-go:</p>
+
+<p><code>go import hystrix-go
+import "github.com/afex/hystrix-go/hystrix"
+</code></p>
+
+<p>hystrix-go is super simple to implement in your code -- you simply implement your logic inside a <code>hystrix.Go</code> function (which <a href="https://github.com/afex/hystrix-go/blob/master/hystrix/hystrix.go#L18">internally creates</a> a <a href="https://golang.org/doc/effective_go.html#goroutines">goroutine</a>). What's more, you create a <em>fallback</em> function, which is invoked in an error condition (<a href="https://github.com/Netflix/Hystrix/wiki/How-it-Works">such as a timeout, etc</a>).</p>
+
+<p>``` go hystrix-go is super simple to use
+hystrix.Go("some command", func() error {</p>
+
+<pre><code>// normal path code
+return nil
+</code></pre>
+
+<p>}, func(err error) error {</p>
+
+<pre><code>// do this when errors occur 
+return nil
+</code></pre>
+
+<p>})
+```</p>
+
+<p>Note, the <code>hystrix.Go</code> function takes three arguments, the last two being <a href="https://gobyexample.com/closures">anonymous functions</a>: the first one being your normal logic, and the last being your desired fallback logic. You can naturally use a <a href="https://gobyexample.com/channels">Go Channel</a> to receive data back from either function.</p>
+
+<p>The <code>string</code> first argument is a key, which can be matched with a unique configuration. For instance, you can set up individual timeouts and even error thresholds before a fallback kicks in.</p>
+
+<p>``` go hystrix-go is also easy to configure
+hystrix.ConfigureCommand("unique_command", hystrix.CommandConfig{</p>
+
+<pre><code>Timeout:               1000,
+MaxConcurrentRequests: 100,
+ErrorPercentThreshold: 25,
+</code></pre>
+
+<p>})
+```</p>
+
+<p>In the case above, timeouts are in milliseconds; consequently, the command <code>unique_command</code> will trigger a fallback condition after 1 second.  The library is well tested and I recommend <a href="https://github.com/afex/hystrix-go/blob/master/hystrix/hystrix_test.go">reading some of its tests</a> to see various fallback conditions triggered.</p>
+
+<p>Armed with the knowledge of how to add a fallback and configure any conditions associated with it, it's super easy to incorporate legitimate fault tolerance in any go code. For instance, I can take that JIRA invoking code and wrap it inside a <code>hystrix.Go</code> function like so:</p>
+
+<p>``` go Now with more Hystrix!
+func retrieveOpenIssues(userConfig UserDefinedConfig) JiraSearchResponse {</p>
+
+<pre><code>url := fmt.Sprintf("%s/rest/api/2/search", userConfig.Host)
+query := fmt.Sprintf("project = %s AND resolution = Unresolved ORDER BY priority DESC", userConfig.Project)
+fields := []string{"summary", "key", "status", "assignee", "description", "issuetype", "created"}
+jsonStr, _ := json.Marshal(JiraSearchRequest{query, 0, fields})
+responseChannel := make(chan JiraSearchResponse)
+hystrix.ConfigureCommand("Get all Issues", hystrix.CommandConfig{Timeout: 2000})
+hystrix.Go("Get all Issues", func() error {
+    body := httpRequest(url, "POST", jsonStr, userConfig)
+    var searchRes JiraSearchResponse
+    json.Unmarshal(body, &amp;searchRes)
+    responseChannel &lt;- searchRes
+    return nil
+}, func(err error) error {
+    var searchRes JiraSearchResponse
+    responseChannel &lt;- searchRes
+    return nil
+})
+return &lt;-responseChannel
+</code></pre>
+
+<p>}
+```</p>
+
+<p>In this case, I've also specified that the "Get all Issues" keyed function will trigger a timeout after 2 seconds. My normal logic leveraging an HTTP <code>GET</code> is placed inside the first anonymous function and my fallback logic is placed in the second. This fallback logic simply returns an empty response so as not to completely affect downstream services relying on some sort of response. That is, if JIRA is slow, down, or just not responding, rather than a panic being generated, an empty response is returned. This ostensibly prohibits a cascading error chain.</p>
+
+<p>Of course, my fallback code could do other logic, if deemed necessary; what's more, my fallback code can detect the type of error generated. For instance, my fallback code could react differently in the case of a timeout as opposed to a concurrency issue. The <code>error</code> object passed into the fallback function can be queried easily enough: <code>if err.Error() == "max concurrency"</code>.</p>
+
+<p><a href="http://techblog.netflix.com/2012/02/fault-tolerance-in-high-volume.html">Netflix has seen success with Hystrix</a> in a large volume, highly distributed system. If you want to build tolerance into any Go services, then I can't recommend hystrix-go enough: it's super easy to set up and use.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[SpringOne2GX 2014 Keynote]]></title>
@@ -426,103 +563,6 @@ $ docker pull aglover/dynamodb-pier
 <p>Think of <code>pull</code>ing as simply downloading and registering a Docker. To use a 'pull'ed Docker, you must still execute the <code>run</code> command.</p>
 
 <p>Docker makes it super easy to distribute pre-packaged applications -- rather than installing various binaries on different operating systems (like MongoDB on OSX for development and <em>a different</em> MongoDB binary on Ubuntu for production), you can use the <em>same</em> package across environments. <code>Dockerfile</code>s make creating Dockers repeatable. And hopefully I've shown you that crafting a <code>Dockerfile</code> isn't terribly difficult.  Go forth and Docker.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Java 8's functional fomentation]]></title>
-    <link href="http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation/"/>
-    <updated>2014-03-25T20:39:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2014/03/25/java-8-s-functional-fomentation</id>
-    <content type="html"><![CDATA[<p><img class="right" src="/images/mine/revolution_small.png">Java 8 has revolutionized Java. It's easily the most significant release of Java in the last <a href="http://en.wikipedia.org/wiki/Java_version_history#J2SE_5.0_.28September_30.2C_2004.29">10 years</a>. There are a ton of new features including default methods, method and constructor references, and lambdas, <a href="http://winterbe.com/posts/2014/03/16/java-8-tutorial/">just to name a few</a>.</p>
-
-<p>One of the more interesting features is the new <a href="http://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html"><code>java.util.stream</code></a> API, which as the Javadoc states, enables</p>
-
-<p><blockquote><p>functional-style operations on streams of elements, such as map-reduce transformations on collections</p></blockquote></p>
-
-<p>Combine this new API with lambda expressions and you end up with a terse, yet, powerful syntax that significantly simplifies code through the application of projections.</p>
-
-<!-- more -->
-
-
-<p></p>
-
-<p>Take, for example, the ostensibly simple task of filtering a collection. In this case, a simple <code>Collection</code> of <code>Message</code> types, created like so:</p>
-
-<p><code>java Creating a Collection of Messages
-List&lt;Message&gt; messages = new ArrayList&lt;&gt;();
-messages.add(new Message("aglover", "foo", 56854));
-messages.add(new Message("aglover", "foo", 85));
-messages.add(new Message("aglover", "bar", 9999));
-messages.add(new Message("rsmith", "foo", 4564));
-</code></p>
-
-<p>With this collection, I'd like to filter out <code>Message</code>s with a <code>delay</code> (3rd constructor parameter) greater than 3,000 seconds.</p>
-
-<p><a href="http://stackoverflow.com/questions/122105/java-what-is-the-best-way-to-filter-a-collection">Previous to Java 8</a>, you could hand jam this sort of logic like so:</p>
-
-<p>``` java Filtering old school style
-for (Message message : messages) {
-  if (message.delay > 3000) {</p>
-
-<pre><code>System.out.println(message);
-</code></pre>
-
-<p>  }
-}
-```</p>
-
-<p>In Java 8, however, this job becomes a lot more concise. Collections now support the <code>stream</code> method, which converts the underlying data structure into a iterate-able steam of objects and thereby permits a new breed of functional operations that leverage lambda expressions. Most of these operations can be chained as well. These chain-able methods are dubbed <em>intermediate</em>, methods that cannot be chained are denoted as <em>terminal</em>.</p>
-
-<p>Briefly, lambda expressions are a lot like anonymous classes except with <em>a lot less</em> syntax. For example, if you look at the Javadocs for the parameter to a <code>Stream</code>'s <code>filter</code> method, you'll see that it takes a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html"><code>Predicate</code></a> type. Yet, you don't have to implement this interface as you would, say, before Java 8 with an anonymous class. Consequently, the <code>Predicate</code> lambda expression for filtering all values of <code>delay</code> greater than 3000 would be:</p>
-
-<p><code>java Lambda expression
-x -&gt; x.delay &gt; 3000
-</code></p>
-
-<p>Where <code>x</code> is the parameter passed in for <em>each value</em> in the stream and everything to the right of the <code>-&gt;</code> being the expression evaluated.</p>
-
-<p>Putting this all together in Java 8 yields:</p>
-
-<p><code>java Streaming lambdas!
-messages.stream().filter(m -&gt; m.delay &gt; 3000).forEach(item -&gt; System.out.println(item));
-</code></p>
-
-<p>Interestingly, due to some other new features of Java 8, the <code>forEach</code>'s lambda can be simplified further to:</p>
-
-<p><code>java Streaming lambdas are even shorter!
-messages.stream().filter(m -&gt; m.delay &gt; 3000).forEach(System.out::println);
-</code></p>
-
-<p>Because the parameter of the <code>forEach</code> lambda is simply consumed by the <code>println</code>, Java 8 now permits you to drop the parameter entirely.</p>
-
-<p>Earlier, I mentioned that streams permit you to chain lambdas -- in the case above, the <code>filter</code> method is an intermediate method, while the <code>forEach</code> is a terminal method. Other intermediate methods, that are immediately recognizable to functional programmers, are:  <code>map</code>, <code>flatMap</code>, and <code>reduce</code>, to name a few.</p>
-
-<p>To elaborate, I'd like to find all <code>Message</code>s that are delayed more than 3,000 seconds and sum up the total delay time. Without functional magic, I could write:</p>
-
-<p>``` java Prosaic Java<br/>
-long totalWaitTime = 0;
-for (Message message : messages) {
-  if (message.delay > 3000) {</p>
-
-<pre><code>totalWaitTime += message.delay;
-</code></pre>
-
-<p>  }
-}
-```</p>
-
-<p>Nevertheless, with Java 8 and a bit of functional-foo, you can achieve a more elegant code construct like so:</p>
-
-<p><code>java Java 8 elegance
-long totWaitTime = messages.stream().filter(m -&gt; m.delay &gt; 3000).mapToLong(m -&gt; m.delay).sum();
-</code></p>
-
-<p>Note how I am able to chain the <code>filter</code> and <code>mapToLong</code> methods, along with a terminal <code>sum</code>. Incidentally, the <code>sum</code> method requires a specific map style method that yields a collection of primitive types, such as <code>mapToLong</code>, <code>mapToInt</code>, etc.</p>
-
-<p>Functional style programming as a core language feature is an  astoundingly powerful construct. And while a lot of these techniques have been available in various 3rd party libraries like Guava and JVM languages like Scala and Groovy, having these features core to the language will surely reach a wider audience of developers and have the biggest impact to the developmental landscape.</p>
-
-<p>Java 8, without a doubt, drastically changes the <a href="http://thediscoblog.com/blog/categories/java/">Java language</a> for the better.</p>
 ]]></content>
   </entry>
   

@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Fault tolerance in Go - The Disco Blog</title>
+  <meta name="author" content="Andrew Glover">
+
+  
+  <meta name="description" content="Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code.">
+  
+  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, Continuous Integration, CoffeScript, Docker, Go, "/>
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://thediscoblog.com/blog/2015/02/07/fault-tolerance-in-go/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="The Disco Blog" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-3500051-4']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Disco Blog</a></h1>
+  
+    <h2>Can you dig it?</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:thediscoblog.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/categories">Categories</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Fault Tolerance in Go</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-07T16:29:00-08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img class="right" src="/images/mine/hystrix.png">In distributed systems, failure is inevitable. Eventually, some service will become bogged down and consequently won&#8217;t respond quickly enough or, worse, a service will simply die. Services relying on a degraded (or dead!) service will naturally become affected and potentially cascade instability throughout the system, unless all services are properly built with isolation and in mind.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p><a href="http://techblog.netflix.com/2011/12/making-netflix-api-more-resilient.html">Netflix experienced the vexation distributed system failures inflict</a> and developed <a href="https://github.com/Netflix/Hystrix">Hystrix</a> as a sophisticated implementation of the <a href="http://martinfowler.com/bliki/CircuitBreaker.html">Circuit Breaker pattern</a>. Briefly, Hystrix is</p>
+
+<blockquote><p>a latency and fault tolerance library designed to isolate points of access to remote systems, services and 3rd party libraries, stop cascading failure and enable resilience in complex distributed systems where failure is inevitable.</p><footer><strong>Github</strong> <cite><a href='https://github.com/Netflix/Hystrix/wiki'>What Is Hystrix?</a></cite></footer></blockquote>
+
+
+<p>Indeed, Hystrix is leveraged heavily at Netflix and</p>
+
+<blockquote><p>tens of billions of thread-isolated and hundreds of billions of semaphore-isolated calls are executed via Hystrix every day at Netflix and a dramatic improvement in uptime and resilience has been achieved through its use.</p><footer><strong>Github</strong> <cite><a href='https://github.com/Netflix/Hystrix/wiki'>What Is Hystrix?</a></cite></footer></blockquote>
+
+
+<p>While <a href="http://techblog.netflix.com/2012/11/hystrix.html">Hystrix</a> is <a href="https://github.com/Netflix/Hystrix/wiki/Getting-Started">implemented in Java</a>, alternate implementations are available. In fact, if you&#8217;re building a service in <a href="https://golang.org/">Go</a>, then you&#8217;ll most definitely want to take a look at <a href="https://github.com/afex/hystrix-go">hystrix-go</a>, which as its name implies, is a fairly easy to use Go implementation of Hystrix.</p>
+
+<p>As an example, here&#8217;s some Go code that queries a 3rd party service (in this case, JIRA, in order to fetch open issues):</p>
+
+<figure class='code'><figcaption><span>Simple function to fetch open issues</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">retrieveOpenIssues</span><span class="p">(</span><span class="n">userConfig</span> <span class="n">UserDefinedConfig</span><span class="p">)</span> <span class="n">JiraSearchResponse</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">url</span> <span class="p">:=</span> <span class="n">fmt</span><span class="p">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">&quot;%s/rest/api/2/search&quot;</span><span class="p">,</span> <span class="n">userConfig</span><span class="p">.</span><span class="n">Host</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">query</span> <span class="p">:=</span> <span class="n">fmt</span><span class="p">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">&quot;project = %s AND resolution = Unresolved ORDER BY priority DESC&quot;</span><span class="p">,</span> <span class="n">userConfig</span><span class="p">.</span><span class="n">Project</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">fields</span> <span class="p">:=</span> <span class="p">[]</span><span class="nb">string</span><span class="p">{</span><span class="s">&quot;summary&quot;</span><span class="p">,</span> <span class="s">&quot;key&quot;</span><span class="p">,</span> <span class="s">&quot;status&quot;</span><span class="p">,</span> <span class="s">&quot;assignee&quot;</span><span class="p">,</span> <span class="s">&quot;description&quot;</span><span class="p">,</span> <span class="s">&quot;issuetype&quot;</span><span class="p">,</span> <span class="s">&quot;created&quot;</span><span class="p">}</span>
+</span><span class='line'>  <span class="n">jsonStr</span><span class="p">,</span> <span class="n">_</span> <span class="p">:=</span> <span class="n">json</span><span class="p">.</span><span class="n">Marshal</span><span class="p">(</span><span class="n">JiraSearchRequest</span><span class="p">{</span><span class="n">query</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fields</span><span class="p">})</span>
+</span><span class='line'>  <span class="n">responseChannel</span> <span class="p">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="n">JiraSearchResponse</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">go</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">body</span> <span class="p">:=</span> <span class="n">httpRequest</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s">&quot;POST&quot;</span><span class="p">,</span> <span class="n">jsonStr</span><span class="p">,</span> <span class="n">userConfig</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">var</span> <span class="n">searchRes</span> <span class="n">JiraSearchResponse</span>
+</span><span class='line'>      <span class="n">json</span><span class="p">.</span><span class="n">Unmarshal</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="p">&amp;</span><span class="n">searchRes</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">responseChannel</span> <span class="p">&lt;-</span> <span class="n">searchRes</span>
+</span><span class='line'>  <span class="p">}()</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">&lt;-</span><span class="n">responseChannel</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This code works well enough <em>until JIRA starts to have issues</em>, in which case, a timeout will eventually create a rather nasty error within the calling code. In fact, Go&#8217;s <a href="http://blog.golang.org/defer-panic-and-recover">built in panic</a> will occur:</p>
+
+<figure class='code'><figcaption><span>Go panics!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>panic: Post https://jira.acme.com/rest/api/2/search: dial tcp 94.144.0.13:443: i/o timeout
+</span><span class='line'>
+</span><span class='line'>goroutine 24 <span class="o">[</span>running<span class="o">]</span>:
+</span><span class='line'>runtime.panic<span class="o">(</span>0x325620, 0xc208024bd0<span class="o">)</span>
+</span><span class='line'>  /usr/local/go/src/pkg/runtime/panic.c:279 +0xf5
+</span><span class='line'>...
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Of course, I could naturally build in some guard-like code to handle these errors, or I could use a framework modeled after Hystrix to do that for me. As <a href="http://thediscoblog.com/blog/2014/03/29/custom-git-commands-in-3-steps/">I&#8217;m lazy</a>, I tend to want to leverage other people&#8217;s expertise and hystrix-go is no exception!</p>
+
+<p>Naturally, you&#8217;ll first need to import hystrix-go:</p>
+
+<figure class='code'><figcaption><span>import hystrix-go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">import</span> <span class="s">&quot;github.com/afex/hystrix-go/hystrix&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>hystrix-go is super simple to implement in your code &#8211; you simply implement your logic inside a <code>hystrix.Go</code> function (which <a href="https://github.com/afex/hystrix-go/blob/master/hystrix/hystrix.go#L18">internally creates</a> a <a href="https://golang.org/doc/effective_go.html#goroutines">goroutine</a>). What&#8217;s more, you create a <em>fallback</em> function, which is invoked in an error condition (<a href="https://github.com/Netflix/Hystrix/wiki/How-it-Works">such as a timeout, etc</a>).</p>
+
+<figure class='code'><figcaption><span>hystrix-go is super simple to use</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="n">hystrix</span><span class="p">.</span><span class="n">Go</span><span class="p">(</span><span class="s">&quot;some command&quot;</span><span class="p">,</span> <span class="k">func</span><span class="p">()</span> <span class="n">error</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// normal path code</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">nil</span>
+</span><span class='line'><span class="p">},</span> <span class="k">func</span><span class="p">(</span><span class="n">err</span> <span class="n">error</span><span class="p">)</span> <span class="n">error</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// do this when errors occur </span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">nil</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note, the <code>hystrix.Go</code> function takes three arguments, the last two being <a href="https://gobyexample.com/closures">anonymous functions</a>: the first one being your normal logic, and the last being your desired fallback logic. You can naturally use a <a href="https://gobyexample.com/channels">Go Channel</a> to receive data back from either function.</p>
+
+<p>The <code>string</code> first argument is a key, which can be matched with a unique configuration. For instance, you can set up individual timeouts and even error thresholds before a fallback kicks in.</p>
+
+<figure class='code'><figcaption><span>hystrix-go is also easy to configure</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="n">hystrix</span><span class="p">.</span><span class="n">ConfigureCommand</span><span class="p">(</span><span class="s">&quot;unique_command&quot;</span><span class="p">,</span> <span class="n">hystrix</span><span class="p">.</span><span class="n">CommandConfig</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">Timeout</span><span class="p">:</span>               <span class="mi">1000</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">MaxConcurrentRequests</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">ErrorPercentThreshold</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the case above, timeouts are in milliseconds; consequently, the command <code>unique_command</code> will trigger a fallback condition after 1 second.  The library is well tested and I recommend <a href="https://github.com/afex/hystrix-go/blob/master/hystrix/hystrix_test.go">reading some of its tests</a> to see various fallback conditions triggered.</p>
+
+<p>Armed with the knowledge of how to add a fallback and configure any conditions associated with it, it&#8217;s super easy to incorporate legitimate fault tolerance in any go code. For instance, I can take that JIRA invoking code and wrap it inside a <code>hystrix.Go</code> function like so:</p>
+
+<figure class='code'><figcaption><span>Now with more Hystrix! </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">retrieveOpenIssues</span><span class="p">(</span><span class="n">userConfig</span> <span class="n">UserDefinedConfig</span><span class="p">)</span> <span class="n">JiraSearchResponse</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">url</span> <span class="p">:=</span> <span class="n">fmt</span><span class="p">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">&quot;%s/rest/api/2/search&quot;</span><span class="p">,</span> <span class="n">userConfig</span><span class="p">.</span><span class="n">Host</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">query</span> <span class="p">:=</span> <span class="n">fmt</span><span class="p">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">&quot;project = %s AND resolution = Unresolved ORDER BY priority DESC&quot;</span><span class="p">,</span> <span class="n">userConfig</span><span class="p">.</span><span class="n">Project</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">fields</span> <span class="p">:=</span> <span class="p">[]</span><span class="nb">string</span><span class="p">{</span><span class="s">&quot;summary&quot;</span><span class="p">,</span> <span class="s">&quot;key&quot;</span><span class="p">,</span> <span class="s">&quot;status&quot;</span><span class="p">,</span> <span class="s">&quot;assignee&quot;</span><span class="p">,</span> <span class="s">&quot;description&quot;</span><span class="p">,</span> <span class="s">&quot;issuetype&quot;</span><span class="p">,</span> <span class="s">&quot;created&quot;</span><span class="p">}</span>
+</span><span class='line'>  <span class="n">jsonStr</span><span class="p">,</span> <span class="n">_</span> <span class="p">:=</span> <span class="n">json</span><span class="p">.</span><span class="n">Marshal</span><span class="p">(</span><span class="n">JiraSearchRequest</span><span class="p">{</span><span class="n">query</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fields</span><span class="p">})</span>
+</span><span class='line'>  <span class="n">responseChannel</span> <span class="p">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="n">JiraSearchResponse</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">hystrix</span><span class="p">.</span><span class="n">ConfigureCommand</span><span class="p">(</span><span class="s">&quot;Get all Issues&quot;</span><span class="p">,</span> <span class="n">hystrix</span><span class="p">.</span><span class="n">CommandConfig</span><span class="p">{</span><span class="n">Timeout</span><span class="p">:</span> <span class="mi">2000</span><span class="p">})</span>
+</span><span class='line'>  <span class="n">hystrix</span><span class="p">.</span><span class="n">Go</span><span class="p">(</span><span class="s">&quot;Get all Issues&quot;</span><span class="p">,</span> <span class="k">func</span><span class="p">()</span> <span class="n">error</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">body</span> <span class="p">:=</span> <span class="n">httpRequest</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s">&quot;POST&quot;</span><span class="p">,</span> <span class="n">jsonStr</span><span class="p">,</span> <span class="n">userConfig</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">var</span> <span class="n">searchRes</span> <span class="n">JiraSearchResponse</span>
+</span><span class='line'>      <span class="n">json</span><span class="p">.</span><span class="n">Unmarshal</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="p">&amp;</span><span class="n">searchRes</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">responseChannel</span> <span class="p">&lt;-</span> <span class="n">searchRes</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">nil</span>
+</span><span class='line'>  <span class="p">},</span> <span class="k">func</span><span class="p">(</span><span class="n">err</span> <span class="n">error</span><span class="p">)</span> <span class="n">error</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">var</span> <span class="n">searchRes</span> <span class="n">JiraSearchResponse</span>
+</span><span class='line'>      <span class="n">responseChannel</span> <span class="p">&lt;-</span> <span class="n">searchRes</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">nil</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">&lt;-</span><span class="n">responseChannel</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, I&#8217;ve also specified that the &#8220;Get all Issues&#8221; keyed function will trigger a timeout after 2 seconds. My normal logic leveraging an HTTP <code>GET</code> is placed inside the first anonymous function and my fallback logic is placed in the second. This fallback logic simply returns an empty response so as not to completely affect downstream services relying on some sort of response. That is, if JIRA is slow, down, or just not responding, rather than a panic being generated, an empty response is returned. This ostensibly prohibits a cascading error chain.</p>
+
+<p>Of course, my fallback code could do other logic, if deemed necessary; what&#8217;s more, my fallback code can detect the type of error generated. For instance, my fallback code could react differently in the case of a timeout as opposed to a concurrency issue. The <code>error</code> object passed into the fallback function can be queried easily enough: <code>if err.Error() == "max concurrency"</code>.</p>
+
+<p><a href="http://techblog.netflix.com/2012/02/fault-tolerance-in-high-volume.html">Netflix has seen success with Hystrix</a> in a large volume, highly distributed system. If you want to build tolerance into any Go services, then I can&#8217;t recommend hystrix-go enough: it&#8217;s super easy to set up and use.</p>
+</div>
+<!-- related posts -->
+<div id='related_posts'>
+  <h4>Related Posts</h4>
+      <ul class="posts">
+      
+          
+          <!-- nothing, skip it as its the same as the post itself -->
+          
+      
+          
+            <li class="related"><a href="/blog/2014/05/05/dockerfiles-in-a-jiffy/">Dockerfiles in a jiffy</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2014/04/01/schooled-in-ping-pong/">Schooled in ping pong</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/">Docker containers with Gradle in 4 steps</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/12/29/just-require-tire-to-inquire/">Just require tire to inquire</a></li>
+          
+      
+          
+            <li class="related"><a href="/blog/2013/08/01/imbibing-the-fluency-of-mockito/">Imbibing the fluency of Mockito</a></li>
+          
+      
+      </ul>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Glover</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-07T16:29:00-08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/go/'>Go</a>, <a class='category' href='/blog/categories/java/'>Java</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://thediscoblog.com/blog/2015/02/07/fault-tolerance-in-go/" data-via="aglover" data-counturl="http://thediscoblog.com/blog/2015/02/07/fault-tolerance-in-go/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2015/01/21/springone2gx-2014-keynote/" title="Previous Post: SpringOne2GX 2014 Keynote">&laquo; SpringOne2GX 2014 Keynote</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <div id='influads_block' class='influads_block'></div><script type='text/javascript'>(function(){var acc='acc_1097d812_pub';var st='css';var or='130';var e=document.getElementsByTagName('script')[0];var d=document.createElement('script');d.src=('https:' == document.location.protocol ?'https://' : 'http://') +'engine.influads.com/show/'+or+'/'+st+'/'+acc;d.type='text/javascript';d.async=true;d.defer=true; e.parentNode.insertBefore(d,e);})();</script>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/02/07/fault-tolerance-in-go/">Fault tolerance in Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/21/springone2gx-2014-keynote/">SpringOne2GX 2014 Keynote</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/12/30/continuous-integration-is-a-hack/">Continuous Integration is a hack!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/12/20/batten-down-those-npm-dependency-hatches/">Batten down those Node dependency hatches</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/">Docker containers with Gradle in 4 steps</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/aglover">@aglover</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'aglover',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+ <h1>Latest Tweets</h1>
+ <a class="twitter-timeline" href="https://twitter.com/aglover" data-widget-id="345533522750099456">Tweets by @aglover</a>
+ <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Glover -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'thediscoblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://thediscoblog.com/blog/2015/02/07/fault-tolerance-in-go/';
+        var disqus_url = 'http://thediscoblog.com/blog/2015/02/07/fault-tolerance-in-go/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

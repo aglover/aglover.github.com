@@ -11,7 +11,7 @@
   
   <meta name="description" content="Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code.">
   
-  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, Continuous Integration, CoffeScript, Docker, "/>
+  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, Continuous Integration, CoffeScript, Docker, Go, "/>
 
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +81,51 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2014/01/24/continuous-delivery-for-heroku-with-jenkins/">Continuous Delivery for Heroku With Jenkins</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-24T20:43:00-08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="left" src="/images/mine/jenkins.png">A <a href="http://thediscoblog.com/blog/categories/devops/">continuous delivery pipeline</a> that leverages <a href="http://jenkins-ci.org/">Jenkins</a> and targets <a href="http://heroku.com/">Heroku</a> is fairly simple to set up, provided you install the Jenkins Git plugin. With this pipeline, changes to a specific Git branch will result in a Heroku deployment.</p>
+
+<p>For this deployment process to work nicely, you should use at least two Git branches, as you&#8217;ll want to have one branch targeted for auto-deploys and another that doesn&#8217;t (as it represents active development).  For example, following the <a href="http://nvie.com/posts/a-successful-git-branching-model/">git-flow</a> convention, those two branches could be named <code>development</code> and <code>master</code>, where changes to <code>master</code> are deployed to Heroku and changes to <code>development</code> aren&#8217;t. Thus, you will have at least two Jenkins jobs that monitor <em>each</em> of these branches.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/01/24/continuous-delivery-for-heroku-with-jenkins/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -488,53 +533,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/10/05/the-significance-of-html5/">The Significance of HTML5</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-05T21:18:00-07:00" pubdate data-updated="true">Oct 5<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img class="right" src="/images/mine/no-flash.jpg"><a href="http://thediscoblog.com/blog/categories/html5/">HTML5</a> is important for three reasons. And its importance starts with the end of browser plugins. That&#8217;s right. With HTML5, rich media aspects that were formally handled by plugins (think Flash), are now built-in. That&#8217;s why there are <a href="http://www.w3schools.com/html/html5_new_elements.asp">new media tags</a> like <code>&lt;audio&gt;</code> and <code>&lt;video&gt;</code>.</p>
-
-<p>Think about it for a second &#8211; when&#8217;s the last time you visited a site on your tablet that asked you to install a plugin? Never.</p>
-
-<p>That&#8217;s also why some older plugin laden sites do not work on your mobile device. Remember the whole &#8221;<a href="http://www.apple.com/hotnews/thoughts-on-flash/">Steve Jobs no flash</a>&#8221; kerfuffle years ago? Yep, Mr. Jobs was adamant that the iPhone would support HTML5 and not fall into the plugin trap. Incidentally, Google and other major vendors have since followed suit. <a href="http://en.wikipedia.org/wiki/HTML5">HTML5 has the support of all major browser vendors now</a> &#8211; Apple, Google, Firefox, Opera, and yes, even Microsoft.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/05/the-significance-of-html5/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -555,6 +553,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/02/07/fault-tolerance-in-go/">Fault tolerance in Go</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/01/21/springone2gx-2014-keynote/">SpringOne2GX 2014 Keynote</a>
       </li>
     
@@ -568,10 +570,6 @@
     
       <li class="post">
         <a href="/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/">Docker containers with Gradle in 4 steps</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/05/dockerfiles-in-a-jiffy/">Dockerfiles in a jiffy</a>
       </li>
     
   </ul>

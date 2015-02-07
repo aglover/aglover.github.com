@@ -11,7 +11,7 @@
   
   <meta name="description" content="Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code.">
   
-  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, Continuous Integration, CoffeScript, Docker, "/>
+  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, Continuous Integration, CoffeScript, Docker, Go, "/>
 
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +81,51 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/08/04/sometimes-tdd-requires-a-hammer/">Sometimes TDD Requires a Hammer</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-04T11:08:00-07:00" pubdate data-updated="true">Aug 4<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="left" src="/images/mine/hammerj.jpg">While there are myriad mocking libraries available for the Java platform, only a select few of these nifty frameworks is capable of mocking the non-mock-friendly modifiers of <code>static</code> and <code>final</code>. Static (or class) methods, while handy for factories, become a nuisance for a framework like <a href="https://code.google.com/p/mockito/">Mockito</a>, however, with the inclusion of <a href="https://code.google.com/p/powermock/">PowerMock</a>, you&#8217;ve got yourself a proverbial hammer.</p>
+
+<p><a href="http://thediscoblog.com/blog/2013/08/01/imbibing-the-fluency-of-mockito/">As I wrote about previously</a>, I had to deal with a 3rd party library that is used to integrate with a networked service. This library is essentially hardwired to interact with homebase, which naturally provides some challenges when trying to test ones code that relies on this library. Moreover, the said library contained a <code>static</code> method for creating instances of a specialized class, which, naturally, my code depended on.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/08/04/sometimes-tdd-requires-a-hammer/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -496,49 +541,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Backgrounding Tasks in Heroku With Delayed Job</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-10T12:56:00-07:00" pubdate data-updated="true">Jun 10<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img class="right" src="/images/mine/heroku-logo-light.png">Long running web requests are bad. They create resource contention among other waiting incoming requests; what&#8217;s more, with HTTP servers like <a href="https://github.com/defunkt/unicorn">Unicorn</a> (which is rapidly becoming the de facto HTTP server for Rails apps running on <a href="https://get.heroku.com/">Heroku</a>), long running requests are summarily terminated after some threshold (for example, 30 seconds) leaving users with a nasty timeout error (and, of course, other users complaining that it takes forever for your site to do anything). Luckily, with frameworks like <a href="https://github.com/collectiveidea/delayed_job">Delayed Job</a>, backgrounding long running tasks <a href="https://devcenter.heroku.com/articles/delayed-job">couldn&#8217;t be any easier</a>.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -559,6 +561,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/02/07/fault-tolerance-in-go/">Fault tolerance in Go</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/01/21/springone2gx-2014-keynote/">SpringOne2GX 2014 Keynote</a>
       </li>
     
@@ -572,10 +578,6 @@
     
       <li class="post">
         <a href="/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/">Docker containers with Gradle in 4 steps</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/05/dockerfiles-in-a-jiffy/">Dockerfiles in a jiffy</a>
       </li>
     
   </ul>

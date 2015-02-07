@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2015-01-21T17:26:24-08:00</updated>
+  <updated>2015-02-07T11:31:20-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,180 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Fault tolerance in Go]]></title>
+    <link href="http://thediscoblog.com/blog/2015/02/07/fault-tolerance-in-go/"/>
+    <updated>2015-02-07T16:29:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2015/02/07/fault-tolerance-in-go</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/hystrix.png">In distributed systems, failure is inevitable. Eventually, some service will become bogged down and consequently won&#8217;t respond quickly enough or, worse, a service will simply die. Services relying on a degraded (or dead!) service will naturally become affected and potentially cascade instability throughout the system, unless all services are properly built with isolation and in mind.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<p><a href="http://techblog.netflix.com/2011/12/making-netflix-api-more-resilient.html">Netflix experienced the vexation distributed system failures inflict</a> and developed <a href="https://github.com/Netflix/Hystrix">Hystrix</a> as a sophisticated implementation of the <a href="http://martinfowler.com/bliki/CircuitBreaker.html">Circuit Breaker pattern</a>. Briefly, Hystrix is</p>
+
+<blockquote><p>a latency and fault tolerance library designed to isolate points of access to remote systems, services and 3rd party libraries, stop cascading failure and enable resilience in complex distributed systems where failure is inevitable.</p><footer><strong>Github</strong> <cite><a href='https://github.com/Netflix/Hystrix/wiki'>What Is Hystrix?</a></cite></footer></blockquote>
+
+
+<p>Indeed, Hystrix is leveraged heavily at Netflix and</p>
+
+<blockquote><p>tens of billions of thread-isolated and hundreds of billions of semaphore-isolated calls are executed via Hystrix every day at Netflix and a dramatic improvement in uptime and resilience has been achieved through its use.</p><footer><strong>Github</strong> <cite><a href='https://github.com/Netflix/Hystrix/wiki'>What Is Hystrix?</a></cite></footer></blockquote>
+
+
+<p>While <a href="http://techblog.netflix.com/2012/11/hystrix.html">Hystrix</a> is <a href="https://github.com/Netflix/Hystrix/wiki/Getting-Started">implemented in Java</a>, alternate implementations are available. In fact, if you&#8217;re building a service in <a href="https://golang.org/">Go</a>, then you&#8217;ll most definitely want to take a look at <a href="https://github.com/afex/hystrix-go">hystrix-go</a>, which as its name implies, is a fairly easy to use Go implementation of Hystrix.</p>
+
+<p>As an example, here&#8217;s some Go code that queries a 3rd party service (in this case, JIRA, in order to fetch open issues):</p>
+
+<figure class='code'><figcaption><span>Simple function to fetch open issues</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">retrieveOpenIssues</span><span class="p">(</span><span class="n">userConfig</span> <span class="n">UserDefinedConfig</span><span class="p">)</span> <span class="n">JiraSearchResponse</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">url</span> <span class="p">:=</span> <span class="n">fmt</span><span class="p">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">&quot;%s/rest/api/2/search&quot;</span><span class="p">,</span> <span class="n">userConfig</span><span class="p">.</span><span class="n">Host</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">query</span> <span class="p">:=</span> <span class="n">fmt</span><span class="p">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">&quot;project = %s AND resolution = Unresolved ORDER BY priority DESC&quot;</span><span class="p">,</span> <span class="n">userConfig</span><span class="p">.</span><span class="n">Project</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">fields</span> <span class="p">:=</span> <span class="p">[]</span><span class="nb">string</span><span class="p">{</span><span class="s">&quot;summary&quot;</span><span class="p">,</span> <span class="s">&quot;key&quot;</span><span class="p">,</span> <span class="s">&quot;status&quot;</span><span class="p">,</span> <span class="s">&quot;assignee&quot;</span><span class="p">,</span> <span class="s">&quot;description&quot;</span><span class="p">,</span> <span class="s">&quot;issuetype&quot;</span><span class="p">,</span> <span class="s">&quot;created&quot;</span><span class="p">}</span>
+</span><span class='line'>  <span class="n">jsonStr</span><span class="p">,</span> <span class="n">_</span> <span class="p">:=</span> <span class="n">json</span><span class="p">.</span><span class="n">Marshal</span><span class="p">(</span><span class="n">JiraSearchRequest</span><span class="p">{</span><span class="n">query</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fields</span><span class="p">})</span>
+</span><span class='line'>  <span class="n">responseChannel</span> <span class="p">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="n">JiraSearchResponse</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">go</span> <span class="k">func</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">body</span> <span class="p">:=</span> <span class="n">httpRequest</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s">&quot;POST&quot;</span><span class="p">,</span> <span class="n">jsonStr</span><span class="p">,</span> <span class="n">userConfig</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">var</span> <span class="n">searchRes</span> <span class="n">JiraSearchResponse</span>
+</span><span class='line'>      <span class="n">json</span><span class="p">.</span><span class="n">Unmarshal</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="p">&amp;</span><span class="n">searchRes</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">responseChannel</span> <span class="p">&lt;-</span> <span class="n">searchRes</span>
+</span><span class='line'>  <span class="p">}()</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">&lt;-</span><span class="n">responseChannel</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This code works well enough <em>until JIRA starts to have issues</em>, in which case, a timeout will eventually create a rather nasty error within the calling code. In fact, Go&#8217;s <a href="http://blog.golang.org/defer-panic-and-recover">built in panic</a> will occur:</p>
+
+<figure class='code'><figcaption><span>Go panics!</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>panic: Post https://jira.acme.com/rest/api/2/search: dial tcp 94.144.0.13:443: i/o timeout
+</span><span class='line'>
+</span><span class='line'>goroutine 24 <span class="o">[</span>running<span class="o">]</span>:
+</span><span class='line'>runtime.panic<span class="o">(</span>0x325620, 0xc208024bd0<span class="o">)</span>
+</span><span class='line'>  /usr/local/go/src/pkg/runtime/panic.c:279 +0xf5
+</span><span class='line'>...
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Of course, I could naturally build in some guard-like code to handle these errors, or I could use a framework modeled after Hystrix to do that for me. As <a href="http://thediscoblog.com/blog/2014/03/29/custom-git-commands-in-3-steps/">I&#8217;m lazy</a>, I tend to want to leverage other people&#8217;s expertise and hystrix-go is no exception!</p>
+
+<p>Naturally, you&#8217;ll first need to import hystrix-go:</p>
+
+<figure class='code'><figcaption><span>import hystrix-go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">import</span> <span class="s">&quot;github.com/afex/hystrix-go/hystrix&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>hystrix-go is super simple to implement in your code &#8211; you simply implement your logic inside a <code>hystrix.Go</code> function (which <a href="https://github.com/afex/hystrix-go/blob/master/hystrix/hystrix.go#L18">internally creates</a> a <a href="https://golang.org/doc/effective_go.html#goroutines">goroutine</a>). What&#8217;s more, you create a <em>fallback</em> function, which is invoked in an error condition (<a href="https://github.com/Netflix/Hystrix/wiki/How-it-Works">such as a timeout, etc</a>).</p>
+
+<figure class='code'><figcaption><span>hystrix-go is super simple to use</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="n">hystrix</span><span class="p">.</span><span class="n">Go</span><span class="p">(</span><span class="s">&quot;some command&quot;</span><span class="p">,</span> <span class="k">func</span><span class="p">()</span> <span class="n">error</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// normal path code</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">nil</span>
+</span><span class='line'><span class="p">},</span> <span class="k">func</span><span class="p">(</span><span class="n">err</span> <span class="n">error</span><span class="p">)</span> <span class="n">error</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// do this when errors occur </span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">nil</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note, the <code>hystrix.Go</code> function takes three arguments, the last two being <a href="https://gobyexample.com/closures">anonymous functions</a>: the first one being your normal logic, and the last being your desired fallback logic. You can naturally use a <a href="https://gobyexample.com/channels">Go Channel</a> to receive data back from either function.</p>
+
+<p>The <code>string</code> first argument is a key, which can be matched with a unique configuration. For instance, you can set up individual timeouts and even error thresholds before a fallback kicks in.</p>
+
+<figure class='code'><figcaption><span>hystrix-go is also easy to configure</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="n">hystrix</span><span class="p">.</span><span class="n">ConfigureCommand</span><span class="p">(</span><span class="s">&quot;unique_command&quot;</span><span class="p">,</span> <span class="n">hystrix</span><span class="p">.</span><span class="n">CommandConfig</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">Timeout</span><span class="p">:</span>               <span class="mi">1000</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">MaxConcurrentRequests</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">ErrorPercentThreshold</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the case above, timeouts are in milliseconds; consequently, the command <code>unique_command</code> will trigger a fallback condition after 1 second.  The library is well tested and I recommend <a href="https://github.com/afex/hystrix-go/blob/master/hystrix/hystrix_test.go">reading some of its tests</a> to see various fallback conditions triggered.</p>
+
+<p>Armed with the knowledge of how to add a fallback and configure any conditions associated with it, it&#8217;s super easy to incorporate legitimate fault tolerance in any go code. For instance, I can take that JIRA invoking code and wrap it inside a <code>hystrix.Go</code> function like so:</p>
+
+<figure class='code'><figcaption><span>Now with more Hystrix! </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="k">func</span> <span class="n">retrieveOpenIssues</span><span class="p">(</span><span class="n">userConfig</span> <span class="n">UserDefinedConfig</span><span class="p">)</span> <span class="n">JiraSearchResponse</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">url</span> <span class="p">:=</span> <span class="n">fmt</span><span class="p">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">&quot;%s/rest/api/2/search&quot;</span><span class="p">,</span> <span class="n">userConfig</span><span class="p">.</span><span class="n">Host</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">query</span> <span class="p">:=</span> <span class="n">fmt</span><span class="p">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">&quot;project = %s AND resolution = Unresolved ORDER BY priority DESC&quot;</span><span class="p">,</span> <span class="n">userConfig</span><span class="p">.</span><span class="n">Project</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">fields</span> <span class="p">:=</span> <span class="p">[]</span><span class="nb">string</span><span class="p">{</span><span class="s">&quot;summary&quot;</span><span class="p">,</span> <span class="s">&quot;key&quot;</span><span class="p">,</span> <span class="s">&quot;status&quot;</span><span class="p">,</span> <span class="s">&quot;assignee&quot;</span><span class="p">,</span> <span class="s">&quot;description&quot;</span><span class="p">,</span> <span class="s">&quot;issuetype&quot;</span><span class="p">,</span> <span class="s">&quot;created&quot;</span><span class="p">}</span>
+</span><span class='line'>  <span class="n">jsonStr</span><span class="p">,</span> <span class="n">_</span> <span class="p">:=</span> <span class="n">json</span><span class="p">.</span><span class="n">Marshal</span><span class="p">(</span><span class="n">JiraSearchRequest</span><span class="p">{</span><span class="n">query</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fields</span><span class="p">})</span>
+</span><span class='line'>  <span class="n">responseChannel</span> <span class="p">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="n">JiraSearchResponse</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">hystrix</span><span class="p">.</span><span class="n">ConfigureCommand</span><span class="p">(</span><span class="s">&quot;Get all Issues&quot;</span><span class="p">,</span> <span class="n">hystrix</span><span class="p">.</span><span class="n">CommandConfig</span><span class="p">{</span><span class="n">Timeout</span><span class="p">:</span> <span class="mi">2000</span><span class="p">})</span>
+</span><span class='line'>  <span class="n">hystrix</span><span class="p">.</span><span class="n">Go</span><span class="p">(</span><span class="s">&quot;Get all Issues&quot;</span><span class="p">,</span> <span class="k">func</span><span class="p">()</span> <span class="n">error</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">body</span> <span class="p">:=</span> <span class="n">httpRequest</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s">&quot;POST&quot;</span><span class="p">,</span> <span class="n">jsonStr</span><span class="p">,</span> <span class="n">userConfig</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">var</span> <span class="n">searchRes</span> <span class="n">JiraSearchResponse</span>
+</span><span class='line'>      <span class="n">json</span><span class="p">.</span><span class="n">Unmarshal</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="p">&amp;</span><span class="n">searchRes</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">responseChannel</span> <span class="p">&lt;-</span> <span class="n">searchRes</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">nil</span>
+</span><span class='line'>  <span class="p">},</span> <span class="k">func</span><span class="p">(</span><span class="n">err</span> <span class="n">error</span><span class="p">)</span> <span class="n">error</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">var</span> <span class="n">searchRes</span> <span class="n">JiraSearchResponse</span>
+</span><span class='line'>      <span class="n">responseChannel</span> <span class="p">&lt;-</span> <span class="n">searchRes</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">nil</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">&lt;-</span><span class="n">responseChannel</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, I&#8217;ve also specified that the &#8220;Get all Issues&#8221; keyed function will trigger a timeout after 2 seconds. My normal logic leveraging an HTTP <code>GET</code> is placed inside the first anonymous function and my fallback logic is placed in the second. This fallback logic simply returns an empty response so as not to completely affect downstream services relying on some sort of response. That is, if JIRA is slow, down, or just not responding, rather than a panic being generated, an empty response is returned. This ostensibly prohibits a cascading error chain.</p>
+
+<p>Of course, my fallback code could do other logic, if deemed necessary; what&#8217;s more, my fallback code can detect the type of error generated. For instance, my fallback code could react differently in the case of a timeout as opposed to a concurrency issue. The <code>error</code> object passed into the fallback function can be queried easily enough: <code>if err.Error() == "max concurrency"</code>.</p>
+
+<p><a href="http://techblog.netflix.com/2012/02/fault-tolerance-in-high-volume.html">Netflix has seen success with Hystrix</a> in a large volume, highly distributed system. If you want to build tolerance into any Go services, then I can&#8217;t recommend hystrix-go enough: it&#8217;s super easy to set up and use.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[SpringOne2GX 2014 Keynote]]></title>
@@ -1892,36 +2066,6 @@ what ever you mounted (i.e <code>/dev/xvdf</code>), the mount point will be the 
 <p>Note, if upon the receive of a message, Moo notices that a message has been waiting in a queue for more than the max queue wait time threshold configured for an associated <code>QueueWaitTimeCallback</code>, Moo will invoke it. Note, Moo can invoke more than one instance; thus, you can set up a chain to take various actions as times increase.</p>
 
 <p>Remember, a queue&#8217;s length is usually a lagging indicator.  The metric that actually means something is how long a message resides in a queue. That&#8217;s an actionable metric and <a href="https://github.com/aglover/moo">Moo</a> gives you the ability to do something about it! Can you dig it?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The significance of HTML5]]></title>
-    <link href="http://thediscoblog.com/blog/2013/10/05/the-significance-of-html5/"/>
-    <updated>2013-10-05T21:18:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/10/05/the-significance-of-html5</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/no-flash.jpg"><a href="http://thediscoblog.com/blog/categories/html5/">HTML5</a> is important for three reasons. And its importance starts with the end of browser plugins. That&#8217;s right. With HTML5, rich media aspects that were formally handled by plugins (think Flash), are now built-in. That&#8217;s why there are <a href="http://www.w3schools.com/html/html5_new_elements.asp">new media tags</a> like <code>&lt;audio&gt;</code> and <code>&lt;video&gt;</code>.</p>
-
-<p>Think about it for a second &#8211; when&#8217;s the last time you visited a site on your tablet that asked you to install a plugin? Never.</p>
-
-<p>That&#8217;s also why some older plugin laden sites do not work on your mobile device. Remember the whole &#8221;<a href="http://www.apple.com/hotnews/thoughts-on-flash/">Steve Jobs no flash</a>&#8221; kerfuffle years ago? Yep, Mr. Jobs was adamant that the iPhone would support HTML5 and not fall into the plugin trap. Incidentally, Google and other major vendors have since followed suit. <a href="http://en.wikipedia.org/wiki/HTML5">HTML5 has the support of all major browser vendors now</a> &#8211; Apple, Google, Firefox, Opera, and yes, even Microsoft.</p>
-
-<!-- more -->
-
-
-<p></p>
-
-<p><img class="left" src="http://thediscoblog.com/images/mine/alotofdevices.jpg">HTML5 is important because now that <a href="http://thediscoblog.com/blog/2012/12/02/comprehending-the-mobile-development-landscape/">all major vendors support it</a> &#8211; including those in the mobile space &#8211; you get a universal experience across a wide spectrum of devices. While particular features of HTML5 might <a href="http://thediscoblog.com/blog/2012/09/24/a-tale-of-three-browsers/">vary by device platform</a>, there are enough common ground features to build a compelling web app that looks and feels similar across the gamut of devices.</p>
-
-<p>And as HTML5 <a href="http://thediscoblog.com/blog/2013/04/05/crowd-think-often-lacks-clarity/">continues to evolve</a>, the differences between various implementations should narrow. Accordingly, with HTML5, you get device ubiquity. You get a chance to build something once and have it work across a wide spectrum of browsers.</p>
-
-<p>What&#8217;s more, while the mobile market is still dominated by Apple and Google, as other players, <a href="http://thediscoblog.com/blog/2013/09/09/8-percent-is-itty-bitty-but-it-matters/">like Microsoft</a>, begin to establish a beachhead, app developers will have to contend with more than two platforms. For a variety of apps, like those being built for the enterprise, the promise of HTML5&#8217;s device ubiquity starts to become quite appealing &#8211; after all, building an app once, as <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">opposed to three or more times</a>, is less expensive.</p>
-
-<p><img class="right" src="http://thediscoblog.com/images/mine/amazonappstore.jpg">Finally, HTML5 is important because <a href="http://thediscoblog.com/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">Amazon recently announced support for HTML5</a> apps in their App Store for Android. Previous to this announcement, pure HTML5 apps had no real mass distribution model. HTML5 app developers relied on a search engine, while native app developers have a direct channel to consumers that cuts through a lot of noise and makes it easy to find specific apps.</p>
-
-<p>Consequently, a lot of HTML5 apps ended up being <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">wrapped in native code</a> so as to get a chance to compete in the app stores. Amazon&#8217;s support of HTML5 is a much needed <a href="http://thediscoblog.com/blog/2013/03/04/its-a-question-of-wow/">shot-in-the-arm for HTML5</a> because it means a direct channel to mass consumers; what&#8217;s more, Amazon also is offering a chance to monetize HTML5 apps <a href="https://developer.amazon.com/sdk/webapps/iap/understanding.html">via a JavaScript In-App purchase API</a>. While Amazon isn&#8217;t the first In-App purchase API for HTML5, it&#8217;s the first one linked to a major e-commerce platform and mass consumer channel.</p>
-
-<p>HTML5 is by no means a silver bullet for mobile app development. There&#8217;s a time and a place for HTML5 apps, just as there&#8217;s still a need to create native apps. Nevertheless, HTML5 continues to gain favor as app stores (like Amazon&#8217;s App store for Android) begin to distribute HTML5 apps and other platforms begin to capture market share.</p>
 ]]></content>
   </entry>
   
