@@ -3,7 +3,7 @@ layout: post
 title: "Continuous Delivery for Heroku with Jenkins"
 date: 2014-01-24 20:43
 comments: true
-categories: [Git, Heroku, DevOps, cloud, Continuous Integration]
+categories: [Git, Heroku, DevOps, cloud, Continuous Integration, Continuous Delivery]
 ---
 
 {% img left /images/mine/jenkins.png %}A [continuous delivery pipeline](http://thediscoblog.com/blog/categories/devops/) that leverages [Jenkins](http://jenkins-ci.org/) and targets [Heroku](http://heroku.com/) is fairly simple to set up, provided you install the Jenkins Git plugin. With this pipeline, changes to a specific Git branch will result in a Heroku deployment. 
