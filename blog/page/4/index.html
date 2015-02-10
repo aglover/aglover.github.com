@@ -11,7 +11,7 @@
   
   <meta name="description" content="Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code.">
   
-  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, Continuous Integration, CoffeScript, Docker, Go, "/>
+  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, Continuous Integration, CoffeScript, Docker, Go, Continuous Delivery, "/>
 
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +81,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">Why Amazon Appstore&#8217;s Support of HTML5 Matters</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-07T21:09:00-07:00" pubdate data-updated="true">Aug 7<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/content/sdk/images/webapps_icon-final-114._V379662584_.png">Today, Amazon announced that their <a href="http://www.amazon.com/mobile-apps/b?ie=UTF8&amp;node=2350149011">Appstore for Android</a> <a href="https://developer.amazon.com/post/Tx2HGWRGOW5YG8/Amazon-is-Now-Accepting-HTML5-Web-Apps-Making-it-Easy-for-You-to-Reach-Millions.html">now supports the submission of HTML5 apps</a>. This is a game changer for <a href="http://en.wikipedia.org/wiki/HTML5">HTML5</a> because now there is a direct channel to consumers.</p>
+
+<p>As I wrote almost a year ago:</p>
+
+<blockquote><p>software delivery on the mobile platform is, at least for the foreseeable future, firmly established via app stores. And app stores cater to native apps (100% native and/or hybrid) only. The average person will not look for useful apps via their device’s browser: that route is still a jungle. And, at this point, there is no viable pure play mobile web app delivery channel.</p><footer><strong>thediscoblog.com</strong> <cite><a href='http://thediscoblog.com/blog/2012/09/07/past-performance-is-no-guarantee-of-future-results/'>Past Performance Is No Guarantee of Future Results</a></cite></footer></blockquote>
+
+
+<p>Today, it&#8217;s still true that the most convenient mechanism  for app delivery on mobile devices (and increasingly desktops) is via various app stores. And until today, HTML5 apps were not included in these app stores (unless they were wrapped by some hybrid-web container like <a href="http://thediscoblog.com/blog/2013/04/14/hybrid-inappropriateness/">PhoneGap</a>).</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/08/07/why-amazon-appstores-support-of-html5-matters/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -479,68 +529,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/06/12/lickety-split-custom-validations-in-rails/">Lickety-split Custom Validations in Rails</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-12T13:19:00-07:00" pubdate data-updated="true">Jun 12<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Have a highly specific, yet custom validation for a particular field on one of your <a href="http://thediscoblog.com/blog/categories/rails/">Rails</a> model objects? Don&#8217;t want to create a <code>ActiveModel::Validator</code> type? Not a problem!</p>
-
-<p>You can just as easily <a href="http://guides.rubyonrails.org/active_record_validations_callbacks.html">create a method</a> that can be invoked as part of the validation process. For example, imagine a field dubbed <code>uri</code> in some model object; this field must begin with a protocol (i.e. http or https). You can create a validation method like so:</p>
-
-<figure class='code'><figcaption><span>Custom validator</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">uri_should_start_with_protocol</span>
-</span><span class='line'>  <span class="k">if</span> <span class="o">!</span><span class="n">uri</span><span class="o">.</span><span class="n">start_with?</span><span class="p">(</span><span class="s1">&#39;http://&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">uri</span><span class="o">.</span><span class="n">start_with?</span><span class="p">(</span><span class="s1">&#39;https://&#39;</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:uri</span><span class="p">,</span> <span class="s1">&#39;Web Address should start with http:// or https://&#39;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This method resides in your model. You can then register this method as a validation for your model like so:</p>
-
-<figure class='code'><figcaption><span>Wiring the validation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">validate</span> <span class="ss">:uri_should_start_with_protocol</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now if the <code>uri</code> field doesn&#8217;t contain http or https, <code>model.save</code> will return <code>false</code>. Done!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -561,6 +549,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/02/09/global-continuous-delivery-talk-at-e4e/">Global Continuous Delivery talk at E4E</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/02/07/fault-tolerance-in-go/">Fault tolerance in Go</a>
       </li>
     
@@ -574,10 +566,6 @@
     
       <li class="post">
         <a href="/blog/2014/12/20/batten-down-those-npm-dependency-hatches/">Batten down those Node dependency hatches</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/">Docker containers with Gradle in 4 steps</a>
       </li>
     
   </ul>

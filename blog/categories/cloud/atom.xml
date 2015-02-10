@@ -4,7 +4,7 @@
   <title><![CDATA[Category: cloud | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/cloud/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2015-02-07T11:31:20-08:00</updated>
+  <updated>2015-02-09T18:33:23-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Global Continuous Delivery talk at E4E]]></title>
+    <link href="http://thediscoblog.com/blog/2015/02/09/global-continuous-delivery-talk-at-e4e/"/>
+    <updated>2015-02-09T18:28:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2015/02/09/global-continuous-delivery-talk-at-e4e</id>
+    <content type="html"><![CDATA[<p>Back in September of last year, <a href="http://www.engineers4engineers.org/speakers#glover">I had the pleasure</a> of giving a talk about Netflix's Continuous Delivery pipelines at <a href="http://www.engineers4engineers.org/">Constant Contact's 2nd annual Engineers4Engineers Conference</a> in Waltham, MA. It's a fabulous conference and definitely worth attending if you're local to the Boston area.</p>
+
+<!-- more -->
+
+
+<p>My session examines the Netflix Continuous Delivery model and provides insights that you can leverage in your own Continuous Delivery processes.</p>
+
+<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/C4klcuIgrRw "></iframe></div></p>
+
+<p></p>
+
+
+<p>Take a look and see what you think!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Continuous Delivery for Heroku with Jenkins]]></title>

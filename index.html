@@ -11,7 +11,7 @@
   
   <meta name="description" content="Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code.">
   
-  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, Continuous Integration, CoffeScript, Docker, Go, "/>
+  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, Continuous Integration, CoffeScript, Docker, Go, Continuous Delivery, "/>
 
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +81,49 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2015/02/09/global-continuous-delivery-talk-at-e4e/">Global Continuous Delivery Talk at E4E</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-09T18:28:00-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Back in September of last year, <a href="http://www.engineers4engineers.org/speakers#glover">I had the pleasure</a> of giving a talk about Netflix&#8217;s Continuous Delivery pipelines at <a href="http://www.engineers4engineers.org/">Constant Contact&#8217;s 2nd annual Engineers4Engineers Conference</a> in Waltham, MA. It&#8217;s a fabulous conference and definitely worth attending if you&#8217;re local to the Boston area.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/02/09/global-continuous-delivery-talk-at-e4e/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -495,68 +538,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/02/12/ahoy-there-maven-central/">Ahoy There Maven Central</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-12T20:54:00-08:00" pubdate data-updated="true">Feb 12<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous <a href="http://thediscoblog.com/blog/categories/sqs/">SQS</a> adapter for <a href="http://thediscoblog.com/blog/categories/aws/">AWS&#8217;s Java SQS library</a>, is now syncing with Maven Central. This means you can easily use Ahoy! in your Maven or Gradle builds.</p>
-
-<p>For example, if you want to <a href="http://thediscoblog.com/blog/2013/09/29/ahoy-there-callbacks/">spice up your SQS</a> and you use Maven, just add the following dependency for your <code>pom.xml</code> file and you&#8217;ll be rockin&#8217; it in no time, baby!</p>
-
-<figure class='code'><figcaption><span>Including Ahoy! into your Maven pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;groupId&gt;</span>com.github.aglover<span class="nt">&lt;/groupId&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;artifactId&gt;</span>ahoy<span class="nt">&lt;/artifactId&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;version&gt;</span>1.0.1<span class="nt">&lt;/version&gt;</span>
-</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You don&#8217;t use Maven? But rather use Gradle? I&#8217;ve got you covered!</p>
-
-<figure class='code'><figcaption><span>Adding Ahoy! into your Gradle build.gradle file</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">compile</span> <span class="s1">&#39;com.github.aglover:ahoy:1.0.1&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Check out <a href="http://mvnrepository.com/artifact/com.github.aglover/ahoy">mvnrepository.com</a> for how to include Ahoy! into your SBT build or other dependency management tool like Ivy.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -575,6 +556,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/02/09/global-continuous-delivery-talk-at-e4e/">Global Continuous Delivery talk at E4E</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/02/07/fault-tolerance-in-go/">Fault tolerance in Go</a>
       </li>
     
@@ -588,10 +573,6 @@
     
       <li class="post">
         <a href="/blog/2014/12/20/batten-down-those-npm-dependency-hatches/">Batten down those Node dependency hatches</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/13/docker-containers-with-gradle-in-4-steps/">Docker containers with Gradle in 4 steps</a>
       </li>
     
   </ul>
