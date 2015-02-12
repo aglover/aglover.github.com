@@ -6,7 +6,7 @@ comments: true
 categories: [Go, Java]
 ---
 
-{% img right /images/mine/hystrix.png %}In distributed systems, failure is inevitable. Eventually, some service will become bogged down and consequently won't respond quickly enough or, worse, a service will simply die. Services relying on a degraded (or dead!) service will naturally become affected and potentially cascade instability throughout the system, unless all services are properly built with isolation and in mind. 
+{% img right /images/mine/hystrix.png %}In distributed systems, failure is inevitable. Eventually, some service will become bogged down and consequently won't respond quickly enough or, worse, a service will simply die. Services relying on a degraded (or dead!) service will naturally become affected and potentially cascade instability throughout the system, unless all services are properly built with isolation in mind. 
 
 <!-- more --> 
 
