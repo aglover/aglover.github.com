@@ -4,7 +4,7 @@
   <title><![CDATA[The Disco Blog]]></title>
   <link href="http://thediscoblog.com/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2015-02-09T18:33:23-08:00</updated>
+  <updated>2017-01-03T16:07:51-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Spinnaker at AWS re:Invent 2016]]></title>
+    <link href="http://thediscoblog.com/blog/2017/01/03/spinnaker-at-aws-re-invent-2016/"/>
+    <updated>2017-01-03T15:49:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2017/01/03/spinnaker-at-aws-re-invent-2016</id>
+    <content type="html"><![CDATA[<p>I recently had the pleasure of speaking at <a href="https://reinvent.awsevents.com/">AWS re:Invent 2016</a>. I gave a presentation entitled &#8221;<a href="https://www.youtube.com/watch?v=1HiilTXQo4w">Multi-Region Delivery Netflix Style</a>&#8221; in which I elaborated how Netflix confidently delivers services on a global scale.</p>
+
+<!-- more -->
+
+
+<p>Specifically, my session expounds upon the many lessons <a href="http://techblog.netflix.com/2016/11/netflix-at-aws-reinvent-2016.html">Netflix</a> has learned regarding how to safely <em>and reliably</em> deploy 4,000 times a day with <a href="http://www.spinnaker.io/">Spinnaker</a>. As the abstract for the talk states:</p>
+
+<blockquote><p>Netflix rapidly deploys services across multiple AWS accounts and regions over 4,000 times a day. We&#8217;ve learned many lessons about reliability and efficiency. What&#8217;s more, we&#8217;ve built sophisticated tooling to facilitate our growing global footprint. In this session, you&#8217;ll learn about how Netflix confidently delivers services on a global scale and how, using best practices combined with freely available open source software, you can do the same.</p></blockquote>
+
+
+<p>You can watch the talk in its entirety as AWS was kind enough to publish all talks via YouTube!</p>
+
+<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/1HiilTXQo4w "></iframe></div>
+
+
+
+
+<p></p>
+
+
+<p>Thank you to <a href="https://kkc.github.io/2016/12/13/reinvent-netflix-multiregion-deployment/">everyone who attended</a> and all the <a href="https://www.linkedin.com/pulse/aws-reinvent-2016-notes-alexander-popov">great feedback you provided</a>!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Global Continuous Delivery talk at E4E]]></title>
@@ -1885,81 +1914,6 @@ which ostensibly updates your local directory with all <a href="http://thediscob
 
 
 <p>Vagrant makes it super easy to fire up localized development environments &#8211; Vagrant instances boot up faster than EC2 instances and they&#8217;re free. And now you know how to use normal SSH to connect to them. Can you dig it?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[AWS EBS in 4 steps]]></title>
-    <link href="http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps/"/>
-    <updated>2013-10-12T17:47:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/10/12/aws-ebs-in-4-steps</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://thediscoblog.com/images/mine/4fingers.jpg">When you fire up an AWS AMI, you are given a small partition of disk space that survives reboots. For example, the base <a href="https://github.com/aglover/ubuntu-equip">Ubuntu AMI</a> I tend to favor comes with an 8GB primary partition; however, 8GB is often not enough, especially if you&#8217;re running a database or something that requires a lot of disk space.</p>
-
-<p>If you poke around on an AMI instance, you&#8217;ll notice some AMI instances will have additional partitions and in many cases, these partitions will be huge; nevertheless, they&#8217;re transient and any data on those disks will disappear after a reboot.</p>
-
-<p>Accordingly, if you need to gain some more permanent space on an AMI instance, you&#8217;ll need to leverage an <a href="http://aws.amazon.com/ebs/">Elastic Block Store (or EBS)</a>, which is basically a permanent hard disk that you can attach to a running AMI instance. The data on an EBS will survive a reboot.</p>
-
-<!-- more -->
-
-
-<p>Attaching an <a href="http://aws.amazon.com/articles/1667">EBS is super simple</a> and can be done in 4 steps. These steps assume you&#8217;ve got a running AMI; accordingly, if you don&#8217;t have one up and running, go ahead and do that first. Finally, these instructions are for Linix/Unix systems.</p>
-
-<p>First, you&#8217;ll need to create an EBS volume in the same zone as the AMI instance. In my case, the instance I&#8217;d like to augment with a beefy hard drive resides in us-east-1b. What&#8217;s more, you&#8217;ll need to configure how much space you&#8217;ll want &#8211; you can also select if you&#8217;d like to have <a href="http://aws.amazon.com/about-aws/whats-new/2012/07/31/announcing-provisioned-iops-for-amazon-ebs/">provisioned IOPS</a> &#8211; this is a high performance I/O feature of AWS and is intended for databases.</p>
-
-<p><img class="center" src="http://thediscoblog.com/images/mine/ebs1.png"></p>
-
-<p>Once the EBS is created, you&#8217;ll need to <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html">attach it</a> to your running AMI &#8211; you can do this by right clicking on the EBS in the AWS Management Console and selecting Attach Volume. You&#8217;ll need to pick your instance from a drop down. Once you&#8217;ve picked your instance, AWS will suggest a Device &#8211; I suggest you keep it. Click the &#8220;Yes, Attach&#8221; button.</p>
-
-<p><img class="center" src="http://thediscoblog.com/images/mine/ebs2.png"></p>
-
-<p>SSH onto your running instance and take a peek at the <code>/proc/partitions</code> file &#8211; you should see at least 2 partitions with your newly attached one on the bottom.  The blocks are listed in kilobytes and pay special attention to the name &#8211; you&#8217;ll need it for the next few steps.</p>
-
-<figure class='code'><figcaption><span>The contents of /proc/partitions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>ubuntu@ip-10-194-97-73:~<span class="nv">$ </span>cat /proc/partitions
-</span><span class='line'>major minor  <span class="c">#blocks  name</span>
-</span><span class='line'>
-</span><span class='line'> 202        1    8388608 xvda1
-</span><span class='line'> 202       80    8388608 xvdf
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see above, there is an 8GB EBS volume named <code>xvdf</code> in the <code>partitions</code> file.</p>
-
-<p>Next, you&#8217;ll want to format the volume &#8211; I&#8217;m going to format the EBS volume as ext4. The command to do this is:</p>
-
-<figure class='code'><figcaption><span>Foratting an EBS volume</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mke2fs -F -t ext4 /dev/xvdf
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now that the volume is formatted, I can mount it &#8211; I&#8217;m going to mount it to a directory called <code>/ebs</code>; accordingly, I need to create the <code>/ebs</code> directory and then mount the <code>xvdf</code> device like so:</p>
-
-<figure class='code'><figcaption><span>Creating and mounting the device to the ebs directory</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mkdir /ebs
-</span><span class='line'>sudo mount /dev/xvdf /ebs
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>At this point, you are 98% done; however, the volume will not be reattached if this instance is rebooted.</p>
-
-<p>To make this EBS volume automatically reattach after a reboot, you&#8217;ll need to add it to the <code>fstab</code> file (it&#8217;s in the <code>/etc</code> directory). When you edit that file, the file system will be
-what ever you mounted (i.e <code>/dev/xvdf</code>), the mount point will be the directory you mounted it to &#8211; in my case, it&#8217;s <code>/ebs</code>. The type will be ext4 (if you formatted it that way) and for options, put default. The last two values can be 0 as well.</p>
-
-<p>If you need to remove your EBS volume, on the attached instance, run</p>
-
-<figure class='code'><figcaption><span>Unmounting a device</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo umount -d /dev/xvdf
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And then go into the AWS Management Console, find your EBS volume, right click on it and select detach volume.</p>
-
-<p>That&#8217;s it &#8211; you&#8217;re done! You&#8217;ve got a permanent store. In 4 steps, you&#8217;ve created an EBS volume, attached it to a running AMI, formatted and mounted it. And you&#8217;ve made it attach automatically after a reboot.  Can you dig it?</p>
 ]]></content>
   </entry>
   

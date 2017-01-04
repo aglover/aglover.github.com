@@ -4,7 +4,7 @@
   <title><![CDATA[Category: DevOps | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2015-02-09T18:33:23-08:00</updated>
+  <updated>2017-01-03T16:07:51-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Spinnaker at AWS re:Invent 2016]]></title>
+    <link href="http://thediscoblog.com/blog/2017/01/03/spinnaker-at-aws-re-invent-2016/"/>
+    <updated>2017-01-03T15:49:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2017/01/03/spinnaker-at-aws-re-invent-2016</id>
+    <content type="html"><![CDATA[<p>I recently had the pleasure of speaking at <a href="https://reinvent.awsevents.com/">AWS re:Invent 2016</a>. I gave a presentation entitled "<a href="https://www.youtube.com/watch?v=1HiilTXQo4w">Multi-Region Delivery Netflix Style</a>" in which I elaborated how Netflix confidently delivers services on a global scale.</p>
+
+<!-- more -->
+
+
+<p>Specifically, my session expounds upon the many lessons <a href="http://techblog.netflix.com/2016/11/netflix-at-aws-reinvent-2016.html">Netflix</a> has learned regarding how to safely <em>and reliably</em> deploy 4,000 times a day with <a href="http://www.spinnaker.io/">Spinnaker</a>. As the abstract for the talk states:</p>
+
+<p><blockquote><p>Netflix rapidly deploys services across multiple AWS accounts and regions over 4,000 times a day. We've learned many lessons about reliability and efficiency. What's more, we've built sophisticated tooling to facilitate our growing global footprint. In this session, you'll learn about how Netflix confidently delivers services on a global scale and how, using best practices combined with freely available open source software, you can do the same.</p></blockquote></p>
+
+<p>You can watch the talk in its entirety as AWS was kind enough to publish all talks via YouTube!</p>
+
+<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/1HiilTXQo4w "></iframe></div></p>
+
+<p></p>
+
+
+<p>Thank you to <a href="https://kkc.github.io/2016/12/13/reinvent-netflix-multiregion-deployment/">everyone who attended</a> and all the <a href="https://www.linkedin.com/pulse/aws-reinvent-2016-notes-alexander-popov">great feedback you provided</a>!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Global Continuous Delivery talk at E4E]]></title>
@@ -422,42 +447,6 @@ $ docker pull aglover/dynamodb-pier
 <p>Think of <code>pull</code>ing as simply downloading and registering a Docker. To use a 'pull'ed Docker, you must still execute the <code>run</code> command.</p>
 
 <p>Docker makes it super easy to distribute pre-packaged applications -- rather than installing various binaries on different operating systems (like MongoDB on OSX for development and <em>a different</em> MongoDB binary on Ubuntu for production), you can use the <em>same</em> package across environments. <code>Dockerfile</code>s make creating Dockers repeatable. And hopefully I've shown you that crafting a <code>Dockerfile</code> isn't terribly difficult.  Go forth and Docker.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Continuous Delivery for Heroku with Jenkins]]></title>
-    <link href="http://thediscoblog.com/blog/2014/01/24/continuous-delivery-for-heroku-with-jenkins/"/>
-    <updated>2014-01-24T20:43:00-08:00</updated>
-    <id>http://thediscoblog.com/blog/2014/01/24/continuous-delivery-for-heroku-with-jenkins</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/jenkins.png">A <a href="http://thediscoblog.com/blog/categories/devops/">continuous delivery pipeline</a> that leverages <a href="http://jenkins-ci.org/">Jenkins</a> and targets <a href="http://heroku.com/">Heroku</a> is fairly simple to set up, provided you install the Jenkins Git plugin. With this pipeline, changes to a specific Git branch will result in a Heroku deployment.</p>
-
-<p>For this deployment process to work nicely, you should use at least two Git branches, as you'll want to have one branch targeted for auto-deploys and another that doesn't (as it represents active development).  For example, following the <a href="http://nvie.com/posts/a-successful-git-branching-model/">git-flow</a> convention, those two branches could be named <code>development</code> and <code>master</code>, where changes to <code>master</code> are deployed to Heroku and changes to <code>development</code> aren't. Thus, you will have at least two Jenkins jobs that monitor <em>each</em> of these branches.</p>
-
-<!-- more -->
-
-
-<p>Naturally, this pipeline process is language agnostic -- <a href="http://thediscoblog.com/blog/categories/node/">Node</a>, <a href="http://thediscoblog.com/blog/categories/ruby/">Ruby</a>, <a href="http://thediscoblog.com/blog/categories/java/">Java</a> -- it doesn't matter what you do during your build as this entire process is choreographed via Git.</p>
-
-<p>When approaching Heroku auto-deployment from Jenkins, <em>don't bother with Heroku's API</em> because it's much easier to use the Git publisher feature of Jenkins to push a branch from your repository to Heroku (which uses Git anyway).</p>
-
-<p>At a high level, you'll need to define a Jenkins job that monitors your <code>master</code> Git branch; if there are changes, this job will run whatever your build needs to do and as a post-build step you can publish that branch to Heroku. It's that easy.</p>
-
-<p>To configure this pipeline, you will need the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin">Git plugin</a>. With the Git plugin installed, create a job and in the Source Code management section, add your source Git repository and then add another repository which is the Heroku remote repository.</p>
-
-<p><img class="center" src="/images/mine/scm-jenkins1.png"></p>
-
-<p>Be sure to give the Heroku repository a name like <code>heroku</code>. This is done by clicking the Advanced button under the Credentials section.</p>
-
-<p>Second, in the Post-build Actions section, you'll configure a Git Publisher.</p>
-
-<p><img class="center" src="/images/mine/git-pub.png"></p>
-
-<p>In this case, the Git repository you are going to publish to will be the Heroku one defined earlier.  Hit the Add Branch button and be sure to indicate the <code>master</code> branch as the Branch to push and the Target remote name should be the name your gave to the remote Heroku repository in the Source Code Management section (i.e. <code>heroku</code>).</p>
-
-<p><img class="center" src="/images/mine/scm-jenkins2.png"></p>
-
-<p>Depending on how you've set up your Build Trigger on your job, when a build completes, Jenkins will push the resultant snapshot to the Heroku repository, <a href="http://stackoverflow.com/questions/16840196/tutorial-on-pushing-to-heroku-via-jenkins/20828183#20828183">resulting in a deployment</a>! Now wasn't that easy, man?</p>
 ]]></content>
   </entry>
   

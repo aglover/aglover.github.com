@@ -11,7 +11,7 @@
   
   <meta name="description" content="Technology observations, tutorials, and options from a disco lovin' cat who writes Ruby, Java, Node, and Objective-C code.">
   
-  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, Continuous Integration, CoffeScript, Docker, Go, Continuous Delivery, "/>
+  <meta name="keywords" content="Java, JavaScript, Node, Scala, mobile, Redis, MongoDB, Android, HTML5, iOS, CoffeeScript, Ruby, cloud, podcast, Rails, elasticsearch, Linux, OSX, AWS, Heroku, Objective-C, Mongoid, jQuery Mobile, TDD, SQS, DevOps, Ubuntu, Git, Continuous Delivery, Continuous Integration, CoffeScript, Docker, Go, Spinnaker, "/>
 
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +81,53 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/10/12/aws-ebs-in-4-steps/">AWS EBS in 4 Steps</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-12T17:47:00-07:00" pubdate data-updated="true">Oct 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/mine/4fingers.jpg">When you fire up an AWS AMI, you are given a small partition of disk space that survives reboots. For example, the base <a href="https://github.com/aglover/ubuntu-equip">Ubuntu AMI</a> I tend to favor comes with an 8GB primary partition; however, 8GB is often not enough, especially if you&#8217;re running a database or something that requires a lot of disk space.</p>
+
+<p>If you poke around on an AMI instance, you&#8217;ll notice some AMI instances will have additional partitions and in many cases, these partitions will be huge; nevertheless, they&#8217;re transient and any data on those disks will disappear after a reboot.</p>
+
+<p>Accordingly, if you need to gain some more permanent space on an AMI instance, you&#8217;ll need to leverage an <a href="http://aws.amazon.com/ebs/">Elastic Block Store (or EBS)</a>, which is basically a permanent hard disk that you can attach to a running AMI instance. The data on an EBS will survive a reboot.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/12/aws-ebs-in-4-steps/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -490,51 +537,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/08/13/whiskered-node-views/">Whiskered Node Views</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-13T12:00:00-07:00" pubdate data-updated="true">Aug 13<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img class="right" src="/images/mine/mustache_template.png">As we draw closer to the glorious month of <a href="http://us.movember.com/">Movember</a>, I find myself pondering the <a href="http://paularmstrong.github.io/node-templates/">myriad template engines</a> available for Node apps. The most popular is still probably <a href="http://jade-lang.com/">Jade</a> as its syntax is <a href="http://haml.info/">Haml</a>-like and results in quite clean views, lacking in HTMLish clutter.</p>
-
-<p>While Jade is handy, it takes some time to get used to. Plus, if you find yourself working with a UI person who prefers to speak in HTML, you&#8217;ll find yourself translating between HTML and Jade (which isn&#8217;t that hard with web apps like <a href="http://html2jade.aaron-powell.com/">HTML2Jade</a>, but nevertheless involves an extra <em>translation</em> step).</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/08/13/whiskered-node-views/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -555,6 +557,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2017/01/03/spinnaker-at-aws-re-invent-2016/">Spinnaker at AWS re:Invent 2016</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/02/09/global-continuous-delivery-talk-at-e4e/">Global Continuous Delivery talk at E4E</a>
       </li>
     
@@ -568,10 +574,6 @@
     
       <li class="post">
         <a href="/blog/2014/12/30/continuous-integration-is-a-hack/">Continuous Integration is a hack!</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/20/batten-down-those-npm-dependency-hatches/">Batten down those Node dependency hatches</a>
       </li>
     
   </ul>
@@ -617,7 +619,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Andrew Glover -
+  Copyright &copy; 2017 - Andrew Glover -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

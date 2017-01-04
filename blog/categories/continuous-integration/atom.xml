@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Continuous Integration | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/continuous-integration/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2015-02-09T18:33:23-08:00</updated>
+  <updated>2017-01-03T16:07:51-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Spinnaker at AWS re:Invent 2016]]></title>
+    <link href="http://thediscoblog.com/blog/2017/01/03/spinnaker-at-aws-re-invent-2016/"/>
+    <updated>2017-01-03T15:49:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2017/01/03/spinnaker-at-aws-re-invent-2016</id>
+    <content type="html"><![CDATA[<p>I recently had the pleasure of speaking at <a href="https://reinvent.awsevents.com/">AWS re:Invent 2016</a>. I gave a presentation entitled "<a href="https://www.youtube.com/watch?v=1HiilTXQo4w">Multi-Region Delivery Netflix Style</a>" in which I elaborated how Netflix confidently delivers services on a global scale.</p>
+
+<!-- more -->
+
+
+<p>Specifically, my session expounds upon the many lessons <a href="http://techblog.netflix.com/2016/11/netflix-at-aws-reinvent-2016.html">Netflix</a> has learned regarding how to safely <em>and reliably</em> deploy 4,000 times a day with <a href="http://www.spinnaker.io/">Spinnaker</a>. As the abstract for the talk states:</p>
+
+<p><blockquote><p>Netflix rapidly deploys services across multiple AWS accounts and regions over 4,000 times a day. We've learned many lessons about reliability and efficiency. What's more, we've built sophisticated tooling to facilitate our growing global footprint. In this session, you'll learn about how Netflix confidently delivers services on a global scale and how, using best practices combined with freely available open source software, you can do the same.</p></blockquote></p>
+
+<p>You can watch the talk in its entirety as AWS was kind enough to publish all talks via YouTube!</p>
+
+<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/1HiilTXQo4w "></iframe></div></p>
+
+<p></p>
+
+
+<p>Thank you to <a href="https://kkc.github.io/2016/12/13/reinvent-netflix-multiregion-deployment/">everyone who attended</a> and all the <a href="https://www.linkedin.com/pulse/aws-reinvent-2016-notes-alexander-popov">great feedback you provided</a>!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Global Continuous Delivery talk at E4E]]></title>

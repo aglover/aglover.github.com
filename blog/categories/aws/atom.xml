@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AWS | The Disco Blog]]></title>
   <link href="http://thediscoblog.com/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://thediscoblog.com/"/>
-  <updated>2015-02-09T18:33:23-08:00</updated>
+  <updated>2017-01-03T16:07:51-08:00</updated>
   <id>http://thediscoblog.com/</id>
   <author>
     <name><![CDATA[Andrew Glover]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Spinnaker at AWS re:Invent 2016]]></title>
+    <link href="http://thediscoblog.com/blog/2017/01/03/spinnaker-at-aws-re-invent-2016/"/>
+    <updated>2017-01-03T15:49:00-08:00</updated>
+    <id>http://thediscoblog.com/blog/2017/01/03/spinnaker-at-aws-re-invent-2016</id>
+    <content type="html"><![CDATA[<p>I recently had the pleasure of speaking at <a href="https://reinvent.awsevents.com/">AWS re:Invent 2016</a>. I gave a presentation entitled "<a href="https://www.youtube.com/watch?v=1HiilTXQo4w">Multi-Region Delivery Netflix Style</a>" in which I elaborated how Netflix confidently delivers services on a global scale.</p>
+
+<!-- more -->
+
+
+<p>Specifically, my session expounds upon the many lessons <a href="http://techblog.netflix.com/2016/11/netflix-at-aws-reinvent-2016.html">Netflix</a> has learned regarding how to safely <em>and reliably</em> deploy 4,000 times a day with <a href="http://www.spinnaker.io/">Spinnaker</a>. As the abstract for the talk states:</p>
+
+<p><blockquote><p>Netflix rapidly deploys services across multiple AWS accounts and regions over 4,000 times a day. We've learned many lessons about reliability and efficiency. What's more, we've built sophisticated tooling to facilitate our growing global footprint. In this session, you'll learn about how Netflix confidently delivers services on a global scale and how, using best practices combined with freely available open source software, you can do the same.</p></blockquote></p>
+
+<p>You can watch the talk in its entirety as AWS was kind enough to publish all talks via YouTube!</p>
+
+<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/1HiilTXQo4w "></iframe></div></p>
+
+<p></p>
+
+
+<p>Thank you to <a href="https://kkc.github.io/2016/12/13/reinvent-netflix-multiregion-deployment/">everyone who attended</a> and all the <a href="https://www.linkedin.com/pulse/aws-reinvent-2016-notes-alexander-popov">great feedback you provided</a>!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Global Continuous Delivery talk at E4E]]></title>
@@ -274,121 +299,6 @@ sudo umount -d /dev/xvdf
 <p>And then go into the AWS Management Console, find your EBS volume, right click on it and select detach volume.</p>
 
 <p>That's it -- you're done! You've got a permanent store. In 4 steps, you've created an EBS volume, attached it to a running AMI, formatted and mounted it. And you've made it attach automatically after a reboot.  Can you dig it?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[All other metrics are useless]]></title>
-    <link href="http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless/"/>
-    <updated>2013-10-09T18:04:00-07:00</updated>
-    <id>http://thediscoblog.com/blog/2013/10/09/all-other-metrics-are-useless</id>
-    <content type="html"><![CDATA[<p><img class="left" src="/images/mine/time1.jpg">When it comes to queues, whether they're implemented as <a href="http://en.wikipedia.org/wiki/Java_Message_Service">JMS</a>, database tables (i.e. what Ruby's <a href="http://thediscoblog.com/blog/2013/06/10/backgrounding-tasks-in-heroku-with-delayed-job/">Delayed::Job</a> uses for a queue), or even <a href="http://aws.amazon.com/sqs/">Amazon's SQS</a>, the most common metric used to evaluate the state of a queue is its length. In essence, one derives an efficiency metric based upon how many messages are residing in a queue at any given time. If there are just a few messages, the queue is operating efficiently. If there are numerous messages, things are inefficient and alarms must be sounded.</p>
-
-<!-- more -->
-
-
-<p>But what if you're in a consistently busy environment with extreme bursts where queues have the tendency to rapidly fill up? If you have sufficient workers <em>already running</em> to handle that burst, do you need to fire up more?</p>
-
-<p>You can fire up more workers, but doing so might cost you. That is, you might have to provision new worker instances, such as <a href="https://devcenter.heroku.com/articles/dynos">Heroku worker dynos</a> or AWS AMIs, which will end up costing you tangible money. And sometimes those worker instances take a few moments to fire up and when they're operational, the burst of activity is over and the queue is back to normal -- the initially available workers handled the load adequately.</p>
-
-<p>It turns out that the queue's length was a lagging indicator. You spun up unneeded resources. False alarm!</p>
-
-<p>If you already have sufficient capacity to handle the influx of messages on a queue, then monitoring a queue's length isn't too helpful. In fact, it's a misleading metric and can cause you to take unneeded actions.</p>
-
-<p>Consequently, a queue's length <em>is not indicative of a system's efficiency</em> when there's already sufficient workers present. Rather, the metric that means something in a high capacity environment is <em>how long a message resides in a queue</em>. That is an actionable metric: if messages are stuck in a queue waiting to be processed then you need more processors!</p>
-
-<h2>Moo over queue length and let queue wait time in</h2>
-
-<p>By default, <a href="http://www.ibm.com/developerworks/library/j-javadev2-17/">Amazon's SQS</a> doesn't provide the ability to query how long a message has been residing in a queue. Therefore, <a href="https://github.com/aglover/moo">I wrote Moo</a>.</p>
-
-<p>Moo provides an interface for clients to obtain and take action on the message time in queue metric. This is done by augmenting an SQS message with a time stamp. That time stamp is then checked when a message is popped off of an SQS queue. If a threshold difference is exceed, then a callback is invoked.</p>
-
-<p>Users of Moo will find its usage similar to <a href="https://github.com/aglover/ahoy">Ahoy!</a>, which is an asynchronous callback oriented facade on top of <a href="http://aws.amazon.com/sdkforjava/">AWS's Java SDK</a>. In fact, Moo uses Ahoy! underneath, with the added feature of attaching a "maximum time in queue" asynchronous callback.</p>
-
-<p>Moo supports multiple time in queue thresholds and setting a maximum time in queue threshold is done like so:</p>
-
-<p>``` java Adding a maximum threshold for time in queue
-//adds a 1 second max threshold
-sqs.addQueueWaitTimeCallback(1000, new QueueWaitTimeCallback() {
-  public void onThresholdExceeded(long waitTime) {</p>
-
-<pre><code>//waitTime is the actual time in queue
-//do something... like fire off a web hook, etc
-</code></pre>
-
-<p>  }
-});
-```</p>
-
-<p>Note the <code>addQueueWaitTimeCallback</code> method takes a millisecond maximum time in queue value and an accompanying <code>QueueWaitTimeCallback</code> callback implementation. The <code>onThresholdExceeded</code> method will be invoked asynchronously during a message receive if the maximum threshold value is exceeded; what's more, the <code>onThresholdExceeded</code> will receive as a parameter the actual queue wait time.</p>
-
-<h4>Show me the Moo</h4>
-
-<p>To fire up an instance of Moo, you have a number of options, including configuring an instance of AWS's <code>AmazonSQS</code> or just passing along a key, secret, and queue name like so:</p>
-
-<p><code>
-SQS sqs = new SQS(System.getProperty("key"), System.getProperty("secret"), System.getProperty("queue"));
-</code></p>
-
-<p>Next, you can attach zero to many <code>QueueWaitTimeCallback</code> instances like so:</p>
-
-<p>```
-sqs.addQueueWaitTimeCallback(600000, new QueueWaitTimeCallback() {
-  public void onThresholdExceeded(long actualWaitTime) {</p>
-
-<pre><code>//do something -- fire off SNS message?
-</code></pre>
-
-<p>  }
-});
-```</p>
-
-<p>In this case, I've added a callback to be invoked if messages are in a queue longer than 10 minutes. Note, these <code>QueueWaitTimeCallback</code> callbacks are fired by the <em>queue reader</em> instance; accordingly, a <code>QueueWaitTimeCallback</code> can certainly fire up more instances of itself, for example.</p>
-
-<p>Here's a sample JSON document that you might want to throw onto an SQS queue:</p>
-
-<p>```
-{ "employees":[</p>
-
-<pre><code>  { "firstName":"John", "lastName":"Doe" },
-  { "firstName":"Anna", "lastName":"Smith" },
-  { "firstName":"Peter", "lastName":"Jones" }
-</code></pre>
-
-<p>]}
-```</p>
-
-<p>Sending and receiving this message are exactly like you'd do if you were using Ahoy!. For example, to send a message, just pass along a <code>String</code> to the <code>send</code> method:</p>
-
-<p>```
-sqs.send(json, new SendCallback() {
-  public void onSend(String messageId) {</p>
-
-<pre><code>//messageId is from SQS
-</code></pre>
-
-<p>  }
-});
-```</p>
-
-<p>Note, the <code>send</code> method takes an optional <code>SendCallback</code>.</p>
-
-<p>Receiving a message is via the <code>receive</code> method, which takes a mandatory <code>ReceiveCallback</code> -- this callback will be invoked asynchronously <em>for each</em> message received off of a queue. Each instance will receive the message placed upon the queue and the message's SQS id.</p>
-
-<p>```
-sqs.receive(new ReceiveCallback() {
-  public void onReceive(String messageId, String message) {</p>
-
-<pre><code>//do something w/the message -- in this case it's JSON
-</code></pre>
-
-<p>  }
-});
-```</p>
-
-<p>Note, if upon the receive of a message, Moo notices that a message has been waiting in a queue for more than the max queue wait time threshold configured for an associated <code>QueueWaitTimeCallback</code>, Moo will invoke it. Note, Moo can invoke more than one instance; thus, you can set up a chain to take various actions as times increase.</p>
-
-<p>Remember, a queue's length is usually a lagging indicator.  The metric that actually means something is how long a message resides in a queue. That's an actionable metric and <a href="https://github.com/aglover/moo">Moo</a> gives you the ability to do something about it! Can you dig it?</p>
 ]]></content>
   </entry>
   
